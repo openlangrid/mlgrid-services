@@ -1,9 +1,9 @@
-package org.langrid.jsservicegw.controller;
+package org.langrid.mlgridservices.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 
-import org.langrid.jsservicegw.service.ServiceInvoker;
+import org.langrid.mlgridservices.service.ServiceInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

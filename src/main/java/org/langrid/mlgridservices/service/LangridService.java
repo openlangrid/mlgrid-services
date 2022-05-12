@@ -1,12 +1,12 @@
-package org.langrid.jsservicegw.service;
+package org.langrid.mlgridservices.service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.langrid.jsservicegw.controller.Request;
-import org.langrid.jsservicegw.controller.Response;
+import org.langrid.mlgridservices.controller.Request;
+import org.langrid.mlgridservices.controller.Response;
 import org.springframework.beans.factory.annotation.Value;
 
 import jp.go.nict.langrid.client.soap.SoapClientFactory;
@@ -38,10 +38,10 @@ public class LangridService implements Service{
 		intfs.put("GoogleTranslateNMT", TranslationService.class);
 	}
 
-	@Value("${jsservicegw.langrid.url}")
+	@Value("${mlgrid-services.langrid.url}")
 	private String url;
-	@Value("${jsservicegw.langrid.username}")
+	@Value("${mlgrid-services.langrid.username}")
 	private String username;
-	@Value("${jsservicegw.langrid.password}")
+	@Value("${mlgrid-services.langrid.password}")
 	private String password;
 }

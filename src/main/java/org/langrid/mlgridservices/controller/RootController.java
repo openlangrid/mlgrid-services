@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.controller;
+package org.langrid.mlgridservices.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

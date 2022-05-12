@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.service.impl;
+package org.langrid.mlgridservices.service.impl;
 
 import org.langrid.service.ml.ImageClassificationResult;
 import org.langrid.service.ml.ImageClassificationService;

@@ -1,10 +1,10 @@
-package org.langrid.jsservicegw.service;
+package org.langrid.mlgridservices.service;
 
 import java.util.Base64;
 
-import org.langrid.jsservicegw.controller.Request;
-import org.langrid.jsservicegw.controller.Response;
-import org.langrid.jsservicegw.service.impl.YoloV5ObjectDetectionService;
+import org.langrid.mlgridservices.controller.Request;
+import org.langrid.mlgridservices.controller.Response;
+import org.langrid.mlgridservices.service.impl.YoloV5ObjectDetectionService;
 import org.langrid.service.ml.ObjectDetectionService;
 import org.springframework.context.annotation.Bean;
 

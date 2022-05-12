@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.controller;
+package org.langrid.mlgridservices.controller;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +15,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.langrid.jsservicegw.service.ServiceInvoker;
+import org.langrid.mlgridservices.service.ServiceInvoker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;

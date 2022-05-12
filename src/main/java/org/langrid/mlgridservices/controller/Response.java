@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.controller;
+package org.langrid.mlgridservices.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-jsservicegw:
+mlgrid-services:
   langrid:
     url: ${LANGRID_URL:https://langrid.org/service_manager/invoker/}
     username: ${LANGRID_USERNAME:langriduser}
@@ -9,4 +9,4 @@ jsservicegw:
 server:
   port: ${SERVER_PORT:8080}
   servlet:
-    context-path: ${CONTEXT_PATH:/jsservicegw}
+    context-path: ${CONTEXT_PATH:/mlgrid-services}

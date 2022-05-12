@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.config;
+package org.langrid.mlgridservices.config;
 
 import java.util.List;
 

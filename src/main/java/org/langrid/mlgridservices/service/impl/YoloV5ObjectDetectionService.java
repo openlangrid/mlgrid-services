@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.service.impl;
+package org.langrid.mlgridservices.service.impl;
 
 import java.io.BufferedReader;
 import java.io.File;

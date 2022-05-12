@@ -1,4 +1,4 @@
-package org.langrid.jsservicegw.service;
+package org.langrid.mlgridservices.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,8 +7,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 
-import org.langrid.jsservicegw.controller.Request;
-import org.langrid.jsservicegw.controller.Response;
+import org.langrid.mlgridservices.controller.Request;
+import org.langrid.mlgridservices.controller.Response;
 import org.langrid.service.ml.ImageClassificationResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -84,6 +84,6 @@ public class KerasService implements Service{
 		return new ObjectMapper();
 	}
 
-	@Value("${jsservicegw.keras.docker-service-name}")
+	@Value("${mlgrid-services.keras.docker-service-name}")
 	private String dockerServiceName;
 }

@@ -4,7 +4,7 @@ services:
   lse4r:
     image: eclipse-temurin:11-jre
     environment:
-      CONTEXT_PATH: /jsservicegw
+      CONTEXT_PATH: /mlgrid-services
       LANGRID_URL: https://langrid.org/service_manager/invoker/
       LANGRID_USERNAME: langriduser
       LANGRID_PASSWORD: langridpass
@@ -13,5 +13,5 @@ services:
     volumes:
       - ./work:/work
     working_dir: /work
-    command: java -jar -Djava.awt.headless=true ./jsservicegw-0.0.1-SNAPSHOT.jar
+    command: java -jar -Djava.awt.headless=true ./mlgrid-services-0.0.1-SNAPSHOT.jar
 
