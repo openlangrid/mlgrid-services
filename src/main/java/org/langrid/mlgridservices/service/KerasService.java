@@ -31,10 +31,10 @@ public class KerasService implements Service {
 
 	private ImageClassificationService service(String serviceId){
 		switch(serviceId){
-			case "YoloV5n": return kerasEfficientNetV2B0();
-			case "YoloV5m": return kerasResNet50();
+			case "KerasEfficientNetV2B0": return kerasEfficientNetV2B0();
+			case "KerasResNet50": return kerasResNet50();
 			default: 
-			case "YoloV5s": return kerasVGG19();
+			case "KerasVGG19": return kerasVGG19();
 		}
 	}
 
