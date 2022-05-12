@@ -14,7 +14,7 @@ public class KerasImageClassificationServiceTest {
         var ic = new KerasImageClassificationService("keras-cpu", "VGG19");
         var ret = ic.classify("image/jpeg",
             Files.readAllBytes(Path.of("./procs/image_classification_keras/cat.jpg")),
-            "ja", 0.5, 10);
+            "ja", 10);
         assertEquals(3, ret.length);
     }
 }

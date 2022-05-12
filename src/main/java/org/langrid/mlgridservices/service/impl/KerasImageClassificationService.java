@@ -20,7 +20,7 @@ public class KerasImageClassificationService implements ImageClassificationServi
 	}
 
 	@Override
-	public ImageClassificationResult[] classify(String format, byte[] image, String labelLanguage, double threshold, int maxResults) {
+	public ImageClassificationResult[] classify(String format, byte[] image, String labelLanguage, int maxResults) {
 		try {
 			var tempDir = new File("procs/image_classification_keras/temp");
 			tempDir.mkdirs();
