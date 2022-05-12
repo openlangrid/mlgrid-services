@@ -69,15 +69,20 @@
     </div>
   </div></div>
 </div>
+<!--
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-bson/2.0.8/bson.min.js" integrity="sha512-3NRCDv4HSFtMd3OLtUOPmxOceZQuCtfhhGaTn3BpCn+wDEDRWOWeNGjL2Ahd6IrvlhH6kBpAHRzeU3AfKKvzkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-bson/2.0.8/bson.js" integrity="sha512-qj4zC8FelR9yOqMc29m3TEARellBmX1gse6toliCJJ9vO8Pgy6FaFUwd/UU02Jv3U2ZTyKIjRe1+GQmUPDLAEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+-->
+<script src="bson.js"></script>
 <script>
-//const baseUrl = "https://langrid.org/mlgridservices/services";
-//const baseUrl = "http://localhost:8080/mlgridservices/services";
+//const baseUrl = "https://langrid.org/mlgrid-services/services";
+//const baseUrl = "http://localhost:8080/mlgrid-services/services";
 const baseUrl = "services";
 
 window.addEventListener("load", ()=>{
+	const bson = new BSON();
 	const loc = document.location;
-	const proto = loc.protocol == "https" ? "wss" : "ws";
+	const proto = loc.protocol == "https:" ? "wss" : "ws";
 	const wsUrl = `${proto}://${loc.host}/${loc.pathname.split("/")[1]}/ws`
 	console.log(wsUrl);
 	const ws = new WSInvoker(wsUrl);
@@ -106,12 +111,15 @@ window.addEventListener("load", ()=>{
 		const file = e.dataTransfer.files[0];
 		ic.querySelector("#icImage").src = URL.createObjectURL(file);
 		const fr = new FileReader();
-		fr.readAsDataURL(file);
+//		fr.readAsDataURL(file);
+		fr.readAsArrayBuffer(file);
 		fr.addEventListener("load", e=>{
 			for(s of services){
 				const result = ic.querySelector(`#${s}`);
 				result.textContent = "processing...";
-				ws.classify(s, "image/jpeg", fr.result.split(",")[1], "en", 10)
+				// [cat.jpg,497bytes] b64(DataURL): 663byte, bin: 497bytes
+//				ws.classify(s, "image/jpeg", fr.result.split(",")[1], "en", 10)
+				ws.classify(s, "image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
 					.then(r=>{result.textContent = r.result.map(a=>`${a["label"]}(${a["accuracy"]})`).join(",")})
 					.catch(e=>{ console.error(e); });
 			}
@@ -130,12 +138,12 @@ window.addEventListener("load", ()=>{
 		const file = e.dataTransfer.files[0];
 		od.querySelector("#odImage").src = URL.createObjectURL(file);
 		const fr = new FileReader();
-		fr.readAsDataURL(file);
+		fr.readAsArrayBuffer(file);
 		fr.addEventListener("load", e=>{
 			for(s of services){
 				const result = od.querySelector(`#${s}`);
 				result.textContent = "processing...";
-				ws.detect(s, "image/jpeg", fr.result.split(",")[1], "en", 10)
+				ws.detect(s, "image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
 					.then(r=>{result.textContent = r.result.map(a=>`${JSON.stringify(a["boundingBox"])},${a["label"]}(${a["accuracy"]})`).join("\n")})
 					.catch(e=>{ console.error(e); });
 			}
@@ -147,29 +155,36 @@ class WSInvoker{
 	constructor(url){
 		this.rid = 0;
 		this.ws = new WebSocket(url);
+		this.ws.binaryType = "arraybuffer";
 		this.ws.addEventListener('open', e=>{
-			console.log("open");
+			console.log("open websocket connection.");
 		});
 		this.ws.addEventListener("message", e=>{
 			if(e.data instanceof ArrayBuffer) {
 				// binary
-				const view = new DataView(e.data);
-				console.log("binary frame received");
+				const array = new Uint8Array(e.data);
+				console.log("res:", array);
+				const r = this.bson.deserialize(Buffer.from(array));
+				console.log("res(decoded):", r);
+				this.handlers[r.reqId](r);
 			} else {
 				// text
+				console.log("res:", e.data);
 				const r = JSON.parse(e.data);
+				console.log("res(decoded):", r);
 				this.handlers[r.reqId](r);
 			}
 		});
 		this.handlers = {};
+		this.bson = new BSON();
 	}
 	translate(serviceId, sl, tl, source){
 		return this.invoke(serviceId, "translate",
 				[sl, tl, source]);
 	}
-	classify(serviceId, format, b64Image, labelLang, maxResults){
+	classify(serviceId, format, image, labelLang, maxResults){
 		return this.invoke(serviceId, "classify",
-				[format, b64Image, labelLang, maxResults]);
+				[format, image, labelLang, maxResults]);
 	}
 	detect(serviceId, format, b64Image, labelLang, maxResults){
 		return this.invoke(serviceId, "detect",
@@ -179,10 +194,15 @@ class WSInvoker{
 		console.log(`${serviceId}.${method}`);
 		return new Promise((resolve, reject)=>{
 			const rid = this.rid++;
-			this.ws.send(JSON.stringify({
+			const msg = {
 				reqId: rid, serviceId: serviceId,
 				method: method, args: args
-			}));
+			};
+			console.log("req:", msg);
+			const data = this.bson.serialize(msg);
+//			const data = JSON.stringify(msg);			
+			console.log("req(encoded):", data);
+			this.ws.send(data);
 			this.handlers[rid] = r=>{
 				resolve(r);
 			};

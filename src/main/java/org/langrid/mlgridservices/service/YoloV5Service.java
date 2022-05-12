@@ -15,7 +15,10 @@ public class YoloV5Service implements Service{
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
-			invocation.getArgs()[1] = Base64.getDecoder().decode((String)invocation.getArgs()[1]);
+			var a2 = invocation.getArgs()[1];
+			if(a2 instanceof String){
+				invocation.getArgs()[1] = Base64.getDecoder().decode((String)a2);
+			}
 			return new Response(
 					ObjectUtil.invoke(service(serviceId), invocation.getMethod(), invocation.getArgs()));
 		} catch(RuntimeException e){

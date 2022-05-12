@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
+import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @org.springframework.stereotype.Service
 public class KerasService implements Service{
@@ -23,7 +24,8 @@ public class KerasService implements Service{
 	public Response invoke(String serviceId, Request invocation) {
 		try {
 			var format = (String)invocation.getArgs()[0];
-			var img = Base64.getDecoder().decode((String)invocation.getArgs()[1]);
+			var a2 = invocation.getArgs()[1];
+			var img = a2 instanceof String ? Base64.getDecoder().decode((String)a2) : (byte[])a2;
 			var labelLang = (String)invocation.getArgs()[2];
 			var maxResults = ((Number)invocation.getArgs()[3]).intValue();
 			var tempDir = new File("procs/image_classification_keras/temp");
