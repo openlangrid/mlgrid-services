@@ -1,0 +1,12 @@
+jsservicegw:
+  langrid:
+    url: ${LANGRID_URL:https://langrid.org/service_manager/invoker/}
+    username: ${LANGRID_USERNAME:langriduser}
+    password: ${LANGRID_PASSWORD:langridpass}
+  keras:
+    docker-service-name: ${KERAS_SERVICE_NAME:keras-gpu}
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ${CONTEXT_PATH:/jsservicegw}

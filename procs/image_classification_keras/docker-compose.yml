@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  keras-gpu:
+    build: ./build/gpu
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./keras-data:/root/.keras
+
+  keras-cpu:
+    build: ./build/cpu
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./keras-data:/root/.keras

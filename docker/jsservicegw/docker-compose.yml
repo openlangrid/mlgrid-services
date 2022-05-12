@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  lse4r:
+    image: eclipse-temurin:11-jre
+    environment:
+      CONTEXT_PATH: /jsservicegw
+      LANGRID_URL: https://langrid.org/service_manager/invoker/
+      LANGRID_USERNAME: langriduser
+      LANGRID_PASSWORD: langridpass
+    ports:
+      - 8091:8080
+    volumes:
+      - ./work:/work
+    working_dir: /work
+    command: java -jar -Djava.awt.headless=true ./jsservicegw-0.0.1-SNAPSHOT.jar
+

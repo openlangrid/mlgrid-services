@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+  <div class="row"><div class="col">
+    <ul class="nav nav-tabs" id="menuTab" role="tablist">
+      <!-- 翻訳サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="transTab" data-bs-toggle="tab" data-bs-target="#trans"
+          type="button" role="tab" aria-controls="trans" aria-selected="true">Translation</button>
+      </li>
+      <!-- 画像識別サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="icTab" data-bs-toggle="tab" data-bs-target="#ic"
+          type="button" role="tab" aria-controls="ic" aria-selected="false">ImageClassification</button>
+      </li>
+      <!-- オブジェクト検出サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="odTab" data-bs-toggle="tab" data-bs-target="#od"
+          type="button" role="tab" aria-controls="od" aria-selected="false">ObjectDetection</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="tabContent">
+      <!-- 翻訳サービス -->
+      <div class="tab-pane fade show active" id="trans" role="tabpanel" aria-labelledby="transTab">
+        <label>sourceLang<input id="sourceLang" class="form-control" type="text" value="en"></label>
+        <label>targetLang<input id="targetLang" class="form-control" type="text" value="ja"></label>
+        <label>source<input id="source" class="form-control" type="text" value="hello"></label>
+        <button id="execute" class="btn btn-success">実行</button>
+        <br/>
+        <label>result:</label><br/>
+        GoogleTranslateNMT: <span id="result"></span>
+      </div>
+      <!-- 画像識別サービス -->
+      <div class="tab-pane fade" id="ic" role="tabpanel" aria-labelledby="icTab">
+        <button id="icButton" effectAllowed="move" style="height: 4em" type="button"
+         class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
+        <br/>
+        <img id="icImage">
+        <br/>
+        <label>results:</label><br/>
+        KerasEfficientNetV2B0: <span id="KerasEfficientNetV2B0"></span><br/>
+        KerasResNet50: <span id="KerasResNet50"></span><br/>
+        KerasVGG19: <span id="KerasVGG19"></span><br/>
+        <br/>
+        <a href="https://www.tensorflow.org/api_docs/python/tf/keras">tf.keras</a>
+      </div>
+      <!-- 物体検出サービス -->
+      <div id="od" aria-labelledby="odTab" class="tab-pane fade" role="tabpanel">
+        <button id="odButton" effectAllowed="move" style="height: 4em" type="button"
+         class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
+        <br/>
+        <img id="odImage">
+        <br/>
+        <label>results:</label><br/>
+        YoloV5n: <span id="YoloV5n"></span><br/>
+        YoloV5s: <span id="YoloV5s"></span><br/>
+        YoloV5m: <span id="YoloV5m"></span><br/>
+        YoloV5l: <span id="YoloV5l"></span><br/>
+        YoloV5x: <span id="YoloV5x"></span><br/>
+        <br/>
+        <a href="https://github.com/ultralytics/yolov5">YoloV5</a>
+      </div>
+    </div>
+  </div></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-bson/2.0.8/bson.min.js" integrity="sha512-3NRCDv4HSFtMd3OLtUOPmxOceZQuCtfhhGaTn3BpCn+wDEDRWOWeNGjL2Ahd6IrvlhH6kBpAHRzeU3AfKKvzkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+//const baseUrl = "https://langrid.org/jsservicegw/services";
+//const baseUrl = "http://localhost:8080/jsservicegw/services";
+const baseUrl = "services";
+
+window.addEventListener("load", ()=>{
+	const loc = document.location;
+	const proto = loc.protocol == "https" ? "wss" : "ws";
+	const wsUrl = `${proto}://${loc.host}/${loc.pathname.split("/")[1]}/ws`
+	console.log(wsUrl);
+	const ws = new WSInvoker(wsUrl);
+	const trans = document.querySelector("#trans");
+	trans.querySelector("#execute").addEventListener("click", e=>{
+		e.preventDefault();
+		const sl = trans.querySelector("#sourceLang").value;
+		const tl = trans.querySelector("#targetLang").value;
+		const source = trans.querySelector("#source").value;
+		const result = trans.querySelector("#result");
+		result.textContent = "processing...";
+		ws.translate("GoogleTranslateNMT", sl, tl, source)
+			.then(r=>{ console.log(r); result.textContent = r.result; })
+			.catch(e=>{ console.error(e); });
+	});
+	const ic = document.querySelector("#ic");
+	const icButton = ic.querySelector("#icButton");
+	icButton.addEventListener("dragover", e=>{
+		e.stopPropagation();
+		e.preventDefault();
+		e.dataTransfer.dropEffect = "link";
+	});
+	icButton.addEventListener("drop", e=>{
+		e.preventDefault();
+		const services = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
+		const file = e.dataTransfer.files[0];
+		ic.querySelector("#icImage").src = URL.createObjectURL(file);
+		const fr = new FileReader();
+		fr.readAsDataURL(file);
+		fr.addEventListener("load", e=>{
+			for(s of services){
+				const result = ic.querySelector(`#${s}`);
+				result.textContent = "processing...";
+				ws.classify(s, "image/jpeg", fr.result.split(",")[1], "en", 10)
+					.then(r=>{result.textContent = r.result.map(a=>`${a["label"]}(${a["accuracy"]})`).join(",")})
+					.catch(e=>{ console.error(e); });
+			}
+		});
+	});
+	const od = document.querySelector("#od");
+	const odButton = od.querySelector("#odButton");
+	odButton.addEventListener("dragover", e=>{
+		e.stopPropagation();
+		e.preventDefault();
+		e.dataTransfer.dropEffect = "link";
+	});
+	odButton.addEventListener("drop", e=>{
+		e.preventDefault();
+		const services = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
+		const file = e.dataTransfer.files[0];
+		od.querySelector("#odImage").src = URL.createObjectURL(file);
+		const fr = new FileReader();
+		fr.readAsDataURL(file);
+		fr.addEventListener("load", e=>{
+			for(s of services){
+				const result = od.querySelector(`#${s}`);
+				result.textContent = "processing...";
+				ws.detect(s, "image/jpeg", fr.result.split(",")[1], "en", 10)
+					.then(r=>{result.textContent = r.result.map(a=>`${JSON.stringify(a["boundingBox"])},${a["label"]}(${a["accuracy"]})`).join("\n")})
+					.catch(e=>{ console.error(e); });
+			}
+		});
+	});
+});
+
+class WSInvoker{
+	constructor(url){
+		this.rid = 0;
+		this.ws = new WebSocket(url);
+		this.ws.addEventListener('open', e=>{
+			console.log("open");
+		});
+		this.ws.addEventListener("message", e=>{
+			if(e.data instanceof ArrayBuffer) {
+				// binary
+				const view = new DataView(e.data);
+				console.log("binary frame received");
+			} else {
+				// text
+				const r = JSON.parse(e.data);
+				this.handlers[r.reqId](r);
+			}
+		});
+		this.handlers = {};
+	}
+	translate(serviceId, sl, tl, source){
+		return this.invoke(serviceId, "translate",
+				[sl, tl, source]);
+	}
+	classify(serviceId, format, b64Image, labelLang, maxResults){
+		return this.invoke(serviceId, "classify",
+				[format, b64Image, labelLang, maxResults]);
+	}
+	detect(serviceId, format, b64Image, labelLang, maxResults){
+		return this.invoke(serviceId, "detect",
+				[format, b64Image, labelLang, maxResults]);
+	}
+	invoke(serviceId, method, args){
+		console.log(`${serviceId}.${method}`);
+		return new Promise((resolve, reject)=>{
+			const rid = this.rid++;
+			this.ws.send(JSON.stringify({
+				reqId: rid, serviceId: serviceId,
+				method: method, args: args
+			}));
+			this.handlers[rid] = r=>{
+				resolve(r);
+			};
+		});
+	}
+}
+</script>
+</body>
+</html>

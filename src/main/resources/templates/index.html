@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+</head>
+<body>
+<script>
+console.log("hello");
+window.addEventListener("load", ()=>{
+    fetch("services/TranslationService",{
+        method: "POST",
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            serviceId: "GoogleTranslateNMT",
+            method: "translate",
+            args: ["en", "ja", "hello"]
+        })
+    }).then(r=>r.json())
+    .then(r=>{
+        console.log(r);
+    }).catch(e=>{
+        console.error(e);
+    });
+});
+</script>
+</body>
+</html>

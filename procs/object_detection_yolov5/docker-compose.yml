@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  yolov5:
+    build: ./build
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./cache:/root/.cache/torch
