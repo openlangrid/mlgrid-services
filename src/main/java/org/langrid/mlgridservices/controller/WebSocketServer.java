@@ -77,7 +77,9 @@ public class WebSocketServer implements ApplicationContextAware {
 			InvocationTargetException, NoSuchMethodException {
 		System.out.println("bin message");
 		var i = bmapper.readValue(message, WebSocketRequest.class);
-		return bmapper.writeValueAsBytes(invoker().invoke(i.getServiceId(), i));
+		return bmapper.writeValueAsBytes(new WebSocketResponse(
+			i.getReqId(),
+			invoker().invoke(i.getServiceId(), i).getResult()));
 	}
 
 	@OnClose
