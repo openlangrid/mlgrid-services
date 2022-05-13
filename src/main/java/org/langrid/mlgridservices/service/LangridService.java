@@ -40,6 +40,7 @@ public class LangridService implements Service{
 	private static Map<String, Class<?>> intfs = new HashMap<>();
 	static{
 		intfs.put("GoogleTranslateNMT", TranslationService.class);
+		intfs.put("KyotoUJServer", TranslationService.class);
 	}
 
 	@Value("${mlgrid-services.langrid.url}")

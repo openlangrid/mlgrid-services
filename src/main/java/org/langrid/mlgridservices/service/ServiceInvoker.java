@@ -16,6 +16,7 @@ public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
 		services.put("LangridGoogleTranslateNMT", langridService);
+		services.put("LangridKyotoUJServer", langridService);
 		services.put("HelsinkiNLPOpusMT", helsinkiNlpService);
 		services.put("KerasResNet50", kerasService);
 		services.put("KerasEfficientNetV2B0", kerasService);
