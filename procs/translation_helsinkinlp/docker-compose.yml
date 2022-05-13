@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  helsinki-nlp:
+    build: ./build
+    runtime: nvidia
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./cache/huggingface:/root/.cache/huggingface
