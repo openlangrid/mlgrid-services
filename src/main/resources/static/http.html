@@ -74,6 +74,16 @@
 //const baseUrl = "http://localhost:8080/mlgridservices/services";
 const baseUrl = "services";
 
+function round(v, n){
+	const s = Math.pow(10, n);
+	return Math.round(v * s) / s;
+}
+
+function roundBox(v, n){
+	return {x: round(v.x, n), y: round(v.y, n),
+		width: round(v.width, n), height: round(v.height, n)};
+}
+
 window.addEventListener("load", ()=>{
 	const trans = document.querySelector("#trans");
 	trans.querySelector("#execute").addEventListener("click", e=>{
@@ -114,7 +124,8 @@ window.addEventListener("load", ()=>{
 				const result = ic.querySelector(`#${s}`);
 				result.textContent = "processing...";
 				invokeImageClassification(s, fr.result.split(",")[1])
-					.then(r=>{result.textContent = r.result.map(a=>`${a["label"]}(${a["accuracy"]})`).join(",")})
+					.then(r=>{result.textContent = r.result.map(
+						a=>`${a["label"]}(${round(a["accuracy"], 2)})`).join(",")})
 					.catch(e=>{ console.error(e); });
 			}
 		});
@@ -138,7 +149,8 @@ window.addEventListener("load", ()=>{
 				const result = od.querySelector(`#${s}`);
 				result.textContent = "processing...";
 				invokeObjectDetection(s, fr.result.split(",")[1])
-					.then(r=>{result.textContent = r.result.map(a=>`${JSON.stringify(a["boundingBox"])},${a["label"]}(${a["accuracy"]})`).join("\n")})
+					.then(r=>{result.textContent = r.result.map(
+						a=>`${JSON.stringify(roundBox(a["boundingBox"], 2))},${a["label"]}(${round(a["accuracy"], 2)})`).join("\n")})
 					.catch(e=>{ console.error(e); });
 			}
 		});
