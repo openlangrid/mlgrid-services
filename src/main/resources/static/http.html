@@ -33,8 +33,12 @@
         <label>source<input id="source" class="form-control" type="text" value="hello"></label>
         <button id="execute" class="btn btn-success">実行</button>
         <br/>
-        <label>result:</label><br/>
-        GoogleTranslateNMT: <span id="result"></span>
+		<div id="transServices">
+		</div>
+		<!-- LangridKyotoUJServer: <span id="LangridKyotoUJServer"></span></br> -->
+		<br/>
+		<a href="https://langrid.org">Language Grid</a>
+		<a href="https://huggingface.co/Helsinki-NLP">Helsinki-NLP</a>
       </div>
       <!-- 画像識別サービス -->
       <div class="tab-pane fade" id="ic" role="tabpanel" aria-labelledby="icTab">
@@ -44,9 +48,8 @@
         <img id="icImage" style="max-height: 360px; object-fit: scale-down;">
         <br/>
         <label>results:</label><br/>
-        KerasEfficientNetV2B0: <span id="KerasEfficientNetV2B0"></span><br/>
-        KerasResNet50: <span id="KerasResNet50"></span><br/>
-        KerasVGG19: <span id="KerasVGG19"></span><br/>
+		<div id="icServices">
+		</div>
         <br/>
         <a href="https://www.tensorflow.org/api_docs/python/tf/keras">tf.keras</a>
       </div>
@@ -58,12 +61,9 @@
         <img id="odImage" style="max-height: 360px; object-fit: scale-down;">
         <br/>
         <label>results:</label><br/>
-        YoloV5n: <span id="YoloV5n"></span><br/>
-        YoloV5s: <span id="YoloV5s"></span><br/>
-        YoloV5m: <span id="YoloV5m"></span><br/>
-        YoloV5l: <span id="YoloV5l"></span><br/>
-        YoloV5x: <span id="YoloV5x"></span><br/>
-        <br/>
+		<div id="odServices">
+		</div>
+		<br/>
         <a href="https://github.com/ultralytics/yolov5">YoloV5</a>
       </div>
     </div>
@@ -85,27 +85,44 @@ function roundBox(v, n){
 }
 
 window.addEventListener("load", ()=>{
+	const transServiceIds = ["LangridGoogleTranslateNMT", "HelsinkiNLPOpusMT"];
+	const icServiceIds = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
+	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
+
 	const trans = document.querySelector("#trans");
+	const transServices = document.querySelector("#transServices");
+	const transResults = {};
+	for(let sid of transServiceIds){
+		transServices.append(document.createTextNode(`${sid}: `));
+		const r = document.createElement("span");
+		transResults[sid] = r;
+		transServices.append(r);
+		transServices.append(document.createElement("br"));
+	}
 	trans.querySelector("#execute").addEventListener("click", e=>{
 		e.preventDefault();
 		const sl = trans.querySelector("#sourceLang").value;
 		const tl = trans.querySelector("#targetLang").value;
 		const source = trans.querySelector("#source").value;
-		const result = trans.querySelector("#result");
-		result.textContent = "processing...";
-		fetch(`${baseUrl}/GoogleTranslateNMT`, {
-			method: "POST", mode: 'cors',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({
-				method: "translate",
-				args: [sl, tl, source]
-			})
-		})
-		.then(r=>r.json())
-		.then(r=>{ console.log(r); result.textContent = r.result; })
-		.catch(e=>{ console.error(e); });
+		for(let sid of transServiceIds){
+			const result = transResults[sid];
+			result.textContent = "processing...";
+			invokeTranslation(sid, sl, tl, source)
+				.then(r=>{ console.log(r); result.textContent = r.result; })
+				.catch(e=>{ console.error(e); result.textContent = r.error; });
+		}
 	});
+
 	const ic = document.querySelector("#ic");
+	const icServices = ic.querySelector("#icServices");
+	const icResults = {};
+	for(let sid of icServiceIds){
+		icServices.append(document.createTextNode(`${sid}: `));
+		const r = document.createElement("span");
+		icResults[sid] = r;
+		icServices.append(r);
+		icServices.append(document.createElement("br"));
+	}
 	const icButton = ic.querySelector("#icButton");
 	icButton.addEventListener("dragover", e=>{
 		e.stopPropagation();
@@ -120,10 +137,10 @@ window.addEventListener("load", ()=>{
 		const fr = new FileReader();
 		fr.readAsDataURL(file);
 		fr.addEventListener("load", e=>{
-			for(s of services){
-				const result = ic.querySelector(`#${s}`);
+			for(let sid of icServiceIds){
+				const result = icResults[sid];
 				result.textContent = "processing...";
-				invokeImageClassification(s, fr.result.split(",")[1])
+				invokeImageClassification(sid, fr.result.split(",")[1])
 					.then(r=>{result.textContent = r.result.map(
 						a=>`${a["label"]}(${round(a["accuracy"], 2)})`).join(",")})
 					.catch(e=>{ console.error(e); });
@@ -131,6 +148,15 @@ window.addEventListener("load", ()=>{
 		});
 	});
 	const od = document.querySelector("#od");
+	const odServices = od.querySelector("#odServices");
+	const odResults = {};
+	for(let sid of odServiceIds){
+		odServices.append(document.createTextNode(`${sid}: `));
+		const r = document.createElement("span");
+		odResults[sid] = r;
+		odServices.append(r);
+		odServices.append(document.createElement("br"));
+	}
 	const odButton = od.querySelector("#odButton");
 	odButton.addEventListener("dragover", e=>{
 		e.stopPropagation();
@@ -139,22 +165,36 @@ window.addEventListener("load", ()=>{
 	});
 	odButton.addEventListener("drop", e=>{
 		e.preventDefault();
-		const services = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
 		const file = e.dataTransfer.files[0];
 		od.querySelector("#odImage").src = URL.createObjectURL(file);
 		const fr = new FileReader();
 		fr.readAsDataURL(file);
 		fr.addEventListener("load", e=>{
-			for(s of services){
-				const result = od.querySelector(`#${s}`);
+			for(let sid of odServiceIds){
+				const result = odResults[sid];
 				result.textContent = "processing...";
-				invokeObjectDetection(s, fr.result.split(",")[1])
+				invokeObjectDetection(sid, fr.result.split(",")[1])
 					.then(r=>{result.textContent = r.result.map(
 						a=>`${JSON.stringify(roundBox(a["boundingBox"], 2))},${a["label"]}(${round(a["accuracy"], 2)})`).join("\n")})
 					.catch(e=>{ console.error(e); });
 			}
 		});
-	});});
+	});
+});
+function invokeTranslation(serviceId, sl, tl, source){
+	return new Promise((resolve, reject)=>{
+		fetch(`${baseUrl}/${serviceId}`, {
+			method: "POST", mode: 'cors',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({
+				method: "translate",
+				args: [sl, tl, source]
+			})
+		})
+		.then(r=>resolve(r.json()))
+		.catch(e=>reject(e));
+	});
+}
 function invokeImageClassification(serviceId, image){
 	return new Promise((resolve, reject)=>{
 		fetch(`${baseUrl}/${serviceId}`, {
