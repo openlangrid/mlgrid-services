@@ -15,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
-		services.put("GoogleTranslateNMT", langridService);
+		services.put("LangridGoogleTranslateNMT", langridService);
+		services.put("HelsinkiNLPOpusMT", helsinkiNlpService);
 		services.put("KerasResNet50", kerasService);
 		services.put("KerasEfficientNetV2B0", kerasService);
 		services.put("KerasVGG19", kerasService);
@@ -42,6 +43,8 @@ public class ServiceInvoker {
 
 	@Autowired
 	private LangridService langridService;
+	@Autowired
+	private HelsinkiNlpService helsinkiNlpService;
 	@Autowired
 	private KerasService kerasService;
 	@Autowired

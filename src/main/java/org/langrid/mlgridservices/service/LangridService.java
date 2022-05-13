@@ -17,6 +17,10 @@ import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 public class LangridService implements Service{
 	public Response invoke(String serviceId, Request invocation) {
 		try{
+			if(serviceId.startsWith("Langrid")){
+				serviceId = serviceId.substring("Langrid".length());
+			}
+			System.out.println(serviceId);
 			var c = newClient(serviceId, intfs.get(serviceId));
 			var r = ObjectUtil.invoke(c, invocation.getMethod(), invocation.getArgs());
 			return new Response(r);
