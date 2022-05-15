@@ -24,6 +24,11 @@
         <button class="nav-link" id="odTab" data-bs-toggle="tab" data-bs-target="#od"
           type="button" role="tab" aria-controls="od" aria-selected="false">ObjectDetection</button>
       </li>
+      <!-- 画像生成サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
+          type="button" role="tab" aria-controls="ig" aria-selected="false">TextImageGeneration</button>
+      </li>
     </ul>
     <div class="tab-content" id="tabContent">
       <!-- 翻訳サービス -->
@@ -31,7 +36,7 @@
         <label>sourceLang<input id="sourceLang" class="form-control" type="text" value="en"></label>
         <label>targetLang<input id="targetLang" class="form-control" type="text" value="ja"></label>
         <label>source<input id="source" class="form-control" type="text" value="hello"></label>
-        <button id="execute" class="btn btn-success">実行</button>
+        <button id="execute" class="btn btn-success">翻訳</button>
         <br/>
         <label>results:</label><br/>
 		<div id="transServices">
@@ -64,6 +69,18 @@
 		<br/>
         <a href="https://github.com/ultralytics/yolov5">YoloV5</a>
       </div>
+      <!-- テキスト画像生成サービス -->
+      <div id="ig" aria-labelledby="igTab" class="tab-pane fade" role="tabpanel">
+        <label>language<input data-id="language" class="form-control" type="text" value="en"></label>
+        <label>text<input data-id="text" class="form-control" type="text" value="sunset over a lake in the mountains"></label>
+        <button data-id="execute" class="btn btn-success">生成</button>
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<br/>
+        <a href="https://github.com/borisdayma/dalle-mini">Dalle Mini</a>
+      </div>
     </div>
   </div></div>
 </div>
@@ -91,6 +108,8 @@ window.addEventListener("load", ()=>{
 	const transServiceIds = ["LangridGoogleTranslateNMT", "HelsinkiNLPOpusMT"];
 	const icServiceIds = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
 	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
+//	const igServiceIds = ["DummyTextImageGeneration"];
+	const igServiceIds = ["DalleMiniMega1Fp16"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -193,6 +212,38 @@ window.addEventListener("load", ()=>{
 			}
 		});
 	});
+
+	{
+		const parent = document.querySelector("#ig");
+		const services = parent.querySelector("[data-id='services']");
+		const results = {};
+		for(let sid of igServiceIds){
+			services.append(document.createTextNode(`${sid}: `));
+			const r = document.createElement("span");
+			results[sid] = r;
+			services.append(r);
+			services.append(document.createElement("br"));
+		}
+		parent.querySelector("[data-id='execute']").addEventListener("click", e=>{
+			e.preventDefault();
+			const lang = parent.querySelector("[data-id='language']").value;
+			const text = parent.querySelector("[data-id='text']").value;
+			for(let sid of igServiceIds){
+				const result = results[sid];
+				result.textContent = "processing...";
+				ws.textImageGenerate(sid, lang, text, "image/jpeg", 1)
+					.then(r=>{
+						console.log(r);
+						console.log(r.result);
+						result.textContent = "";
+						const img = document.createElement("img");
+						img.src = URL.createObjectURL(new Blob([r.result.buffer]));
+						result.append(img);
+					})
+					.catch(e=>{ console.error(e); result.textContent = r.error; });
+			}
+		});
+	}
 });
 
 class WSInvoker{
@@ -233,6 +284,10 @@ class WSInvoker{
 	detect(serviceId, format, b64Image, labelLang, maxResults){
 		return this.invoke(serviceId, "detect",
 				[format, b64Image, labelLang, maxResults]);
+	}
+	textImageGenerate(serviceId, language, text, imageFormat, maxResults){
+		return this.invoke(serviceId, "generate",
+				[language, text, imageFormat, maxResults]);
 	}
 	invoke(serviceId, method, args){
 		console.log(`${serviceId}.${method}`);

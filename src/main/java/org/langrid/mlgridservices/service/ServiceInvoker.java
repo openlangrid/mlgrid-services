@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
+import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
+import org.langrid.service.ml.TextImageGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @org.springframework.stereotype.Service
@@ -16,6 +18,17 @@ public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
 		services.put("DalleMiniMega1Fp16", dalleMiniService);
+		services.put("DummyTextImageGeneration", new Service(){
+			private TextImageGenerationService s = new DummyTextImageGenerationService();
+			@Override
+			public Response invoke(String serviceId, Request invocation) {
+				try{
+					return new Response(s.generate("", "", "", 1));
+				} catch(Exception e){
+					throw new RuntimeException(e);
+				}
+			}
+		});
 		services.put("HelsinkiNLPOpusMT", helsinkiNlpService);
 		services.put("KerasResNet50", kerasService);
 		services.put("KerasEfficientNetV2B0", kerasService);

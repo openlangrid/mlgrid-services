@@ -22,7 +22,7 @@ public class DalleMiniTextImageGenerationService implements TextImageGenerationS
             tempDir.mkdirs();
             var temp = FileUtil.createUniqueFile(tempDir, "outimage-", "");
             run(text, "temp/" + temp.getName());
-            return Files.readAllBytes(new File(tempDir, temp.getName() + "-0.jpg").toPath());
+            return Files.readAllBytes(new File(tempDir, temp.getName() + "_0.jpg").toPath());
         } catch(RuntimeException e) {
             throw e;
         } catch(Exception e) {
