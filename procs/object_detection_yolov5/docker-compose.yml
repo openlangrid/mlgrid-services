@@ -4,6 +4,7 @@ services:
   yolov5:
     build: ./build
     working_dir: /work
+    runtime: nvidia
     volumes:
       - .:/work
       - ./cache:/root/.cache/torch

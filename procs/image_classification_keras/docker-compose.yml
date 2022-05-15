@@ -4,6 +4,7 @@ services:
   keras-gpu:
     build: ./build/gpu
     working_dir: /work
+    runtime: nvidia
     volumes:
       - .:/work
       - ./keras-data:/root/.keras
