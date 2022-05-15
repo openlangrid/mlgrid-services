@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  dalle-mini:
+    build: ./build
+    runtime: nvidia
+    environment:
+      WANDB_API_KEY: YOUR_WANDB_API_KEY
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./cache/wandb:/root/.cache/wandb
+      - ./cache/huggingface:/root/.cache/huggingface
