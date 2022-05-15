@@ -1,3 +1,3 @@
-FROM tensorflow/tensorflow:2.8.0-gpu
+FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel
 
-RUN pip install transformers sentencepiece torch torchvision sacremoses
+RUN pip install transformers sentencepiece sacremoses
