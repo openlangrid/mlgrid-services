@@ -15,12 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
-		services.put("LangridGoogleTranslateNMT", langridService);
-		services.put("LangridKyotoUJServer", langridService);
+		services.put("DalleMiniMega1Fp16", dalleMiniService);
 		services.put("HelsinkiNLPOpusMT", helsinkiNlpService);
 		services.put("KerasResNet50", kerasService);
 		services.put("KerasEfficientNetV2B0", kerasService);
 		services.put("KerasVGG19", kerasService);
+		services.put("LangridGoogleTranslateNMT", langridService);
+		services.put("LangridKyotoUJServer", langridService);
 		services.put("YoloV5n", yoloV5Service);
 		services.put("YoloV5s", yoloV5Service);
 		services.put("YoloV5m", yoloV5Service);
@@ -50,4 +51,6 @@ public class ServiceInvoker {
 	private KerasService kerasService;
 	@Autowired
 	private YoloV5Service yoloV5Service;
+	@Autowired
+	private DalleMiniService dalleMiniService;
 }
