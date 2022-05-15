@@ -7,14 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.langrid.service.ml.Box2d;
-import org.langrid.service.ml.ObjectDetectionResult;
-import org.langrid.service.ml.ObjectDetectionService;
-
 import jp.go.nict.langrid.commons.io.FileUtil;
-import jp.go.nict.langrid.commons.util.ArrayUtil;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 public class HelsinkiNlpTranslationService implements TranslationService{
@@ -72,5 +65,4 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 
 	private String modelName = "opus-mt-en-jap";
 	private File baseDir = new File("./procs/translation_helsinkinlp");
-	private ObjectMapper mapper = new ObjectMapper();
 }
