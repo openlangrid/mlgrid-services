@@ -18,6 +18,7 @@ public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
 		services.put("DalleMiniMega1Fp16", dalleMiniService);
+		services.put("DalleMiniMini1", dalleMiniService);
 		services.put("DummyTextImageGeneration", new Service(){
 			private TextImageGenerationService s = new DummyTextImageGenerationService();
 			@Override

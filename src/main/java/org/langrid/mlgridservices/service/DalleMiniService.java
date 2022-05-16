@@ -26,11 +26,17 @@ public class DalleMiniService  implements Service {
 		switch(serviceId){
 			default: 
 			case "DalleMiniMega1Fp16": return dalleMiniMega1Fp16();
+			case "DalleMiniMini1": return dalleMiniMini1();
 		}
 	}
 
 	@Bean
 	private TextImageGenerationService dalleMiniMega1Fp16(){
-		return new DalleMiniTextImageGenerationService();
+		return new DalleMiniTextImageGenerationService("dalle-mini/dalle-mini/mega-1-fp16:latest");
+	}
+
+	@Bean
+	private TextImageGenerationService dalleMiniMini1(){
+		return new DalleMiniTextImageGenerationService("dalle-mini/dalle-mini/mini-1:v0");
 	}
 }

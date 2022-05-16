@@ -1,7 +1,9 @@
 import sys
 
-prompt = sys.argv[1] if len(sys.argv) > 1 else "sunset over a lake in the mountains"
-outpath = sys.argv[2] if len(sys.argv) > 2 else "out"
+modelName = sys.argv[1] if len(sys.argv) > 1 else "dalle-mini/dalle-mini/mega-1-fp16:latest"
+prompt = sys.argv[2] if len(sys.argv) > 2 else "sunset over a lake in the mountains"
+maxResults = int(sys.argv[3] if len(sys.argv) > 3 else "1")
+outpath = sys.argv[4] if len(sys.argv) > 4 else "out"
 
 
 # Model references
@@ -12,6 +14,7 @@ DALLE_COMMIT_ID = None
 
 # if the notebook crashes too often you can use dalle-mini instead by uncommenting below line
 # DALLE_MODEL = "dalle-mini/dalle-mini/mini-1:v0"
+DALLE_MODEL = modelName
 
 # VQGAN model
 VQGAN_REPO = "dalle-mini/vqgan_imagenet_f16_16384"
@@ -100,25 +103,64 @@ from PIL import Image
 
 print(f"Prompt: {prompt}\n")
 
-# get a new key
-key, subkey = jax.random.split(key)
-# generate images
-encoded_images = p_generate(
-    tokenized_prompt,
-    shard_prng_key(subkey),
-    params,
-    gen_top_k,
-    gen_top_p,
-    temperature,
-    cond_scale,
+images = []
+for i in range(maxResults):
+    # get a new key
+    key, subkey = jax.random.split(key)
+    # generate images
+    encoded_images = p_generate(
+        tokenized_prompt,
+        shard_prng_key(subkey),
+        params,
+        gen_top_k,
+        gen_top_p,
+        temperature,
+        cond_scale,
+    )
+    # remove BOS
+    encoded_images = encoded_images.sequences[..., 1:]
+    # decode images
+    decoded_images = p_decode(encoded_images, vqgan_params)
+    decoded_images = decoded_images.clip(0.0, 1.0).reshape((-1, 256, 256, 3))
+    for decoded_img in decoded_images:
+        img = Image.fromarray(np.asarray(decoded_img * 255, dtype=np.uint8))
+        images.append(img)
+
+
+CLIP_REPO = "openai/clip-vit-base-patch32"
+CLIP_COMMIT_ID = None
+
+# Load CLIP
+clip, clip_params = FlaxCLIPModel.from_pretrained(
+    CLIP_REPO, revision=CLIP_COMMIT_ID, dtype=jnp.float16, _do_init=False
 )
-# remove BOS
-encoded_images = encoded_images.sequences[..., 1:]
-# decode images
-decoded_images = p_decode(encoded_images, vqgan_params)
-decoded_images = decoded_images.clip(0.0, 1.0).reshape((-1, 256, 256, 3))
+clip_processor = CLIPProcessor.from_pretrained(CLIP_REPO, revision=CLIP_COMMIT_ID)
+clip_params = replicate(clip_params)
+
+# score images
+@partial(jax.pmap, axis_name="batch")
+def p_clip(inputs, params):
+    logits = clip(params=params, **inputs).logits_per_image
+    return logits
+
+
+from flax.training.common_utils import shard
+
+# get clip scores
+clip_inputs = clip_processor(
+    text=[prompt] * jax.device_count(),
+    images=images,
+    return_tensors="np",
+    padding="max_length",
+    max_length=77,
+    truncation=True,
+).data
+logits = p_clip(shard(clip_inputs), clip_params)
+logits = logits.squeeze().flatten()
+
 i = 0
-for decoded_img in decoded_images:
-    img = Image.fromarray(np.asarray(decoded_img * 255, dtype=np.uint8))
-    img.save(f"{outpath}_{i}.jpg")
+for idx in logits.argsort()[::-1]:
+    images[idx].save(f"{outpath}_{i}.jpg")
+    with open(f"{outpath}_{i}.acc.txt", mode="w") as f:
+        f.write(f"{logits[idx]:.2f}\n")
     i = i + 1

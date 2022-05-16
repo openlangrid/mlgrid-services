@@ -78,6 +78,11 @@
         <label>results:</label><br/>
 		<div data-id="services">
 		</div>
+		<template data-id="resultTemplate">
+		  <div style="display: inline-block">
+			<img><br/><span></span>
+		  </div>
+		</template>
 		<br/>
         <a href="https://github.com/borisdayma/dalle-mini">Dalle Mini</a>
       </div>
@@ -109,7 +114,7 @@ window.addEventListener("load", ()=>{
 	const icServiceIds = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
 	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
 //	const igServiceIds = ["DummyTextImageGeneration"];
-	const igServiceIds = ["DalleMiniMega1Fp16"];
+	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -231,14 +236,20 @@ window.addEventListener("load", ()=>{
 			for(let sid of igServiceIds){
 				const result = results[sid];
 				result.textContent = "processing...";
-				ws.textImageGenerate(sid, lang, text, "image/jpeg", 1)
+				ws.textImageGenerate(sid, lang, text, "image/jpeg", 8)
 					.then(r=>{
 						console.log(r);
 						console.log(r.result);
 						result.textContent = "";
-						const img = document.createElement("img");
-						img.src = URL.createObjectURL(new Blob([r.result.buffer]));
-						result.append(img);
+						result.append(document.createElement("br"));
+						for(let res of r.result){
+							const content = parent.querySelector("[data-id='resultTemplate']").content.cloneNode(true);
+							const img = content.querySelector("img");
+							img.src = URL.createObjectURL(new Blob([res.image.buffer]));
+							const acc = content.querySelector("span");
+							acc.textContent = "Accuracy: " + round(res.accuracy, 2);
+							result.append(content);
+						}
 					})
 					.catch(e=>{ console.error(e); result.textContent = r.error; });
 			}
