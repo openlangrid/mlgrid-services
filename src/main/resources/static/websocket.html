@@ -179,7 +179,7 @@ window.addEventListener("load", ()=>{
 				ws.classify(sid, "image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
 					.then(r=>{result.textContent = r.result.map(
 						a=>`${a["label"]}(${round(a["accuracy"], 2)})`).join(",")})
-					.catch(e=>{ console.error(e); result.textContent = r.error; });
+					.catch(e=>{ console.error(e); result.textContent = e.error; });
 			}
 		});
 	});
@@ -259,31 +259,14 @@ window.addEventListener("load", ()=>{
 
 class WSInvoker{
 	constructor(url){
-		this.rid = 0;
-		this.ws = new WebSocket(url);
-		this.ws.binaryType = "arraybuffer";
-		this.ws.addEventListener('open', e=>{
-			console.log("open websocket connection.");
-		});
-		this.ws.addEventListener("message", e=>{
-			if(e.data instanceof ArrayBuffer) {
-				// binary
-				const array = new Uint8Array(e.data);
-				console.log("res:", array);
-				const r = this.bson.deserialize(Buffer.from(array));
-				console.log("res(decoded):", r);
-				this.handlers[r.reqId](r);
-			} else {
-				// text
-				console.log("res:", e.data);
-				const r = JSON.parse(e.data);
-				console.log("res(decoded):", r);
-				this.handlers[r.reqId](r);
-			}
-		});
-		this.handlers = {};
 		this.bson = new BSON();
+		this.url = url;
+		this.ws = null;
+		this.sendbuf = [];
+		this.rid = 0;
+		this.handlers = {};
 	}
+
 	translate(serviceId, sl, tl, source){
 		return this.invoke(serviceId, "translate",
 				[sl, tl, source]);
@@ -312,10 +295,57 @@ class WSInvoker{
 			const data = this.bson.serialize(msg);
 //			const data = JSON.stringify(msg);			
 			console.log("req(encoded):", data);
-			this.ws.send(data);
+			this.send(data);
 			this.handlers[rid] = r=>{
 				resolve(r);
+				delete this.handlers[rid];
 			};
+		});
+	}
+
+	send(data){
+		this.prepareWs();
+		if(this.ws.readyState == 0){
+			this.sendbuf.push(data);
+		} else if(this.ws.readyState == 1){
+			this.ws.send(data);
+		} else{
+			console.error("websocket connection closing.");
+		}
+	}
+
+	prepareWs(){
+		if(this.ws != null) return;
+		this.ws = new WebSocket(this.url);
+		this.ws.binaryType = "arraybuffer";
+		this.ws.addEventListener('open', e=>{
+			console.log("websocket connection opened.");
+			for(let b of this.sendbuf){
+				this.ws.send(b);
+			}
+			this.sendbuf = [];
+		});
+		this.ws.addEventListener('close', e=>{
+			console.log("websocket connection closed.");
+			this.ws = null;
+			this.rid = 0;
+			this.handlers = {};
+		});
+		this.ws.addEventListener("message", e=>{
+			if(e.data instanceof ArrayBuffer) {
+				// binary
+				const array = new Uint8Array(e.data);
+				console.log("res:", array);
+				const r = this.bson.deserialize(Buffer.from(array));
+				console.log("res(decoded):", r);
+				this.handlers[r.reqId](r);
+			} else {
+				// text
+				console.log("res:", e.data);
+				const r = JSON.parse(e.data);
+				console.log("res(decoded):", r);
+				this.handlers[r.reqId](r);
+			}
 		});
 	}
 }
