@@ -29,6 +29,11 @@
         <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
           type="button" role="tab" aria-controls="ig" aria-selected="false">TextImageGeneration</button>
       </li>
+      <!-- テキスト感情分析サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tsaTab" data-bs-toggle="tab" data-bs-target="#tsa"
+          type="button" role="tab" aria-controls="tsa" aria-selected="false">TextSentimentAnalysis</button>
+      </li>
     </ul>
     <div class="tab-content" id="tabContent">
       <!-- 翻訳サービス -->
@@ -86,6 +91,18 @@
 		<br/>
         <a href="https://github.com/borisdayma/dalle-mini">Dalle Mini</a>
       </div>
+      <!-- テキスト感情分析サービス -->
+      <div id="tsa" aria-labelledby="tsaTab" class="tab-pane fade" role="tabpanel">
+        <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
+        <label>text<input data-id="text" class="form-control" type="text" value="今日はいい天気ですね"></label>
+        <button data-id="execute" class="btn btn-success">分析</button>
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<br/>
+        <a href="https://github.com/cl-tohoku/bert-japanese/tree/v1.0">BERT Models for Japanese NLP</a>
+      </div>
     </div>
   </div></div>
 </div>
@@ -115,6 +132,7 @@ window.addEventListener("load", ()=>{
 	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
 //	const igServiceIds = ["DummyTextImageGeneration"];
 	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1"];
+	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -218,7 +236,7 @@ window.addEventListener("load", ()=>{
 		});
 	});
 
-	{
+	{	// TextImageGeneration
 		const parent = document.querySelector("#ig");
 		const services = parent.querySelector("[data-id='services']");
 		const results = {};
@@ -255,6 +273,34 @@ window.addEventListener("load", ()=>{
 			}
 		});
 	}
+
+	{	// TextSentimentAnalysis
+		const parent = document.querySelector("#tsa");
+		const sids = tsaServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const results = {};
+		for(let sid of sids){
+			services.append(document.createTextNode(`${sid}: `));
+			const r = document.createElement("span");
+			results[sid] = r;
+			services.append(r);
+			services.append(document.createElement("br"));
+		}
+		parent.querySelector("[data-id='execute']").addEventListener("click", e=>{
+			e.preventDefault();
+			const lang = parent.querySelector("[data-id='language']").value;
+			const text = parent.querySelector("[data-id='text']").value;
+			for(let sid of sids){
+				const result = results[sid];
+				result.textContent = "processing...";
+				ws.textSentimentAnalyze(sid, lang, text)
+					.then(r=>{
+						result.textContent = `${r.result.label}(${round(r.result.accuracy, 2)})`;
+					})
+					.catch(e=>{ console.error(e); result.textContent = r.error; });
+			}
+		});
+	}
 });
 
 class WSInvoker{
@@ -282,6 +328,10 @@ class WSInvoker{
 	textImageGenerate(serviceId, language, text, imageFormat, maxResults){
 		return this.invoke(serviceId, "generate",
 				[language, text, imageFormat, maxResults]);
+	}
+	textSentimentAnalyze(serviceId, language, text){
+		return this.invoke(serviceId, "analyze",
+				[language, text]);
 	}
 	invoke(serviceId, method, args){
 		console.log(`${serviceId}.${method}`);

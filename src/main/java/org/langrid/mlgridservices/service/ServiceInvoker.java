@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
+		services.put("ClTohokuSentimentAnalysis", huggingFaceService);
 		services.put("DalleMiniMega1Fp16", dalleMiniService);
 		services.put("DalleMiniMini1", dalleMiniService);
 		services.put("DummyTextImageGeneration", new Service(){
@@ -59,6 +60,8 @@ public class ServiceInvoker {
 
 	@Autowired
 	private LangridService langridService;
+	@Autowired
+	private HuggingFaceService huggingFaceService;
 	@Autowired
 	private HelsinkiNlpService helsinkiNlpService;
 	@Autowired
