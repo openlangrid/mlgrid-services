@@ -2,7 +2,6 @@ package org.langrid.mlgridservices.service;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
-import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.HuggingFaceTextSentimentAnalysisService;
 import org.langrid.service.ml.TextSentimentAnalysisService;
 import org.springframework.context.annotation.Bean;
