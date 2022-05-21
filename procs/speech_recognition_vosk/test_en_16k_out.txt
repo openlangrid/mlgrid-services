@@ -1,0 +1,207 @@
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : "one"
+}
+{
+  "partial" : "one zero"
+}
+{
+  "partial" : "one zero"
+}
+{
+  "partial" : "one zero zero"
+}
+{
+  "partial" : "one zero zero"
+}
+{
+  "partial" : "one zero zero zero"
+}
+{
+  "partial" : "one zero zero zero one"
+}
+{
+  "partial" : "one zero zero zero one"
+}
+{
+  "partial" : "one zero zero zero one"
+}
+{
+  "partial" : "one zero zero zero one"
+}
+{
+  "partial" : "one zero zero zero one"
+}
+{
+  "result" : [{
+      "conf" : 1.000000,
+      "end" : 1.110000,
+      "start" : 0.840000,
+      "word" : "one"
+    }, {
+      "conf" : 1.000000,
+      "end" : 1.530000,
+      "start" : 1.110000,
+      "word" : "zero"
+    }, {
+      "conf" : 1.000000,
+      "end" : 1.920000,
+      "start" : 1.530000,
+      "word" : "zero"
+    }, {
+      "conf" : 1.000000,
+      "end" : 2.310000,
+      "start" : 1.920000,
+      "word" : "zero"
+    }, {
+      "conf" : 1.000000,
+      "end" : 2.610000,
+      "start" : 2.310000,
+      "word" : "one"
+    }],
+  "text" : "one zero zero zero one"
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : "no no"
+}
+{
+  "partial" : "nah no"
+}
+{
+  "partial" : "nah no to"
+}
+{
+  "partial" : "nah no to i know"
+}
+{
+  "partial" : "nah no to i know"
+}
+{
+  "partial" : "nah no to i know"
+}
+{
+  "partial" : "nah no to i know"
+}
+{
+  "result" : [{
+      "conf" : 0.393649,
+      "end" : 4.110000,
+      "start" : 3.930000,
+      "word" : "nah"
+    }, {
+      "conf" : 0.596490,
+      "end" : 4.290000,
+      "start" : 4.110000,
+      "word" : "no"
+    }, {
+      "conf" : 0.747784,
+      "end" : 4.560000,
+      "start" : 4.290000,
+      "word" : "to"
+    }, {
+      "conf" : 0.558995,
+      "end" : 4.620000,
+      "start" : 4.560000,
+      "word" : "i"
+    }, {
+      "conf" : 0.853276,
+      "end" : 4.980000,
+      "start" : 4.620000,
+      "word" : "know"
+    }],
+  "text" : "nah no to i know"
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : ""
+}
+{
+  "partial" : "zero"
+}
+{
+  "partial" : "zero one"
+}
+{
+  "partial" : "zero one eight six"
+}
+{
+  "partial" : "zero one eight zero"
+}
+{
+  "partial" : "zero one eight zero"
+}
+{
+  "partial" : "zero one eight zero"
+}
+{
+  "partial" : "zero one eight zero three"
+}
+{
+  "partial" : "zero one eight zero three"
+}
+{
+  "result" : [{
+      "conf" : 1.000000,
+      "end" : 6.690000,
+      "start" : 6.240000,
+      "word" : "zero"
+    }, {
+      "conf" : 1.000000,
+      "end" : 6.900000,
+      "start" : 6.690000,
+      "word" : "one"
+    }, {
+      "conf" : 1.000000,
+      "end" : 7.110000,
+      "start" : 6.930000,
+      "word" : "eight"
+    }, {
+      "conf" : 1.000000,
+      "end" : 7.500000,
+      "start" : 7.110000,
+      "word" : "zero"
+    }, {
+      "conf" : 1.000000,
+      "end" : 7.950000,
+      "start" : 7.500000,
+      "word" : "three"
+    }],
+  "text" : "zero one eight zero three"
+}
