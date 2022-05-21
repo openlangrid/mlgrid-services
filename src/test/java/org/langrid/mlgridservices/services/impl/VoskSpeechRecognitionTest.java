@@ -5,7 +5,6 @@ import org.langrid.mlgridservices.service.impl.VoskSpeechToTextService;
 import org.langrid.service.ml.ContinuousSpeechRecognitionConfig;
 import org.langrid.service.ml.ContinuousSpeechRecognitionReceiverService;
 import org.langrid.service.ml.ContinuousSpeechRecognitionTranscript;
-import org.springframework.test.context.TestExecutionListeners;
 
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
@@ -19,64 +18,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sound.sampled.AudioSystem;
 
-import java.util.ArrayList;
-
 public class VoskSpeechRecognitionTest {
-	@Test
-	public void test() throws Throwable{
-		var base = "./procs/speech_recognition_vosk/";
-		var fname =
-			"test_ja_2_16k";
-			//"test_en_16k";
-		var file = base + fname + ".wav";
-		try(var w = Files.newBufferedWriter(Path.of(base + fname + "_out.txt"))){
-			for (String res : transcribe(file)) {
-				System.out.println(res);
-				w.write(res);
-				w.newLine();
-	        }
-		}
-	}
-
-    private ArrayList<String> results = new ArrayList<String>();
-    private CountDownLatch recieveLatch;
-
-    public ArrayList<String> transcribe(String path) throws Exception {
-        var factory = new WebSocketFactory();
-        var ws = factory.createSocket("ws://localhost:2700");
-        ws.addListener(new WebSocketAdapter() {
-            @Override
-            public void onTextMessage(WebSocket websocket, String message) {
-                results.add(message);
-                recieveLatch.countDown();
-            }
-			@Override
-			public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-				recieveLatch.countDown();
-				cause.printStackTrace();
-			}
-		});
-		ws.connect();
-
-		recieveLatch = new CountDownLatch(1);
-		try(var fis = new FileInputStream(new File(path));
-			var dis = new DataInputStream(fis)){
-			byte[] buf = new byte[8000];
-			while (true) {
-				int nbytes = dis.read(buf);
-				if (nbytes < 0) break;
-				ws.sendBinary(buf);
-				recieveLatch.await();
-			}
-			ws.sendText("{\"eof\" : 1}");
-			recieveLatch.await();
-		} finally{
-			ws.disconnect();
-		}
-
-		return results;
-    }
-
+	CountDownLatch recieveLatch;
 	@Test
 	public void test2() throws Exception {
 		var base = "./procs/speech_recognition_vosk/";
