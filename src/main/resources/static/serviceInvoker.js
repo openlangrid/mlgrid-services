@@ -158,3 +158,31 @@ class WSServiceInvoker extends ServiceInvoker{
 		});
 	}
 }
+
+class HTTPServiceInvoker extends ServiceInvoker{
+	constructor(baseUrl){
+        super();
+		this.baseUrl = baseUrl;
+	}
+
+	invoke(serviceId, method, args){
+		const body = JSON.stringify({
+			method: method,
+			args: args
+		});
+		console.trace("req:", body);
+		return new Promise((resolve, reject)=>{
+			fetch(`${this.baseUrl}/${serviceId}`, {
+				method: "POST", mode: 'cors',
+				headers: {'Content-Type': 'application/json'},
+				body: body
+			})
+			.then(r=>{
+				const ret = r.json();
+				console.trace("res(decoded):", ret);
+				resolve(ret);
+			})
+			.catch(e=>reject(e));
+		});
+	}	
+}
