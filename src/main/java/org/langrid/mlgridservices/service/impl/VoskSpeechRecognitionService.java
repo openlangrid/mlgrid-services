@@ -24,7 +24,6 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
 public class VoskSpeechRecognitionService implements ContinuousSpeechRecognitionService{
 	public VoskSpeechRecognitionService(){
-		System.err.println("VoskSpeechRecognitionService created!!");
 	}
 	static class Context{
 		WebSocket ws;
@@ -53,7 +52,7 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 		}
 		void waitResultOrException() throws InterruptedException{
 			synchronized(lock){
-				lock.wait();
+				lock.wait(2000);
 			}
 		}
 	}
@@ -80,7 +79,6 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 				public void onTextMessage(WebSocket websocket, String message) {
 					int sentenceId = c.sentenceCount;
 					try{
-						System.out.println(message);
 						var ret = mapper.readValue(message, Map.class);
 						if(ret.containsKey("partial")){
 							c.notifyResult(
@@ -148,7 +146,6 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 	@Override
 	public ContinuousSpeechRecognitionTranscript[] processRecognition(String sessionId, byte[] audio)
 	throws InvalidParameterException, ProcessFailedException{
-		System.out.printf("sessionId: %s, audio.length: %d.%n", sessionId, audio.length);
 		var c = contexts.get(sessionId);
 		if(c == null){
 			throw new InvalidParameterException("sessionId", "no valid running request: " + sessionId);
@@ -158,10 +155,9 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 		try {
 			c.recorder.onRawData(audio);
 			c.waitResultOrException();
-			if(c.result != null){
-				return c.result;
-			}
-			throw c.exception;
+			if(c.result != null) return c.result;
+			if(c.exception != null) throw c.exception;
+			return new ContinuousSpeechRecognitionTranscript[]{};
 		} catch (InterruptedException | IOException e) {
 			e.printStackTrace();
 			c.ws.disconnect();
@@ -183,10 +179,9 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 		try {
 			c.recorder.onRecordingFinished();
 			c.waitResultOrException();
-			if(c.result != null){
-				return c.result;
-			}
-			throw c.exception;
+			if(c.result != null) return c.result;
+			if(c.exception != null) throw c.exception;
+			return new ContinuousSpeechRecognitionTranscript[]{};
 		} catch (InterruptedException | IOException e) {
 			e.printStackTrace();
 			c.ws.disconnect();
