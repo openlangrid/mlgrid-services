@@ -130,7 +130,6 @@
 <script src="./serviceInvoker.js"></script>
 <script src="./recorder.js"></script>
 <script>
-
 //const baseUrl = "https://langrid.org/mlgrid-services/services";
 //const baseUrl = "http://localhost:8080/mlgrid-services/services";
 const baseUrl = "services";
@@ -158,7 +157,7 @@ window.addEventListener("load", ()=>{
 	const loc = document.location;
 	const proto = loc.protocol == "https:" ? "wss" : "ws";
 	const wsUrl = `${proto}://${loc.host}/${loc.pathname.split("/")[1]}/ws`
-	console.log(`ws url: ${wsUrl}`);
+	console.trace(`ws url: ${wsUrl}`);
 	const ws = new WSServiceInvoker(wsUrl);
 	const rec = new Recorder();
 
@@ -181,7 +180,7 @@ window.addEventListener("load", ()=>{
 			const result = transResults[sid];
 			result.textContent = "processing...";
 			ws.translation(sid).translate(sl, tl, source)
-				.then(r=>{ console.log(r); result.textContent = r.result; })
+				.then(r=>{ result.textContent = r.result; })
 				.catch(e=>{ console.error(e); result.textContent = r.error; });
 		}
 	});
@@ -277,8 +276,6 @@ window.addEventListener("load", ()=>{
 				result.textContent = "processing...";
 				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", 8)
 					.then(r=>{
-						console.log(r);
-						console.log(r.result);
 						result.textContent = "";
 						result.append(document.createElement("br"));
 						for(let res of r.result){
@@ -401,7 +398,6 @@ window.addEventListener("load", ()=>{
 					if(s.started){
 						const data = downsampleBuffer(channelData, recorder.getAudioContext().sampleRate, 16000);
 //						const data = channelData;
-						console.log(data);
 						ws.continuousSpeechRecognition(sid)
 							.processRecognition(s.sessionId, Buffer.from(data))
 							.then(receiver(s))
@@ -454,7 +450,6 @@ function downsampleBuffer(buffer, sampleRate, outSampleRate){
 		v = v < 0 ? v * 0x8000 : v * 0x7fff
 		result[offsetResult * 2] = v & 0xff;
 		result[offsetResult * 2 + 1] = (v & 0xff00) >> 8;
-
 /*/
 		result[offsetResult * 2] = Math.min(1, accum / count) * 0xFF;
 		result[offsetResult * 2 + 1] = (Math.min(1, accum / count) * 0x7F00) >> 8;
