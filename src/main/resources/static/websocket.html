@@ -369,7 +369,6 @@ window.addEventListener("load", ()=>{
 				const lang = parent.querySelector(`[data-id="language"]`).value;
 				for(let sid of sids){
 					const s = services[sid];
-					s.resultsDiv.append(document.createTextNode("processing..."));
 					const config = {
 						channels: 1,
 						sampleSizeInBits: 16,
@@ -377,6 +376,11 @@ window.addEventListener("load", ()=>{
 					};
 					ws.continuousSpeechRecognition(sid).startRecognition(lang, config)
 						.then(r=>{
+							while (s.resultsDiv.firstChild) {
+     						   s.resultsDiv.removeChild(s.resultsDiv.firstChild);
+							}
+							s.resultsDiv.append(document.createElement("span"));
+							s.resultsDiv.firstChild.textContent = "processing...";
 							s.started = true;
 							s.sessionId = r.result;
 						})
@@ -420,6 +424,7 @@ window.addEventListener("load", ()=>{
 							s.resultsDiv.append(document.createTextNode(e.error));
 							recorder.finish();
 						});
+					s.resultsDiv.removeChild(s.resultsDiv.firstChild);
 				}
 			};
 			recorder.start();
