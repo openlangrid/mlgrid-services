@@ -2,6 +2,8 @@ package org.langrid.mlgridservices.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +25,11 @@ import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
 public class VoskSpeechRecognitionService implements ContinuousSpeechRecognitionService{
+	private String uri = "ws://localhost:2700";
 	public VoskSpeechRecognitionService(){
+	}
+	public VoskSpeechRecognitionService(String uri){
+		this.uri = uri;
 	}
 	static class Context{
 		WebSocket ws;
@@ -71,9 +77,10 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 		var sessionId = "session_" + receiverCount++;
 		contexts.put(sessionId, c);
 		try{
-			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp"), "recording");
+			String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
+			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp-" + ds + "-"), "recording");
 			c.recorder = new WavRecorder(f.toString(), config.getChannels(), config.getSampleSizeInBits(), config.getFrameRate());
-			c.ws = factory.createSocket("ws://localhost:2700");
+			c.ws = factory.createSocket(this.uri);
 			c.ws.addListener(new WebSocketAdapter() {
 				@Override
 				public void onTextMessage(WebSocket websocket, String message) {
