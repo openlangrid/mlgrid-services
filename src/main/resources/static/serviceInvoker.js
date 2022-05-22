@@ -94,7 +94,6 @@ class WSServiceInvoker extends ServiceInvoker{
 	}
 
 	invoke(serviceId, method, args){
-		console.trace(`${serviceId}.${method}`);
 		return new Promise((resolve, reject)=>{
 			const rid = this.rid++;
 			const msg = {
