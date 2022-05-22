@@ -34,6 +34,11 @@
         <button class="nav-link" id="tsaTab" data-bs-toggle="tab" data-bs-target="#tsa"
           type="button" role="tab" aria-controls="tsa" aria-selected="false">TextSentimentAnalysis</button>
       </li>
+      <!-- 音声認識サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="asrTab" data-bs-toggle="tab" data-bs-target="#asr"
+          type="button" role="tab" aria-controls="asr" aria-selected="false">SpeechRecognition</button>
+      </li>
     </ul>
     <div class="tab-content" id="tabContent">
       <!-- 翻訳サービス -->
@@ -103,6 +108,17 @@
 		<br/>
         <a href="https://github.com/cl-tohoku/bert-japanese/tree/v1.0">BERT Models for Japanese NLP</a>
       </div>
+      <!-- 音声認識サービス -->
+      <div id="asr" aria-labelledby="asrTab" class="tab-pane fade" role="tabpanel">
+        <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
+        <button data-id="execute" class="btn btn-success">開始</button>
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<br/>
+        <a href="https://alphacephei.com/vosk/server">VOSK Server</a>
+      </div>
     </div>
   </div></div>
 </div>
@@ -110,8 +126,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-bson/2.0.8/bson.min.js" integrity="sha512-3NRCDv4HSFtMd3OLtUOPmxOceZQuCtfhhGaTn3BpCn+wDEDRWOWeNGjL2Ahd6IrvlhH6kBpAHRzeU3AfKKvzkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-bson/2.0.8/bson.js" integrity="sha512-qj4zC8FelR9yOqMc29m3TEARellBmX1gse6toliCJJ9vO8Pgy6FaFUwd/UU02Jv3U2ZTyKIjRe1+GQmUPDLAEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 -->
-<script src="bson.js"></script>
+<script src="./bson.js"></script>
+<script src="./serviceInvoker.js"></script>
+<script src="./recorder.js"></script>
 <script>
+
 //const baseUrl = "https://langrid.org/mlgrid-services/services";
 //const baseUrl = "http://localhost:8080/mlgrid-services/services";
 const baseUrl = "services";
@@ -133,13 +152,15 @@ window.addEventListener("load", ()=>{
 //	const igServiceIds = ["DummyTextImageGeneration"];
 	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1"];
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
+	const asrServiceIds = ["VOSK"];//, "ChromeASR"];
 
 	const bson = new BSON();
 	const loc = document.location;
 	const proto = loc.protocol == "https:" ? "wss" : "ws";
 	const wsUrl = `${proto}://${loc.host}/${loc.pathname.split("/")[1]}/ws`
-	console.log(wsUrl);
-	const ws = new WSInvoker(wsUrl);
+	console.log(`ws url: ${wsUrl}`);
+	const ws = new WSServiceInvoker(wsUrl);
+	const rec = new Recorder();
 
 	const trans = document.querySelector("#trans");
 	const transServices = document.querySelector("#transServices");
@@ -159,7 +180,7 @@ window.addEventListener("load", ()=>{
 		for(let sid of transServiceIds){
 			const result = transResults[sid];
 			result.textContent = "processing...";
-			ws.translate(sid, sl, tl, source)
+			ws.translation(sid).translate(sl, tl, source)
 				.then(r=>{ console.log(r); result.textContent = r.result; })
 				.catch(e=>{ console.error(e); result.textContent = r.error; });
 		}
@@ -193,8 +214,8 @@ window.addEventListener("load", ()=>{
 				const result = icResults[sid];
 				result.textContent = "processing...";
 // [cat.jpg,497bytes] b64(DataURL): 663byte, bin: 497bytes
-//				ws.classify(sid, "image/jpeg", fr.result.split(",")[1], "en", 10)
-				ws.classify(sid, "image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
+//				ws.imageClassification(sid).classify(sid, "image/jpeg", fr.result.split(",")[1], "en", 10)
+				ws.imageClassification(sid).classify("image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
 					.then(r=>{result.textContent = r.result.map(
 						a=>`${a["label"]}(${round(a["accuracy"], 2)})`).join(",")})
 					.catch(e=>{ console.error(e); result.textContent = e.error; });
@@ -228,7 +249,7 @@ window.addEventListener("load", ()=>{
 			for(let sid of odServiceIds){
 				const result = odResults[sid];
 				result.textContent = "processing...";
-				ws.detect(sid, "image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
+				ws.objectDetection(sid).detect("image/jpeg", Buffer.from(new Uint8Array(fr.result)), "en", 10)
 					.then(r=>{result.textContent = r.result.map(
 						a=>`${JSON.stringify(roundBox(a["boundingBox"], 2))},${a["label"]}(${round(a["accuracy"], 2)})`).join("\n")})
 					.catch(e=>{ console.error(e); result.textContent = r.error; });
@@ -254,7 +275,7 @@ window.addEventListener("load", ()=>{
 			for(let sid of igServiceIds){
 				const result = results[sid];
 				result.textContent = "processing...";
-				ws.textImageGenerate(sid, lang, text, "image/jpeg", 8)
+				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", 8)
 					.then(r=>{
 						console.log(r);
 						console.log(r.result);
@@ -293,7 +314,7 @@ window.addEventListener("load", ()=>{
 			for(let sid of sids){
 				const result = results[sid];
 				result.textContent = "processing...";
-				ws.textSentimentAnalyze(sid, lang, text)
+				ws.textSentimentAnalysis(sid).analyze(lang, text)
 					.then(r=>{
 						result.textContent = `${r.result.label}(${round(r.result.accuracy, 2)})`;
 					})
@@ -301,103 +322,140 @@ window.addEventListener("load", ()=>{
 			}
 		});
 	}
+
+	{	// ContinuousSpeechRecognition
+		const parent = document.querySelector("#asr");
+		const sids = asrServiceIds;
+		const resultContainer = parent.querySelector("[data-id='services']");
+		const services = {};
+		for(let sid of sids){
+			const s = {};
+			services[sid] = s;
+			resultContainer.append(document.createTextNode(`${sid}: `));
+			const resultsDiv = document.createElement("div");
+			resultContainer.append(resultsDiv);
+			resultContainer.append(document.createElement("br"));
+			s.resultsDiv = resultsDiv;
+		}
+		let recorder = null;
+		const exeBtn = parent.querySelector("[data-id='execute']");
+		exeBtn.addEventListener("click", e=>{
+			e.preventDefault();
+			if(recorder){
+				// 停止する
+				recorder.finish();
+				recorder = null;
+				exeBtn.textContent = "開始";
+				return;
+			}
+			// 開始する
+			exeBtn.textContent = "停止";
+			recorder = new Recorder();
+			const receiver = s=>{ return r=>{
+				for(let result of r.result){
+					let sentenceSpan = s.resultsDiv.querySelector(`[data-sentence-id="${result.sentenceId}"]`);
+					if(!sentenceSpan){
+						sentenceSpan = document.createElement("span");
+						sentenceSpan.setAttribute("data-sentence-id", result.sentenceId);
+						s.resultsDiv.append(document.createElement("br"));
+						s.resultsDiv.append(sentenceSpan);
+					}
+					sentenceSpan.textContent = `${result.sentence}(${round(result.accuracy, 2)})`;
+				}
+			}; };
+			recorder.onStartRecording = (stream, audioContext)=>{
+				const lang = parent.querySelector(`[data-id="language"]`).value;
+				for(let sid of sids){
+					const s = services[sid];
+					s.resultsDiv.append(document.createTextNode("processing..."));
+					const config = {
+						channels: 1,
+						sampleSizeInBits: 16,
+						frameRate: 16000 // audioContext.sampleRate  // hertz. 8000, 16000, 44100.
+					};
+					ws.continuousSpeechRecognition(sid).startRecognition(lang, config)
+						.then(r=>{
+							s.started = true;
+							s.sessionId = r.result;
+						})
+						.catch(e=>{
+							console.error(e);
+							s.resultsDiv.textContent = r.error;
+							recorder.finish();
+						});
+				}
+			};
+			recorder.onProcessRecording = channelData =>{
+				for(let sid of sids){
+					const s = services[sid];
+					if(s.sessionId == null){
+						console.trace("skip service because sessionId is null.")
+						continue;
+					}
+					if(s.started){
+						const data = downsampleBuffer(channelData, recorder.getAudioContext().sampleRate, 16000);
+//						const data = channelData;
+						console.log(data);
+						ws.continuousSpeechRecognition(sid)
+							.processRecognition(s.sessionId, Buffer.from(data))
+							.then(receiver(s))
+							.catch(e=>{
+								console.error(e);
+								s.resultsDiv.append(document.createTextNode(e.error));
+								recorder.finish();
+							});
+					}
+				}
+			};
+			recorder.onFinishRecording = ()=>{
+				for(let sid of sids){
+					const s = services[sid];
+					ws.continuousSpeechRecognition(sid)
+						.stopRecognition(s.sessionId)
+						.then(receiver(s))
+						.catch(e=>{
+							console.error(e);
+							s.resultsDiv.append(document.createTextNode(e.error));
+							recorder.finish();
+						});
+				}
+			};
+			recorder.start();
+		});
+	}
 });
 
-class WSInvoker{
-	constructor(url){
-		this.bson = new BSON();
-		this.url = url;
-		this.ws = null;
-		this.sendbuf = [];
-		this.rid = 0;
-		this.handlers = {};
+function downsampleBuffer(buffer, sampleRate, outSampleRate){
+	if (outSampleRate > sampleRate) {
+		console.error('downsampling rate show be smaller than original sample rate');
 	}
-
-	translate(serviceId, sl, tl, source){
-		return this.invoke(serviceId, "translate",
-				[sl, tl, source]);
-	}
-	classify(serviceId, format, image, labelLang, maxResults){
-		return this.invoke(serviceId, "classify",
-				[format, image, labelLang, maxResults]);
-	}
-	detect(serviceId, format, b64Image, labelLang, maxResults){
-		return this.invoke(serviceId, "detect",
-				[format, b64Image, labelLang, maxResults]);
-	}
-	textImageGenerate(serviceId, language, text, imageFormat, maxResults){
-		return this.invoke(serviceId, "generate",
-				[language, text, imageFormat, maxResults]);
-	}
-	textSentimentAnalyze(serviceId, language, text){
-		return this.invoke(serviceId, "analyze",
-				[language, text]);
-	}
-	invoke(serviceId, method, args){
-		console.log(`${serviceId}.${method}`);
-		return new Promise((resolve, reject)=>{
-			const rid = this.rid++;
-			const msg = {
-				reqId: rid, serviceId: serviceId,
-				method: method, args: args
-			};
-			console.log("req:", msg);
-			const data = this.bson.serialize(msg);
-//			const data = JSON.stringify(msg);			
-			console.log("req(encoded):", data);
-			this.send(data);
-			this.handlers[rid] = r=>{
-				resolve(r);
-				delete this.handlers[rid];
-			};
-		});
-	}
-
-	send(data){
-		this.prepareWs();
-		if(this.ws.readyState == 0){
-			this.sendbuf.push(data);
-		} else if(this.ws.readyState == 1){
-			this.ws.send(data);
-		} else{
-			console.error("websocket connection closing.");
+	const sampleRateRatio = sampleRate / outSampleRate;
+	const newLength = Math.round(buffer.length / sampleRateRatio);
+	const result = new Uint8Array(newLength * 2);
+	let offsetResult = 0;
+	let offsetBuffer = 0;
+	while (offsetResult < result.length) {
+		const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+		let accum = 0;
+		let count = 0;
+		for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i += 1) {
+			accum += buffer[i];
+			count += 1;
 		}
-	}
+//*
+		let v = accum / count;
+		v = v < 0 ? v * 0x8000 : v * 0x7fff
+		result[offsetResult * 2] = v & 0xff;
+		result[offsetResult * 2 + 1] = (v & 0xff00) >> 8;
 
-	prepareWs(){
-		if(this.ws != null) return;
-		this.ws = new WebSocket(this.url);
-		this.ws.binaryType = "arraybuffer";
-		this.ws.addEventListener('open', e=>{
-			console.log("websocket connection opened.");
-			for(let b of this.sendbuf){
-				this.ws.send(b);
-			}
-			this.sendbuf = [];
-		});
-		this.ws.addEventListener('close', e=>{
-			console.log("websocket connection closed.");
-			this.ws = null;
-			this.rid = 0;
-			this.handlers = {};
-		});
-		this.ws.addEventListener("message", e=>{
-			if(e.data instanceof ArrayBuffer) {
-				// binary
-				const array = new Uint8Array(e.data);
-				console.log("res:", array);
-				const r = this.bson.deserialize(Buffer.from(array));
-				console.log("res(decoded):", r);
-				this.handlers[r.reqId](r);
-			} else {
-				// text
-				console.log("res:", e.data);
-				const r = JSON.parse(e.data);
-				console.log("res(decoded):", r);
-				this.handlers[r.reqId](r);
-			}
-		});
+/*/
+		result[offsetResult * 2] = Math.min(1, accum / count) * 0xFF;
+		result[offsetResult * 2 + 1] = (Math.min(1, accum / count) * 0x7F00) >> 8;
+//*/
+		offsetResult += 1;
+		offsetBuffer = nextOffsetBuffer;
 	}
+	return result;
 }
 </script>
 </body>

@@ -1,10 +1,8 @@
 package org.langrid.mlgridservices.services.impl;
 
 import org.junit.jupiter.api.Test;
-import org.langrid.mlgridservices.service.impl.VoskSpeechToTextService;
+import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.langrid.service.ml.ContinuousSpeechRecognitionConfig;
-import org.langrid.service.ml.ContinuousSpeechRecognitionReceiverService;
-import org.langrid.service.ml.ContinuousSpeechRecognitionTranscript;
 
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
@@ -89,36 +87,13 @@ public class VoskSpeechRecognitionTest {
 			//"test_en_16k";
 		var file = base + fname + ".wav";
 		var mapper = new ObjectMapper();
-		var service = new VoskSpeechToTextService();
+		var service = new VoskSpeechRecognitionService();
 		try(var w = Files.newBufferedWriter(Path.of(base + fname + "_out_service.txt"));
-			var ais = AudioSystem.getAudioInputStream(new File(file))){
+				var ais = AudioSystem.getAudioInputStream(new File(file))){
 			var af = ais.getFormat();
-			var rid = service.startRecognition(
+			var sid = service.startRecognition(
 				"ja",
-				new ContinuousSpeechRecognitionConfig(af.getChannels(), af.getSampleSizeInBits(), (int)af.getFrameRate()),
-				new ContinuousSpeechRecognitionReceiverService() {
-					@Override
-					public void onRecognitionResult(String recognitionId,
-							ContinuousSpeechRecognitionTranscript[] results) {
-						try{
-							System.out.println("onRecognitionResult");
-							var s = mapper.writeValueAsString(results);
-							System.out.println(s);
-							w.write(s);
-							w.newLine();
-							System.out.println(s);
-						} catch(IOException e){
-							e.printStackTrace();
-						}
-						recieveLatch.countDown();
-					}
-					@Override
-					public void onException(ProcessFailedException exception) {
-						recieveLatch.countDown();
-						exception.printStackTrace();
-					}
-				});
-
+				new ContinuousSpeechRecognitionConfig(af.getChannels(), af.getSampleSizeInBits(), (int)af.getFrameRate()));
 			try{
 				System.out.println("channels: " + ais.getFormat().getChannels());
 				System.out.println("sampleSizeInBits: " + ais.getFormat().getSampleSizeInBits());
@@ -132,13 +107,31 @@ public class VoskSpeechRecognitionTest {
 					if (nbytes < 0) break;
 					recieveLatch = new CountDownLatch(1);
 					System.out.println("send " + buf.length + " bytes.");
-					service.processRecognition(rid, buf);
-					recieveLatch.await();
+					var results = service.processRecognition(sid, buf);
+					try{
+						System.out.println("onRecognitionResult");
+						var s = mapper.writeValueAsString(results);
+						System.out.println(s);
+						w.write(s);
+						w.newLine();
+						System.out.println(s);
+					} catch(IOException e){
+						e.printStackTrace();
+					}
 				}
-				recieveLatch = new CountDownLatch(1);
-				service.stopRecognition(rid);
-				recieveLatch.await();
-			} finally{
+				var results = service.stopRecognition(sid);
+				try{
+					System.out.println("onRecognitionResult");
+					var s = mapper.writeValueAsString(results);
+					System.out.println(s);
+					w.write(s);
+					w.newLine();
+					System.out.println(s);
+				} catch(IOException e){
+					e.printStackTrace();
+				}
+			} catch(ProcessFailedException e){
+				e.printStackTrace();
 			}
 		}
 	}

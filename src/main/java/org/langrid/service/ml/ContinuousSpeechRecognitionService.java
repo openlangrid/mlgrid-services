@@ -5,16 +5,17 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public interface ContinuousSpeechRecognitionService {
+	/**
+	 * @return sessionId
+	 */
 	String startRecognition(
 		String language,
-		ContinuousSpeechRecognitionConfig config,
-		ContinuousSpeechRecognitionReceiverService receiver)
+		ContinuousSpeechRecognitionConfig config)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException;
 
-	void processRecognition(String rid, byte[] audio)
+	ContinuousSpeechRecognitionTranscript[] processRecognition(String sessionId, byte[] audio)
 	throws InvalidParameterException, ProcessFailedException;
 
-	void stopRecognition(String rid)
+	ContinuousSpeechRecognitionTranscript[] stopRecognition(String sessionId)
 	throws InvalidParameterException, ProcessFailedException;
-
 }

@@ -42,6 +42,7 @@ public class ServiceInvoker {
 		services.put("YoloV5m", yoloV5Service);
 		services.put("YoloV5l", yoloV5Service);
 		services.put("YoloV5x", yoloV5Service);
+		services.put("VOSK", voskService);
 	}
 
 	public synchronized Response invoke(
@@ -70,4 +71,6 @@ public class ServiceInvoker {
 	private YoloV5Service yoloV5Service;
 	@Autowired
 	private DalleMiniService dalleMiniService;
+	@Autowired
+	private VoskService voskService;
 }
