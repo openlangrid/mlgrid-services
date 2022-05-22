@@ -76,7 +76,10 @@ class ServiceInvoker{
 	translation(serviceId){
 		return new TranslationService(this, serviceId);
 	}
-    textSentimentAnalyze(serviceId){
+	textImageGeneration(serviceId){
+		return new TextImageGenerationService(this, serviceId);
+	}
+    textSentimentAnalysis(serviceId){
         return new TextSentimentAnalysisService(this, serviceId);
     }
 } 
