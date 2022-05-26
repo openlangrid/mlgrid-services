@@ -78,7 +78,7 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 		contexts.put(sessionId, c);
 		try{
 			String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
-			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp-" + ds + "-"), "recording");
+			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp"), "recording-" + ds + "-");
 			c.recorder = new WavRecorder(f.toString(), config.getChannels(), config.getSampleSizeInBits(), config.getFrameRate());
 			c.ws = factory.createSocket(this.uri);
 			c.ws.addListener(new WebSocketAdapter() {
