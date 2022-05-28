@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,13 +24,15 @@ import org.langrid.service.ml.ContinuousSpeechRecognitionTranscript;
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public class VoskSpeechRecognitionService implements ContinuousSpeechRecognitionService{
-	private String uri = "ws://localhost:2700";
 	public VoskSpeechRecognitionService(){
+		serverUris.put("ja", "ws://localhost:2700");
+		serverUris.put("en", "ws://localhost:2701");
 	}
-	public VoskSpeechRecognitionService(String uri){
-		this.uri = uri;
+	protected void addServer(String language, String uri){
+		serverUris.put(language, uri);
 	}
 	static class Context{
 		WebSocket ws;
@@ -62,17 +65,29 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 			}
 		}
 	}
+	private Map<String, String> serverUris = new HashMap<>();
 	private WebSocketFactory factory = new WebSocketFactory();
 	private Map<String, Context> contexts = new ConcurrentHashMap<>();
 	private int receiverCount;
 	private ObjectMapper mapper = new ObjectMapper();
 
+	String getUri(String language)
+	throws UnsupportedLanguageException{
+		var uri = serverUris.get(language);
+		if(uri != null) return uri;
+		var prefix = language + "-";
+		for(var e : serverUris.entrySet()){
+			if(e.getKey().startsWith(prefix)) return e.getValue();
+		}
+		throw new UnsupportedLanguageException("language", language);
+	}
 	@Override
 	public synchronized String startRecognition(
 		String language, 
 		ContinuousSpeechRecognitionConfig config)
-		throws ProcessFailedException
+		throws UnsupportedLanguageException, ProcessFailedException
 	{
+		var uri = getUri(language.toLowerCase());
 		var c = new Context();
 		var sessionId = "session_" + receiverCount++;
 		contexts.put(sessionId, c);
@@ -80,7 +95,7 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 			String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
 			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp"), "recording-" + ds + "-");
 			c.recorder = new WavRecorder(f.toString(), config.getChannels(), config.getSampleSizeInBits(), config.getFrameRate());
-			c.ws = factory.createSocket(this.uri);
+			c.ws = factory.createSocket(uri);
 			c.ws.addListener(new WebSocketAdapter() {
 				@Override
 				public void onTextMessage(WebSocket websocket, String message) {

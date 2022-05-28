@@ -1,4 +1,4 @@
-package org.langrid.mlgridservices.service;
+package org.langrid.mlgridservices.service.group;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @org.springframework.stereotype.Service
-public class HuggingFaceService  implements Service {
+public class HuggingFaceService  implements ServiceGroup {
     @Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{

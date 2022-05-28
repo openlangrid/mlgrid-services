@@ -1,4 +1,4 @@
-package org.langrid.mlgridservices.service;
+package org.langrid.mlgridservices.service.group;
 
 import java.util.Base64;
 
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @org.springframework.stereotype.Service
-public class YoloV5Service implements Service{
+public class YoloV5Service implements ServiceGroup{
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{

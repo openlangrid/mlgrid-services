@@ -1,4 +1,4 @@
-package org.langrid.mlgridservices.service;
+package org.langrid.mlgridservices.service.group;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,7 +14,7 @@ import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 @org.springframework.stereotype.Service
-public class LangridService implements Service{
+public class LangridService implements ServiceGroup{
 	public Response invoke(String serviceId, Request invocation) {
 		try{
 			if(serviceId.startsWith("Langrid")){

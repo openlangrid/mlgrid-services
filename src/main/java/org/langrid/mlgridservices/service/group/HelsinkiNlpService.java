@@ -1,4 +1,4 @@
-package org.langrid.mlgridservices.service;
+package org.langrid.mlgridservices.service.group;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
@@ -9,7 +9,7 @@ import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 @org.springframework.stereotype.Service
-public class HelsinkiNlpService  implements Service {
+public class HelsinkiNlpService  implements ServiceGroup {
     @Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
