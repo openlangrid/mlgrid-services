@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @Service
-public class YoloV5Service implements ServiceGroup{
+public class YoloV5ServiceGroup implements ServiceGroup{
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{

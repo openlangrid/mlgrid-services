@@ -9,12 +9,12 @@ import javax.annotation.PostConstruct;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
-import org.langrid.mlgridservices.service.group.DalleMiniService;
-import org.langrid.mlgridservices.service.group.HuggingFaceService;
-import org.langrid.mlgridservices.service.group.KerasService;
-import org.langrid.mlgridservices.service.group.LangridService;
+import org.langrid.mlgridservices.service.group.DalleMiniServiceGroup;
+import org.langrid.mlgridservices.service.group.HuggingFaceServiceGroup;
+import org.langrid.mlgridservices.service.group.KerasServiceGroup;
+import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
-import org.langrid.mlgridservices.service.group.YoloV5Service;
+import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
@@ -77,13 +77,13 @@ public class ServiceInvoker {
 	private Map<String, Object> serviceImples = new HashMap<>();
 
 	@Autowired
-	private LangridService langridService;
+	private LangridServiceGroup langridService;
 	@Autowired
-	private HuggingFaceService huggingFaceService;
+	private HuggingFaceServiceGroup huggingFaceService;
 	@Autowired
-	private KerasService kerasService;
+	private KerasServiceGroup kerasService;
 	@Autowired
-	private YoloV5Service yoloV5Service;
+	private YoloV5ServiceGroup yoloV5Service;
 	@Autowired
-	private DalleMiniService dalleMiniService;
+	private DalleMiniServiceGroup dalleMiniService;
 }

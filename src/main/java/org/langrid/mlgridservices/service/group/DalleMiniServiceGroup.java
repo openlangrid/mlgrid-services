@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @Service
-public class DalleMiniService  implements ServiceGroup {
+public class DalleMiniServiceGroup  implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{

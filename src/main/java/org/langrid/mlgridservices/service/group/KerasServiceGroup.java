@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @Service
-public class KerasService implements ServiceGroup {
+public class KerasServiceGroup implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{

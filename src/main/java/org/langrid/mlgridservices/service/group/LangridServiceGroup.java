@@ -15,7 +15,7 @@ import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 @Service
-public class LangridService implements ServiceGroup{
+public class LangridServiceGroup implements ServiceGroup{
 	public Response invoke(String serviceId, Request invocation) {
 		try{
 			if(serviceId.startsWith("Langrid")){

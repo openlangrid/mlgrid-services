@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @Service
-public class HuggingFaceService  implements ServiceGroup {
+public class HuggingFaceServiceGroup  implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
