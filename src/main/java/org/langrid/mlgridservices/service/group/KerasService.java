@@ -8,10 +8,11 @@ import org.langrid.mlgridservices.service.impl.KerasImageClassificationService;
 import org.langrid.service.ml.ImageClassificationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
-@org.springframework.stereotype.Service
+@Service
 public class KerasService implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {

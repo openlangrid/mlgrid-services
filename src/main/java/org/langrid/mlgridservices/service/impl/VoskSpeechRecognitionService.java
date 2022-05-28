@@ -16,6 +16,7 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
+import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.WavRecorder;
 import org.langrid.service.ml.ContinuousSpeechRecognitionConfig;
 import org.langrid.service.ml.ContinuousSpeechRecognitionService;
@@ -75,9 +76,8 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 	throws UnsupportedLanguageException{
 		var uri = serverUris.get(language);
 		if(uri != null) return uri;
-		var prefix = language + "-";
 		for(var e : serverUris.entrySet()){
-			if(e.getKey().startsWith(prefix)) return e.getValue();
+			if(LanguageUtil.matches(e.getKey(), language)) return e.getValue();
 		}
 		throw new UnsupportedLanguageException("language", language);
 	}

@@ -8,12 +8,13 @@ import java.util.Map;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.client.soap.SoapClientFactory;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
-@org.springframework.stereotype.Service
+@Service
 public class LangridService implements ServiceGroup{
 	public Response invoke(String serviceId, Request invocation) {
 		try{

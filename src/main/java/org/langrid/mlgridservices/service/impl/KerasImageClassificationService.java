@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.ImageClassificationResult;
 import org.langrid.service.ml.ImageClassificationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public class KerasImageClassificationService implements ImageClassificationService{
 	public KerasImageClassificationService(String dockerServiceName, String modelName){
@@ -20,7 +22,10 @@ public class KerasImageClassificationService implements ImageClassificationServi
 	}
 
 	@Override
-	public ImageClassificationResult[] classify(String format, byte[] image, String labelLanguage, int maxResults) {
+	public ImageClassificationResult[] classify(String format, byte[] image, String labelLanguage, int maxResults)
+	throws UnsupportedLanguageException{
+		if(!LanguageUtil.matches("ja", labelLanguage))
+			throw new UnsupportedLanguageException("labelLanguage", labelLanguage);
 		try {
 			var tempDir = new File("procs/image_classification_keras/temp");
 			tempDir.mkdirs();

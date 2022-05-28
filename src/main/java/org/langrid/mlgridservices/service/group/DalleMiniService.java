@@ -5,10 +5,11 @@ import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
 import org.langrid.service.ml.TextToImageGenerationService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
-@org.springframework.stereotype.Service
+@Service
 public class DalleMiniService  implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {

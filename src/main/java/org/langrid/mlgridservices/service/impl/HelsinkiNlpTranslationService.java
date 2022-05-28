@@ -7,16 +7,27 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.langrid.mlgridservices.util.LanguageUtil;
+
 import jp.go.nict.langrid.commons.io.FileUtil;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguagePairException;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 public class HelsinkiNlpTranslationService implements TranslationService{
-	public HelsinkiNlpTranslationService(String modelName){
-		this.modelName = modelName;
+	private String getModelName(String sourceLang, String targetLang) {
+		if(LanguageUtil.matches("en", sourceLang) && LanguageUtil.matches("ja", targetLang)) {
+			return "opus-mt-en-jap";
+		}
+		if(LanguageUtil.matches("ja", sourceLang) && LanguageUtil.matches("en", targetLang)) {
+			return "opus-mt-ja-en";
+		}
+		return null;
 	}
-
 	@Override
-	public String translate(String sourceLang, String targetLang, String source) {
+	public String translate(String sourceLang, String targetLang, String source)
+	throws UnsupportedLanguagePairException{
+		var modelName = getModelName(sourceLang, targetLang);
+		if(modelName == null) throw new UnsupportedLanguagePairException("sourceLang", "targetLang", sourceLang, targetLang);
 		try{
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
@@ -63,6 +74,5 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 		}
 	}
 
-	private String modelName = "opus-mt-en-jap";
 	private File baseDir = new File("./procs/translation_helsinkinlp");
 }

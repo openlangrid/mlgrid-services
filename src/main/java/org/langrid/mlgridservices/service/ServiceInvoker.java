@@ -10,32 +10,33 @@ import javax.annotation.PostConstruct;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.group.DalleMiniService;
-import org.langrid.mlgridservices.service.group.HelsinkiNlpService;
 import org.langrid.mlgridservices.service.group.HuggingFaceService;
 import org.langrid.mlgridservices.service.group.KerasService;
 import org.langrid.mlgridservices.service.group.LangridService;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5Service;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
+import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.commons.beanutils.Converter;
 import jp.go.nict.langrid.commons.lang.ClassUtil;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
-@org.springframework.stereotype.Service
+@Service
 public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
-		serviceImples.put("VOSK", vosk);
+		serviceImples.put("VOSK", new VoskSpeechRecognitionService());
+		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceService);
 		serviceGroups.put("DalleMini", dalleMiniService);
-		serviceGroups.put("HelsinkiNLPOpusMT", helsinkiNlpService);
 		serviceGroups.put("Keras", kerasService);
 		serviceGroups.put("Langrid", langridService);
 		serviceGroups.put("YoloV5", yoloV5Service);
@@ -76,13 +77,9 @@ public class ServiceInvoker {
 	private Map<String, Object> serviceImples = new HashMap<>();
 
 	@Autowired
-	private VoskSpeechRecognitionService vosk;
-	@Autowired
 	private LangridService langridService;
 	@Autowired
 	private HuggingFaceService huggingFaceService;
-	@Autowired
-	private HelsinkiNlpService helsinkiNlpService;
 	@Autowired
 	private KerasService kerasService;
 	@Autowired

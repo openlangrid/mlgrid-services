@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.TextToImageGenerationResult;
 import org.langrid.service.ml.TextToImageGenerationService;
 
@@ -29,6 +30,8 @@ public class DalleMiniTextImageGenerationService implements TextToImageGeneratio
 	@Override
 	public TextToImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+		if(!LanguageUtil.matches("en", language))
+			throw new UnsupportedLanguageException("language", language);
 		try {
 			maxResults = Math.max(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");

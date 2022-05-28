@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 
 import org.langrid.service.ml.TextSentimentLabel;
+import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.TextSentimentAnalysisResult;
 import org.langrid.service.ml.TextSentimentAnalysisService;
 
@@ -24,7 +25,7 @@ implements TextSentimentAnalysisService{
 	@Override
 	public TextSentimentAnalysisResult analyze(String language, String text)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		if(!(language.equals("ja") || language.startsWith("ja-")))
+		if(!LanguageUtil.matches("ja", language))
 				throw new UnsupportedLanguageException("language", language);
 		try {
 			var r = run(text)[0];
