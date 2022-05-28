@@ -18,6 +18,7 @@ public class VoskService implements Service {
 			var mn = invocation.getMethod();
 			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
 			Converter c = new Converter();
+//			c.addTransformerConversion(String.class, byte[].class, v->Base64.getDecoder().decode(v));
 			var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
 			return new Response(ObjectUtil.invoke(service(serviceId), mn, args));
 		} catch(RuntimeException e){
