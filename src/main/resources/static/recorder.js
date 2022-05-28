@@ -5,12 +5,21 @@ class Recorder{
 	getAudioContext(){
 		return this.audioContext;
 	}
+
 	isRecording(){
 		return this.recording;
 	}
-    onStartRecording(stream, autioContext){}
+
+	onStartRecording(stream, autioContext){}
+
+	/**
+	 * 
+	 * @param {Float32Array} channelData 
+	 */
     onProcessRecording(channelData){}
-    onFinishRecording(){}
+
+	onStopRecording(){}
+
 	start(){
 		this.recording = true;
 		const bufferSize = 1024;
@@ -29,7 +38,7 @@ class Recorder{
 				};
 				this.audioContext.createMediaStreamSource(stream).connect(sp);
 				sp.connect(this.audioContext.destination);
-				console.trace(`recording started. sample rate: ${this.audioContext.sampleRate}`);
+				console.debug(`recording started. sample rate: ${this.audioContext.sampleRate}`);
 /*
 				window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 				if(window.SpeechRecognition){
@@ -58,14 +67,14 @@ class Recorder{
 */
 			});
 	}
-	finish() {
+	stop() {
 		if(!this.recording) return;
 		this.recording = false;
 		if(this.stream){
 			this.stream.getTracks().forEach(t=>t.stop());
 		}
-		console.log("recording finished");
-        this.onFinishRecording();
+		console.debug("recording stopped.");
+        this.onStopRecording();
 /*		if(this.sr){
 			this.sr.stop();
 		} else{

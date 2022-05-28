@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+</head>
+<body>
+<button id="startstop">●</button>
+<div id="results">
+</div>
+<script src="recorder.js"></script>
+<script src="wavwriter.js"></script>
+<script>
+window.addEventListener("load", ()=>{
+    const btn = document.getElementById("startstop");
+    const results = document.getElementById("results");
+    let recording = false;
+    const recorder = new Recorder();
+    
+    let wavWriter = null;
+    let sampleRate = null;
+    recorder.onStartRecording = (stream, audioContext)=>{
+        sampleRate = audioContext.sampleRate;
+        wavWriter = new WavWriter(1, 16, sampleRate);
+    };
+    recorder.onProcessRecording = channelData =>{
+        const uint8buff = downsampleBuffer(channelData, recorder.getAudioContext().sampleRate, 16000);
+        wavWriter.addData(uint8buff);
+    };
+    recorder.onStopRecording = ()=>{
+        const url = URL.createObjectURL(new Blob(
+            [wavWriter.getWavFile()], {type: "audio/wav"}));
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.src = url;
+        results.appendChild(audio);
+        const a = document.createElement("a");
+        a.download = 'recordings.wav';
+        a.href = url;
+        a.textContent = "download";
+        results.appendChild(a);
+        results.appendChild(document.createElement("br"));
+    };
+    btn.addEventListener("click", e=>{
+        e.preventDefault();
+        if(recording){
+            recording = false;
+            btn.textContent = "●";
+            recorder.stop();
+        } else{
+            recording = true;
+            btn.textContent = "■";
+            recorder.start();
+        }
+    });
+});
+
+/**
+ * @param {Float32Array} buffer
+ * @param {number} sampleRate
+ * @param {number} outSampleRate
+ * @return {ArrayBuffer}
+ */
+function downsampleBuffer(buffer, sampleRate, outSampleRate){
+	if (outSampleRate > sampleRate) {
+		console.error('down-sampling rate should be smaller than the original one');
+        return null;
+	}
+	const scale = sampleRate / outSampleRate;
+	const newLength = Math.round(buffer.length / scale);
+    const buff = new ArrayBuffer(newLength * 2);
+    const view = new DataView(buff);
+	let offsetResult = 0;
+	let offsetBuffer = 0;
+	while (offsetResult < newLength) {
+		const nextOffsetBuffer = Math.round((offsetResult + 1) * scale);
+		let accum = 0;
+		let count = 0;
+		for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i ++) {
+			accum += buffer[i];
+			count += 1;
+		}
+		let v = accum / count;
+		v = v < 0 ? v * 0x8000 : v * 0x7fff;
+        view.setUint16(offsetResult * 2, v, true);
+		offsetResult++;
+		offsetBuffer = nextOffsetBuffer;
+	}
+	return buff;
+}
+</script>
+</body>
+</html>

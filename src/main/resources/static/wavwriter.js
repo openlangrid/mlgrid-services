@@ -1,0 +1,56 @@
+class WavWriter{
+    /**
+     * @param {number} channels ex: 1
+     * @param {number} sampleSizeInBits ex: 16
+     * @param {number} sampleRate ex: 16000
+     */
+    constructor(channels, sampleSizeInBits, sampleRate){
+        this.channels = channels;
+        this.sampleSizeInBits = sampleSizeInBits;
+        this.sampleRate = sampleRate;
+        this.audioData = [];
+    }
+
+    /**
+     * @param {ArrayBuffer} data 
+     */
+    addData(data){
+        this.audioData.push(data);
+    };
+
+    /**
+     * @return {ArrayBuffer}
+     */
+    getWavFile(){
+        const dataSize = this.audioData.map(d=>d.byteLength).reduce((l, r)=>l+r);
+        const buffer = new ArrayBuffer(44 + dataSize);
+        var view = new DataView(buffer);
+
+        const writeString = function(view, offset, string) {
+            for (let i = 0; i < string.length; i++){
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        };
+        writeString(view, 0, 'RIFF');  // RIFFヘッダ
+        view.setUint32(4, 32 + dataSize, true); // これ以降のファイルサイズ
+        writeString(view, 8, 'WAVEfmt '); // WAVEヘッダ
+        view.setUint32(16, 16, true); // fmtチャンクのバイト数
+        view.setUint16(20, 1, true); // フォーマットID
+        view.setUint16(22, this.channels, true); // チャンネル数
+        view.setUint32(24, this.sampleRate, true); // サンプリングレート
+        view.setUint32(28, this.sampleRate * 2, true); // データ速度
+        view.setUint16(32, 2, true); // ブロックサイズ
+        view.setUint16(34, this.sampleSizeInBits, true); // サンプルあたりのビット数
+        writeString(view, 36, 'data'); // dataチャンク
+        view.setUint32(40, dataSize, true); // 波形データのバイト数
+        const dst = new Uint8Array(buffer, 44);
+        let index = 0;
+        for(let s of this.audioData){
+            // Uint8Array同士にしてmemcpy
+            dst.set(new Uint8Array(s), index);
+            index += s.byteLength;
+        }
+        console.debug(`${buffer.byteLength} bytes file created.`);
+        return buffer;
+    };
+}

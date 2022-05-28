@@ -340,7 +340,7 @@ window.addEventListener("load", ()=>{
 			e.preventDefault();
 			if(recorder){
 				// 停止する
-				recorder.finish();
+				recorder.stop();
 				recorder = null;
 				exeBtn.textContent = "開始";
 				return;
@@ -384,7 +384,7 @@ window.addEventListener("load", ()=>{
 						.catch(e=>{
 							console.error(e);
 							s.resultsDiv.textContent = r.error;
-							recorder.finish();
+							recorder.stop();
 						});
 				}
 			};
@@ -404,12 +404,12 @@ window.addEventListener("load", ()=>{
 							.catch(e=>{
 								console.error(e);
 								s.resultsDiv.append(document.createTextNode(e.error));
-								recorder.finish();
+								recorder.stop();
 							});
 					}
 				}
 			};
-			recorder.onFinishRecording = ()=>{
+			recorder.onStopRecording = ()=>{
 				for(let sid of sids){
 					const s = services[sid];
 					ws.continuousSpeechRecognition(sid)
@@ -418,7 +418,7 @@ window.addEventListener("load", ()=>{
 						.catch(e=>{
 							console.error(e);
 							s.resultsDiv.append(document.createTextNode(e.error));
-							recorder.finish();
+							recorder.stop();
 						});
 					s.resultsDiv.removeChild(s.resultsDiv.firstChild);
 				}
