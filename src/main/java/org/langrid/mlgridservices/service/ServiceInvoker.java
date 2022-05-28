@@ -18,47 +18,32 @@ import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5Service;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
-import org.langrid.service.ml.TextToImageGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jp.go.nict.langrid.commons.beanutils.Converter;
 import jp.go.nict.langrid.commons.lang.ClassUtil;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
+import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
 @org.springframework.stereotype.Service
 public class ServiceInvoker {
 	@PostConstruct
 	private synchronized void init() {
-		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceService);
-		serviceGroups.put("DalleMiniMega1Fp16", dalleMiniService);
-		serviceGroups.put("DalleMiniMini1", dalleMiniService);
-		serviceGroups.put("DummyTextImageGeneration", new ServiceGroup(){
-			private TextToImageGenerationService s = new DummyTextImageGenerationService();
-			@Override
-			public Response invoke(String serviceId, Request invocation) {
-				try{
-					return new Response(s.generate("", "", "", 1));
-				} catch(Exception e){
-					throw new RuntimeException(e);
-				}
-			}
-		});
-		serviceGroups.put("HelsinkiNLPOpusMT", helsinkiNlpService);
-		serviceGroups.put("KerasResNet50", kerasService);
-		serviceGroups.put("KerasEfficientNetV2B0", kerasService);
-		serviceGroups.put("KerasVGG19", kerasService);
-		serviceGroups.put("LangridGoogleTranslateNMT", langridService);
-		serviceGroups.put("LangridKyotoUJServer", langridService);
-		serviceGroups.put("YoloV5n", yoloV5Service);
-		serviceGroups.put("YoloV5s", yoloV5Service);
-		serviceGroups.put("YoloV5m", yoloV5Service);
-		serviceGroups.put("YoloV5l", yoloV5Service);
-		serviceGroups.put("YoloV5x", yoloV5Service);
+		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
 		serviceImples.put("VOSK", vosk);
+		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
+		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
+		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceService);
+		serviceGroups.put("DalleMini", dalleMiniService);
+		serviceGroups.put("HelsinkiNLPOpusMT", helsinkiNlpService);
+		serviceGroups.put("Keras", kerasService);
+		serviceGroups.put("Langrid", langridService);
+		serviceGroups.put("YoloV5", yoloV5Service);
 	}
 
 	public synchronized Response invoke(String serviceId, Request invocation)
-	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
+	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
+	ProcessFailedException{
 		var s = serviceImples.get(serviceId);
 		if(s != null){
 			System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
@@ -68,18 +53,27 @@ public class ServiceInvoker {
 			return new Response(ObjectUtil.invoke(s, mn, args));
 		}
 		var g = serviceGroups.get(serviceId);
-		System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
-		if(g != null) {
-			return g.invoke(serviceId, invocation);
-		} else {
-			return langridService.invoke(serviceId, invocation);
+		if(g == null) {
+			for(var e : serviceGroups.entrySet()) {
+				if(!serviceId.startsWith(e.getKey())) continue;
+				g = e.getValue();
+			}
 		}
+		System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
+		if(g == null) {
+			throw new ProcessFailedException("service " + serviceId + " not found.");
+		}
+		var r = g.invoke(serviceId, invocation);
+		serviceGroups.put(serviceId, g); // cache matching result
+		return r;
 	}
 
 	private Converter c = new Converter();
 	private Map<String, ServiceGroup> serviceGroups = new HashMap<>();
 	private Map<String, Object> serviceImples = new HashMap<>();
 
+	@Autowired
+	private VoskSpeechRecognitionService vosk;
 	@Autowired
 	private LangridService langridService;
 	@Autowired
@@ -92,6 +86,4 @@ public class ServiceInvoker {
 	private YoloV5Service yoloV5Service;
 	@Autowired
 	private DalleMiniService dalleMiniService;
-	@Autowired
-	private VoskSpeechRecognitionService vosk;
 }

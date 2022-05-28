@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.undercouch.bson4jackson.BsonFactory;
+import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
 @Component
 @ServerEndpoint(value="/ws")
@@ -51,9 +52,11 @@ public class WebSocketServer implements ApplicationContextAware {
 	public String onMessage(Session session, String message)
 			throws JsonMappingException, JsonProcessingException, MalformedURLException,
 			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		int reqId = -1;
 		try {
 			System.out.println(message);
 			var req = jmapper.readValue(message, WebSocketRequest.class);
+			reqId = req.getReqId();
 			var res = new WebSocketResponse(
 					req.getReqId(),
 					invoker().invoke(req.getServiceId(), req).getResult());
@@ -61,20 +64,20 @@ public class WebSocketServer implements ApplicationContextAware {
 			return resMsg;
 		} catch(RuntimeException e) {
 			e.printStackTrace();
-			throw e;
-		} catch(Error e) {
+			return jmapper.writeValueAsString(new WebSocketResponse(reqId, new Error(-1, e.toString())));
+		} catch(java.lang.Error e) {
 			e.printStackTrace();
-			throw e;
+			return jmapper.writeValueAsString(new WebSocketResponse(reqId, new Error(-1, e.toString())));
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw e;
+			return jmapper.writeValueAsString(new WebSocketResponse(reqId, new Error(-1, e.toString())));
 		}
 	}
 
 	@OnMessage
 	public byte[] onMessage(Session session, byte[] message)
 			throws StreamReadException, DatabindException, IOException, IllegalAccessException,
-			InvocationTargetException, NoSuchMethodException {
+			InvocationTargetException, NoSuchMethodException, ProcessFailedException {
 		System.out.println("bin message");
 		var i = bmapper.readValue(message, WebSocketRequest.class);
 		return bmapper.writeValueAsBytes(new WebSocketResponse(

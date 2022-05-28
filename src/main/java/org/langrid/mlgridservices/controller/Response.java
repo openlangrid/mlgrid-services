@@ -9,4 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Response {
 	private Object result;
+	private Error error;
+	public Response(Object result) {
+		this.result = result;
+	}
+	public Response(Error error) {
+		this.error = error;
+	}
 }

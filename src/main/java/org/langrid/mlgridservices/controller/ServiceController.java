@@ -20,7 +20,12 @@ public class ServiceController {
 			@PathVariable("serviceId") String serviceId,
 			@RequestBody Request request) throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 		System.out.println(invoker);
-		return invoker.invoke(serviceId, request);
+		try {
+			return invoker.invoke(serviceId, request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new Response(null, new Error(-1, e.toString()));
+		}
 	}
 
 	@Autowired
