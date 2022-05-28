@@ -18,7 +18,7 @@ import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5Service;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
-import org.langrid.service.ml.TextImageGenerationService;
+import org.langrid.service.ml.TextToImageGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jp.go.nict.langrid.commons.beanutils.Converter;
@@ -33,7 +33,7 @@ public class ServiceInvoker {
 		serviceGroups.put("DalleMiniMega1Fp16", dalleMiniService);
 		serviceGroups.put("DalleMiniMini1", dalleMiniService);
 		serviceGroups.put("DummyTextImageGeneration", new ServiceGroup(){
-			private TextImageGenerationService s = new DummyTextImageGenerationService();
+			private TextToImageGenerationService s = new DummyTextImageGenerationService();
 			@Override
 			public Response invoke(String serviceId, Request invocation) {
 				try{

@@ -4,11 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.langrid.service.ml.TextSentiment;
+import org.langrid.service.ml.TextSentimentLabel;
 import org.langrid.service.ml.TextSentimentAnalysisResult;
 import org.langrid.service.ml.TextSentimentAnalysisService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
@@ -16,27 +16,27 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public class HuggingFaceTextSentimentAnalysisService
 implements TextSentimentAnalysisService{
-    private File baseDir = new File("./procs/text_sentiment_analysis_huggingface");
+	private File baseDir = new File("./procs/text_sentiment_analysis_huggingface");
 
 	public HuggingFaceTextSentimentAnalysisService(){
 	}
 
-    @Override
-    public TextSentimentAnalysisResult analyze(String language, String text)
-            throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+	@Override
+	public TextSentimentAnalysisResult analyze(String language, String text)
+			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!(language.equals("ja") || language.startsWith("ja-")))
 				throw new UnsupportedLanguageException("language", language);
-        try {
-            var r = run(text)[0];
+		try {
+			var r = run(text)[0];
 			return new TextSentimentAnalysisResult(
-				r.label.equals("ポジティブ") ? TextSentiment.POSITIVE.name() :  TextSentiment.NEGATIVE.name(),
+				r.label.equals("ポジティブ") ? TextSentimentLabel.POSITIVE : TextSentimentLabel.NEGATIVE,
 				r.score);
-        } catch(RuntimeException e) {
-            throw e;
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+		} catch(RuntimeException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	static class Result{
 		String label;
@@ -52,7 +52,7 @@ implements TextSentimentAnalysisService{
 	public Result[] run(String text){
 		try{
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
-                "run --rm huggingface python run.py " +
+					"run --rm huggingface python run.py " +
 				" \"" + text.replaceAll("\"", "\\\"") + "\" ";
 			System.out.println(cmd);
 			var pb = new ProcessBuilder("bash", "-c", cmd);

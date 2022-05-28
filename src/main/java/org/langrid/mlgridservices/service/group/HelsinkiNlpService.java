@@ -10,7 +10,7 @@ import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 @org.springframework.stereotype.Service
 public class HelsinkiNlpService  implements ServiceGroup {
-    @Override
+	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
 			return new Response(

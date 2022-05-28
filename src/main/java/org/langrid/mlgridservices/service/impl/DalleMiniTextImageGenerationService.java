@@ -6,15 +6,15 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-import org.langrid.service.ml.TextImageGenerationService;
-import org.langrid.service.ml.TextImageGenerationResult;
+import org.langrid.service.ml.TextToImageGenerationResult;
+import org.langrid.service.ml.TextToImageGenerationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class DalleMiniTextImageGenerationService implements TextImageGenerationService{
+public class DalleMiniTextImageGenerationService implements TextToImageGenerationService{
     private File baseDir = new File("./procs/text_image_generation_dalle_mini");
 	private String model;
 
@@ -26,37 +26,37 @@ public class DalleMiniTextImageGenerationService implements TextImageGenerationS
 		this.model = model;
 	}
 
-    @Override
-    public TextImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
-            throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-        try {
+	@Override
+	public TextToImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
+			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+		try {
 			maxResults = Math.max(maxResults, 8);
-            var tempDir = new File(baseDir, "temp");
-            tempDir.mkdirs();
-            var temp = FileUtil.createUniqueFile(tempDir, "outimage-", "");
-            run(model, text, maxResults, "temp/" + temp.getName());
-			var ret = new ArrayList<TextImageGenerationResult>();
+			var tempDir = new File(baseDir, "temp");
+			tempDir.mkdirs();
+			var temp = FileUtil.createUniqueFile(tempDir, "outimage-", "");
+			run(model, text, maxResults, "temp/" + temp.getName());
+			var ret = new ArrayList<TextToImageGenerationResult>();
 			for(var i = 0; i < maxResults; i++){
 				var imgFile = new File(tempDir, temp.getName() + "_" + i + ".jpg");
 				if(!imgFile.exists()) break;
 				var accFile = new File(tempDir, temp.getName() + "_" + i + ".acc.txt");
-				ret.add(new TextImageGenerationResult(
+				ret.add(new TextToImageGenerationResult(
 					Files.readAllBytes(imgFile.toPath()),
 					Double.parseDouble(Files.readString(accFile.toPath()))
 				));
 			}
-            return ret.toArray(new TextImageGenerationResult[]{});
-        } catch(RuntimeException e) {
-            throw e;
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
+			return ret.toArray(new TextToImageGenerationResult[]{});
+		} catch(RuntimeException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	public void run(String model, String text, int maxResults, String outimagePrefix){
 		try{
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
-                "run --rm dalle-mini python3 run.py " +
+					"run --rm dalle-mini python3 run.py " +
 				model + " \"" + text.replaceAll("\"", "\\\"") + "\" " +
 				maxResults + " " + outimagePrefix;
 			System.out.println(cmd);
@@ -67,7 +67,7 @@ public class DalleMiniTextImageGenerationService implements TextImageGenerationS
 				proc.waitFor();
 				var res = proc.exitValue();
 				if(res == 0) {
-                    return;
+					return;
 				} else {
 					var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 					var lines = new StringBuilder();

@@ -3,14 +3,14 @@ package org.langrid.mlgridservices.service.group;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
-import org.langrid.service.ml.TextImageGenerationService;
+import org.langrid.service.ml.TextToImageGenerationService;
 import org.springframework.context.annotation.Bean;
 
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @org.springframework.stereotype.Service
 public class DalleMiniService  implements ServiceGroup {
-    @Override
+	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
 			return new Response(
@@ -22,7 +22,7 @@ public class DalleMiniService  implements ServiceGroup {
 		}
 	}
 
-	private TextImageGenerationService service(String serviceId){
+	private TextToImageGenerationService service(String serviceId){
 		switch(serviceId){
 			default: 
 			case "DalleMiniMega1Fp16": return dalleMiniMega1Fp16();
@@ -31,12 +31,12 @@ public class DalleMiniService  implements ServiceGroup {
 	}
 
 	@Bean
-	private TextImageGenerationService dalleMiniMega1Fp16(){
+	private TextToImageGenerationService dalleMiniMega1Fp16(){
 		return new DalleMiniTextImageGenerationService("dalle-mini/dalle-mini/mega-1-fp16:latest");
 	}
 
 	@Bean
-	private TextImageGenerationService dalleMiniMini1(){
+	private TextToImageGenerationService dalleMiniMini1(){
 		return new DalleMiniTextImageGenerationService("dalle-mini/dalle-mini/mini-1:v0");
 	}
 }
