@@ -44,6 +44,7 @@ public class ServiceInvoker {
 	public synchronized Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
+		// serviceIdに対応する実装クラスを探す
 		var s = serviceImples.get(serviceId);
 		if(s != null){
 			System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
@@ -52,19 +53,21 @@ public class ServiceInvoker {
 			var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
 			return new Response(ObjectUtil.invoke(s, mn, args));
 		}
+		// 実装クラスがなければグループを探す
 		var g = serviceGroups.get(serviceId);
 		if(g == null) {
+			// 見つからなければ前方一致で検索
 			for(var e : serviceGroups.entrySet()) {
 				if(!serviceId.startsWith(e.getKey())) continue;
 				g = e.getValue();
 			}
 		}
-		System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
 		if(g == null) {
 			throw new ProcessFailedException("service " + serviceId + " not found.");
 		}
+		System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
 		var r = g.invoke(serviceId, invocation);
-		serviceGroups.put(serviceId, g); // cache matching result
+		serviceGroups.put(serviceId, g); // 処理が正常に終了した場合はserviceIdとグループを関連付けておく。
 		return r;
 	}
 
