@@ -14,10 +14,10 @@ import com.google.common.io.LittleEndianDataInputStream;
 import com.google.common.io.LittleEndianDataOutputStream;
 
 public class WavRecorder {
-	public WavRecorder(String prefix, int channels, int sampleSizeInBits, int frameRate) throws IOException{
+	public WavRecorder(String prefix, int channels, int sampleSizeInBits, int sampleRate) throws IOException{
 		this.channels = channels;
 		this.sampleSizeInBits = sampleSizeInBits;
-		this.frameRate = frameRate;
+		this.sampleRate = sampleRate;
 		this.rawFile = new File(prefix + ".raw");
 		this.wavFile = new File(prefix + ".wav");
 		this.rawOs = new BufferedOutputStream(new FileOutputStream(rawFile));
@@ -44,8 +44,8 @@ public class WavRecorder {
 			dos.writeInt(16); // fmtチャンクのバイト数
 			dos.writeShort(1); // フォーマットID
 			dos.writeShort(channels); // チャンネル数
-			dos.writeInt(frameRate); // サンプリングレート
-			dos.writeInt(frameRate * 2); // データ速度
+			dos.writeInt(sampleRate); // サンプリングレート
+			dos.writeInt(sampleRate * 2); // データ速度
 			dos.writeShort(2); // ブロックサイズ
 			dos.writeShort(sampleSizeInBits); // サンプルあたりのビット数
 			dos.flush();
@@ -61,7 +61,7 @@ public class WavRecorder {
 
 	private int channels;
 	private int sampleSizeInBits;
-	private int frameRate;
+	private int sampleRate;
 	private File rawFile;
 	private File wavFile;
 	private OutputStream rawOs;
