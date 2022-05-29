@@ -175,7 +175,7 @@ window.addEventListener("load", ()=>{
 	const loc = document.location;
 	const proto = loc.protocol == "https:" ? "wss" : "ws";
 	const wsUrl = `${proto}://${loc.host}/${loc.pathname.split("/")[1]}/ws`
-	console.trace(`ws url: ${wsUrl}`);
+	console.debug(`ws url: ${wsUrl}`);
 	const ws = new WSServiceInvoker(wsUrl);
 	const rec = new Recorder();
 
@@ -410,7 +410,7 @@ window.addEventListener("load", ()=>{
 				for(let sid of sids){
 					const s = services[sid];
 					if(s.sessionId == null){
-						console.trace("skip service because sessionId is null.")
+						console.debug("skip service because sessionId is null.")
 						continue;
 					}
 					if(s.started){
