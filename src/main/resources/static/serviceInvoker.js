@@ -25,7 +25,6 @@ class ContinuousSpeechRecognitionService extends Service{
         return this.invoke("startRecognition", Array.prototype.slice.call(arguments));
     }
 	processRecognition(sessionId, audio){
-		console.trace(`sessionId: ${sessionId}, audio.length: ${audio.length}`);
         return this.invoke("processRecognition", Array.prototype.slice.call(arguments));
     }
 	stopRecognition(sessionId){
@@ -46,6 +45,11 @@ class TranslationService extends Service{
 	translate(sourceLang, targetLang, source){
         return this.invoke("translate", Array.prototype.slice.call(arguments));
     }
+}
+class SpeechEmotionRecognition extends Service{
+	recognize(language, audioFormat, audio){
+		return this.invoke("recognize", Array.prototype.slice.call(arguments));
+	}
 }
 class TextImageGenerationService extends Service{
     generate(language, text, imageFormat, maxResults){
@@ -73,6 +77,9 @@ class ServiceInvoker{
     objectDetection(serviceId){
         return new ObjectDetectionService(this, serviceId);
     }
+	speechEmotionRecognition(serviceId){
+		return new SpeechEmotionRecognition(this, serviceId);
+	}
 	translation(serviceId){
 		return new TranslationService(this, serviceId);
 	}
@@ -103,10 +110,10 @@ class WSServiceInvoker extends ServiceInvoker{
 				reqId: rid, serviceId: serviceId,
 				method: method, args: args
 			};
-			console.trace("req:", msg);
+			console.debug("req:", msg);
 			const data = this.bson.serialize(msg);
 //			const data = JSON.stringify(msg);			
-//			console.trace("req(encoded):", data);
+//			console.debug("req(encoded):", data);
 			this.send(data);
 			this.handlers[rid] = r=>{
 				resolve(r);
@@ -131,14 +138,14 @@ class WSServiceInvoker extends ServiceInvoker{
 		this.ws = new WebSocket(this.url);
 		this.ws.binaryType = "arraybuffer";
 		this.ws.addEventListener('open', e=>{
-			console.trace("websocket connection opened.");
+			console.debug("websocket connection opened.");
 			for(let b of this.sendbuf){
 				this.ws.send(b);
 			}
 			this.sendbuf = [];
 		});
 		this.ws.addEventListener('close', e=>{
-			console.trace("websocket connection closed.");
+			console.debug("websocket connection closed.");
 			this.ws = null;
 			this.rid = 0;
 			this.handlers = {};
@@ -147,15 +154,15 @@ class WSServiceInvoker extends ServiceInvoker{
 			if(e.data instanceof ArrayBuffer) {
 				// binary
 				const array = new Uint8Array(e.data);
-//				console.trace("res:", array);
+//				console.debug("res:", array);
 				const r = this.bson.deserialize(Buffer.from(array));
-				console.trace("res(decoded):", r);
+				console.debug("res(decoded):", r);
 				this.handlers[r.reqId](r);
 			} else {
 				// text
-//				console.trace("res:", e.data);
+//				console.debug("res:", e.data);
 				const r = JSON.parse(e.data);
-				console.trace("res(decoded):", r);
+				console.debug("res(decoded):", r);
 				this.handlers[r.reqId](r);
 			}
 		});
@@ -173,7 +180,7 @@ class HTTPServiceInvoker extends ServiceInvoker{
 			method: method,
 			args: args
 		});
-		console.trace("req:", body);
+		console.debug("req:", body);
 		return new Promise((resolve, reject)=>{
 			fetch(`${this.baseUrl}/${serviceId}`, {
 				method: "POST", mode: 'cors',
@@ -182,7 +189,7 @@ class HTTPServiceInvoker extends ServiceInvoker{
 			})
 			.then(r=>{
 				const ret = r.json();
-				console.trace("res(decoded):", ret);
+				console.debug("res(decoded):", ret);
 				resolve(ret);
 			})
 			.catch(e=>reject(e));

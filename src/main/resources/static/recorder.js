@@ -96,3 +96,37 @@ class Recorder{
 */
    	}
 }
+
+/**
+ * @param {Float32Array} buffer
+ * @param {number} sampleRate
+ * @param {number} outSampleRate
+ * @return {ArrayBuffer}
+ */
+ function downsampleBuffer(buffer, sampleRate, outSampleRate){
+	if (outSampleRate > sampleRate) {
+		console.error('down-sampling rate should be smaller than the original one');
+        return null;
+	}
+	const scale = sampleRate / outSampleRate;
+	const newLength = Math.round(buffer.length / scale);
+    const buff = new ArrayBuffer(newLength * 2);
+    const view = new DataView(buff);
+	let offsetResult = 0;
+	let offsetBuffer = 0;
+	while (offsetResult < newLength) {
+		const nextOffsetBuffer = Math.round((offsetResult + 1) * scale);
+		let accum = 0;
+		let count = 0;
+		for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i ++) {
+			accum += buffer[i];
+			count += 1;
+		}
+		let v = accum / count;
+		v = v < 0 ? v * 0x8000 : v * 0x7fff;
+        view.setUint16(offsetResult * 2, v, true);
+		offsetResult++;
+		offsetBuffer = nextOffsetBuffer;
+	}
+	return buff;
+}

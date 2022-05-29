@@ -39,6 +39,11 @@
         <button class="nav-link" id="asrTab" data-bs-toggle="tab" data-bs-target="#asr"
           type="button" role="tab" aria-controls="asr" aria-selected="false">SpeechRecognition</button>
       </li>
+      <!-- 音声感情検出サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="serTab" data-bs-toggle="tab" data-bs-target="#ser"
+          type="button" role="tab" aria-controls="ser" aria-selected="false">SpeechEmotionRecognition</button>
+      </li>
     </ul>
     <div class="tab-content" id="tabContent">
       <!-- 翻訳サービス -->
@@ -119,6 +124,17 @@
 		<br/>
         <a href="https://alphacephei.com/vosk/server">VOSK Server</a>
       </div>
+      <!-- 音声感情検出サービス -->
+      <div id="ser" aria-labelledby="serTab" class="tab-pane fade" role="tabpanel">
+        <!--label>language<input data-id="language" class="form-control" type="text" value="ja"></label-->
+        <button data-id="execute" class="btn btn-success">開始</button>
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<br/>
+        <a href="https://webempath.net/lp-jpn/">Empath</a>
+      </div>
     </div>
   </div></div>
 </div>
@@ -129,6 +145,7 @@
 <script src="./bson.js"></script>
 <script src="./serviceInvoker.js"></script>
 <script src="./recorder.js"></script>
+<script src="./wavwriter.js"></script>
 <script>
 //const baseUrl = "https://langrid.org/mlgrid-services/services";
 //const baseUrl = "http://localhost:8080/mlgrid-services/services";
@@ -152,6 +169,7 @@ window.addEventListener("load", ()=>{
 	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1"];
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 	const asrServiceIds = ["VOSK"];//, "ChromeASR"];
+	const serServiceIds = ["Empath"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -426,8 +444,84 @@ window.addEventListener("load", ()=>{
 			recorder.start();
 		});
 	}
+
+	{	// SpeechEmotionRecognition
+		const parent = document.querySelector("#ser");
+		const sids = serServiceIds;
+		const resultContainer = parent.querySelector("[data-id='services']");
+		const services = {};
+		for(let sid of sids){
+			const s = {};
+			services[sid] = s;
+			resultContainer.append(document.createTextNode(`${sid}: `));
+			const resultsDiv = document.createElement("div");
+			resultContainer.append(resultsDiv);
+			resultContainer.append(document.createElement("br"));
+			s.resultsDiv = resultsDiv;
+		}
+		let recorder = null;
+		let wavWriter = null;
+		const exeBtn = parent.querySelector("[data-id='execute']");
+		exeBtn.addEventListener("click", e=>{
+			e.preventDefault();
+			if(recorder){
+				// 停止する
+				recorder.stop();
+				recorder = null;
+				exeBtn.textContent = "録音開始";
+				return;
+			}
+			// 開始する
+			exeBtn.textContent = "検出";
+			recorder = new Recorder();
+			wavWriter = new WavWriter({sampleRate: 11025});
+			recorder.onStartRecording = (stream, audioContext)=>{
+				for(let sid of sids){
+					const s = services[sid];
+					while (s.resultsDiv.firstChild) {
+     				   s.resultsDiv.removeChild(s.resultsDiv.firstChild);
+					}
+				}
+			};
+			recorder.onProcessRecording = channelData =>{
+				wavWriter.addData(downsampleBuffer(channelData,
+           			recorder.getAudioContext().sampleRate,
+           			11025));
+			};
+			recorder.onStopRecording = ()=>{
+				const audio = wavWriter.getWavFile();
+				for(let sid of sids){
+					const s = services[sid];
+					const file = wavWriter.getWavFile();
+					const url = URL.createObjectURL(new Blob(
+						[file], {type: "audio/wav"}));
+					const audio = document.createElement("audio");
+					audio.controls = true;
+					audio.src = url;
+					s.resultsDiv.appendChild(audio);
+					const a = document.createElement("a");
+					a.download = 'recordings.wav';
+					a.href = url;
+					a.textContent = "download";
+					s.resultsDiv.appendChild(a);
+					s.resultsDiv.appendChild(document.createElement("br"));
+					ws.speechEmotionRecognition(sid).recognize(
+						"ja", "audio/x-wav", Buffer.from(file)
+					).then(r=>{
+						s.resultsDiv.appendChild(document.createTextNode(JSON.stringify(r.result)));
+					}).catch(e=>{
+						console.error(e);
+						s.resultsDiv.append(document.createTextNode(e.error));
+						recorder.stop();
+					});
+				}
+			};
+			recorder.start(11025);
+		});
+	}
 });
 
+/*
 function downsampleBuffer(buffer, sampleRate, outSampleRate){
 	if (outSampleRate > sampleRate) {
 		console.error('downsampling rate show be smaller than original sample rate');
@@ -445,20 +539,16 @@ function downsampleBuffer(buffer, sampleRate, outSampleRate){
 			accum += buffer[i];
 			count += 1;
 		}
-//*
 		let v = accum / count;
 		v = v < 0 ? v * 0x8000 : v * 0x7fff
 		result[offsetResult * 2] = v & 0xff;
 		result[offsetResult * 2 + 1] = (v & 0xff00) >> 8;
-/*/
-		result[offsetResult * 2] = Math.min(1, accum / count) * 0xFF;
-		result[offsetResult * 2 + 1] = (Math.min(1, accum / count) * 0x7F00) >> 8;
-//*/
 		offsetResult += 1;
 		offsetBuffer = nextOffsetBuffer;
 	}
 	return result;
 }
+*/
 </script>
 </body>
 </html>

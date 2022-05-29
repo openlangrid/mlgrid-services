@@ -1,6 +1,8 @@
 package org.langrid.mlgridservices.service.impl;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,6 +15,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ValidationUtil;
 import org.langrid.service.ml.SpeechEmotionRecognitionResult;
 import org.langrid.service.ml.SpeechEmotionRecognitionService;
@@ -37,6 +40,16 @@ public class EmpathService implements SpeechEmotionRecognitionService{
 	@Override
 	public SpeechEmotionRecognitionResult[] recognize(String language, String audioFormat, byte[] audio)
 	throws InvalidParameterException, ProcessFailedException{
+		var temp = new File("temp/" + EmpathService.class.getName());
+		temp.mkdirs();
+		try{
+			System.out.println("recignize called. " + audio.length);
+			var f = FileUtil.createUniqueFileWithDateTime(temp, "recording-", ".wav");
+			Files.write(f.toPath(), audio);
+		} catch(IOException e){
+			throw new ProcessFailedException(e);
+		}
+
 		ValidationUtil.getValidAudioFormat("audioFormat", audioFormat, supportedAudioFormats);
 		var builder = MultipartEntityBuilder.create()
 				.setMode(HttpMultipartMode.STRICT)
