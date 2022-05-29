@@ -54,6 +54,6 @@ public class KerasServiceGroup implements ServiceGroup {
 		return new KerasImageClassificationService(dockerServiceName, "VGG19");
 	}
 
-	@Value("${mlgrid-services.keras.docker-service-name}")
+	@Value("${services.keras.docker-service-name}")
 	private String dockerServiceName;
 }

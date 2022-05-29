@@ -44,10 +44,10 @@ public class LangridServiceGroup implements ServiceGroup{
 		intfs.put("KyotoUJServer", TranslationService.class);
 	}
 
-	@Value("${mlgrid-services.langrid.url}")
+	@Value("${services.langrid.url}")
 	private String url;
-	@Value("${mlgrid-services.langrid.username}")
+	@Value("${services.langrid.username}")
 	private String username;
-	@Value("${mlgrid-services.langrid.password}")
+	@Value("${services.langrid.password}")
 	private String password;
 }

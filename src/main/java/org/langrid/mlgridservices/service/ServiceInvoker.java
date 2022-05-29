@@ -16,6 +16,7 @@ import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
+import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,13 @@ public class ServiceInvoker {
 		serviceImples.put("VOSK", new VoskSpeechRecognitionService());
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
+		serviceImples.put("Empath", empathService);
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
-		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceService);
-		serviceGroups.put("DalleMini", dalleMiniService);
-		serviceGroups.put("Keras", kerasService);
-		serviceGroups.put("Langrid", langridService);
-		serviceGroups.put("YoloV5", yoloV5Service);
+		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
+		serviceGroups.put("DalleMini", dalleMiniServices);
+		serviceGroups.put("Keras", kerasServices);
+		serviceGroups.put("Langrid", langridServices);
+		serviceGroups.put("YoloV5", yoloV5Services);
 	}
 
 	public synchronized Response invoke(String serviceId, Request invocation)
@@ -77,13 +79,16 @@ public class ServiceInvoker {
 	private Map<String, Object> serviceImples = new HashMap<>();
 
 	@Autowired
-	private LangridServiceGroup langridService;
+	private EmpathService empathService;
+
 	@Autowired
-	private HuggingFaceServiceGroup huggingFaceService;
+	private LangridServiceGroup langridServices;
 	@Autowired
-	private KerasServiceGroup kerasService;
+	private HuggingFaceServiceGroup huggingFaceServices;
 	@Autowired
-	private YoloV5ServiceGroup yoloV5Service;
+	private KerasServiceGroup kerasServices;
 	@Autowired
-	private DalleMiniServiceGroup dalleMiniService;
+	private YoloV5ServiceGroup yoloV5Services;
+	@Autowired
+	private DalleMiniServiceGroup dalleMiniServices;
 }

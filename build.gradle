@@ -30,6 +30,7 @@ dependencies {
   implementation 'de.undercouch:bson4jackson:[2.13.1,)'
   implementation 'com.neovisionaries:nv-websocket-client:2.9'
   implementation 'com.google.guava:guava:31.1-jre'
+  implementation 'org.apache.httpcomponents:httpmime:4.5.13'
 
   compileOnly 'org.projectlombok:lombok'
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
