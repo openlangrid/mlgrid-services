@@ -5,25 +5,34 @@
 </head>
 <body>
 <button id="startstop">●</button>
+<select id="sampleRate">
+    <option value="44100">44100</option>
+    <option value="16000">16000</option>
+    <option value="11025">11025</option>
+</select>
 <div id="results">
 </div>
 <script src="recorder.js"></script>
 <script src="wavwriter.js"></script>
 <script>
 window.addEventListener("load", ()=>{
-    const btn = document.getElementById("startstop");
+    const startStopBtn = document.getElementById("startstop");
+    const sampleRateSelect = document.getElementById("sampleRate");
     const results = document.getElementById("results");
-    let recording = false;
+
     const recorder = new Recorder();
-    
+    let recording = false;
     let wavWriter = null;
     let sampleRate = null;
+    let targetSampleRate = null;
     recorder.onStartRecording = (stream, audioContext)=>{
         sampleRate = audioContext.sampleRate;
         wavWriter = new WavWriter(1, 16, sampleRate);
     };
     recorder.onProcessRecording = channelData =>{
-        const uint8buff = downsampleBuffer(channelData, recorder.getAudioContext().sampleRate, 16000);
+        const uint8buff = downsampleBuffer(channelData,
+            recorder.getAudioContext().sampleRate,
+            targetSampleRate);
         wavWriter.addData(uint8buff);
     };
     recorder.onStopRecording = ()=>{
@@ -40,16 +49,17 @@ window.addEventListener("load", ()=>{
         results.appendChild(a);
         results.appendChild(document.createElement("br"));
     };
-    btn.addEventListener("click", e=>{
+    startStopBtn.addEventListener("click", e=>{
         e.preventDefault();
         if(recording){
-            recording = false;
-            btn.textContent = "●";
+            startStopBtn.textContent = "●";
             recorder.stop();
+            recording = false;
         } else{
+            startStopBtn.textContent = "■";
+            targetSampleRate = sampleRateSelect.value;
+            recorder.start(targetSampleRate);
             recording = true;
-            btn.textContent = "■";
-            recorder.start();
         }
     });
 });

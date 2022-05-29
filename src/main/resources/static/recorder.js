@@ -1,5 +1,6 @@
 class Recorder{
 	constructor(){
+		this.sampleRate = 16000;
         this.recording = false;
 	}
 	getAudioContext(){
@@ -20,25 +21,26 @@ class Recorder{
 
 	onStopRecording(){}
 
-	start(){
+	start(sampleRate){
+		if(sampleRate) this.sampleRate = sampleRate;
 		this.recording = true;
-		const bufferSize = 1024;
 		navigator.mediaDevices
 			.getUserMedia({audio: true, video: false})
 			.then(stream => {
 				window.AudioContext = window.AudioContext || window.webkitAudioContext;
 				this.audioContext = new window.AudioContext({
-					sampleRate: 16000,
+					sampleRate: this.sampleRate,
 				});
 				this.stream = stream;
                 this.onStartRecording(stream, this.audioContext);
-				const sp = this.audioContext.createScriptProcessor(bufferSize, 1, 1);
+				const sp = this.audioContext.createScriptProcessor(1024, 1, 1);
 				sp.onaudioprocess = e=>{
 					if(this.recording) this.onProcessRecording(e.inputBuffer.getChannelData(0));
 				};
 				this.audioContext.createMediaStreamSource(stream).connect(sp);
 				sp.connect(this.audioContext.destination);
-				console.debug(`recording started. sample rate: ${this.audioContext.sampleRate}`);
+				console.debug(`recording started. required sample rate: ${sampleRate}, `
+					+ `actual sample rate: ${this.audioContext.sampleRate}`);
 /*
 				window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 				if(window.SpeechRecognition){
