@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  facerecognition:
+    build: ./build
+    working_dir: /work
+    runtime: nvidia
+    volumes:
+      - .:/work

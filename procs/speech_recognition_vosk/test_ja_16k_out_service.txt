@@ -18,4 +18,4 @@
 [{"sentenceId":0,"sentence":"今日 は 音声 認識 の テスト で","fixed":false,"accuracy":"NaN"}]
 [{"sentenceId":0,"sentence":"今日 は 音声 認識 の テスト です","fixed":false,"accuracy":"NaN"}]
 [{"sentenceId":0,"sentence":"今日 は 音声 認識 の テスト です","fixed":false,"accuracy":"NaN"}]
-[{"sentenceId":0,"sentence":"今日 は 音声 認識 の テスト です","fixed":true,"accuracy":0.9923388571428572}]
+[{"sentenceId":0,"sentence":"今日 は 音声 認識 の テスト です","fixed":true,"accuracy":0.9925765714285715}]
