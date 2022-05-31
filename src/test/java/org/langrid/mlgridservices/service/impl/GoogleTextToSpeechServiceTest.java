@@ -1,10 +1,9 @@
-package org.langrid.mlgridservices.services.impl;
+package org.langrid.mlgridservices.service.impl;
 
 import java.io.File;
 import java.nio.file.Files;
 
 import org.junit.jupiter.api.Test;
-import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

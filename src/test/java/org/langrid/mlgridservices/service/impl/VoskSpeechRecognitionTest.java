@@ -1,7 +1,6 @@
-package org.langrid.mlgridservices.services.impl;
+package org.langrid.mlgridservices.service.impl;
 
 import org.junit.jupiter.api.Test;
-import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.langrid.service.ml.ContinuousSpeechRecognitionConfig;
 
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;

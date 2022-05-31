@@ -1,7 +1,6 @@
-package org.langrid.mlgridservices.services.impl;
+package org.langrid.mlgridservices.service.impl;
 
 import org.junit.jupiter.api.Test;
-import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
 
 public class DalleMiniTextImageGenerationServiceTest {
 	@Test

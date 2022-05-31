@@ -1,4 +1,4 @@
-package org.langrid.mlgridservices.services.impl;
+package org.langrid.mlgridservices.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.Test;
-import org.langrid.mlgridservices.service.impl.KerasImageClassificationService;
 
 public class KerasImageClassificationServiceTest {
     @Test
