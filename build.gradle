@@ -31,6 +31,8 @@ dependencies {
   implementation 'com.neovisionaries:nv-websocket-client:2.9'
   implementation 'com.google.guava:guava:31.1-jre'
   implementation 'org.apache.httpcomponents:httpmime:4.5.13'
+  implementation platform('com.google.cloud:libraries-bom:25.3.0')
+  implementation 'com.google.cloud:google-cloud-texttospeech'
 
   compileOnly 'org.projectlombok:lombok'
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
