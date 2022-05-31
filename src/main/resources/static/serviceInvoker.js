@@ -41,11 +41,6 @@ class ObjectDetectionService extends Service{
 		return this.invoke("detect", Array.prototype.slice.call(arguments));
 	}
 }
-class TranslationService extends Service{
-	translate(sourceLang, targetLang, source){
-        return this.invoke("translate", Array.prototype.slice.call(arguments));
-    }
-}
 class SpeechEmotionRecognition extends Service{
 	recognize(language, audioFormat, audio){
 		return this.invoke("recognize", Array.prototype.slice.call(arguments));
@@ -61,13 +56,23 @@ class TextSentimentAnalysisService extends Service{
 		return this.invoke("analyze", Array.prototype.slice.call(arguments));
 	}
 }
+class TextToSpeechService extends Service{
+	speak(language, text, voiceType, audioType){
+        return this.invoke("speak", Array.prototype.slice.call(arguments));
+	}
+}
+class TranslationService extends Service{
+	translate(sourceLang, targetLang, source){
+        return this.invoke("translate", Array.prototype.slice.call(arguments));
+    }
+}
 
 // Service呼び出しに使用するクラスのベースクラス。派生クラスで実装するinvokeメソッドと、
 // 各サービスクラスを返すメソッドだけを用意する。
 class ServiceInvoker{
     invoke(serviceId, methodName, args){}
 
-    /** @type {ContinuousSpeechRecognitionService} */
+    /** return {ContinuousSpeechRecognitionService} */
     continuousSpeechRecognition(serviceId){
         return new ContinuousSpeechRecognitionService(this, serviceId);
     }
@@ -89,6 +94,9 @@ class ServiceInvoker{
     textSentimentAnalysis(serviceId){
         return new TextSentimentAnalysisService(this, serviceId);
     }
+	textToSpeech(serviceId){
+		return new TextToSpeechService(this, serviceId);
+	}
 } 
 
 // Websocketを使ってサービス呼び出しを行うクラス

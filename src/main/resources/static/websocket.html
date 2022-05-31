@@ -44,6 +44,11 @@
         <button class="nav-link" id="serTab" data-bs-toggle="tab" data-bs-target="#ser"
           type="button" role="tab" aria-controls="ser" aria-selected="false">SpeechEmotionRecognition</button>
       </li>
+      <!-- 音声合成サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="ttsTab" data-bs-toggle="tab" data-bs-target="#tts"
+          type="button" role="tab" aria-controls="tts" aria-selected="false">TextToSpeech</button>
+      </li>
     </ul>
     <div class="tab-content" id="tabContent">
       <!-- 翻訳サービス -->
@@ -135,6 +140,18 @@
 		<br/>
         <a href="https://webempath.net/lp-jpn/">Empath</a>
       </div>
+      <!-- 音声合成サービス -->
+      <div id="tts" aria-labelledby="ttsTab" class="tab-pane fade" role="tabpanel">
+        <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
+        <label>text<input data-id="text" class="form-control" type="text" value="今日はいい天気ですね"></label>
+        <button data-id="execute" class="btn btn-success">合成</button>
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<br/>
+        <a href="https://cloud.google.com/text-to-speech">Google Cloud Text-to-Speech</a>
+      </div>
     </div>
   </div></div>
 </div>
@@ -170,6 +187,7 @@ window.addEventListener("load", ()=>{
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 	const asrServiceIds = ["VOSK"];//, "ChromeASR"];
 	const serServiceIds = ["Empath"];
+	const ttsServiceIds = ["GoogleTTS"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -518,36 +536,42 @@ window.addEventListener("load", ()=>{
 			recorder.start(11025);
 		});
 	}
+
+	{	// TextToSpeech
+		const parent = document.querySelector("#tts");
+		const sids = ttsServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const results = {};
+		for(let sid of sids){
+			services.append(document.createTextNode(`${sid}: `));
+			const r = document.createElement("span");
+			results[sid] = r;
+			services.append(r);
+			services.append(document.createElement("br"));
+		}
+		parent.querySelector("[data-id='execute']").addEventListener("click", e=>{
+			e.preventDefault();
+			const lang = parent.querySelector("[data-id='language']").value;
+			const text = parent.querySelector("[data-id='text']").value;
+			for(let sid of sids){
+				const result = results[sid];
+				result.textContent = "processing...";
+				ws.textToSpeech(sid).speak(lang, text, "", "audio/mpeg")
+					.then(r=>{
+						result.textContent = "";
+						const audio = document.createElement("audio");
+						audio.controls = true;
+						console.log(r.result.audio.buffer.buffer);
+						audio.src = URL.createObjectURL(new Blob(
+							[r.result.audio.buffer], {type: r.result.audioType}));
+						result.appendChild(audio);
+					})
+					.catch(e=>{ console.error(e); result.textContent = r.error; });
+			}
+		});
+	}
 });
 
-/*
-function downsampleBuffer(buffer, sampleRate, outSampleRate){
-	if (outSampleRate > sampleRate) {
-		console.error('downsampling rate show be smaller than original sample rate');
-	}
-	const sampleRateRatio = sampleRate / outSampleRate;
-	const newLength = Math.round(buffer.length / sampleRateRatio);
-	const result = new Uint8Array(newLength * 2);
-	let offsetResult = 0;
-	let offsetBuffer = 0;
-	while (offsetResult < result.length) {
-		const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
-		let accum = 0;
-		let count = 0;
-		for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i += 1) {
-			accum += buffer[i];
-			count += 1;
-		}
-		let v = accum / count;
-		v = v < 0 ? v * 0x8000 : v * 0x7fff
-		result[offsetResult * 2] = v & 0xff;
-		result[offsetResult * 2 + 1] = (v & 0xff00) >> 8;
-		offsetResult += 1;
-		offsetBuffer = nextOffsetBuffer;
-	}
-	return result;
-}
-*/
 </script>
 </body>
 </html>
