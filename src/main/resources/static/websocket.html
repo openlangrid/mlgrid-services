@@ -415,7 +415,6 @@ window.addEventListener("load", ()=>{
 					}
 					if(s.started){
 						const data = downsampleBuffer(channelData, recorder.getAudioContext().sampleRate, 16000);
-//						const data = channelData;
 						ws.continuousSpeechRecognition(sid)
 							.processRecognition(s.sessionId, Buffer.from(data))
 							.then(receiver(s))
