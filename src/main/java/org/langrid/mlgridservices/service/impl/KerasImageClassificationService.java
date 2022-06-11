@@ -24,7 +24,7 @@ public class KerasImageClassificationService implements ImageClassificationServi
 	@Override
 	public ImageClassificationResult[] classify(String format, byte[] image, String labelLanguage, int maxResults)
 	throws UnsupportedLanguageException{
-		if(!LanguageUtil.matches("ja", labelLanguage))
+		if(!LanguageUtil.matches("en", labelLanguage))
 			throw new UnsupportedLanguageException("labelLanguage", labelLanguage);
 		try {
 			var tempDir = new File("procs/image_classification_keras/temp");
