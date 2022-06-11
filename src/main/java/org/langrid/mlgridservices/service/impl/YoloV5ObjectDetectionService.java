@@ -8,6 +8,7 @@ import java.nio.file.Files;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.service.ml.Box2d;
 import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
@@ -46,7 +47,7 @@ public class YoloV5ObjectDetectionService implements ObjectDetectionService{
 	}
 
 	public String run(String modelName, File imgFile){
-		try{
+		try(var l = GPULock.acquire()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm "
 					+ "yolov5 python runYoloV5.py " + modelName + " temp/" + imgFile.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.TextToImageGenerationResult;
 import org.langrid.service.ml.TextToImageGenerationService;
@@ -57,7 +58,7 @@ public class DalleMiniTextImageGenerationService implements TextToImageGeneratio
 	}
 	
 	public void run(String model, String text, int maxResults, String outimagePrefix){
-		try{
+		try(var l = GPULock.acquire()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
 					"run --rm dalle-mini python3 run.py " +
 				model + " \"" + text.replaceAll("\"", "\\\"") + "\" " +

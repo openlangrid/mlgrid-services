@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.ImageClassificationResult;
 import org.langrid.service.ml.ImageClassificationService;
@@ -45,7 +46,7 @@ public class KerasImageClassificationService implements ImageClassificationServi
 	}
 
 	public String run(String scriptName, File imgFile){
-		try{
+		try(var l = GPULock.acquire()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm "
 					+ dockerServiceName + " python " + scriptName + " temp/" + imgFile.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 
 import org.langrid.service.ml.TextSentimentLabel;
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.TextSentimentAnalysisResult;
 import org.langrid.service.ml.TextSentimentAnalysisService;
@@ -51,7 +52,7 @@ implements TextSentimentAnalysisService{
 	}
 
 	public Result[] run(String text){
-		try{
+		try(var l = GPULock.acquire()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
 					"run --rm huggingface python run.py " +
 				" \"" + text.replaceAll("\"", "\\\"") + "\" ";

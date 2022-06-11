@@ -31,7 +31,7 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 @Service
 public class ServiceInvoker {
 	@PostConstruct
-	private synchronized void init() {
+	private void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
 		serviceImples.put("VOSK", new VoskSpeechRecognitionService());
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
@@ -46,7 +46,7 @@ public class ServiceInvoker {
 		serviceGroups.put("YoloV5", yoloV5Services);
 	}
 
-	public synchronized Response invoke(String serviceId, Request invocation)
+	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
 		// serviceIdに対応する実装クラスを探す
