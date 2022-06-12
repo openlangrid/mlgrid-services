@@ -13,14 +13,11 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
-import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.HumanPoseEstimation3dService;
-import org.langrid.service.ml.ImageClassificationResult;
-import org.langrid.service.ml.ImageClassificationService;
 import org.langrid.service.ml.Point3d;
 
-import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3dService{
@@ -28,12 +25,13 @@ public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3d
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Map<String, Point3d>[] estimate(String format, byte[] image, int maxResults)
 	throws UnsupportedLanguageException{
 		try {
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var infile = FileUtil.createUniqueFile(tempDir, "image-", ".jpg");
+			var infile = FileUtil.createUniqueFileWithDateTime(tempDir, "image-", ".jpg");
 			var outJsonFile = infile.toString() + ".out.json";
 			Files.write(infile.toPath(), image);
 			run("run.py", infile);
