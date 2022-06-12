@@ -24,6 +24,11 @@
         <button class="nav-link" id="odTab" data-bs-toggle="tab" data-bs-target="#od"
           type="button" role="tab" aria-controls="od" aria-selected="false">ObjectDetection</button>
       </li>
+      <!-- 人間姿勢推定サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="hpeTab" data-bs-toggle="tab" data-bs-target="#hpe"
+          type="button" role="tab" aria-controls="hpe" aria-selected="false">HumanPoseEstimation</button>
+      </li>
       <!-- 画像生成サービスタブ -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
@@ -88,6 +93,19 @@
 		</div>
 		<br/>
         <a href="https://github.com/ultralytics/yolov5">YoloV5</a>
+      </div>
+      <!-- 人間姿勢推定サービス -->
+      <div id="hpe" aria-labelledby="hpeTab" class="tab-pane fade" role="tabpanel">
+        <button data-id="button" effectAllowed="move" style="height: 4em" type="button"
+         class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
+        <br/>
+        <img data-id="image" style="max-height: 360px; object-fit: scale-down;">
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<br/>
+        <a href="https://github.com/CMU-Perceptual-Computing-Lab/openpose">OpenPose</a>
       </div>
       <!-- テキスト画像生成サービス -->
       <div id="ig" aria-labelledby="igTab" class="tab-pane fade" role="tabpanel">
@@ -188,6 +206,7 @@ window.addEventListener("load", ()=>{
 	const asrServiceIds = ["VOSK"];//, "ChromeASR"];
 	const serServiceIds = ["Empath"];
 	const ttsServiceIds = ["GoogleTTS"];
+	const hpeServiceIds = ["OpenPose"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -291,6 +310,42 @@ window.addEventListener("load", ()=>{
 			}
 		});
 	});
+
+	{	// HumanPoseEstimation
+		const parent = document.querySelector("#hpe");
+		const sids = hpeServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const results = {};
+		for(let sid of sids){
+			services.append(document.createTextNode(`${sid}: `));
+			const r = document.createElement("span");
+			results[sid] = r;
+			services.append(r);
+			services.append(document.createElement("br"));
+		}
+		const button = parent.querySelector("[data-id='button']");
+		button.addEventListener("dragover", e=>{
+			e.stopPropagation();
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "link";
+		});
+		button.addEventListener("drop", e=>{
+			e.preventDefault();
+			const file = e.dataTransfer.files[0];
+			parent.querySelector("[data-id='image']").src = URL.createObjectURL(file);
+			const fr = new FileReader();
+			fr.readAsArrayBuffer(file);
+			fr.addEventListener("load", e=>{
+				for(let sid of sids){
+					const result = results[sid];
+					result.textContent = "processing...";
+					ws.humanPoseEstimation(sid).estimate("image/jpeg", Buffer.from(new Uint8Array(fr.result)), 100)
+						.then(r=>{ result.textContent = JSON.stringify(r.result);})
+						.catch(e=>{ console.error(e); result.textContent = r.error; });
+				}
+			});
+		});
+	}
 
 	{	// TextImageGeneration
 		const parent = document.querySelector("#ig");
