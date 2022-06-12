@@ -19,6 +19,7 @@ import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
+import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class ServiceInvoker {
 		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
 		serviceImples.put("Empath", empathService);
 		serviceImples.put("GoogleTTS", googleTtsService);
+		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
