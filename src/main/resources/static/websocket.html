@@ -99,7 +99,10 @@
         <button data-id="button" effectAllowed="move" style="height: 4em" type="button"
          class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
         <br/>
-        <img data-id="image" style="max-height: 360px; object-fit: scale-down;">
+		<div style="position: relative">
+			<img data-id="image" style="max-height: 360px; object-fit: scale-down">
+			<div data-id="canvases"></div>
+		</div>
         <br/>
         <label>results:</label><br/>
 		<div data-id="services">
@@ -181,6 +184,7 @@
 <script src="./serviceInvoker.js"></script>
 <script src="./recorder.js"></script>
 <script src="./wavwriter.js"></script>
+<script src="./drawUtil.js"></script>
 <script>
 //const baseUrl = "https://langrid.org/mlgrid-services/services";
 //const baseUrl = "http://localhost:8080/mlgrid-services/services";
@@ -315,13 +319,19 @@ window.addEventListener("load", ()=>{
 		const parent = document.querySelector("#hpe");
 		const sids = hpeServiceIds;
 		const services = parent.querySelector("[data-id='services']");
+		const canvases = parent.querySelector("[data-id='canvases']");
 		const results = {};
 		for(let sid of sids){
 			services.append(document.createTextNode(`${sid}: `));
 			const r = document.createElement("span");
-			results[sid] = r;
+			const c = document.createElement("canvas");
+			c.style.position = "absolute";
+			c.style.left = "0px";
+			c.style.top = "0px";
+			results[sid] = {text: r, canvas: c};
 			services.append(r);
 			services.append(document.createElement("br"));
+			canvases.append(c);
 		}
 		const button = parent.querySelector("[data-id='button']");
 		button.addEventListener("dragover", e=>{
@@ -332,16 +342,30 @@ window.addEventListener("load", ()=>{
 		button.addEventListener("drop", e=>{
 			e.preventDefault();
 			const file = e.dataTransfer.files[0];
-			parent.querySelector("[data-id='image']").src = URL.createObjectURL(file);
+			const srcImage = parent.querySelector("[data-id='image']");
+			srcImage.src = URL.createObjectURL(file);
 			const fr = new FileReader();
 			fr.readAsArrayBuffer(file);
 			fr.addEventListener("load", e=>{
 				for(let sid of sids){
 					const result = results[sid];
-					result.textContent = "processing...";
+					result["text"].textContent = "processing...";
+					const canvas = result["canvas"];
+					const ctx = canvas.getContext('2d');
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					ws.humanPoseEstimation(sid).estimate("image/jpeg", Buffer.from(new Uint8Array(fr.result)), 100)
-						.then(r=>{ result.textContent = JSON.stringify(r.result);})
-						.catch(e=>{ console.error(e); result.textContent = r.error; });
+						.then(r=>{
+							const scale = srcImage.width / srcImage.naturalWidth;
+							result["text"].textContent = JSON.stringify(r.result);
+							const canvas = result["canvas"];
+							canvas.width = srcImage.width;
+							canvas.height = srcImage.height;
+							const ctx = canvas.getContext('2d');
+							for(const pose of r.result){
+								drawPose(ctx, scale, pose);
+							}
+						})
+						.catch(e=>{ console.error(e); result.textContent = e.error; });
 				}
 			});
 		});
