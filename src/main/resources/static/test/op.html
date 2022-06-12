@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<div>
+<img id="srcImage" style="position: relative" src="op-input.jpg" width="480">
+<canvas id="canvas" style="position: absolute; left: 8px; top: 8px"></canvas>
+</div>
+<img src="op-output.jpg" width="480">
+<script src="../drawUtil.js"></script>
+<script>
+window.addEventListener("load", ()=>{
+    fetch("op-output.json", {type: "application/json"})
+        .then(res => res.json())
+        .then(r => {
+            const srcImage = document.getElementById("srcImage");
+            const scale = srcImage.width / srcImage.naturalWidth;
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext('2d')
+            canvas.width = srcImage.width;
+            canvas.height = srcImage.height;
+            for(const pose of r){
+                drawPose(ctx, scale, pose);
+            }
+        });
+});
+</script>
+</body>
+</html>
