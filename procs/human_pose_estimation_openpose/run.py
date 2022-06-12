@@ -17,7 +17,7 @@ wrapper.start()
 partNames = ["Nose", "Neck",
   "RShoulder", "RElbow", "RWrist",
   "LShoulder", "LElbow", "LWrist",
-  "MidHip",
+  "MHip",
   "RHip", "RKnee", "RAnkle",
   "LHip", "LKnee", "LAnkle",
   "REye", "LEye", "REar", "LEar",
