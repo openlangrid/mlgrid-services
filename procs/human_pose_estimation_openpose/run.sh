@@ -3,4 +3,4 @@
 JPG=${1:-zidane.jpg}
 MODEL=${2:-hog}
 
-docker-compose run --rm facerecognition python3 run.py ${JPG} ${MODEL}
+docker-compose run --rm openpose python3 run.py ${JPG} ${MODEL}
