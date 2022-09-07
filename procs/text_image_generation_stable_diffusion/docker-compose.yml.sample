@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  sd:
+    build: ./build
+    runtime: nvidia
+    environment:
+      HUGGINGFACE_TOKEN: YOUR_HF_TOKEN
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./cache/huggingface:/root/.cache/huggingface
