@@ -30,19 +30,20 @@ public class StableDiffusionTextImageGenerationService implements TextToImageGen
 		if(!LanguageUtil.matches("en", language))
 			throw new UnsupportedLanguageException("language", language);
 		try {
-			maxResults = Math.max(maxResults, 8);
+			maxResults = Math.min(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFile(tempDir, "outimage-", "");
 			run(text, maxResults, "temp/" + temp.getName());
 			var ret = new ArrayList<TextToImageGenerationResult>();
 			for(var i = 0; i < maxResults; i++){
-				var imgFile = new File(tempDir, temp.getName() + "_" + i + ".jpg");
+				var imgFile = new File(tempDir, temp.getName() + ".png"); //"_" + i + ".png");
 				if(!imgFile.exists()) break;
-				var accFile = new File(tempDir, temp.getName() + "_" + i + ".acc.txt");
+//				var accFile = new File(tempDir, temp.getName() + "_" + i + ".acc.txt");
 				ret.add(new TextToImageGenerationResult(
 					Files.readAllBytes(imgFile.toPath()),
-					Double.parseDouble(Files.readString(accFile.toPath()))
+					0
+//					Double.parseDouble(Files.readString(accFile.toPath()))
 				));
 			}
 			return ret.toArray(new TextToImageGenerationResult[]{});

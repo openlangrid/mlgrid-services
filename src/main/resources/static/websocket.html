@@ -390,7 +390,7 @@ window.addEventListener("load", ()=>{
 			for(let sid of igServiceIds){
 				const result = results[sid];
 				result.textContent = "processing...";
-				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", 8)
+				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", 1)
 					.then(r=>{
 						result.textContent = "";
 						result.append(document.createElement("br"));

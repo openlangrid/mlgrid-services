@@ -34,7 +34,7 @@ public class DalleMiniTextImageGenerationService implements TextToImageGeneratio
 		if(!LanguageUtil.matches("en", language))
 			throw new UnsupportedLanguageException("language", language);
 		try {
-			maxResults = Math.max(maxResults, 8);
+			maxResults = Math.min(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFile(tempDir, "outimage-", "");
