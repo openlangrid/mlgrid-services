@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class PocessUtil {
+public class ProcessUtil {
 	public static class ProcessFailedException extends Exception{
 		public ProcessFailedException(){
 		}
