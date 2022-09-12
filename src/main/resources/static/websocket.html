@@ -114,11 +114,18 @@
       <div id="ig" aria-labelledby="igTab" class="tab-pane fade" role="tabpanel">
         <label>language<input data-id="language" class="form-control" type="text" value="en"></label>
         <label>text<input data-id="text" class="form-control" type="text" value="sunset over a lake in the mountains"></label>
+		<label>samples<input data-id="samples" class="form-control" type="number" min="1" max="8" value="3"></label>
         <button data-id="execute" class="btn btn-success">生成</button>
         <br/>
-        <label>results:</label><br/>
+        <label>services:</label><br/>
 		<div data-id="services">
 		</div>
+		<template data-id="serviceTemplate">
+		  <div>
+			<label data-id="serviceId" data-value="service1"><input type="checkbox" data-id="check" checked>&nbsp;</label>
+			<span data-id="status"></span>
+		  </div>
+		</template>
 		<template data-id="resultTemplate">
 		  <div style="display: inline-block">
 			<img><br/><span></span>
@@ -126,7 +133,8 @@
 		</template>
 		<br/>
         <a href="https://github.com/borisdayma/dalle-mini">Dalle Mini</a> &nbsp;
-        <a href="https://github.com/CompVis/stable-diffusion">Stable Diffusion</a>
+        <a href="https://github.com/CompVis/stable-diffusion">Stable Diffusion</a> &nbsp;
+		<a href="https://github.com/rinnakk/japanese-stable-diffusion">Rinna Japanese Stable Diffusion</a>
       </div>
       <!-- テキスト感情分析サービス -->
       <div id="tsa" aria-labelledby="tsaTab" class="tab-pane fade" role="tabpanel">
@@ -206,7 +214,7 @@ window.addEventListener("load", ()=>{
 	const icServiceIds = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
 	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
 //	const igServiceIds = ["DummyTextImageGeneration"];
-	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1", "StableDiffusion"];
+	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1", "StableDiffusion", "RinnaJapaneseStableDiffusion"];
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 	const asrServiceIds = ["VOSK"];//, "ChromeASR"];
 	const serServiceIds = ["Empath"];
@@ -377,22 +385,25 @@ window.addEventListener("load", ()=>{
 		const services = parent.querySelector("[data-id='services']");
 		const results = {};
 		for(let sid of igServiceIds){
-			services.append(document.createTextNode(`${sid}: `));
-			const r = document.createElement("span");
-			results[sid] = r;
-			services.append(r);
-			services.append(document.createElement("br"));
+			const content = parent.querySelector("[data-id='serviceTemplate']").content.cloneNode(true);
+			const serviceId = content.querySelector("[data-id='serviceId'");
+			serviceId.setAttribute("data-value", `${sid}`);
+			serviceId.append(document.createTextNode(`${sid}`));
+			results[sid] = content.querySelector("div");
+			services.append(content);
 		}
 		parent.querySelector("[data-id='execute']").addEventListener("click", e=>{
 			e.preventDefault();
 			const lang = parent.querySelector("[data-id='language']").value;
 			const text = parent.querySelector("[data-id='text']").value;
+			const samples = parent.querySelector("[data-id='samples']").value;
 			for(let sid of igServiceIds){
+				if(!document.querySelector(`[data-value='${sid}'] input`).checked) continue;
 				const result = results[sid];
-				result.textContent = "processing...";
-				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", 1)
+				result.querySelector("[data-id='status']").textContent = "processing...";
+				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", samples)
 					.then(r=>{
-						result.textContent = "";
+						result.querySelector("[data-id='status']").textContent = "done.";
 						result.append(document.createElement("br"));
 						for(let res of r.result){
 							const content = parent.querySelector("[data-id='resultTemplate']").content.cloneNode(true);
