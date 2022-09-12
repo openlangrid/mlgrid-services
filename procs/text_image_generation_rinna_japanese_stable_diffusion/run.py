@@ -4,9 +4,11 @@ TOKEN = os.environ['HUGGINGFACE_TOKEN']
 
 parser = argparse.ArgumentParser()
 parser.add_argument("prompt", type=str, default="sunset over a lake in the mountains")
+parser.add_argument("num_of_candidates", type=int, default=0)
 parser.add_argument("outpath",type=str, default="out")
 args = parser.parse_args()
 prompt = args.prompt
+num_of_candidates =args.num_of_candidates
 outpath = args.outpath
 
 
@@ -31,7 +33,7 @@ pipe = JapaneseStableDiffusionPipeline.from_pretrained(
 ).to(device)
 
 # the number of output images. If you encounter Out Of Memory error, decrease this number.
-n_samples = 1 #@param{type: 'integer'}
+n_samples = num_of_candidates #@param{type: 'integer'}
 # `classifier-free guidance scale` adjusts how much the image will be like your prompt. Higher values keep your image closer to your prompt.
 guidance_scale = 7.5 #@param {type:"number"}
 # How many steps to spend generating (diffusing) your image.
@@ -58,8 +60,9 @@ with autocast(device):
         generator=generator
     )["sample"]
 
-image = images[0]
-image.save(f"{outpath}.png")
+for i in range(n_samples):
+    image = images[i]
+    image.save(f"{outpath}_{i}.png")
 
 with open(f"{outpath}.txt", 'w', encoding='UTF-8') as f:
     f.write(prompt)

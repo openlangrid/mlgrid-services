@@ -20,6 +20,7 @@ import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
+import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,11 @@ public class ServiceInvoker {
 		serviceImples.put("VOSK", new VoskSpeechRecognitionService());
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
-		serviceImples.put("Empath", empathService);
-		serviceImples.put("GoogleTTS", googleTtsService);
+		serviceImples.put("Empath", empath);
+		serviceImples.put("GoogleTTS", googleTts);
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
-		serviceImples.put("StableDiffusion", stableDiffusionService);
+		serviceImples.put("StableDiffusion", stableDiffusion);
+		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
@@ -85,11 +87,13 @@ public class ServiceInvoker {
 	private Map<String, Object> serviceImples = new HashMap<>();
 
 	@Autowired
-	private EmpathService empathService;
+	private EmpathService empath;
 	@Autowired
-	private GoogleTextToSpeechService googleTtsService;
+	private GoogleTextToSpeechService googleTts;
 	@Autowired
-	private StableDiffusionTextImageGenerationService stableDiffusionService;
+	private StableDiffusionTextImageGenerationService stableDiffusion;
+	@Autowired
+	private RinnaJapaneseStableDiffusionTextImageGenerationService rinnaJapaneseStableDiffusion;
 
 	@Autowired
 	private LangridServiceGroup langridServices;

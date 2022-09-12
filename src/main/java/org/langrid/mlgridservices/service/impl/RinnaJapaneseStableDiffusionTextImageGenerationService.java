@@ -18,7 +18,7 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 @Service
 public class RinnaJapaneseStableDiffusionTextImageGenerationService implements TextToImageGenerationService{
-    private File baseDir = new File("./procs/text_image_generation_stable_diffusion");
+    private File baseDir = new File("./procs/text_image_generation_rinna_japanese_stable_diffusion");
 
 	public RinnaJapaneseStableDiffusionTextImageGenerationService(){
 	}
@@ -32,16 +32,17 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 			maxResults = Math.min(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "outimage-", "");
-			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
-					"run --rm service python3 run.py " +
-				" \"" + text.replaceAll("\"", "\\\"") + "\" " +
-				" " + "temp/" + temp.getName();
+			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "out-", "");
+			var cmd = String.format(
+					"PATH=$PATH:/usr/local/bin " +
+					"/usr/local/bin/docker-compose run --rm service " +
+					"python3 run.py \"%s\" %d temp/%s",
+					text.replaceAll("\"", "\\\""), maxResults, temp.getName());
 			System.out.println(cmd);
 			ProcessUtil.runAndWait(cmd, baseDir);
 			var ret = new ArrayList<TextToImageGenerationResult>();
 			for(var i = 0; i < maxResults; i++){
-				var imgFile = new File(tempDir, temp.getName() + ".png"); //"_" + i + ".png");
+				var imgFile = new File(temp.toString() + "_" + i + ".png");
 				if(!imgFile.exists()) break;
 //				var accFile = new File(tempDir, temp.getName() + "_" + i + ".acc.txt");
 				ret.add(new TextToImageGenerationResult(
