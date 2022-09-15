@@ -442,8 +442,13 @@ window.addEventListener("load", ()=>{
 					ws.imageToImageConversion(sid).convert("image/jpeg", Buffer.from(new Uint8Array(fr.result)))
 						.then(r=>{
 							result["state"].textContent = "done.";
-							const img = document.createElement("img");
-							result["result"].append(img);
+							let img = result["result"].querySelector("img");
+							if(!img){
+								img = document.createElement("img");
+								result["result"].append(img);
+							} else{
+								URL.revokeObjectURL(img.src);
+							}
 							img.src = URL.createObjectURL(new Blob([r.result.image.buffer]));
 							img.width = srcImage.width;
 							img.height = srcImage.height;
