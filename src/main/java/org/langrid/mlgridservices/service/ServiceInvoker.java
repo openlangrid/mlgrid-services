@@ -15,6 +15,7 @@ import org.langrid.mlgridservices.service.group.KerasServiceGroup;
 import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
+import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
@@ -44,6 +45,7 @@ public class ServiceInvoker {
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
 		serviceImples.put("StableDiffusion", stableDiffusion);
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
+		serviceImples.put("CodeFormer", codeFormer);
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
@@ -94,6 +96,8 @@ public class ServiceInvoker {
 	private StableDiffusionTextImageGenerationService stableDiffusion;
 	@Autowired
 	private RinnaJapaneseStableDiffusionTextImageGenerationService rinnaJapaneseStableDiffusion;
+	@Autowired
+	private CodeFormerImageToImageConversionService codeFormer;
 
 	@Autowired
 	private LangridServiceGroup langridServices;

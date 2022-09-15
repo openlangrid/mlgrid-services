@@ -12,4 +12,22 @@ public class FileUtil {
 		return jp.go.nict.langrid.commons.io.FileUtil.createUniqueFile(
 			dir, prefix + ds, suffix);
 	}
+
+	public static File createUniqueDirectoryWithDateTime(File dir, String prefix)
+	throws IOException{
+		String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
+		return jp.go.nict.langrid.commons.io.FileUtil.createUniqueDirectory(
+			dir, prefix + ds);
+	}
+
+	public static String getExtFromFormat(String format){
+		format = format.toLowerCase();
+		if(format.endsWith("jpeg")) return "jpg";
+		if(format.endsWith("jpg")) return "jpg";
+		if(format.endsWith("png")) return "png";
+		if(format.endsWith("wav")) return "wav";
+		if(format.endsWith("mp4")) return "mp4";
+		var parts = format.split("\\/");
+		return parts[parts.length - 1];
+	}
 }

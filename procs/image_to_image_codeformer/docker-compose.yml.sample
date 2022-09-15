@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    runtime: nvidia
+    working_dir: /workspace/CodeFormer
+    volumes:
+      - .:/work
+      - ./temp/inputs:/temp/inputs
+      - ./temp/results:/workspace/CodeFormer/results
+      - ./cache/weights/realesrgan:/workspace/CodeFormer/weights/realesrgan
