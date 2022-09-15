@@ -46,6 +46,11 @@ class HumanPoseEstimationService extends Service{
 		return this.invoke("estimate", Array.prototype.slice.call(arguments));
 	}
 }
+class ImageToImageConversionService extends Service{
+	convert(format, image){
+		return this.invoke("convert", Array.prototype.slice.call(arguments));
+	}
+}
 class SpeechEmotionRecognition extends Service{
 	recognize(language, audioFormat, audio){
 		return this.invoke("recognize", Array.prototype.slice.call(arguments));
@@ -89,6 +94,9 @@ class ServiceInvoker{
     }
 	humanPoseEstimation(serviceId){
 		return new HumanPoseEstimationService(this, serviceId);
+	}
+	imageToImageConversion(serviceId){
+		return new ImageToImageConversionService(this, serviceId);
 	}
 	speechEmotionRecognition(serviceId){
 		return new SpeechEmotionRecognition(this, serviceId);

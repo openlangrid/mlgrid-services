@@ -29,6 +29,11 @@
         <button class="nav-link" id="hpeTab" data-bs-toggle="tab" data-bs-target="#hpe"
           type="button" role="tab" aria-controls="hpe" aria-selected="false">HumanPoseEstimation</button>
       </li>
+      <!-- 画像変換サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="i2iTab" data-bs-toggle="tab" data-bs-target="#i2i"
+          type="button" role="tab" aria-controls="i2i" aria-selected="false">Image2ImageConversion</button>
+      </li>
       <!-- 画像生成サービスタブ -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
@@ -109,6 +114,27 @@
 		</div>
 		<br/>
         <a href="https://github.com/CMU-Perceptual-Computing-Lab/openpose">OpenPose</a>
+      </div>
+      <!-- 画像変換サービス -->
+      <div id="i2i" aria-labelledby="i2iTab" class="tab-pane fade" role="tabpanel">
+        <button data-id="button" effectAllowed="move" style="height: 4em" type="button"
+         class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
+        <br/>
+		<div style="position: relative">
+			<img data-id="image" style="max-height: 360px; object-fit: scale-down">
+			<div data-id="canvases"></div>
+		</div>
+        <br/>
+        <label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<template data-id="resultTemplate">
+		  <div style="display: inline-block">
+		    <img><br/><span></span>
+		  </div>
+		</template>
+        <br/>
+        <a href="https://github.com/sczhou/CodeFormer">CodeFormer</a>
       </div>
       <!-- テキスト画像生成サービス -->
       <div id="ig" aria-labelledby="igTab" class="tab-pane fade" role="tabpanel">
@@ -220,6 +246,7 @@ window.addEventListener("load", ()=>{
 	const serServiceIds = ["Empath"];
 	const ttsServiceIds = ["GoogleTTS"];
 	const hpeServiceIds = ["OpenPose"];
+	const i2iServiceIds = ["CodeFormer"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -380,6 +407,53 @@ window.addEventListener("load", ()=>{
 		});
 	}
 
+	{	// ImageToImageConversion
+		const parent = document.querySelector("#i2i");
+		const sids = i2iServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const results = {};
+		for(let sid of sids){
+			services.append(document.createTextNode(`${sid}: `));
+			const state = document.createTextNode("");
+			services.append(state);
+			services.append(document.createElement("br"));
+			const result = document.createElement("div");
+			services.append(result);
+			results[sid] = {state: state, result: result};
+			services.append(document.createElement("br"));
+		}
+		const button = parent.querySelector("[data-id='button']");
+		button.addEventListener("dragover", e=>{
+			e.stopPropagation();
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "link";
+		});
+		button.addEventListener("drop", e=>{
+			e.preventDefault();
+			const file = e.dataTransfer.files[0];
+			const srcImage = parent.querySelector("[data-id='image']");
+			srcImage.src = URL.createObjectURL(file);
+			const fr = new FileReader();
+			fr.readAsArrayBuffer(file);
+			fr.addEventListener("load", e=>{
+				for(let sid of sids){
+					const result = results[sid];
+					result["state"].textContent = "processing...";
+					ws.imageToImageConversion(sid).convert("image/jpeg", Buffer.from(new Uint8Array(fr.result)))
+						.then(r=>{
+							result["state"].textContent = "done.";
+							const img = document.createElement("img");
+							result["result"].append(img);
+							img.src = URL.createObjectURL(new Blob([r.result.image.buffer]));
+							img.width = srcImage.width;
+							img.height = srcImage.height;
+						})
+						.catch(e=>{ console.error(e); result["state"].textContent = e.error; });
+				}
+			});
+		});
+	}
+	
 	{	// TextImageGeneration
 		const parent = document.querySelector("#ig");
 		const services = parent.querySelector("[data-id='services']");

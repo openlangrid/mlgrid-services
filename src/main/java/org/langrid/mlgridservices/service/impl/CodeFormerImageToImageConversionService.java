@@ -3,7 +3,6 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
@@ -23,10 +22,9 @@ public class CodeFormerImageToImageConversionService implements ImageToImageConv
 	}
 
 	@Override
-	public ImageToImageConversionResult[] convert(String format, byte[] image, int maxResults)
+	public ImageToImageConversionResult convert(String format, byte[] image)
 			throws InvalidParameterException, ProcessFailedException {
 		try(var l = GPULock.acquire()){
-			maxResults = Math.min(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");
 			var inputsDir = new File(tempDir, "inputs");
 			inputsDir.mkdirs();
@@ -43,13 +41,12 @@ public class CodeFormerImageToImageConversionService implements ImageToImageConv
 					tempDir.getName(), inputsDir.getName(), inputDir.getName());
 			System.out.println(cmd);
 			ProcessUtil.runAndWait(cmd, baseDir);
-			var ret = new ArrayList<ImageToImageConversionResult>();
-			var resultFile = new File(new File(new File(resultsDir, inputDir.getName() + "_0.7"), "final_results"), fileName);
+			var resultFile = new File(new File(new File(resultsDir, inputDir.getName() + "_0.7"), "final_results"), "input.png");
+			System.out.println("result: " + resultFile);
 			if(resultFile.exists()){
-				System.out.println("result: " + resultFile);
-				ret.add(new ImageToImageConversionResult(Files.readAllBytes(resultFile.toPath())));
+				return new ImageToImageConversionResult(Files.readAllBytes(resultFile.toPath()));
 			}
-			return ret.toArray(new ImageToImageConversionResult[]{});
+			throw new ProcessFailedException("failed to convert image.");
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {
