@@ -1,5 +1,5 @@
 #!/bin/bash
-pkill -f "java -jar"
+pkill -f "java -jar ./build/libs/mlgrid-services-"
 git pull
 ./gradlew build -x test
 ./gradlew --stop
