@@ -24,6 +24,7 @@ import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationServic
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
+import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,7 @@ public class ServiceInvoker {
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
 		serviceImples.put("StableDiffusion", stableDiffusion);
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
+		serviceImples.put("WaifuDiffusion", waifuDiffusion);
 		serviceImples.put("CodeFormer", codeFormer);
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
@@ -96,6 +98,8 @@ public class ServiceInvoker {
 	private StableDiffusionTextImageGenerationService stableDiffusion;
 	@Autowired
 	private RinnaJapaneseStableDiffusionTextImageGenerationService rinnaJapaneseStableDiffusion;
+	@Autowired
+	private WaifuDiffusionTextImageGenerationService waifuDiffusion;
 	@Autowired
 	private CodeFormerImageToImageConversionService codeFormer;
 
