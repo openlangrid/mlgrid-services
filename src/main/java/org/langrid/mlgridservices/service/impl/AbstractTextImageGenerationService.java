@@ -9,13 +9,11 @@ import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.TextToImageGenerationResult;
 import org.langrid.service.ml.TextToImageGenerationService;
-import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-@Service
 public class AbstractTextImageGenerationService implements TextToImageGenerationService{
     private File baseDir = new File("./procs/text_image_generation_stable_diffusion");
 
