@@ -94,7 +94,7 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 		try{
 			String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
 			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp"), "recording-" + ds + "-");
-			c.recorder = new WavRecorder(f.toString(), config.getChannels(), config.getSampleSizeInBits(), config.getFrameRate());
+			c.recorder = new WavRecorder(f.toString(), config.getChannels(), config.getSampleSizeInBits(), config.getSampleRate());
 			c.ws = factory.createSocket(uri);
 			c.ws.addListener(new WebSocketAdapter() {
 				@Override
@@ -158,7 +158,7 @@ public class VoskSpeechRecognitionService implements ContinuousSpeechRecognition
 				}
 			});
 			c.ws.connect();
-			c.ws.sendText(String.format("{ \"config\" : { \"sample_rate\" : %d } }", config.getFrameRate()));
+			c.ws.sendText(String.format("{ \"config\" : { \"sample_rate\" : %d } }", config.getSampleRate()));
 		} catch(IOException | WebSocketException e){
 			throw new ProcessFailedException(e);
 		}

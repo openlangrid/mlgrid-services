@@ -669,7 +669,7 @@ window.addEventListener("load", ()=>{
 					const config = {
 						channels: 1,
 						sampleSizeInBits: 16,
-						frameRate: 16000 // audioContext.sampleRate  // hertz. 8000, 16000, 44100.
+						sampleRate: 16000 // audioContext.sampleRate  // hertz. 8000, 16000, 44100.
 					};
 					ws.continuousSpeechRecognition(sid).startRecognition(lang, config)
 						.then(r=>{
