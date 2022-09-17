@@ -7,6 +7,8 @@ import org.langrid.service.ml.TextToImageGenerationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import jp.go.nict.langrid.commons.beanutils.Converter;
+import jp.go.nict.langrid.commons.lang.ClassUtil;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 
 @Service
@@ -14,8 +16,11 @@ public class DalleMiniServiceGroup  implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
-			return new Response(
-					ObjectUtil.invoke(service(serviceId), invocation.getMethod(), invocation.getArgs()));
+			var s = service(serviceId);
+			var mn = invocation.getMethod();
+			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
+			var args = new Converter().convertEachElement(invocation.getArgs(), m.getParameterTypes());
+			return new Response(ObjectUtil.invoke(s, mn, args));
 		} catch(RuntimeException e){
 			throw e;
 		} catch(Exception e){
