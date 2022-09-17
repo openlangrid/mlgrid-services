@@ -39,6 +39,11 @@
         <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
           type="button" role="tab" aria-controls="ig" aria-selected="false">TextImageGeneration</button>
       </li>
+      <!-- テキスト画像変換サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tgiTab" data-bs-toggle="tab" data-bs-target="#tgi"
+          type="button" role="tab" aria-controls="tgi" aria-selected="false">TextGuidedImageConversion</button>
+      </li>
       <!-- テキスト感情分析サービスタブ -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="tsaTab" data-bs-toggle="tab" data-bs-target="#tsa"
@@ -163,6 +168,35 @@
         <a href="https://github.com/harubaru/waifu-diffusion">Waifu Diffusion</a> &nbsp;
 		<a href="https://github.com/rinnakk/japanese-stable-diffusion">Rinna Japanese Stable Diffusion</a>
       </div>
+	  <!-- テキスト画像変換サービス -->
+	  <div id="tgi" aria-labelledby="tgiTab" class="tab-pane fade" role="tabpanel">
+	    <button data-id="button" effectAllowed="move" style="height: 4em" type="button"
+		  class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
+		<br/>
+        <label>language<input data-id="language" class="form-control" type="text" value="en"></label>
+        <label>prompt<input data-id="prompt" class="form-control" type="text" value="A fantasy landscape, trending on artstation"></label>
+
+		<div style="position: relative">
+			<img data-id="image" style="max-height: 360px; object-fit: scale-down">
+		</div>
+		<br/>
+		<label>results:</label><br/>
+		<div data-id="services">
+		</div>
+		<template data-id="serviceTemplate">
+		  <div>
+		    <label data-id="serviceId" data-value="service1"><input type="checkbox" data-id="check" checked>&nbsp;</label>
+			<span data-id="status"></span>
+		  </div>
+		</template>
+		<template data-id="resultTemplate">
+		  <div style="display: inline-block">
+			<img><br/><span></span>
+		  </div>
+		</template>
+		<br/>
+        <a href="https://github.com/CompVis/stable-diffusion">Stable Diffusion</a> &nbsp;
+	  </div>
       <!-- テキスト感情分析サービス -->
       <div id="tsa" aria-labelledby="tsaTab" class="tab-pane fade" role="tabpanel">
         <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
@@ -248,6 +282,7 @@ window.addEventListener("load", ()=>{
 	const ttsServiceIds = ["GoogleTTS"];
 	const hpeServiceIds = ["OpenPose"];
 	const i2iServiceIds = ["CodeFormer"];
+	const tgiServiceIds = ["StableDiffusionI2I"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -257,6 +292,7 @@ window.addEventListener("load", ()=>{
 	const ws = new WSServiceInvoker(wsUrl);
 	const rec = new Recorder();
 
+	// 翻訳サービス
 	const trans = document.querySelector("#trans");
 	const transServices = document.querySelector("#transServices");
 	const transResults = {};
@@ -281,6 +317,7 @@ window.addEventListener("load", ()=>{
 		}
 	});
 
+	// 画像識別サービス
 	const ic = document.querySelector("#ic");
 	const icServices = ic.querySelector("#icServices");
 	const icResults = {};
@@ -318,6 +355,7 @@ window.addEventListener("load", ()=>{
 		});
 	});
 
+	// 物体検出サービス
 	const od = document.querySelector("#od");
 	const odServices = od.querySelector("#odServices");
 	const odResults = {};
@@ -463,8 +501,9 @@ window.addEventListener("load", ()=>{
 	{	// TextImageGeneration
 		const parent = document.querySelector("#ig");
 		const services = parent.querySelector("[data-id='services']");
+		const sids = igServiceIds;
 		const results = {};
-		for(let sid of igServiceIds){
+		for(let sid of sids){
 			const content = parent.querySelector("[data-id='serviceTemplate']").content.cloneNode(true);
 			const serviceId = content.querySelector("[data-id='serviceId'");
 			serviceId.setAttribute("data-value", `${sid}`);
@@ -477,7 +516,7 @@ window.addEventListener("load", ()=>{
 			const lang = parent.querySelector("[data-id='language']").value;
 			const text = parent.querySelector("[data-id='text']").value;
 			const samples = parent.querySelector("[data-id='samples']").value;
-			for(let sid of igServiceIds){
+			for(let sid of sids){
 				if(!document.querySelector(`[data-value='${sid}'] input`).checked) continue;
 				const result = results[sid];
 				result.querySelector("[data-id='status']").textContent = "processing...";
@@ -496,6 +535,60 @@ window.addEventListener("load", ()=>{
 					})
 					.catch(e=>{ console.error(e); result.textContent = r.error; });
 			}
+		});
+	}
+
+	{	// TextGuidedImageConversion
+		const parent = document.querySelector("#tgi");
+		const services = parent.querySelector("[data-id='services']");
+		const sids = tgiServiceIds;
+		const results = {};
+		for(let sid of sids){
+			const content = parent.querySelector("[data-id='serviceTemplate']").content.cloneNode(true);
+			const serviceId = content.querySelector("[data-id='serviceId'");
+			serviceId.setAttribute("data-value", `${sid}`);
+			serviceId.append(document.createTextNode(`${sid}`));
+			results[sid] = content.querySelector("div");
+			services.append(content);
+		}
+		const button = parent.querySelector("[data-id='button']");
+		button.addEventListener("dragover", e=>{
+			e.stopPropagation();
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "link";
+		});
+		button.addEventListener("drop", e=>{
+			e.preventDefault();
+			const lang = parent.querySelector("[data-id='language']").value;
+			const prompt = parent.querySelector("[data-id='prompt']").value;
+			const file = e.dataTransfer.files[0];
+			const srcImage = parent.querySelector("[data-id='image']");
+			if(srcImage.src) URL.revokeObjectURL(srcImage.src);
+			srcImage.src = URL.createObjectURL(file);
+			const fr = new FileReader();
+			fr.readAsArrayBuffer(file);
+			fr.addEventListener("load", e=>{
+				for(let sid of sids){
+					const result = results[sid];
+					result.querySelector("[data-id='status']").textContent = "processing...";
+					ws.textGuidedImageConversion(sid).convert(
+						lang, prompt, "image/png", Buffer.from(new Uint8Array(fr.result)))
+						.then(r=>{
+							result.querySelector("[data-id='status']").textContent = "done.";
+							let img = result.querySelector("img");
+							if(!img){
+								img = document.createElement("img");
+								result.append(img);
+							} else{
+								URL.revokeObjectURL(img.src);
+							}
+							img.src = URL.createObjectURL(new Blob([r.result.image.buffer]));
+							img.width = srcImage.width;
+							img.height = srcImage.height;
+						})
+						.catch(e=>{ console.error(e); result["state"].textContent = e.error; });
+				}
+			});
 		});
 	}
 

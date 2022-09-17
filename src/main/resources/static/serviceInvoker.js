@@ -61,6 +61,11 @@ class TextImageGenerationService extends Service{
         return this.invoke("generate", Array.prototype.slice.call(arguments));
     }
 }
+class TextGuidedImageConversionService extends Service{
+	convert(language, prompt, frmat, image){
+		return this.invoke("convert", Array.prototype.slice.call(arguments));
+	}
+}
 class TextSentimentAnalysisService extends Service{
 	analyze(language, text){
 		return this.invoke("analyze", Array.prototype.slice.call(arguments));
@@ -106,6 +111,9 @@ class ServiceInvoker{
 	}
 	textImageGeneration(serviceId){
 		return new TextImageGenerationService(this, serviceId);
+	}
+	textGuidedImageConversion(serviceId){
+		return new TextGuidedImageConversionService(this, serviceId);
 	}
     textSentimentAnalysis(serviceId){
         return new TextSentimentAnalysisService(this, serviceId);

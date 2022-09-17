@@ -22,6 +22,7 @@ import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
+import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageConversionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
@@ -47,6 +48,7 @@ public class ServiceInvoker {
 		serviceImples.put("StableDiffusion", stableDiffusion);
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
 		serviceImples.put("WaifuDiffusion", waifuDiffusion);
+		serviceImples.put("StableDiffusionI2I", stableDiffusionI2I);
 		serviceImples.put("CodeFormer", codeFormer);
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
@@ -102,6 +104,8 @@ public class ServiceInvoker {
 	private WaifuDiffusionTextImageGenerationService waifuDiffusion;
 	@Autowired
 	private CodeFormerImageToImageConversionService codeFormer;
+	@Autowired
+	private StableDiffusionTextGuidedImageConversionService stableDiffusionI2I;
 
 	@Autowired
 	private LangridServiceGroup langridServices;
