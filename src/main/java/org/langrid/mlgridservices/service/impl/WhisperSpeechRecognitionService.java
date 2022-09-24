@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
@@ -14,7 +15,6 @@ import org.langrid.service.ml.interim.SpeechRecognitionResult;
 import org.langrid.service.ml.interim.SpeechRecognitionService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.re2j.Pattern;
 
 import jp.go.nict.langrid.commons.io.StreamUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
