@@ -307,6 +307,10 @@ function roundBox(v, n){
 		width: round(v.width, n), height: round(v.height, n)};
 }
 
+function msToMsms(ms){
+	return `${Math.floor(ms / 1000 / 60)}:${ms / 1000 % 60}.${ms % 1000}`;
+}
+
 window.addEventListener("load", ()=>{
 	const transServiceIds = ["LangridGoogleTranslateNMT", "HelsinkiNLPOpusMT"];
 	const icServiceIds = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
@@ -828,12 +832,8 @@ window.addEventListener("load", ()=>{
 							serviceResults.append(sr);
 							for(const r of ret.result){
 								const rr = recognitionResultTemplate.content.cloneNode(true);
-								const sm = r.startMillis;
-								const em = r.endMillis;
-								rr.querySelector("[data-id='startMillis']").textContent =
-									`${Math.floor(sm / 1000 / 60)}:${sm / 1000 % 60}.${sm % 1000}`;
-								rr.querySelector("[data-id='endMillis']").textContent =
-									`${Math.floor(em / 1000 / 60)}:${em / 1000 % 60}.${em % 1000}`;
+								rr.querySelector("[data-id='startMillis']").textContent = msToMsms(r.startMillis);
+								rr.querySelector("[data-id='endMillis']").textContent = msToMsms(r.endMillis);
 								rr.querySelector("[data-id='transcript']").textContent = r.transcript;
 								recognitionResults.append(rr);
 							}
