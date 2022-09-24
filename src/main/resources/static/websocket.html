@@ -49,10 +49,15 @@
         <button class="nav-link" id="tsaTab" data-bs-toggle="tab" data-bs-target="#tsa"
           type="button" role="tab" aria-controls="tsa" aria-selected="false">TextSentimentAnalysis</button>
       </li>
+      <!-- 継続型音声認識サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="csrTab" data-bs-toggle="tab" data-bs-target="#csr"
+          type="button" role="tab" aria-controls="csr" aria-selected="false">ContinuousSpeechRecognition</button>
+      </li>
       <!-- 音声認識サービスタブ -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="asrTab" data-bs-toggle="tab" data-bs-target="#asr"
-          type="button" role="tab" aria-controls="asr" aria-selected="false">SpeechRecognition</button>
+        <button class="nav-link" id="srTab" data-bs-toggle="tab" data-bs-target="#sr"
+          type="button" role="tab" aria-controls="sr" aria-selected="false">SpeechRecognition</button>
       </li>
       <!-- 音声感情検出サービスタブ -->
       <li class="nav-item" role="presentation">
@@ -209,8 +214,8 @@
 		<br/>
         <a href="https://github.com/cl-tohoku/bert-japanese/tree/v1.0">BERT Models for Japanese NLP</a>
       </div>
-      <!-- 音声認識サービス -->
-      <div id="asr" aria-labelledby="asrTab" class="tab-pane fade" role="tabpanel">
+      <!-- 継続型音声認識サービス -->
+      <div id="csr" aria-labelledby="csrTab" class="tab-pane fade" role="tabpanel">
         <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
         <button data-id="execute" class="btn btn-success">開始</button>
         <br/>
@@ -219,6 +224,38 @@
 		</div>
 		<br/>
         <a href="https://alphacephei.com/vosk/server">VOSK Server</a>
+      </div>
+      <!-- 音声認識サービス -->
+      <div id="sr" aria-labelledby="srTab" class="tab-pane fade" role="tabpanel">
+		<div data-id="inputs">
+	        <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
+    	    <button data-id="execute" class="btn btn-success">開始</button>
+		</div>
+        <label>services:</label><br/>
+		<div data-id="services">
+		</div>
+		<template data-id="serviceTemplate">
+			<label><input data-id="serviceIdCheck" type="checkbox" checked>&nbsp;
+				<span data-id="serviceIdLabel"></span></label><br/>
+		</template>
+		<label>results:</label>
+		<div data-id="results">
+		</div>
+		<template data-id="resultTemplate">
+			input: <audio data-id="audio" controls></audio> <a data-id="link">download</a>
+			<div data-id="serviceResults">
+			</div>
+		</template>
+		<template data-id="serviceResultTemplate">
+			<span data-id="serviceId"></span><br/>
+			<div data-id="recognitionResults"></div>
+		</template>
+		<template data-id="recognitionResultTemplate">
+			[<span data-id="startMillis"></span> --> <span data-id="endMillis"></span>]
+				<span data-id="transcript"></span><br/>
+		</template>
+		<br/>
+        <a href="https://github.com/openai/whisper">Whisper</a>
       </div>
       <!-- 音声感情検出サービス -->
       <div id="ser" aria-labelledby="serTab" class="tab-pane fade" role="tabpanel">
@@ -277,7 +314,8 @@ window.addEventListener("load", ()=>{
 //	const igServiceIds = ["DummyTextImageGeneration"];
 	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1", "StableDiffusion", "WaifuDiffusion", "RinnaJapaneseStableDiffusion"];
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
-	const asrServiceIds = ["VOSK"];//, "ChromeASR"];
+	const csrServiceIds = ["VOSK"];//, "ChromeASR"];
+	const srServiceIds = ["DummySpeechRecognition", "Whisper"];
 	const serServiceIds = ["Empath"];
 	const ttsServiceIds = ["GoogleTTS"];
 	const hpeServiceIds = ["OpenPose"];
@@ -621,8 +659,8 @@ window.addEventListener("load", ()=>{
 	}
 
 	{	// ContinuousSpeechRecognition
-		const parent = document.querySelector("#asr");
-		const sids = asrServiceIds;
+		const parent = document.querySelector("#csr");
+		const sids = csrServiceIds;
 		const resultContainer = parent.querySelector("[data-id='services']");
 		const services = {};
 		for(let sid of sids){
@@ -720,6 +758,86 @@ window.addEventListener("load", ()=>{
 							recorder.stop();
 						});
 					s.resultsDiv.removeChild(s.resultsDiv.firstChild);
+				}
+			};
+			recorder.start();
+		});
+	}
+
+	{	// SpeechRecognition
+		const parent = document.querySelector("#sr");
+		const inputs = parent.querySelector("[data-id='inputs']");
+		const sids = srServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const serviceTemplate = parent.querySelector("[data-id='serviceTemplate']");
+		for(let sid of sids){
+			const content = serviceTemplate.content.cloneNode(true);
+			content.querySelector("[data-id='serviceIdCheck']").setAttribute("data-id", `${sid}Check`);
+			content.querySelector("[data-id='serviceIdLabel']").textContent = sid;
+			services.append(content);
+		}
+		const results = parent.querySelector("[data-id='results']");
+		const resultTemplate = parent.querySelector("[data-id='resultTemplate']");
+		let recorder = null;
+		const exeBtn = parent.querySelector("[data-id='execute']");
+		exeBtn.addEventListener("click", e=>{
+			e.preventDefault();
+			if(recorder){
+				// 停止する
+				recorder.stop();
+				recorder = null;
+				exeBtn.textContent = "開始";
+				return;
+			}
+			// 開始する
+			exeBtn.textContent = "停止";
+			recorder = new Recorder();
+			const targetSampleRate = 16000;
+			let wavWriter = new WavWriter();
+			recorder.onStartRecording = (stream, audioContext)=>{
+				sampleRate = audioContext.sampleRate;
+		        wavWriter = new WavWriter({sampleRate: targetSampleRate});
+			};
+			recorder.onProcessRecording = channelData=>{
+				const uint8buff = downsampleBuffer(channelData,
+	            	recorder.getAudioContext().sampleRate,
+    	    	    targetSampleRate);
+		        wavWriter.addData(uint8buff);
+			};
+			recorder.onStopRecording = ()=>{
+				const wavFile = wavWriter.getWavFile();
+				wavwriter = null;
+				const dataUrl = URL.createObjectURL(new Blob(
+		            [wavFile], {type: "audio/wav"}));
+				const result = resultTemplate.content.cloneNode(true);
+				result.querySelector("[data-id='audio']").src = dataUrl;
+				result.querySelector("[data-id='link']").href = dataUrl;
+				const serviceResults = result.querySelector("[data-id='serviceResults']");
+				results.append(result);
+				const lang = inputs.querySelector("[data-id='language']").value;
+				const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
+				const recognitionResultTemplate = parent.querySelector("[data-id='recognitionResultTemplate']");
+				for(const sid of sids){
+					if(!services.querySelector(`[data-id='${sid}Check']`).checked) continue;
+					ws.speechRecognition(sid).recognize(lang, "audio/x-wav", Buffer.from(wavFile))
+						.then(ret => {
+							console.log(ret);
+							const sr = serviceResultTemplate.content.cloneNode(true);
+							sr.querySelector("[data-id='serviceId']").textContent = sid;
+							const recognitionResults = sr.querySelector("[data-id='recognitionResults']");
+							serviceResults.append(sr);
+							for(const r of ret.result){
+								const rr = recognitionResultTemplate.content.cloneNode(true);
+								const sm = r.startMillis;
+								const em = r.endMillis;
+								rr.querySelector("[data-id='startMillis']").textContent =
+									`${Math.floor(sm / 1000 / 60)}:${sm / 1000 % 60}.${sm % 1000}`;
+								rr.querySelector("[data-id='endMillis']").textContent =
+									`${Math.floor(em / 1000 / 60)}:${em / 1000 % 60}.${em % 1000}`;
+								rr.querySelector("[data-id='transcript']").textContent = r.transcript;
+								recognitionResults.append(rr);
+							}
+						});
 				}
 			};
 			recorder.start();

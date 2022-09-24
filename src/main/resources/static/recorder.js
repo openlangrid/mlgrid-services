@@ -1,6 +1,6 @@
 class Recorder{
-	constructor(){
-		this.sampleRate = 16000;
+	constructor(sampleRate){
+		this.sampleRate = sampleRate ? sampleRate : 16000;
         this.recording = false;
 	}
 	getAudioContext(){
@@ -39,7 +39,7 @@ class Recorder{
 				};
 				this.audioContext.createMediaStreamSource(stream).connect(sp);
 				sp.connect(this.audioContext.destination);
-				console.debug(`recording started. required sample rate: ${sampleRate}, `
+				console.debug(`recording started. required sample rate: ${sampleRate ? sampleRate : "none"}, `
 					+ `actual sample rate: ${this.audioContext.sampleRate}`);
 /*
 				window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;

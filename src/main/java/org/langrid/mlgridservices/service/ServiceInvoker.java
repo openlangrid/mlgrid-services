@@ -16,6 +16,7 @@ import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
+import org.langrid.mlgridservices.service.impl.DummySpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
@@ -26,6 +27,7 @@ import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageCon
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
+import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,8 @@ public class ServiceInvoker {
 	private void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
 		serviceImples.put("VOSK", new VoskSpeechRecognitionService());
+		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
+		serviceImples.put("DummySpeechRecognition", new DummySpeechRecognitionService());
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
 		serviceImples.put("Empath", empath);

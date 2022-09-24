@@ -20,11 +20,16 @@ public class ProcessUtil {
 		}
 	}
 
-	public static void runAndWait(String cmd, File workDir)
+	public static Process run(String cmd, File workDir)
 	throws IOException, InterruptedException, ProcessFailedException{
 		var pb = new ProcessBuilder("bash", "-c", cmd);
 		pb.directory(workDir);
-		var proc = pb.start();
+		return pb.start();
+	}
+
+	public static void runAndWait(String cmd, File workDir)
+	throws IOException, InterruptedException, ProcessFailedException{
+		var proc = run(cmd, workDir);
 		try {
 			proc.waitFor();
 			var res = proc.exitValue();

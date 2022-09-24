@@ -3,8 +3,7 @@ class WavWriter{
      * @param {Object} config {channels: 1, sampleSizeInBits: 16, sampleRate: 16000}
      */
     constructor(config){
-        this.config = {channels: 1, sampleSizeInBits: 16, sampleRate: 16000};
-        Object.assign(this.config, config);
+        this.config = {channels: 1, sampleSizeInBits: 16, sampleRate: 16000, ...config};
         this.audioData = [];
     }
 

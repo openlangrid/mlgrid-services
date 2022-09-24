@@ -31,6 +31,11 @@ class ContinuousSpeechRecognitionService extends Service{
         return this.invoke("stopRecognition", Array.prototype.slice.call(arguments));
     }
 }
+class SpeechRecognition extends Service{
+	recognize(language, format, audio){
+		return this.invoke("recognize", Array.prototype.slice.call(arguments));
+	}
+}
 class ImageClassificationService extends Service{
     classify(format, image, labelLang, maxResults){
 		return this.invoke("classify", Array.prototype.slice.call(arguments));
@@ -91,6 +96,9 @@ class ServiceInvoker{
     continuousSpeechRecognition(serviceId){
         return new ContinuousSpeechRecognitionService(this, serviceId);
     }
+	speechRecognition(serviceId){
+		return new SpeechEmotionRecognition(this, serviceId);
+	}
     imageClassification(serviceId){
         return new ImageClassificationService(this, serviceId);
     }
