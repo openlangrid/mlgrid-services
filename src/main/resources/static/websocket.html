@@ -229,7 +229,13 @@
       <div id="sr" aria-labelledby="srTab" class="tab-pane fade" role="tabpanel">
 		<div data-id="inputs">
 	        <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
-    	    <button data-id="execute" class="btn btn-success">開始</button>
+			&nbsp;
+			<label>audio<div>
+	    	    <button data-id="execute" class="btn btn-success">録音</button>
+				&nbsp;or&nbsp;
+				<button data-id="button" effectAllowed="move" style="height: 3em" type="button"
+		  			class="btn btn-sm btn-outline-success form-control-inline">ここにwavファイルをドロップしてください</button>
+			</div></label>
 		</div>
         <label>services:</label><br/>
 		<div data-id="services">
@@ -782,6 +788,52 @@ window.addEventListener("load", ()=>{
 		}
 		const results = parent.querySelector("[data-id='results']");
 		const resultTemplate = parent.querySelector("[data-id='resultTemplate']");
+
+		const go = (lang, wav)=>{
+			const dataUrl = URL.createObjectURL(new Blob(
+		            [wav], {type: "audio/wav"}));
+			const result = resultTemplate.content.cloneNode(true);
+			result.querySelector("[data-id='audio']").src = dataUrl;
+			result.querySelector("[data-id='link']").href = dataUrl;
+			const serviceResults = result.querySelector("[data-id='serviceResults']");
+			results.append(result);
+			const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
+			const recognitionResultTemplate = parent.querySelector("[data-id='recognitionResultTemplate']");
+			for(const sid of sids){
+				if(!services.querySelector(`[data-id='${sid}Check']`).checked) continue;
+				ws.speechRecognition(sid).recognize(lang, "audio/x-wav", Buffer.from(wav))
+					.then(ret => {
+						console.log(ret);
+						const sr = serviceResultTemplate.content.cloneNode(true);
+						sr.querySelector("[data-id='serviceId']").textContent = sid;
+						const recognitionResults = sr.querySelector("[data-id='recognitionResults']");
+						serviceResults.append(sr);
+						for(const r of ret.result){
+							const rr = recognitionResultTemplate.content.cloneNode(true);
+							rr.querySelector("[data-id='startMillis']").textContent = msToMsms(r.startMillis);
+							rr.querySelector("[data-id='endMillis']").textContent = msToMsms(r.endMillis);
+							rr.querySelector("[data-id='transcript']").textContent = r.transcript;
+							recognitionResults.append(rr);
+						}
+					});
+			}
+		};
+
+		const button = parent.querySelector("[data-id='button']");
+		button.addEventListener("dragover", e=>{
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "link";
+		});
+		button.addEventListener("drop", e=>{
+			e.preventDefault();
+			const fr = new FileReader();
+			fr.readAsArrayBuffer(e.dataTransfer.files[0]);
+			fr.addEventListener("load", e=>{
+				const lang = inputs.querySelector("[data-id='language']").value;
+				go(lang, fr.result);
+			});
+		});
+
 		let recorder = null;
 		const exeBtn = parent.querySelector("[data-id='execute']");
 		exeBtn.addEventListener("click", e=>{
@@ -811,34 +863,8 @@ window.addEventListener("load", ()=>{
 			recorder.onStopRecording = ()=>{
 				const wavFile = wavWriter.getWavFile();
 				wavwriter = null;
-				const dataUrl = URL.createObjectURL(new Blob(
-		            [wavFile], {type: "audio/wav"}));
-				const result = resultTemplate.content.cloneNode(true);
-				result.querySelector("[data-id='audio']").src = dataUrl;
-				result.querySelector("[data-id='link']").href = dataUrl;
-				const serviceResults = result.querySelector("[data-id='serviceResults']");
-				results.append(result);
 				const lang = inputs.querySelector("[data-id='language']").value;
-				const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
-				const recognitionResultTemplate = parent.querySelector("[data-id='recognitionResultTemplate']");
-				for(const sid of sids){
-					if(!services.querySelector(`[data-id='${sid}Check']`).checked) continue;
-					ws.speechRecognition(sid).recognize(lang, "audio/x-wav", Buffer.from(wavFile))
-						.then(ret => {
-							console.log(ret);
-							const sr = serviceResultTemplate.content.cloneNode(true);
-							sr.querySelector("[data-id='serviceId']").textContent = sid;
-							const recognitionResults = sr.querySelector("[data-id='recognitionResults']");
-							serviceResults.append(sr);
-							for(const r of ret.result){
-								const rr = recognitionResultTemplate.content.cloneNode(true);
-								rr.querySelector("[data-id='startMillis']").textContent = msToMsms(r.startMillis);
-								rr.querySelector("[data-id='endMillis']").textContent = msToMsms(r.endMillis);
-								rr.querySelector("[data-id='transcript']").textContent = r.transcript;
-								recognitionResults.append(rr);
-							}
-						});
-				}
+				go(lang, wavFile);
 			};
 			recorder.start();
 		});
