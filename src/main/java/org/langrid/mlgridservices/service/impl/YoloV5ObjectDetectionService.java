@@ -14,6 +14,7 @@ import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
+import jp.go.nict.langrid.commons.io.StreamUtil;
 import jp.go.nict.langrid.commons.util.ArrayUtil;
 import lombok.Data;
 
@@ -65,13 +66,8 @@ public class YoloV5ObjectDetectionService implements ObjectDetectionService{
 					}
 					throw new RuntimeException("no results found");
 				} else {
-					var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-					var lines = new StringBuilder();
-					String line = null;
-					while ((line = br.readLine()) != null) {
-						lines.append(line);
-					}
-					throw new RuntimeException(lines.toString());
+					throw new RuntimeException(StreamUtil.readAsString(
+						proc.getErrorStream(), "UTF-8"));
 				}
 			} finally {
 				proc.destroy();
