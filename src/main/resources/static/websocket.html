@@ -9,7 +9,7 @@
 <div class="container">
   <div class="alert alert-danger">アップロードされたデータはオープンソースソフトウェアで処理されたり，
 	Google翻訳を含む外部サービスに送信されるとともに，研究目的で使用されます。
-	直接外部に公開されることはありませんが，個人情報や秘密情報をアップロードしないようご注意ください。</div>
+	データそのものが直接外部に公開されることはありませんが，個人情報や秘密情報をアップロードしないようご注意ください。</div>
   <div class="row"><div class="col">
     <ul class="nav nav-tabs" id="menuTab" role="tablist">
       <!-- 翻訳サービスタブ -->
@@ -268,14 +268,45 @@
       </div>
       <!-- 音声感情検出サービス -->
       <div id="ser" aria-labelledby="serTab" class="tab-pane fade" role="tabpanel">
-        <!--label>language<input data-id="language" class="form-control" type="text" value="ja"></label-->
-        <button data-id="execute" class="btn btn-success">開始</button>
-        <br/>
-        <label>results:</label><br/>
+		<div data-id="inputs">
+	        <!--label>language--><input data-id="language" class="form-control" type="hidden" value="ja"><!-- /label-->
+			&nbsp;
+			<label>audio<div>
+	    	    <button data-id="execute" class="btn btn-success">録音</button>
+				<select data-id="sampleRate">
+					<option value="11025">11025</option>
+					<option value="16000" selected>16000</option>
+				</select>Hz
+				&nbsp;or&nbsp;
+				<button data-id="button" effectAllowed="move" style="height: 3em" type="button"
+		  			class="btn btn-sm btn-outline-success form-control-inline">ここにwavファイルをドロップしてください</button>
+			</div></label>
+		</div>
+        <label>services:</label><br/>
 		<div data-id="services">
 		</div>
+		<template data-id="serviceTemplate">
+			<label><input data-id="serviceIdCheck" type="checkbox" checked>&nbsp;
+				<span data-id="serviceIdLabel"></span></label><br/>
+		</template>
+		<label>results:</label>
+		<div data-id="results">
+		</div>
+		<template data-id="resultTemplate">
+			input: <audio data-id="audio" controls></audio> <a data-id="link">download</a>
+			<div data-id="serviceResults">
+			</div>
+		</template>
+		<template data-id="serviceResultTemplate">
+			<span data-id="serviceId"></span><br/>
+			<div data-id="emotionRecognitionResults"></div>
+		</template>
+		<template data-id="emotionRecognitionResultTemplate">
+			<span data-id="label"></span>(<span data-id="degree"></span>)<br/>
+		</template>
 		<br/>
-        <a href="https://webempath.net/lp-jpn/">Empath</a>
+        <a href="https://webempath.net/lp-jpn/">Empath</a>(11025Hz)&nbsp;
+        <a href="https://github.com/speechbrain/speechbrain">SpeechBrain</a>(16000Hz)
       </div>
       <!-- 音声合成サービス -->
       <div id="tts" aria-labelledby="ttsTab" class="tab-pane fade" role="tabpanel">
@@ -329,7 +360,7 @@ window.addEventListener("load", ()=>{
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 	const csrServiceIds = ["VOSK"];//, "ChromeASR"];
 	const srServiceIds = ["DummySpeechRecognition", "Whisper"];
-	const serServiceIds = ["Empath"];
+	const serServiceIds = ["Empath", "SpeechBrainSER"];
 	const ttsServiceIds = ["GoogleTTS"];
 	const hpeServiceIds = ["OpenPose"];
 	const i2iServiceIds = ["CodeFormer"];
@@ -869,26 +900,70 @@ window.addEventListener("load", ()=>{
 				const lang = inputs.querySelector("[data-id='language']").value;
 				go(lang, wavFile);
 			};
-			recorder.start();
+			recorder.start(targetSampleRate);
 		});
 	}
 
 	{	// SpeechEmotionRecognition
 		const parent = document.querySelector("#ser");
+		const inputs = parent.querySelector("[data-id='inputs']");
 		const sids = serServiceIds;
-		const resultContainer = parent.querySelector("[data-id='services']");
-		const services = {};
+		const services = parent.querySelector("[data-id='services']");
+		const serviceTemplate = parent.querySelector("[data-id='serviceTemplate']");
 		for(let sid of sids){
-			const s = {};
-			services[sid] = s;
-			resultContainer.append(document.createTextNode(`${sid}: `));
-			const resultsDiv = document.createElement("div");
-			resultContainer.append(resultsDiv);
-			resultContainer.append(document.createElement("br"));
-			s.resultsDiv = resultsDiv;
+			const content = serviceTemplate.content.cloneNode(true);
+			content.querySelector("[data-id='serviceIdCheck']").setAttribute("data-id", `${sid}Check`);
+			content.querySelector("[data-id='serviceIdLabel']").textContent = sid;
+			services.append(content);
 		}
+		const results = parent.querySelector("[data-id='results']");
+		const resultTemplate = parent.querySelector("[data-id='resultTemplate']");
+
+		const go = (lang, wav)=>{
+			const dataUrl = URL.createObjectURL(new Blob(
+		            [wav], {type: "audio/wav"}));
+			const result = resultTemplate.content.cloneNode(true);
+			result.querySelector("[data-id='audio']").src = dataUrl;
+			result.querySelector("[data-id='link']").href = dataUrl;
+			const serviceResults = result.querySelector("[data-id='serviceResults']");
+			results.append(result);
+			const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
+			const recognitionResultTemplate = parent.querySelector("[data-id='emotionRecognitionResultTemplate']");
+			for(const sid of sids){
+				if(!services.querySelector(`[data-id='${sid}Check']`).checked) continue;
+				ws.speechRecognition(sid).recognize(lang, "audio/x-wav", Buffer.from(wav))
+					.then(ret => {
+						console.log(ret);
+						const sr = serviceResultTemplate.content.cloneNode(true);
+						sr.querySelector("[data-id='serviceId']").textContent = sid;
+						const recognitionResults = sr.querySelector("[data-id='emotionRecognitionResults']");
+						serviceResults.append(sr);
+						for(const r of ret.result){
+							const rr = recognitionResultTemplate.content.cloneNode(true);
+							rr.querySelector("[data-id='label']").textContent = r.label;
+							rr.querySelector("[data-id='degree']").textContent = r.degree;
+							recognitionResults.append(rr);
+						}
+					});
+			}
+		};
+
+		const button = parent.querySelector("[data-id='button']");
+		button.addEventListener("dragover", e=>{
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "link";
+		});
+		button.addEventListener("drop", e=>{
+			e.preventDefault();
+			const fr = new FileReader();
+			fr.readAsArrayBuffer(e.dataTransfer.files[0]);
+			fr.addEventListener("load", e=>{
+				const lang = inputs.querySelector("[data-id='language']").value;
+				go(lang, fr.result);
+			});
+		});
+
 		let recorder = null;
-		let wavWriter = null;
 		const exeBtn = parent.querySelector("[data-id='execute']");
 		exeBtn.addEventListener("click", e=>{
 			e.preventDefault();
@@ -896,55 +971,31 @@ window.addEventListener("load", ()=>{
 				// 停止する
 				recorder.stop();
 				recorder = null;
-				exeBtn.textContent = "録音開始";
+				exeBtn.textContent = "開始";
 				return;
 			}
 			// 開始する
-			exeBtn.textContent = "検出";
+			exeBtn.textContent = "停止";
 			recorder = new Recorder();
-			wavWriter = new WavWriter({sampleRate: 11025});
+			const targetSampleRate = inputs.querySelector("[data-id='sampleRate']").value;
+			let wavWriter = new WavWriter();
 			recorder.onStartRecording = (stream, audioContext)=>{
-				for(let sid of sids){
-					const s = services[sid];
-					while (s.resultsDiv.firstChild) {
-     				   s.resultsDiv.removeChild(s.resultsDiv.firstChild);
-					}
-				}
+				sampleRate = audioContext.sampleRate;
+		        wavWriter = new WavWriter({sampleRate: targetSampleRate});
 			};
-			recorder.onProcessRecording = channelData =>{
-				wavWriter.addData(downsampleBuffer(channelData,
-           			recorder.getAudioContext().sampleRate,
-           			11025));
+			recorder.onProcessRecording = channelData=>{
+				const uint8buff = downsampleBuffer(channelData,
+	            	recorder.getAudioContext().sampleRate,
+    	    	    targetSampleRate);
+		        wavWriter.addData(uint8buff);
 			};
 			recorder.onStopRecording = ()=>{
-				const audio = wavWriter.getWavFile();
-				for(let sid of sids){
-					const s = services[sid];
-					const file = wavWriter.getWavFile();
-					const url = URL.createObjectURL(new Blob(
-						[file], {type: "audio/wav"}));
-					const audio = document.createElement("audio");
-					audio.controls = true;
-					audio.src = url;
-					s.resultsDiv.appendChild(audio);
-					const a = document.createElement("a");
-					a.download = 'recordings.wav';
-					a.href = url;
-					a.textContent = "download";
-					s.resultsDiv.appendChild(a);
-					s.resultsDiv.appendChild(document.createElement("br"));
-					ws.speechEmotionRecognition(sid).recognize(
-						"ja", "audio/x-wav", Buffer.from(file)
-					).then(r=>{
-						s.resultsDiv.appendChild(document.createTextNode(JSON.stringify(r.result)));
-					}).catch(e=>{
-						console.error(e);
-						s.resultsDiv.append(document.createTextNode(e.error));
-						recorder.stop();
-					});
-				}
+				const wavFile = wavWriter.getWavFile();
+				wavwriter = null;
+				const lang = inputs.querySelector("[data-id='language']").value;
+				go(lang, wavFile);
 			};
-			recorder.start(11025);
+			recorder.start(targetSampleRate);
 		});
 	}
 

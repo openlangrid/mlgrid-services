@@ -1,0 +1,5 @@
+/cache
+/pretrained_models
+/wav2vec2_checkpoints
+/temp
+out.*

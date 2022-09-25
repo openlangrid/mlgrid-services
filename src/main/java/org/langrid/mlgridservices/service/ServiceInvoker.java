@@ -23,6 +23,7 @@ import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
+import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageConversionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -41,19 +42,20 @@ public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
-		serviceImples.put("VOSK", new VoskContinuousSpeechRecognitionService());
-		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
 		serviceImples.put("DummySpeechRecognition", new DummySpeechRecognitionService());
-		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
+		serviceImples.put("CodeFormer", codeFormer);
 		serviceImples.put("Empath", empath);
 		serviceImples.put("GoogleTTS", googleTts);
+		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
-		serviceImples.put("StableDiffusion", stableDiffusion);
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
-		serviceImples.put("WaifuDiffusion", waifuDiffusion);
+		serviceImples.put("SpeechBrainSER", new SpeechBrainSpeechEmotionRecognitionService());
+		serviceImples.put("StableDiffusion", stableDiffusion);
 		serviceImples.put("StableDiffusionI2I", stableDiffusionI2I);
-		serviceImples.put("CodeFormer", codeFormer);
+		serviceImples.put("VOSK", new VoskContinuousSpeechRecognitionService());
+		serviceImples.put("WaifuDiffusion", waifuDiffusion);
+		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
