@@ -135,7 +135,7 @@ class ServiceInvoker{
 class WSServiceInvoker extends ServiceInvoker{
 	constructor(url){
         super();
-		this.bson = new BSON();
+		this.bson = typeof BSON !== 'undefined' ? new BSON() : null;
 		this.url = url;
 		this.ws = null;
 		this.sendbuf = [];

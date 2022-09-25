@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width" />
+<title>React Chat Sample</title>
+<!--
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+-->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!--
+<script src="./bson.js"></script>
+-->
+<script src="./serviceInvoker.js"></script>
+<script src="./recorder.js"></script>
+<script src="./wavwriter.js"></script>
+<script src="./drawUtil.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="alert alert-danger">アップロードされたデータはオープンソースソフトウェアで処理されたり，
+	Google翻訳を含む外部サービスに送信されるとともに，研究目的で使用されます。
+	データそのものが直接外部に公開されることはありませんが，個人情報や秘密情報をアップロードしないようご注意ください。</div>
+    <div class="row"><div class="col">
+        <ul class="nav nav-tabs" id="menuTab" role="tablist">
+          <!-- 翻訳サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="transTab" data-bs-toggle="tab" data-bs-target="#trans"
+              type="button" role="tab" aria-controls="trans" aria-selected="true">Translation</button>
+          </li>
+          <!-- 画像識別サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="icTab" data-bs-toggle="tab" data-bs-target="#ic"
+              type="button" role="tab" aria-controls="ic" aria-selected="false">ImageClassification</button>
+          </li>
+          <!-- オブジェクト検出サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="odTab" data-bs-toggle="tab" data-bs-target="#od"
+              type="button" role="tab" aria-controls="od" aria-selected="false">ObjectDetection</button>
+          </li>
+          <!-- 人間姿勢推定サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="hpeTab" data-bs-toggle="tab" data-bs-target="#hpe"
+              type="button" role="tab" aria-controls="hpe" aria-selected="false">HumanPoseEstimation</button>
+          </li>
+          <!-- 画像変換サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="i2iTab" data-bs-toggle="tab" data-bs-target="#i2i"
+              type="button" role="tab" aria-controls="i2i" aria-selected="false">Image2ImageConversion</button>
+          </li>
+          <!-- 画像生成サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
+              type="button" role="tab" aria-controls="ig" aria-selected="false">TextImageGeneration</button>
+          </li>
+          <!-- テキスト画像変換サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tgiTab" data-bs-toggle="tab" data-bs-target="#tgi"
+              type="button" role="tab" aria-controls="tgi" aria-selected="false">TextGuidedImageConversion</button>
+          </li>
+          <!-- テキスト感情分析サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tsaTab" data-bs-toggle="tab" data-bs-target="#tsa"
+              type="button" role="tab" aria-controls="tsa" aria-selected="false">TextSentimentAnalysis</button>
+          </li>
+          <!-- 継続型音声認識サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="csrTab" data-bs-toggle="tab" data-bs-target="#csr"
+              type="button" role="tab" aria-controls="csr" aria-selected="false">ContinuousSpeechRecognition</button>
+          </li>
+          <!-- 音声認識サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="srTab" data-bs-toggle="tab" data-bs-target="#sr"
+              type="button" role="tab" aria-controls="sr" aria-selected="false">SpeechRecognition</button>
+          </li>
+          <!-- 音声感情検出サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="serTab" data-bs-toggle="tab" data-bs-target="#ser"
+              type="button" role="tab" aria-controls="ser" aria-selected="false">SpeechEmotionRecognition</button>
+          </li>
+          <!-- 音声合成サービスタブ -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="ttsTab" data-bs-toggle="tab" data-bs-target="#tts"
+              type="button" role="tab" aria-controls="tts" aria-selected="false">TextToSpeech</button>
+          </li>
+        </ul>
+    </div>
+    <div class="tab-content" id="tabContent">
+        <div id="transTabContent"></div>
+    </div>
+</div>
+<script type="text/babel">
+const url = new URL(document.location);
+const wsUrl = `${url.protocol}//${url.host}/${url.pathname.split("/")[1]}/services`
+console.debug(`ws url: ${wsUrl}`);
+const ws = new HTTPServiceInvoker(wsUrl);
+
+const ServiceComponent = ({serviceId, checked}) =>{
+    const onChange = e=>{
+        if(e.target.checked) checked.add(serviceId);
+        else checked.delete(serviceId);
+    };
+    return (
+        <div>
+            <label><input onChange={onChange} type="checkbox" defaultChecked />&nbsp;
+            <span>{serviceId}</span></label>
+        </div>
+    );
+}
+const TransResult = ({sourceLang, targetLang, source, invocations})=>{
+    return (
+        <div style={{border: "1px solid", borderRadius: "4px", padding: "4px"}}>
+            input:<br/>
+	    	sourceLang: {sourceLang}&nbsp;, targetLang: {targetLang}&nbsp;, soruce: {source}<br/>
+            results:<br/>
+            {invocations.map(i=><div key={i.serviceId}>{i.serviceId}: <span data-id={i.serviceId + "Result"}>processing..</span></div>)}
+        </div>
+    );
+};
+const TransTabContent = ({sids}) =>{
+    const sourceLang = React.useRef();
+    const targetLang = React.useRef();
+    const source = React.useRef();
+    const results = React.useRef();
+    const validServices = new Set(transServiceIds);
+    const onSubmit = e=>{
+        e.preventDefault();
+        const sl = sourceLang.current.value;
+        const tl = targetLang.current.value;
+        const s = source.current.value;
+        const invocations = [];
+        const invocation = document.createElement("div");
+        for(const sid of validServices){
+            ws.translation(sid).translate(sl, tl, s)
+                .then(r=>{ invocation.querySelector(`[data-id='${sid}Result']`).textContent = r.result; })
+                .catch(e=>{ console.error(e); invocation.querySelector(`[data-id='${sid}Result']`).textContent = e.error; });
+            invocations.push({serviceId: sid});
+        }
+        ReactDOM.createRoot(invocation).render(<TransResult sourceLang={sl} targetLang={tl} source={s} invocations={invocations} />);
+        results.current.append(invocation);
+    };
+    return (
+    <div className="tab-pane fade show active" id="trans" role="tabpanel" aria-labelledby="transTab">
+		<label>inputs:</label><br/>
+		<div data-id="inputs">
+            <form onSubmit={onSubmit}>
+                <label>sourceLang<input ref={sourceLang} className="form-control" size="10" type="text" defaultValue={"en"} /></label>
+                <label>targetLang<input ref={targetLang} className="form-control" size="10" type="text" defaultValue={"ja"} /></label>
+                <label>source<input ref={source} className="form-control" size="80" type="text" defaultValue={"hello"} /></label>
+                <button className="btn btn-success">翻訳</button>
+            </form>
+		</div>
+		<label>services:</label>
+        {sids.map(s => <ServiceComponent key={s} serviceId={s} checked={validServices} />)}
+        <label>results:</label>
+		<div ref={results}>
+		</div>
+		<a href="https://langrid.org">Language Grid</a>
+		<a href="https://huggingface.co/Helsinki-NLP">Helsinki-NLP</a>
+    </div>
+    );
+};
+const transServiceIds = ["LangridGoogleTranslateNMT", "HelsinkiNLPOpusMT"];
+ReactDOM.createRoot(document.getElementById("transTabContent")).render(<TransTabContent sids={transServiceIds}/>);
+</script>
+</body>
+</html>
