@@ -76,14 +76,33 @@
     <div class="tab-content" id="tabContent">
       <!-- 翻訳サービス -->
       <div class="tab-pane fade show active" id="trans" role="tabpanel" aria-labelledby="transTab">
-        <label>sourceLang<input id="sourceLang" class="form-control" type="text" value="en"></label>
-        <label>targetLang<input id="targetLang" class="form-control" type="text" value="ja"></label>
-        <label>source<input id="source" class="form-control" type="text" value="hello"></label>
-        <button id="execute" class="btn btn-success">翻訳</button>
-        <br/>
-        <label>results:</label><br/>
-		<div id="transServices">
+		<label>inputs:</label><br/>
+		<div data-id="inputs">
+			<label>sourceLang<input data-id="sourceLang" class="form-control" size="10" type="text" value="en"></label>
+			<label>targetLang<input data-id="targetLang" class="form-control" size="10" type="text" value="ja"></label>
+			<label>source<input data-id="source" class="form-control" size="80" type="text" value="hello"></label>
+			<button data-id="execute" class="btn btn-success">翻訳</button>
+			<br/>
 		</div>
+		<label>services:</label>
+		<div data-id="services"></div>
+		<template data-id="serviceTemplate">
+			<label><input data-id="serviceIdCheck" type="checkbox" checked>&nbsp;
+				<span data-id="serviceIdLabel"></span></label><br/>
+		</template>
+		<label>results:</label>
+		<div data-id="results">
+		</div>
+		<template data-id="resultTemplate">
+			input:<br/>
+			sourceLang: <span data-id="sourceLang"></span>&nbsp;targetLang: <span data-id="targetLang"></span>
+			&nbsp;soruce: <span data-id="source"></span>
+			<div data-id="serviceResults">
+			</div>
+		</template>
+		<template data-id="serviceResultTemplate">
+			<span data-id="serviceId"></span>: <span data-id="result"></span><br/>
+		</template>
 		<a href="https://langrid.org">Language Grid</a>
 		<a href="https://huggingface.co/Helsinki-NLP">Helsinki-NLP</a>
       </div>
@@ -151,8 +170,8 @@
       </div>
       <!-- テキスト画像生成サービス -->
       <div id="ig" aria-labelledby="igTab" class="tab-pane fade" role="tabpanel">
-        <label>language<input data-id="language" class="form-control" type="text" value="en"></label>
-        <label>text<input data-id="text" class="form-control" type="text" value="sunset over a lake in the mountains"></label>
+        <label>language<input data-id="language" class="form-control" size="20" type="text" value="en"></label>
+        <label>text<input data-id="text" class="form-control" size="80" type="text" value="sunset over a lake in the mountains"></label>
 		<label>samples<input data-id="samples" class="form-control" type="number" min="1" max="8" value="3"></label>
         <button data-id="execute" class="btn btn-success">生成</button>
         <br/>
@@ -181,8 +200,8 @@
 	    <button data-id="button" effectAllowed="move" style="height: 4em" type="button"
 		  class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
 		<br/>
-        <label>language<input data-id="language" class="form-control" type="text" value="en"></label>
-        <label>prompt<input data-id="prompt" class="form-control" type="text" value="A fantasy landscape, trending on artstation"></label>
+        <label>language<input data-id="language" class="form-control" size="20" type="text" value="en"></label>
+        <label>prompt<input data-id="prompt" class="form-control" size="80" type="text" value="A fantasy landscape, trending on artstation"></label>
 
 		<div style="position: relative">
 			<img data-id="image" style="max-height: 360px; object-fit: scale-down">
@@ -207,8 +226,8 @@
 	  </div>
       <!-- テキスト感情分析サービス -->
       <div id="tsa" aria-labelledby="tsaTab" class="tab-pane fade" role="tabpanel">
-        <label>language<input data-id="language" class="form-control" type="text" value="ja"></label>
-        <label>text<input data-id="text" class="form-control" type="text" value="今日はいい天気ですね"></label>
+        <label>language<input data-id="language" class="form-control" size="20"type="text" value="ja"></label>
+        <label>text<input data-id="text" class="form-control" size="80" type="text" value="今日はいい天気ですね"></label>
         <button data-id="execute" class="btn btn-success">分析</button>
         <br/>
         <label>results:</label><br/>
@@ -376,29 +395,45 @@ window.addEventListener("load", ()=>{
 	const rec = new Recorder();
 
 	// 翻訳サービス
-	const trans = document.querySelector("#trans");
-	const transServices = document.querySelector("#transServices");
-	const transResults = {};
-	for(let sid of transServiceIds){
-		transServices.append(document.createTextNode(`${sid}: `));
-		const r = document.createElement("span");
-		transResults[sid] = r;
-		transServices.append(r);
-		transServices.append(document.createElement("br"));
-	}
-	trans.querySelector("#execute").addEventListener("click", e=>{
-		e.preventDefault();
-		const sl = trans.querySelector("#sourceLang").value;
-		const tl = trans.querySelector("#targetLang").value;
-		const source = trans.querySelector("#source").value;
-		for(let sid of transServiceIds){
-			const result = transResults[sid];
-			result.textContent = "processing...";
-			ws.translation(sid).translate(sl, tl, source)
-				.then(r=>{ result.textContent = r.result; })
-				.catch(e=>{ console.error(e); result.textContent = r.error; });
+	{
+		const parent = document.querySelector("#trans");
+		const inputs = parent.querySelector("[data-id='inputs']");
+		const sids = transServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const serviceTemplate = parent.querySelector("[data-id='serviceTemplate']");
+		for(let sid of sids){
+			const content = serviceTemplate.content.cloneNode(true);
+			content.querySelector("[data-id='serviceIdCheck']").setAttribute("data-id", `${sid}Check`);
+			content.querySelector("[data-id='serviceIdLabel']").textContent = sid;
+			services.append(content);
 		}
-	});
+
+		const results = parent.querySelector("[data-id='results']");
+		const resultTemplate = parent.querySelector("[data-id='resultTemplate']");
+		parent.querySelector("[data-id='execute']").addEventListener("click", e=>{
+			e.preventDefault();
+			const sl = inputs.querySelector("[data-id='sourceLang']").value;
+			const tl = inputs.querySelector("[data-id='targetLang']").value;
+			const source = inputs.querySelector("[data-id='source']").value;
+			const result = resultTemplate.content.cloneNode(true);
+			result.querySelector("[data-id='sourceLang']").textContent = sl;
+			result.querySelector("[data-id='targetLang']").textContent = tl;
+			result.querySelector("[data-id='source']").textContent = source;
+			const serviceResults = result.querySelector("[data-id='serviceResults']");
+			const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
+			for(let sid of sids){
+				const serviceResult = serviceResultTemplate.content.cloneNode(true);
+				serviceResult.querySelector("[data-id='serviceId']").textContent = sid;
+				const serviceResultResult = serviceResult.querySelector("[data-id='result']");
+				serviceResultResult.textContent = "processing...";
+				ws.translation(sid).translate(sl, tl, source)
+					.then(r=>{ serviceResultResult.textContent = r.result; })
+					.catch(e=>{ console.error(e); result.textContent = r.error; });
+				serviceResults.append(serviceResult);
+			}
+			results.append(result);
+		});
+	}
 
 	// 画像識別サービス
 	const ic = document.querySelector("#ic");
