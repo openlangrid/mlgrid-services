@@ -118,7 +118,8 @@ const TransResult = ({sourceLang, targetLang, source, invocations})=>{
             input:<br/>
 	    	sourceLang: {sourceLang}&nbsp;, targetLang: {targetLang}&nbsp;, soruce: {source}<br/>
             results:<br/>
-            {invocations.map(i=><div key={i.serviceId}>{i.serviceId}: <span data-id={i.serviceId + "Result"}>processing..</span></div>)}
+            {invocations.map(i=><div key={i.serviceId}>{i.serviceId}(<span data-id={i.serviceId + "Time"}></span>):
+                <span data-id={i.serviceId + "Result"}>processing..</span></div>)}
         </div>
     );
 };
@@ -135,9 +136,14 @@ const TransTabContent = ({sids}) =>{
         const s = source.current.value;
         const invocations = [];
         const invocation = document.createElement("div");
+        let start = new Date().getTime();
         for(const sid of validServices){
             ws.translation(sid).translate(sl, tl, s)
-                .then(r=>{ invocation.querySelector(`[data-id='${sid}Result']`).textContent = r.result; })
+                .then(r=>{
+                    invocation.querySelector(`[data-id='${sid}Time']`).textContent = ((new Date().getTime()) - start) + "ms";
+                    invocation.querySelector(`[data-id='${sid}Result']`).textContent = r.result;
+                    start = new Date().getTime();
+                })
                 .catch(e=>{ console.error(e); invocation.querySelector(`[data-id='${sid}Result']`).textContent = e.error; });
             invocations.push({serviceId: sid});
         }
