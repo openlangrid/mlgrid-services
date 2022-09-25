@@ -25,7 +25,7 @@ import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationServic
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageConversionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
-import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
+import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
-		serviceImples.put("VOSK", new VoskSpeechRecognitionService());
+		serviceImples.put("VOSK", new VoskContinuousSpeechRecognitionService());
 		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
 		serviceImples.put("DummySpeechRecognition", new DummySpeechRecognitionService());
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());

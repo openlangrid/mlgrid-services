@@ -27,8 +27,8 @@ import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class VoskSpeechRecognitionService implements ContinuousSpeechRecognitionService{
-	public VoskSpeechRecognitionService(){
+public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechRecognitionService{
+	public VoskContinuousSpeechRecognitionService(){
 		serverUris.put("ja", "ws://localhost:2700");
 		serverUris.put("en", "ws://localhost:2701");
 	}

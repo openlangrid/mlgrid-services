@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sound.sampled.AudioSystem;
 
-public class VoskSpeechRecognitionTest {
+public class VoskContinuousSpeechRecognitionTest {
 	CountDownLatch recieveLatch;
 	@Test
 	public void test2() throws Exception {
@@ -86,7 +86,7 @@ public class VoskSpeechRecognitionTest {
 			//"test_en_16k";
 		var file = base + fname + ".wav";
 		var mapper = new ObjectMapper();
-		var service = new VoskSpeechRecognitionService();
+		var service = new VoskContinuousSpeechRecognitionService();
 		try(var w = Files.newBufferedWriter(Path.of(base + fname + "_out_service.txt"));
 				var ais = AudioSystem.getAudioInputStream(new File(file))){
 			var af = ais.getFormat();

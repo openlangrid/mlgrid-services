@@ -1,6 +1,6 @@
 package org.langrid.mlgridservices.config;
 
-import org.langrid.mlgridservices.service.impl.VoskSpeechRecognitionService;
+import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
 import org.langrid.service.ml.ContinuousSpeechRecognitionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfig {
 	@Bean
 	public ContinuousSpeechRecognitionService voskSpeechRecognition(){
-		return new VoskSpeechRecognitionService();
+		return new VoskContinuousSpeechRecognitionService();
 	}
 }
