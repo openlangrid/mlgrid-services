@@ -6,6 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body>
+<br/>
 <div class="container">
   <div class="alert alert-danger">アップロードされたデータはオープンソースソフトウェアで処理されたり，
 	Google翻訳を含む外部サービスに送信されるとともに，研究目的で使用されます。
@@ -36,6 +37,11 @@
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="i2iTab" data-bs-toggle="tab" data-bs-target="#i2i"
           type="button" role="tab" aria-controls="i2i" aria-selected="false">Image2ImageConversion</button>
+      </li>
+	  <!-- 画像テキスト生成サービスタブ -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="i2tTab" data-bs-toggle="tab" data-bs-target="#i2t"
+          type="button" role="tab" aria-controls="i2t" aria-selected="false">Image2TextGeneration</button>
       </li>
       <!-- 画像生成サービスタブ -->
       <li class="nav-item" role="presentation">
@@ -167,6 +173,34 @@
 		</template>
         <br/>
         <a href="https://github.com/sczhou/CodeFormer">CodeFormer</a>
+      </div>
+      <!-- 画像テキスト生成サービス -->
+      <div id="i2t" aria-labelledby="i2tTab" class="tab-pane fade" role="tabpanel">
+        <button data-id="button" effectAllowed="move" style="height: 4em" type="button"
+         class="btn btn-outline-success form-control">ここに画像をドロップしてください</button>
+        <br/>
+		<label>services:</label>
+		<div data-id="services">
+		</div>
+		<template data-id="serviceTemplate">
+			<label><input data-id="serviceIdCheck" type="checkbox" checked>&nbsp;
+				<span data-id="serviceIdLabel"></span></label><br/>
+		</template>
+		<label>results:</label>
+		<div data-id="results">
+		</div>
+		<template data-id="resultTemplate">
+			<hr/>
+			input: <img data-id="image" style="max-width: 512px; max-height: 512px;"></img>
+			<div data-id="serviceResults">
+			</div>
+		</template>
+		<template data-id="serviceResultTemplate">
+			<span data-id="serviceId"></span><br/>
+			<div data-id="generationResult"></div>
+		</template>
+		<br/>
+        <a href="https://github.com/pharmapsychotic/clip-interrogator">Clip Interrogator</a> &nbsp;
       </div>
       <!-- テキスト画像生成サービス -->
       <div id="ig" aria-labelledby="igTab" class="tab-pane fade" role="tabpanel">
@@ -384,6 +418,7 @@ window.addEventListener("load", ()=>{
 	const ttsServiceIds = ["GoogleTTS"];
 	const hpeServiceIds = ["OpenPose"];
 	const i2iServiceIds = ["CodeFormer"];
+	const i2tServiceIds = ["ClipInterrogator"];
 	const tgiServiceIds = ["StableDiffusionI2I"];
 
 	const bson = new BSON();
@@ -615,7 +650,54 @@ window.addEventListener("load", ()=>{
 			});
 		});
 	}
-	
+
+	{	// ImageToTextGeneration
+		const parent = document.querySelector("#i2t");
+		const sids = i2tServiceIds;
+		const services = parent.querySelector("[data-id='services']");
+		const serviceTemplate = parent.querySelector("[data-id='serviceTemplate']");
+		for(let sid of sids){
+			const content = serviceTemplate.content.cloneNode(true);
+			content.querySelector("[data-id='serviceIdCheck']").setAttribute("data-id", `${sid}Check`);
+			content.querySelector("[data-id='serviceIdLabel']").textContent = sid;
+			services.append(content);
+		}
+
+		const results = parent.querySelector("[data-id='results']");
+		const resultTemplate = parent.querySelector("[data-id='resultTemplate']");
+		const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
+		const button = parent.querySelector("[data-id='button']");
+		button.addEventListener("dragover", e=>{
+			e.stopPropagation();
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "link";
+		});
+		button.addEventListener("drop", e=>{
+			e.preventDefault();
+			const file = e.dataTransfer.files[0];
+			const result = resultTemplate.content.cloneNode(true);
+			result.querySelector("[data-id='image']").src = URL.createObjectURL(file);
+			const serviceResults = result.querySelector("[data-id='serviceResults']");
+			const fr = new FileReader();
+			fr.readAsArrayBuffer(file);
+			fr.addEventListener("load", e=>{
+				for(let sid of sids){
+					const sr = serviceResultTemplate.content.cloneNode(true);
+					sr.querySelector("[data-id='serviceId']").textContent = sid;
+					const gr = sr.querySelector("[data-id='generationResult']");
+					gr.textContent = "processing...";
+					ws.imageToTextGeneration(sid).generate("image/jpeg", Buffer.from(new Uint8Array(fr.result)))
+						.then(r=>{
+							gr.textContent = r.result;
+						})
+						.catch(e=>{ console.error(e); gr.textContent = e.error; });
+					serviceResults.append(sr);
+				}
+			});
+			results.append(result);
+		});
+	}
+
 	{	// TextImageGeneration
 		const parent = document.querySelector("#ig");
 		const services = parent.querySelector("[data-id='services']");

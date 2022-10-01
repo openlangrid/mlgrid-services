@@ -15,6 +15,7 @@ import org.langrid.mlgridservices.service.group.KerasServiceGroup;
 import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
+import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.DummySpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
@@ -48,6 +49,7 @@ public class ServiceInvoker {
 		serviceImples.put("Empath", empath);
 		serviceImples.put("GoogleTTS", googleTts);
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
+		serviceImples.put("ClipInterrogator", new ClipInterrogatorImageToTextService());
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
 		serviceImples.put("SpeechBrainSER", new SpeechBrainSpeechEmotionRecognitionService());

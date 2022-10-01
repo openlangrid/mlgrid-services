@@ -56,6 +56,11 @@ class ImageToImageConversionService extends Service{
 		return this.invoke("convert", Array.prototype.slice.call(arguments));
 	}
 }
+class ImageToTextGenerationService extends Service{
+	generate(format, image){
+		return this.invoke("generate", Array.prototype.slice.call(arguments));
+	}
+}
 class SpeechEmotionRecognition extends Service{
 	recognize(language, audioFormat, audio){
 		return this.invoke("recognize", Array.prototype.slice.call(arguments));
@@ -110,6 +115,9 @@ class ServiceInvoker{
 	}
 	imageToImageConversion(serviceId){
 		return new ImageToImageConversionService(this, serviceId);
+	}
+	imageToTextGeneration(serviceId){
+		return new ImageToTextGenerationService(this, serviceId);
 	}
 	speechEmotionRecognition(serviceId){
 		return new SpeechEmotionRecognition(this, serviceId);

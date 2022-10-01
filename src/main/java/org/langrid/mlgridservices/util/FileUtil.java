@@ -2,10 +2,19 @@ package org.langrid.mlgridservices.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FileUtil {
+	public static File writeTempFile(File tempDir, String format, byte[] content)
+	throws IOException{
+		var file = FileUtil.createUniqueFileWithDateTime(
+			tempDir, "temp-", "." + FileUtil.getExtFromFormat(format));
+		Files.write(file.toPath(), content, StandardOpenOption.CREATE);
+		return file;
+	}
 	public static File createUniqueFileWithDateTime(File dir, String prefix, String suffix)
 	throws IOException{
 		String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
