@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    runtime: nvidia
+    working_dir: /workspace/Real-ESRGAN
+    volumes:
+      - .:/work
+      - ./cache/Real-ESRGAN/weights:/workspace/Real-ESRGAN/weights
+      - ./cache/Real-ESRGAN/gfpgan/weights:/workspace/Real-ESRGAN/gfpgan/weights
+      - ./cache/opt/conda/lib/python3.8/site-packages/gfpgan-1.3.8-py3.8.egg/gfpgan/weights:/opt/conda/lib/python3.8/site-packages/gfpgan-1.3.8-py3.8.egg/gfpgan/weights
