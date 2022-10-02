@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 
 import org.langrid.mlgridservices.util.FileUtil;
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.interim.ImageToTextService;
 
@@ -15,7 +16,7 @@ public class ClipInterrogatorImageToTextService implements ImageToTextService{
 	
 	@Override
 	public String generate(String format, byte[] image) throws InvalidParameterException, ProcessFailedException {
-		try {
+		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var infile = FileUtil.writeTempFile(tempDir, format, image);

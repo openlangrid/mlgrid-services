@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
 import org.langrid.mlgridservices.util.FileUtil;
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.TextGuidedImageConversionResult;
@@ -27,7 +28,7 @@ public class StableDiffusionTextGuidedImageConversionService implements TextGuid
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches("en", language))
 			throw new UnsupportedLanguageException("language", language);
-		try {
+		try(var l = GPULock.acquire()){
 			var tempDirName = "temp";
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();

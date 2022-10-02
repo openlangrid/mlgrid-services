@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 import org.langrid.mlgridservices.util.FileUtil;
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.TextToImageGenerationResult;
@@ -26,7 +27,7 @@ public class AbstractTextImageGenerationService implements TextToImageGeneration
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches("en", language))
 			throw new UnsupportedLanguageException("language", language);
-		try {
+		try(var l = GPULock.acquire()){
 			maxResults = Math.min(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.langrid.mlgridservices.util.FileUtil;
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.interim.SpeechRecognitionResult;
 import org.langrid.service.ml.interim.SpeechRecognitionService;
@@ -47,7 +48,7 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 			throw new UnsupportedLanguageException("language", language);
 		}
 		lang = lang.substring(0, 1).toUpperCase() + lang.substring(1);
-		try {
+		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");

@@ -4,17 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.langrid.mlgridservices.util.FileUtil;
+import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.EmotionRecognitionResult;
 import org.langrid.service.ml.SpeechEmotionRecognitionService;
-import org.langrid.service.ml.interim.SpeechRecognitionResult;
-import org.langrid.service.ml.interim.SpeechRecognitionService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,7 +26,7 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 			String language, String audioFormat, byte[] audio)
 			throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException
 	{
-		try {
+		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");
