@@ -22,6 +22,18 @@ public class FileUtil {
 			dir, prefix + ds, suffix);
 	}
 
+	public static String addFileNameSuffix(String path, String suffix){
+		var i = path.lastIndexOf('.');
+		if(i == -1) return path + suffix;
+		return path.substring(0, i) + suffix + path.substring(i);
+	}
+
+	public static String changeFileExt(String path, String ext){
+		var i = path.lastIndexOf('.');
+		if(i == -1) return path + ext;
+		return path.substring(0, i) + ext;
+	}
+
 	public static File createUniqueDirectoryWithDateTime(File dir, String prefix)
 	throws IOException{
 		String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());

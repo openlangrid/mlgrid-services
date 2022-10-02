@@ -23,6 +23,7 @@ import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
+import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageConversionService;
@@ -51,6 +52,7 @@ public class ServiceInvoker {
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("ClipInterrogator", new ClipInterrogatorImageToTextService());
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
+		serviceImples.put("RealESRGAN", new RealEsrganImageToImageConversionService());
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
 		serviceImples.put("SpeechBrainSER", new SpeechBrainSpeechEmotionRecognitionService());
 		serviceImples.put("StableDiffusion", stableDiffusion);

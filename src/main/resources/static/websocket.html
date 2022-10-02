@@ -162,17 +162,30 @@
 			<img data-id="image" style="max-height: 360px; object-fit: scale-down">
 			<div data-id="canvases"></div>
 		</div>
-        <br/>
-        <label>results:</label><br/>
+        <label>services:</label><br/>
 		<div data-id="services">
 		</div>
+		<template data-id="serviceTemplate">
+			<label><input data-id="serviceIdCheck" type="checkbox" checked>&nbsp;
+				<span data-id="serviceIdLabel"></span></label><br/>
+		</template>
+		<br/>
+		<label>results:</label>
+		<div data-id="results">
+		</div>
 		<template data-id="resultTemplate">
-		  <div style="display: inline-block">
-		    <img><br/><span></span>
-		  </div>
+			<hr/>
+			input: <img data-id="image" style="max-width: 512px; max-height: 512px;"></img>
+			<div data-id="serviceResults">
+			</div>
+		</template>
+		<template data-id="serviceResultTemplate">
+			<span data-id="serviceId"></span>: <span data-id="status"></span><br/>
+		    <img data-id="conversionResult" style="max-width: 512px; max-height: 512px;"><br/><span></span>
 		</template>
         <br/>
-        <a href="https://github.com/sczhou/CodeFormer">CodeFormer</a>
+        <a href="https://github.com/sczhou/CodeFormer">CodeFormer</a>&nbsp;
+        <a href="https://github.com/xinntao/Real-ESRGAN">RealESRGAN</a>
       </div>
       <!-- 画像テキスト生成サービス -->
       <div id="i2t" aria-labelledby="i2tTab" class="tab-pane fade" role="tabpanel">
@@ -417,7 +430,7 @@ window.addEventListener("load", ()=>{
 	const serServiceIds = ["Empath", "SpeechBrainSER"];
 	const ttsServiceIds = ["GoogleTTS"];
 	const hpeServiceIds = ["OpenPose"];
-	const i2iServiceIds = ["CodeFormer"];
+	const i2iServiceIds = ["CodeFormer", "RealESRGAN"];
 	const i2tServiceIds = ["ClipInterrogator"];
 	const tgiServiceIds = ["StableDiffusionI2I"];
 
@@ -603,17 +616,17 @@ window.addEventListener("load", ()=>{
 		const parent = document.querySelector("#i2i");
 		const sids = i2iServiceIds;
 		const services = parent.querySelector("[data-id='services']");
-		const results = {};
+		const serviceTemplate = parent.querySelector("[data-id='serviceTemplate']");
 		for(let sid of sids){
-			services.append(document.createTextNode(`${sid}: `));
-			const state = document.createTextNode("");
-			services.append(state);
-			services.append(document.createElement("br"));
-			const result = document.createElement("div");
-			services.append(result);
-			results[sid] = {state: state, result: result};
-			services.append(document.createElement("br"));
+			const content = serviceTemplate.content.cloneNode(true);
+			content.querySelector("[data-id='serviceIdCheck']").setAttribute("data-value", `${sid}`);
+			content.querySelector("[data-id='serviceIdLabel']").textContent = sid;
+			services.append(content);
 		}
+
+		const results = parent.querySelector("[data-id='results']");
+		const resultTemplate = parent.querySelector("[data-id='resultTemplate']");
+		const serviceResultTemplate = parent.querySelector("[data-id='serviceResultTemplate']");
 		const button = parent.querySelector("[data-id='button']");
 		button.addEventListener("dragover", e=>{
 			e.stopPropagation();
@@ -623,31 +636,29 @@ window.addEventListener("load", ()=>{
 		button.addEventListener("drop", e=>{
 			e.preventDefault();
 			const file = e.dataTransfer.files[0];
-			const srcImage = parent.querySelector("[data-id='image']");
-			srcImage.src = URL.createObjectURL(file);
+			const result = resultTemplate.content.cloneNode(true);
+			result.querySelector("[data-id='image']").src = URL.createObjectURL(file);
+			const srs = result.querySelector("[data-id='serviceResults']");
 			const fr = new FileReader();
 			fr.readAsArrayBuffer(file);
 			fr.addEventListener("load", e=>{
 				for(let sid of sids){
-					const result = results[sid];
-					result["state"].textContent = "processing...";
+					if(!parent.querySelector(`[data-value='${sid}']`).checked) continue;
+					const sr = serviceResultTemplate.content.cloneNode(true);
+					sr.querySelector("[data-id='serviceId']").textContent = sid;
+					const srStatus = sr.querySelector("[data-id='status']");
+					const srImg = sr.querySelector("[data-id='conversionResult']");
+					srStatus.textContent = "processing...";
 					ws.imageToImageConversion(sid).convert("image/jpeg", Buffer.from(new Uint8Array(fr.result)))
 						.then(r=>{
-							result["state"].textContent = "done.";
-							let img = result["result"].querySelector("img");
-							if(!img){
-								img = document.createElement("img");
-								result["result"].append(img);
-							} else{
-								URL.revokeObjectURL(img.src);
-							}
-							img.src = URL.createObjectURL(new Blob([r.result.image.buffer]));
-							img.width = srcImage.width;
-							img.height = srcImage.height;
+							srStatus.textContent = "done.";
+							srImg.src = URL.createObjectURL(new Blob([r.result.image.buffer]));
 						})
 						.catch(e=>{ console.error(e); result["state"].textContent = e.error; });
+					srs.append(sr);
 				}
 			});
+			results.append(result);
 		});
 	}
 
