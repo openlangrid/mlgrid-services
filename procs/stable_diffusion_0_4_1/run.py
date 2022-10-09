@@ -39,7 +39,7 @@ pipeOpts = {
 # adjust options before save
 if modelPath == "naclbit/trinart_stable_diffusion_v2" and modelOpts["revision"] == "fp16":
     modelOpts["revision"] = "diffusers-60k"
-elif modelPath == "doohickey/trinart-waifu-diffusion-50-50" or modelPath == "hakurei/waifu-diffusion":
+elif modelPath == "doohickey/trinart-waifu-diffusion-50-50" or modelPath == "hakurei/waifu-diffusion" or modelPath == "sd-dreambooth-library/disco-diffusion-style":
     del modelOpts["revision"]
     del modelOpts["torch_dtype"]
 

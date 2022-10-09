@@ -69,6 +69,7 @@ public class ServiceInvoker {
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
 		serviceImples.put("TrinartWaifuIMSD041", new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("DiscoDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
 
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
