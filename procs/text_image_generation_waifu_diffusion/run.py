@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("prompt", type=str, default="sunset over a lake in the mountains")
 parser.add_argument("num_of_samples", type=int, default=0)
 parser.add_argument("outpath",type=str, default="out")
+parser.add_argument("--modelPath", type=str)
 args = parser.parse_args()
 prompt = args.prompt
 num_of_samples = args.num_of_samples
@@ -16,8 +17,8 @@ from torch import autocast
 
 pipe = StableDiffusionPipeline.from_pretrained(
     "hakurei/waifu-diffusion",
-    torch_dtype=torch.float16,
-    revision="fp16",
+    torch_dtype=torch.float32,
+#    revision="fp32",
     scheduler=DDIMScheduler(
         beta_start=0.00085,
         beta_end=0.012,
