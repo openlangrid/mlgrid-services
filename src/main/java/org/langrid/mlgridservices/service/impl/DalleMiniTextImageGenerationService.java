@@ -8,15 +8,15 @@ import java.util.ArrayList;
 
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
-import org.langrid.service.ml.TextToImageGenerationResult;
-import org.langrid.service.ml.TextToImageGenerationService;
+import org.langrid.service.ml.interim.Image;
+import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class DalleMiniTextImageGenerationService implements TextToImageGenerationService{
+public class DalleMiniTextImageGenerationService implements TextGuidedImageGenerationService{
     private File baseDir = new File("./procs/text_image_generation_dalle_mini");
 	private String model;
 
@@ -29,7 +29,7 @@ public class DalleMiniTextImageGenerationService implements TextToImageGeneratio
 	}
 
 	@Override
-	public TextToImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
+	public Image[] generateMultiTimes(String language, String text, int maxResults)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches("en", language))
 			throw new UnsupportedLanguageException("language", language);
@@ -39,17 +39,16 @@ public class DalleMiniTextImageGenerationService implements TextToImageGeneratio
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFile(tempDir, "outimage-", "");
 			run(model, text, maxResults, "temp/" + temp.getName());
-			var ret = new ArrayList<TextToImageGenerationResult>();
+			var ret = new ArrayList<Image>();
 			for(var i = 0; i < maxResults; i++){
 				var imgFile = new File(tempDir, temp.getName() + "_" + i + ".jpg");
 				if(!imgFile.exists()) break;
-				var accFile = new File(tempDir, temp.getName() + "_" + i + ".acc.txt");
-				ret.add(new TextToImageGenerationResult(
-					Files.readAllBytes(imgFile.toPath()),
-					Double.parseDouble(Files.readString(accFile.toPath()))
+				ret.add(new Image(
+					"image/jpeg",
+					Files.readAllBytes(imgFile.toPath())
 				));
 			}
-			return ret.toArray(new TextToImageGenerationResult[]{});
+			return ret.toArray(new Image[]{});
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

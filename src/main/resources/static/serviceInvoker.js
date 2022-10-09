@@ -66,14 +66,17 @@ class SpeechEmotionRecognition extends Service{
 		return this.invoke("recognize", Array.prototype.slice.call(arguments));
 	}
 }
-class TextImageGenerationService extends Service{
-    generate(language, text, imageFormat, maxResults){
+class TextGuildedImageGenerationService extends Service{
+    generate(language, text){
         return this.invoke("generate", Array.prototype.slice.call(arguments));
     }
+    generateMultiTimes(language, text, numberOfTimes){
+        return this.invoke("generateMultiTimes", Array.prototype.slice.call(arguments));
+    }
 }
-class TextGuidedImageConversionService extends Service{
-	convert(language, prompt, frmat, image){
-		return this.invoke("convert", Array.prototype.slice.call(arguments));
+class TextGuidedImageManipulationService extends Service{
+	manipulate(language, prompt, format, image){
+		return this.invoke("manipulate", Array.prototype.slice.call(arguments));
 	}
 }
 class TextSentimentAnalysisService extends Service{
@@ -125,11 +128,11 @@ class ServiceInvoker{
 	translation(serviceId){
 		return new TranslationService(this, serviceId);
 	}
-	textImageGeneration(serviceId){
-		return new TextImageGenerationService(this, serviceId);
+	textGuildedImageGeneration(serviceId){
+		return new TextGuildedImageGenerationService(this, serviceId);
 	}
-	textGuidedImageConversion(serviceId){
-		return new TextGuidedImageConversionService(this, serviceId);
+	textGuidedImageManipulation(serviceId){
+		return new TextGuidedImageManipulationService(this, serviceId);
 	}
     textSentimentAnalysis(serviceId){
         return new TextSentimentAnalysisService(this, serviceId);

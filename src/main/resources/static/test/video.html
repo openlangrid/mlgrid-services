@@ -1,0 +1,43 @@
+<!doctype HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/gh/BMSVieira/moovie.js@latest/js/moovie.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BMSVieira/moovie.js@latest/css/moovie.min.css">
+</head>
+<body>
+<button id="button" effectAllowed="move" style="height: 4em" type="button"
+  class="btn btn-outline-success form-control">ここにビデオをドロップしてください</button>
+<div id="videos">
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+  let id = 0;
+  const container = document.querySelector("#videos");
+  const button = document.querySelector("#button");
+  button.addEventListener("dragover", e=>{
+    e.stopPropagation();
+    e.preventDefault();
+
+    e.dataTransfer.dropEffect = "link";
+  });
+  button.addEventListener("drop", e=>{
+    e.preventDefault();
+
+    const file = e.dataTransfer.files[0];
+    const video = document.createElement("video");
+    video.id = "video" + id;
+    video.src = URL.createObjectURL(file);
+    container.append(video);
+    const moovie = new Moovie({
+      selector: "#video" + id,
+      dimensions: {
+        width: "100%"
+      }
+    });
+    id++;
+  });
+});
+</script>
+</body>
+</html>

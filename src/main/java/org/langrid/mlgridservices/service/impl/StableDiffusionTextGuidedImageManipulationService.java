@@ -17,12 +17,16 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 @Service
-public class StableDiffusionTextGuidedImageConversionService implements TextGuidedImageConversionService{
-    private File baseDir = new File("./procs/text_guided_image_conversion_stable_diffusion");
-
-	public StableDiffusionTextGuidedImageConversionService(){
+public class StableDiffusionTextGuidedImageManipulationService extends AbstractTextGuidedImageManipulationService{
+	public StableDiffusionTextGuidedImageManipulationService(){
+		this("CompVis/stable-diffusion-v1-4");
 	}
 
+	public StableDiffusionTextGuidedImageManipulationService(String modelPath){
+		super(new File("./procs/stable_diffusion_0_4_1"));
+		setModelPath(modelPath);
+	}
+/*
 	@Override
 	public TextGuidedImageConversionResult convert(String language, String prompt, String format, byte[] image) 
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
@@ -56,5 +60,5 @@ public class StableDiffusionTextGuidedImageConversionService implements TextGuid
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
+	}*/
 }

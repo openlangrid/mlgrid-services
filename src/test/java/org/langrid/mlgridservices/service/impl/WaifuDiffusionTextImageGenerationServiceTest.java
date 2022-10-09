@@ -6,6 +6,6 @@ public class WaifuDiffusionTextImageGenerationServiceTest {
 	@Test
 	public void test() throws Throwable{
 		var ig = new WaifuDiffusionTextImageGenerationService();
-		ig.generate("en", "logo of an armchair in the shape of an avocado", "image/png", 2);
+		ig.generate("en", "logo of an armchair in the shape of an avocado");
 	}
 }

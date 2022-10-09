@@ -26,8 +26,8 @@ import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationServic
 import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
-import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageConversionService;
-import org.langrid.mlgridservices.service.impl.StableDiffusionTextImageGenerationService;
+import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
+import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
@@ -55,11 +55,21 @@ public class ServiceInvoker {
 		serviceImples.put("RealESRGAN", new RealEsrganImageToImageConversionService());
 		serviceImples.put("RinnaJapaneseStableDiffusion", rinnaJapaneseStableDiffusion);
 		serviceImples.put("SpeechBrainSER", new SpeechBrainSpeechEmotionRecognitionService());
-		serviceImples.put("StableDiffusion", stableDiffusion);
-		serviceImples.put("StableDiffusionI2I", stableDiffusionI2I);
 		serviceImples.put("VOSK", new VoskContinuousSpeechRecognitionService());
-		serviceImples.put("WaifuDiffusion", waifuDiffusion);
 		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
+
+		serviceImples.put("WaifuDiffusionSD030", waifuDiffusion);
+		serviceImples.put("StableDiffusionSD041", stableDiffusion);
+		serviceImples.put("DiscoDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuSD041", new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+
+		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
+		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuIMSD041", new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
+
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
@@ -77,6 +87,9 @@ public class ServiceInvoker {
 			System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
 			var mn = invocation.getMethod();
 			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
+			if(m == null){
+				throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
+			}
 			var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
 			return new Response(ObjectUtil.invoke(s, mn, args));
 		}
@@ -107,7 +120,7 @@ public class ServiceInvoker {
 	@Autowired
 	private GoogleTextToSpeechService googleTts;
 	@Autowired
-	private StableDiffusionTextImageGenerationService stableDiffusion;
+	private StableDiffusionTextGuidedImageGenerationService stableDiffusion;
 	@Autowired
 	private RinnaJapaneseStableDiffusionTextImageGenerationService rinnaJapaneseStableDiffusion;
 	@Autowired
@@ -115,7 +128,7 @@ public class ServiceInvoker {
 	@Autowired
 	private CodeFormerImageToImageConversionService codeFormer;
 	@Autowired
-	private StableDiffusionTextGuidedImageConversionService stableDiffusionI2I;
+	private StableDiffusionTextGuidedImageManipulationService stableDiffusionI2I;
 
 	@Autowired
 	private LangridServiceGroup langridServices;

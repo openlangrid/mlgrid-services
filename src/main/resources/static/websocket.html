@@ -46,12 +46,12 @@
       <!-- 画像生成サービスタブ -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="igTab" data-bs-toggle="tab" data-bs-target="#ig"
-          type="button" role="tab" aria-controls="ig" aria-selected="false">TextImageGeneration</button>
+          type="button" role="tab" aria-controls="ig" aria-selected="false">TextGuidedImageGeneration</button>
       </li>
       <!-- テキスト画像変換サービスタブ -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="tgiTab" data-bs-toggle="tab" data-bs-target="#tgi"
-          type="button" role="tab" aria-controls="tgi" aria-selected="false">TextGuidedImageConversion</button>
+          type="button" role="tab" aria-controls="tgi" aria-selected="false">TextGuidedImageManipulation</button>
       </li>
       <!-- テキスト感情分析サービスタブ -->
       <li class="nav-item" role="presentation">
@@ -423,7 +423,10 @@ window.addEventListener("load", ()=>{
 	const icServiceIds = ["KerasEfficientNetV2B0", "KerasResNet50", "KerasVGG19"];
 	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
 //	const igServiceIds = ["DummyTextImageGeneration"];
-	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1", "StableDiffusion", "WaifuDiffusion", "RinnaJapaneseStableDiffusion"];
+	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1",
+		"StableDiffusionSD041", "WaifuDiffusionSD030",
+		"WaifuDiffusionSD041", "TrinartWaifuSD041",
+		"DiscoDiffusionSD041", "TrinartStableDiffusionSD041", "RinnaJapaneseStableDiffusion"];
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 	const csrServiceIds = ["VOSK"];//, "ChromeASR"];
 	const srServiceIds = ["DummySpeechRecognition", "Whisper"];
@@ -432,7 +435,8 @@ window.addEventListener("load", ()=>{
 	const hpeServiceIds = ["OpenPose"];
 	const i2iServiceIds = ["CodeFormer", "RealESRGAN"];
 	const i2tServiceIds = ["ClipInterrogator"];
-	const tgiServiceIds = ["StableDiffusionI2I"];
+	const tgiServiceIds = ["StableDiffusionIMSD041", "WaifuDiffusionIMSD041",
+		"TrinartStableDiffusionIMSD041", "TrinartWaifuIMSD041"];
 
 	const bson = new BSON();
 	const loc = document.location;
@@ -731,7 +735,7 @@ window.addEventListener("load", ()=>{
 				if(!document.querySelector(`[data-value='${sid}'] input`).checked) continue;
 				const result = results[sid];
 				result.querySelector("[data-id='status']").textContent = "processing...";
-				ws.textImageGeneration(sid).generate(lang, text, "image/jpeg", samples)
+				ws.textGuildedImageGeneration(sid).generateMultiTimes(lang, text, samples)
 					.then(r=>{
 						result.querySelector("[data-id='status']").textContent = "done.";
 						result.append(document.createElement("br"));
@@ -739,8 +743,6 @@ window.addEventListener("load", ()=>{
 							const content = parent.querySelector("[data-id='resultTemplate']").content.cloneNode(true);
 							const img = content.querySelector("img");
 							img.src = URL.createObjectURL(new Blob([res.image.buffer]));
-							const acc = content.querySelector("span");
-							acc.textContent = "Accuracy: " + round(res.accuracy, 2);
 							result.append(content);
 						}
 					})
@@ -749,7 +751,7 @@ window.addEventListener("load", ()=>{
 		});
 	}
 
-	{	// TextGuidedImageConversion
+	{	// TextGuidedImageManipulateion
 		const parent = document.querySelector("#tgi");
 		const services = parent.querySelector("[data-id='services']");
 		const sids = tgiServiceIds;
@@ -782,7 +784,7 @@ window.addEventListener("load", ()=>{
 				for(let sid of sids){
 					const result = results[sid];
 					result.querySelector("[data-id='status']").textContent = "processing...";
-					ws.textGuidedImageConversion(sid).convert(
+					ws.textGuidedImageManipulation(sid).manipulate(
 						lang, prompt, "image/png", Buffer.from(new Uint8Array(fr.result)))
 						.then(r=>{
 							result.querySelector("[data-id='status']").textContent = "done.";
