@@ -789,6 +789,7 @@ window.addEventListener("load", ()=>{
 			fr.readAsArrayBuffer(file);
 			fr.addEventListener("load", e=>{
 				for(let sid of sids){
+					if(!parent.querySelector(`[data-value='${sid}'] input`).checked) continue;
 					const result = results[sid];
 					result.querySelector("[data-id='status']").textContent = "processing...";
 					ws.textGuidedImageManipulation(sid).manipulate(
