@@ -8,8 +8,8 @@ import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.TextToImageGenerationResult;
-import org.langrid.service.ml.TextToImageGenerationService;
+import org.langrid.service.ml.interim.Image;
+import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
 import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
@@ -17,19 +17,19 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 @Service
-public class RinnaJapaneseStableDiffusionTextImageGenerationService implements TextToImageGenerationService{
+public class RinnaJapaneseStableDiffusionTextImageGenerationService implements TextGuidedImageGenerationService{
     private File baseDir = new File("./procs/text_image_generation_rinna_japanese_stable_diffusion");
 
 	public RinnaJapaneseStableDiffusionTextImageGenerationService(){
 	}
 
 	@Override
-	public TextToImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
+	public Image[] generateMultiTimes(String language, String text, int numberOfTimes)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches("ja", language))
 			throw new UnsupportedLanguageException("language", language);
 		try(var l = GPULock.acquire()){
-			maxResults = Math.min(maxResults, 8);
+			numberOfTimes = Math.min(numberOfTimes, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "out-", "");
@@ -37,21 +37,19 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python3 run.py \"%s\" %d temp/%s",
-					text.replaceAll("\"", "\\\""), maxResults, temp.getName());
+					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName());
 			System.out.println(cmd);
 			ProcessUtil.runAndWait(cmd, baseDir);
-			var ret = new ArrayList<TextToImageGenerationResult>();
-			for(var i = 0; i < maxResults; i++){
+			var ret = new ArrayList<Image>();
+			for(var i = 0; i < numberOfTimes; i++){
 				var imgFile = new File(temp.toString() + "_" + i + ".png");
 				if(!imgFile.exists()) break;
-//				var accFile = new File(tempDir, temp.getName() + "_" + i + ".acc.txt");
-				ret.add(new TextToImageGenerationResult(
-					Files.readAllBytes(imgFile.toPath()),
-					0
-//					Double.parseDouble(Files.readString(accFile.toPath()))
+				ret.add(new Image(
+					"image/jpeg",
+					Files.readAllBytes(imgFile.toPath())
 				));
 			}
-			return ret.toArray(new TextToImageGenerationResult[]{});
+			return ret.toArray(new Image[]{});
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {
