@@ -26,6 +26,7 @@ import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationServic
 import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
+import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -64,6 +65,11 @@ public class ServiceInvoker {
 		serviceImples.put("WaifuDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
 		serviceImples.put("TrinartWaifuSD041", new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("StableDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService());
+		serviceImples.put("DiscoDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuSD051", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
