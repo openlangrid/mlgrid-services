@@ -22,14 +22,15 @@ public class ServiceManagement implements ServiceManagementService{
 	}
 
 	@Override
-	public synchronized SearchServicesResult searchServices(int startIndex, int maxCount, MatchingCondition[] conditions,
-			Order[] orders, String scope) {
+	public synchronized SearchServicesResult searchServices(
+		int startIndex, int maxCount,
+		MatchingCondition[] conditions, Order[] orders) {
 		if(serviceNameAndServiceTypes.size() == 0){
 			initDB();
 		}
 		MatchingCondition stcond = null;
-		for(var c : conditions){
-			if(c.getFieldName().equals("ServiceType")){
+		if(conditions != null) for(var c : conditions){
+			if(c.getFieldName().equals("serviceType")){
 				stcond = c;
 				break;
 			}
@@ -75,7 +76,15 @@ public class ServiceManagement implements ServiceManagementService{
 	}
 
 	private Class<?> findInterface(Object service){
-		return service.getClass().getInterfaces()[0];
+		var clz = service.getClass();
+		while(clz != null){
+			var ifs = clz.getInterfaces();
+			if(ifs.length > 0){
+				return ifs[0];
+			}
+			clz = clz.getSuperclass();
+		}
+		throw new RuntimeException("no interfaces found for class " + service.getClass());
 	}
 
 	private Map<String, String> serviceNameAndServiceTypes = new TreeMap<>();
