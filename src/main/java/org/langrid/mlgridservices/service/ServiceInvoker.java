@@ -32,6 +32,7 @@ import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGen
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
+import org.langrid.mlgridservices.service.management.ServiceManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,12 +78,15 @@ public class ServiceInvoker {
 		serviceImples.put("TrinartWaifuIMSD041", new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
 		serviceImples.put("DiscoDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
 
+		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
+
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
 		serviceGroups.put("Keras", kerasServices);
 		serviceGroups.put("Langrid", langridServices);
 		serviceGroups.put("YoloV5", yoloV5Services);
+
 	}
 
 	public Response invoke(String serviceId, Request invocation)
