@@ -2,7 +2,9 @@ package org.langrid.mlgridservices.service.group;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.langrid.mlgridservices.controller.Request;
@@ -12,10 +14,20 @@ import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.client.soap.SoapClientFactory;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
+import jp.go.nict.langrid.commons.util.Pair;
 import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 @Service
 public class LangridServiceGroup implements ServiceGroup{
+	@Override
+	public List<Pair<String, Class<?>>> listServices() {
+		Class<?> clazz = TranslationService.class;
+		return Arrays.asList(
+				Pair.create("LangridGoogleTranslateNMT", clazz),
+				Pair.create("LangridKyotoUJServer", clazz)
+			);
+	}
+
 	public Response invoke(String serviceId, Request invocation) {
 		try{
 			if(serviceId.startsWith("Langrid")){

@@ -1,6 +1,8 @@
 package org.langrid.mlgridservices.service.group;
 
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
@@ -10,9 +12,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
+import jp.go.nict.langrid.commons.util.Pair;
 
 @Service
 public class YoloV5ServiceGroup implements ServiceGroup{
+	@Override
+	public List<Pair<String, Class<?>>> listServices() {
+		Class<?> clazz = ObjectDetectionService.class;
+		return Arrays.asList(
+				Pair.create("YoloV5n", clazz),
+				Pair.create("YoloV5n", clazz),
+				Pair.create("YoloV5n", clazz),
+				Pair.create("YoloV5n", clazz),
+				Pair.create("YoloV5s", clazz)
+			);
+	}
+
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
