@@ -16,3 +16,6 @@ services:
   empath:
     endpoint: ${EMPATH_ENDPOINT:https://api.webempath.net/v2/analyzeWav}
     api-key: ${EMPATH_APIKEY:empath-api-key}
+
+  google:
+    tts-api-key-file: ${GOOGLE_TTS_APIKEY:google-tts-key.json}

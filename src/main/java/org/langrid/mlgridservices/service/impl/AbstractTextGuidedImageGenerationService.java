@@ -48,8 +48,8 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "out-", "");
 			var cmd = String.format(
-					"PATH=$PATH:/usr/local/bin " +
-					"/usr/local/bin/docker-compose run --rm service " +
+					"PATH=$PATH:/usr/bin " +
+					"/usr/bin/docker compose run --rm service " +
 					"python3 run.py \"%s\" %d temp/%s --modelPath \"%s\"",
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(),
 					modelPath);
