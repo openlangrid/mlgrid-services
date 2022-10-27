@@ -1,5 +1,7 @@
 package org.langrid.mlgridservices.controller;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Response {
+	private Map<String, String> headers;
 	private Object result;
 	private Error error;
 	public Response(Object result) {
