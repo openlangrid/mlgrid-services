@@ -128,8 +128,8 @@ class ServiceInvoker{
 	translation(serviceId){
 		return new TranslationService(this, serviceId);
 	}
-	textGuildedImageGeneration(serviceId){
-		return new TextGuildedImageGenerationService(this, serviceId);
+	textGuidedImageGeneration(serviceId){
+		return new TextGuidedImageGenerationService(this, serviceId);
 	}
 	textGuidedImageManipulation(serviceId){
 		return new TextGuidedImageManipulationService(this, serviceId);
