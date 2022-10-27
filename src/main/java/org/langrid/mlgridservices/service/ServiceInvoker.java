@@ -60,17 +60,24 @@ public class ServiceInvoker {
 		serviceImples.put("VOSK", new VoskContinuousSpeechRecognitionService());
 		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
 
-		serviceImples.put("WaifuDiffusionSD030", waifuDiffusion);
-		serviceImples.put("StableDiffusionSD041", stableDiffusion);
-		serviceImples.put("DiscoDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionSD041", new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuSD041", new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("StableDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService());
-		serviceImples.put("DiscoDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuSD051", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+
+		serviceImples.put("WaifuDiffusionDS030", waifuDiffusion);
+		serviceImples.put("StableDiffusionDS041", stableDiffusion);
+		serviceImples.put("DiscoDiffusionDS041", new StableDiffusionTextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionDS041", new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionDS041", new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuDS041", new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("StableDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService());
+		serviceImples.put("DiscoDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuDS051", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("StableDiffusionDS060SD15", new StableDiffusion051TextGuidedImageGenerationService());
+		serviceImples.put("StableDiffusionDS060SD14", new StableDiffusion051TextGuidedImageGenerationService());
+		serviceImples.put("DiscoDiffusionDS060", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionDS060", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionDS060", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuDS060", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
