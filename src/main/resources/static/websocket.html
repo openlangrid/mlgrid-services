@@ -431,9 +431,16 @@ window.addEventListener("load", ()=>{
 	const odServiceIds = ["YoloV5n", "YoloV5s", "YoloV5m", "YoloV5l", "YoloV5x"];
 //	const igServiceIds = ["DummyTextImageGeneration"];
 	const igServiceIds = ["DalleMiniMega1Fp16", "DalleMiniMini1",
-		"StableDiffusionSD041", "WaifuDiffusionSD030",
-		"WaifuDiffusionSD041", "TrinartWaifuSD041",
-		"DiscoDiffusionSD041", "TrinartStableDiffusionSD041", "RinnaJapaneseStableDiffusion"];
+		"StableDiffusionDS041", "WaifuDiffusionDS030",
+		"WaifuDiffusionDS041", "TrinartWaifuDS041",
+		"DiscoDiffusionDS041", "TrinartStableDiffusionDS041",
+		"StableDiffusionDS051", "WaifuDiffusionDS051",
+		"WaifuDiffusionDS051", "TrinartWaifuDS051",
+		"DiscoDiffusionDS051", "TrinartStableDiffusionDS051",
+		"StableDiffusionDS060SD14", "StableDiffusionDS060SD15", "WaifuDiffusionDS060",
+		"WaifuDiffusionDS060", "TrinartWaifuDS060",
+		"DiscoDiffusionDS060", "TrinartStableDiffusionDS060",
+		"RinnaJapaneseStableDiffusion"];
 	const tsaServiceIds = ["ClTohokuSentimentAnalysis"];
 	const csrServiceIds = ["VOSK"];//, "ChromeASR"];
 	const srServiceIds = ["DummySpeechRecognition", "Whisper"];
@@ -720,7 +727,7 @@ window.addEventListener("load", ()=>{
 		});
 	}
 
-	{	// TextImageGeneration
+	{	// TextGuidedImageGeneration
 		const parent = document.querySelector("#ig");
 		const services = parent.querySelector("[data-id='services']");
 		const sids = igServiceIds;
@@ -742,7 +749,7 @@ window.addEventListener("load", ()=>{
 				if(!document.querySelector(`[data-value='${sid}'] input`).checked) continue;
 				const result = results[sid];
 				result.querySelector("[data-id='status']").textContent = "processing...";
-				ws.textGuildedImageGeneration(sid).generateMultiTimes(lang, text, samples)
+				ws.textGuidedImageGeneration(sid).generateMultiTimes(lang, text, samples)
 					.then(r=>{
 						result.querySelector("[data-id='status']").textContent = "done.";
 						result.append(document.createElement("br"));

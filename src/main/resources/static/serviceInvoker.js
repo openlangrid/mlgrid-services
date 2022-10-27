@@ -66,7 +66,7 @@ class SpeechEmotionRecognition extends Service{
 		return this.invoke("recognize", Array.prototype.slice.call(arguments));
 	}
 }
-class TextGuildedImageGenerationService extends Service{
+class TextGuidedImageGenerationService extends Service{
     generate(language, text){
         return this.invoke("generate", Array.prototype.slice.call(arguments));
     }
