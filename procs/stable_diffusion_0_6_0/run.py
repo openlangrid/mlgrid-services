@@ -17,7 +17,8 @@ parser.add_argument("prompt", nargs="?", type=str, default="sunset over a lake i
 parser.add_argument("numOfSamples", nargs="?", type=int, default=1)
 parser.add_argument("outPathPrefix",type=str, default="out")
 parser.add_argument("--modelPath", type=str, default="runwayml/stable-diffusion-v1-5")
-parser.add_argument("--modelRevision", type=str, default="fp16")
+parser.add_argument("--modelRevision", type=str, default=None)
+parser.add_argument("--modelTorchDType", type=str, default=None)
 parser.add_argument("--initImage", type=str)
 parser.add_argument("--negativePrompt", type=str)
 args = parser.parse_args()
@@ -28,7 +29,7 @@ modelPath = args.modelPath
 outPathPrefix = args.outPathPrefix
 modelOpts = {
     "revision": args.modelRevision,
-    "torch_dtype": torch.float16
+    "torch_dtype": args.modelTorchDType
 }
 pipeOpts = {
     "prompt": args.prompt,
@@ -37,11 +38,14 @@ pipeOpts = {
 }
 
 # adjust options before save
-if modelPath == "naclbit/trinart_stable_diffusion_v2" and modelOpts["revision"] == "fp16":
-    modelOpts["revision"] = "diffusers-60k"
-elif modelPath == "doohickey/trinart-waifu-diffusion-50-50" or modelPath == "hakurei/waifu-diffusion" or modelPath == "sd-dreambooth-library/disco-diffusion-style":
-    del modelOpts["revision"]
-    del modelOpts["torch_dtype"]
+if modelOpts["revision"] == None:
+    if modelPath == "naclbit/trinart_stable_diffusion_v2":
+        modelOpts["revision"] = "diffusers-60k"
+    if modelPath == "CompVis/stable-diffusion-v1-4" or modelPath == "runwayml/stable-diffusion-v1-5":
+        modelOpts["revision"] = "fp16"
+if modelOpts["torch_dtype"] == None:
+    if modelPath == "CompVis/stable-diffusion-v1-4" or modelPath == "runwayml/stable-diffusion-v1-5":
+        modelOpts["torch_dtype"] = torch.float16
 
 # write options
 import json
