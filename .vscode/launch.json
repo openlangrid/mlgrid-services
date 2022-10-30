@@ -1,0 +1,16 @@
+{
+    "configurations": [
+    
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<mlgrid-services>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "org.langrid.mlgridservices.Application",
+            "projectName": "mlgrid-services",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

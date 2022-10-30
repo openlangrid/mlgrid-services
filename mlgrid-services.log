@@ -1,0 +1,89 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.6.4)
+
+2022-10-30 16:53:33.775  INFO 3055611 --- [           main] org.langrid.mlgridservices.Application   : Starting Application using Java 17.0.4 on blooper with PID 3055611 (/home/nakaguchi/git/mlgrid-services/build/libs/mlgrid-services-0.0.1-SNAPSHOT.jar started by nakaguchi in /home/nakaguchi/git/mlgrid-services)
+2022-10-30 16:53:33.778  INFO 3055611 --- [           main] org.langrid.mlgridservices.Application   : No active profile set, falling back to 1 default profile: "default"
+2022-10-30 16:53:34.973  INFO 3055611 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-10-30 16:53:34.986  INFO 3055611 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-10-30 16:53:34.987  INFO 3055611 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.58]
+2022-10-30 16:53:35.047  INFO 3055611 --- [           main] o.a.c.c.C.[.[.[/mlgrid-services]         : Initializing Spring embedded WebApplicationContext
+2022-10-30 16:53:35.047  INFO 3055611 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1196 ms
+2022-10-30 16:53:35.310  INFO 3055611 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3b977113-cbb4-403a-88c2-9cad680d1837
+
+2022-10-30 16:53:35.424  INFO 3055611 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure any request
+2022-10-30 16:53:35.603  INFO 3055611 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-10-30 16:53:35.761  INFO 3055611 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path '/mlgrid-services'
+2022-10-30 16:53:35.772  INFO 3055611 --- [           main] org.langrid.mlgridservices.Application   : Started Application in 2.518 seconds (JVM running for 3.099)
+2022-10-30 16:54:12.343  INFO 3055611 --- [nio-8080-exec-1] o.a.c.c.C.[.[.[/mlgrid-services]         : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-10-30 16:54:12.343  INFO 3055611 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-10-30 16:54:12.344  INFO 3055611 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+bin message
+[invokeService] ServiceManagement -> org.langrid.mlgridservices.service.management.ServiceManagement@753fc860
+DalleMiniMega1Fp16: TextGuidedImageGenerationService added.
+DalleMiniMini1: TextGuidedImageGenerationService added.
+LangridGoogleTranslateNMT: TranslationService added.
+LangridKyotoUJServer: TranslationService added.
+YoloV5n: ObjectDetectionService added.
+YoloV5n: ObjectDetectionService added.
+YoloV5n: ObjectDetectionService added.
+YoloV5n: ObjectDetectionService added.
+YoloV5s: ObjectDetectionService added.
+ClTohokuSentimentAnalysis: TextSentimentAnalysisService added.
+KerasEfficientNetV2B0: ImageClassificationService added.
+KerasResNet50: ImageClassificationService added.
+KerasVGG19: ImageClassificationService added.
+WaifuDiffusionDS030: TextGuidedImageGenerationService added.
+WaifuDiffusionDS051: TextGuidedImageGenerationService added.
+StableDiffusionDS060SD15: TextGuidedImageGenerationService added.
+TrinartWaifuIMSD041: TextGuidedImageManipulationService added.
+StableDiffusionDS060SD14: TextGuidedImageGenerationService added.
+DummySpeechRecognition: SpeechRecognitionService added.
+DiscoDiffusionDS060: TextGuidedImageGenerationService added.
+TrinartWaifuDS060: TextGuidedImageGenerationService added.
+DiscoDiffusionIMSD041: TextGuidedImageManipulationService added.
+DummyTextImageGeneration: TextToImageGenerationService added.
+StableDiffusionDS051: TextGuidedImageGenerationService added.
+RinnaJapaneseStableDiffusion: TextGuidedImageGenerationService added.
+DiscoDiffusionDS041: TextGuidedImageGenerationService added.
+TrinartStableDiffusionDS051: TextGuidedImageGenerationService added.
+GoogleTTS: TextToSpeechService added.
+Whisper: SpeechRecognitionService added.
+TrinartWaifuDS041: TextGuidedImageGenerationService added.
+ClipInterrogator: ImageToTextService added.
+WaifuDiffusionIMSD041: TextGuidedImageManipulationService added.
+TrinartStableDiffusionIMSD041: TextGuidedImageManipulationService added.
+Empath: SpeechEmotionRecognitionService added.
+OpenPose: HumanPoseEstimation3dService added.
+RealESRGAN: ImageToImageConversionService added.
+WaifuDiffusionDS060: TextGuidedImageGenerationService added.
+WaifuDiffusionDS041: TextGuidedImageGenerationService added.
+StableDiffusionIMSD041: TextGuidedImageManipulationService added.
+TrinartStableDiffusionDS041: TextGuidedImageGenerationService added.
+CodeFormer: ImageToImageConversionService added.
+DiscoDiffusionDS051: TextGuidedImageGenerationService added.
+TrinartWaifuDS051: TextGuidedImageGenerationService added.
+TrinartStableDiffusionDS060: TextGuidedImageGenerationService added.
+StableDiffusionDS041: TextGuidedImageGenerationService added.
+HelsinkiNLPOpusMT: TranslationService added.
+SpeechBrainSER: SpeechEmotionRecognitionService added.
+VOSK: ContinuousSpeechRecognitionService added.
+ServiceManagement: ServiceManagementService added.
+bin message
+[invokeService] StableDiffusionDS060SD14 -> org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService@3f2734cd
+PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm service python3 run.py "sunset over a lake in the mountains" 2 temp/out-20221030-165429-332dtIKGWae --modelPath "runwayml/stable-diffusion-v1-5"
+bin message
+[invokeService] StableDiffusionDS060SD15 -> org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService@6b5989ba
+PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm service python3 run.py "sunset over a lake in the mountains" 2 temp/out-20221030-165506-373fwPYRhAB --modelPath "runwayml/stable-diffusion-v1-5"
+bin message
+[invokeService] StableDiffusionDS051 -> org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImageGenerationService@33ada72
+PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm service python3 run.py "sunset over a lake in the mountains" 2 temp/out-20221030-165543-347QrOlTdlz --modelPath "CompVis/stable-diffusion-v1-4"
+CloseReason: code [1001], reason [null]
+CloseReason: code [1001], reason [null]
