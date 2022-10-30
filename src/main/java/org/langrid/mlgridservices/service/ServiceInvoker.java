@@ -27,6 +27,7 @@ import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImageGenerationService;
+import org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -72,12 +73,12 @@ public class ServiceInvoker {
 		serviceImples.put("WaifuDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
 		serviceImples.put("TrinartWaifuDS051", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("StableDiffusionDS060SD15", new StableDiffusion051TextGuidedImageGenerationService());
-		serviceImples.put("StableDiffusionDS060SD14", new StableDiffusion051TextGuidedImageGenerationService());
-		serviceImples.put("DiscoDiffusionDS060", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionDS060", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionDS060", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuDS060", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("StableDiffusionDS060SD15", new StableDiffusion060TextGuidedImageGenerationService());
+		serviceImples.put("StableDiffusionDS060SD14", new StableDiffusion060TextGuidedImageGenerationService());
+		serviceImples.put("DiscoDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuDS060", new StableDiffusion060TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
