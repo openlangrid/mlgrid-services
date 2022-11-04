@@ -28,6 +28,7 @@ import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextI
 import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService;
+import org.langrid.mlgridservices.service.impl.StableDiffusion070TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -79,6 +80,12 @@ public class ServiceInvoker {
 		serviceImples.put("WaifuDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
 		serviceImples.put("TrinartWaifuDS060", new StableDiffusion060TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("StableDiffusionDS070SD15", new StableDiffusion070TextGuidedImageGenerationService());
+		serviceImples.put("StableDiffusionDS070SD14", new StableDiffusion070TextGuidedImageGenerationService());
+		serviceImples.put("DiscoDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+		serviceImples.put("WaifuDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+		serviceImples.put("TrinartStableDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+		serviceImples.put("TrinartWaifuDS070", new StableDiffusion070TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
