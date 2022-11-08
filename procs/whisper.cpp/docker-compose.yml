@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    volumes:
+      - ./model:/whisper.cpp/model
+      - ./temp:/whisper.cpp/temp
+    working_dir: /whisper.cpp
