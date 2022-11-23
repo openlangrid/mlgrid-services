@@ -19,6 +19,7 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
     private final File baseDir;
 	private String modelPath;
 	private String supportedLang = "en";
+	private String additionalPrompt;
 
 	public AbstractTextGuidedImageGenerationService(File baseDir){
 		this.baseDir = baseDir;
@@ -29,6 +30,10 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 		if(modelPath.equals("rinna/japanese-stable-diffusion")){
 			this.supportedLang = "ja";
 		}
+	}
+
+	public void setAdditionalPrompt(String additionalPrompt) {
+		this.additionalPrompt = additionalPrompt;
 	}
 
 	@Override
@@ -43,6 +48,9 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 		if(!LanguageUtil.matches(supportedLang, language))
 			throw new UnsupportedLanguageException("language", language);
 		try(var l = GPULock.acquire()){
+			if(additionalPrompt != null){
+				text = additionalPrompt + ", " + text;
+			}
 			numberOfTimes = Math.min(numberOfTimes, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();

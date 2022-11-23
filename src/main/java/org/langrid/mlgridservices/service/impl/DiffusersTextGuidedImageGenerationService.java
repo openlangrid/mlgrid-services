@@ -11,7 +11,12 @@ public class DiffusersTextGuidedImageGenerationService extends AbstractTextGuide
 	}
 
 	public DiffusersTextGuidedImageGenerationService(String procPath, String modelPath){
+		this(procPath, modelPath, null);
+	}
+
+	public DiffusersTextGuidedImageGenerationService(String procPath, String modelPath, String additionalPrompt){
 		super(new File(procPath));
 		setModelPath(modelPath);
+		setAdditionalPrompt(additionalPrompt);
 	}
 }
