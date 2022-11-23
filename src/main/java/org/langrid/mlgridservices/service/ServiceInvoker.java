@@ -89,7 +89,7 @@ public class ServiceInvoker {
 		serviceImples.put("TrinartWaifuDS070", new StableDiffusion070TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 		serviceImples.put("MidjourneyV4DS072", new DiffusersTextGuidedImageGenerationService(
 			"./procs/diffusers_0_7_2", "prompthero/midjourney-v4-diffusion"));
-		serviceImples.put("MidjourneyV4DS072", new DiffusersTextGuidedImageGenerationService(
+		serviceImples.put("GhibliDS072", new DiffusersTextGuidedImageGenerationService(
 			"./procs/diffusers_0_7_2", "nitrosocke/Ghibli-Diffusion"));
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
