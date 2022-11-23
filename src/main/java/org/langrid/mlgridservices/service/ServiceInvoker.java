@@ -17,6 +17,7 @@ import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
+import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.DummySpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
@@ -86,6 +87,10 @@ public class ServiceInvoker {
 		serviceImples.put("WaifuDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
 		serviceImples.put("TrinartWaifuDS070", new StableDiffusion070TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		serviceImples.put("MidjourneyV4DS072", new DiffusersTextGuidedImageGenerationService(
+			"./procs/diffusers_0_7_2", "prompthero/midjourney-v4-diffusion"));
+		serviceImples.put("MidjourneyV4DS072", new DiffusersTextGuidedImageGenerationService(
+			"./procs/diffusers_0_7_2", "nitrosocke/Ghibli-Diffusion"));
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
