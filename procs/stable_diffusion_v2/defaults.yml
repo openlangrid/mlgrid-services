@@ -1,0 +1,4 @@
+defaults:
+  stabilityai/stable-diffusion-2:
+    torch_dtype: torch.float16
+    revision: fp16
