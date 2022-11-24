@@ -92,6 +92,20 @@ public class ServiceInvoker {
 		serviceImples.put("GhibliDS072", new DiffusersTextGuidedImageGenerationService(
 			"./procs/diffusers_0_7_2", "nitrosocke/Ghibli-Diffusion", "ghibli style"));
 
+		var ds081 = "./procs/diffusers_0_8_1";
+		addDiffusers081TGIG("StableDiffusionDS081SD14", "CompVis/stable-diffusion-v1-4");
+		addDiffusers081TGIG("StableDiffusionDS081SD15", "runwayml/stable-diffusion-v1-5");
+		addDiffusers081TGIG("DiscoDiffusionDS081", "sd-dreambooth-library/disco-diffusion-style");
+		addDiffusers081TGIG("WaifuDiffusionDS081", "hakurei/waifu-diffusion");
+		addDiffusers081TGIG("TrinartStableDiffusionDS081", "naclbit/trinart_stable_diffusion_v2");
+		addDiffusers081TGIG("ChiyodaMomoTrinartWaifuDS081", "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+		serviceImples.put("MidjourneyV4DS081", new DiffusersTextGuidedImageGenerationService(
+			ds081, "prompthero/midjourney-v4-diffusion", "mdjrny-v4 style"));
+		serviceImples.put("GhibliDS081", new DiffusersTextGuidedImageGenerationService(
+			ds081, "nitrosocke/Ghibli-Diffusion", "ghibli style"));
+		serviceImples.put("StableDiffusionV2", new DiffusersTextGuidedImageGenerationService(
+			"./procs/stable_diffusion_v2", "stabilityai/stable-diffusion-2"));
+			
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
@@ -108,6 +122,12 @@ public class ServiceInvoker {
 		serviceGroups.put("YoloV5", yoloV5Services);
 
 	}
+	
+	private void addDiffusers081TGIG(String name, String modelPath){
+		serviceImples.put(name, new DiffusersTextGuidedImageGenerationService(
+			"./procs/diffusers_0_8_1", modelPath));
+	}
+		
 
 	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
