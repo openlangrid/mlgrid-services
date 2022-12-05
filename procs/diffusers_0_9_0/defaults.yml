@@ -1,0 +1,10 @@
+
+defaults:
+  runwayml/stable-diffusion-v1-5:
+    torch_dtype: torch.float16
+    revision: fp16
+  CompVis/stable-diffusion-v1-4:
+    torch_dtype: torch.float16
+    revision: fp16
+  naclbit/trinart_stable_diffusion_v2:
+    revision: diffusers-60k
