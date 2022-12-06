@@ -93,19 +93,32 @@ public class ServiceInvoker {
 			"./procs/diffusers_0_7_2", "nitrosocke/Ghibli-Diffusion", "ghibli style"));
 
 		var ds081 = "./procs/diffusers_0_8_1";
-		addDiffusers081TGIG("StableDiffusionDS081SD14", "CompVis/stable-diffusion-v1-4");
-		addDiffusers081TGIG("StableDiffusionDS081SD15", "runwayml/stable-diffusion-v1-5");
-		addDiffusers081TGIG("DiscoDiffusionDS081", "sd-dreambooth-library/disco-diffusion-style");
-		addDiffusers081TGIG("WaifuDiffusionDS081", "hakurei/waifu-diffusion");
-		addDiffusers081TGIG("TrinartStableDiffusionDS081", "naclbit/trinart_stable_diffusion_v2");
-		addDiffusers081TGIG("ChiyodaMomoTrinartWaifuDS081", "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
-		serviceImples.put("MidjourneyV4DS081", new DiffusersTextGuidedImageGenerationService(
-			ds081, "prompthero/midjourney-v4-diffusion", "mdjrny-v4 style"));
-		serviceImples.put("GhibliDS081", new DiffusersTextGuidedImageGenerationService(
-			ds081, "nitrosocke/Ghibli-Diffusion", "ghibli style"));
+		addDiffusersTGIG(ds081, "StableDiffusionDS081SD14", "CompVis/stable-diffusion-v1-4");
+		addDiffusersTGIG(ds081, "StableDiffusionDS081SD15", "runwayml/stable-diffusion-v1-5");
+		addDiffusersTGIG(ds081, "DiscoDiffusionDS081", "sd-dreambooth-library/disco-diffusion-style");
+		addDiffusersTGIG(ds081, "WaifuDiffusionDS081", "hakurei/waifu-diffusion");
+		addDiffusersTGIG(ds081, "TrinartStableDiffusionDS081", "naclbit/trinart_stable_diffusion_v2");
+		addDiffusersTGIG(ds081, "ChiyodaMomoTrinartWaifuDS081", "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+		addDiffusersTGIG(ds081, "MidjourneyV4DS081", "prompthero/midjourney-v4-diffusion",
+			"mdjrny-v4 style");
+		addDiffusersTGIG(ds081, "GhibliDS081", "nitrosocke/Ghibli-Diffusion",
+			"ghibli style");
+
 		serviceImples.put("StableDiffusionV2", new DiffusersTextGuidedImageGenerationService(
 			"./procs/stable_diffusion_v2", "stabilityai/stable-diffusion-2"));
-			
+
+		var ds090 = "./procs/diffusers_0_9_0";
+		addDiffusersTGIG(ds090, "StableDiffusionDS090SD14", "CompVis/stable-diffusion-v1-4");
+		addDiffusersTGIG(ds090, "StableDiffusionDS090SD15", "runwayml/stable-diffusion-v1-5");
+		addDiffusersTGIG(ds090, "DiscoDiffusionDS090", "sd-dreambooth-library/disco-diffusion-style");
+		addDiffusersTGIG(ds090, "WaifuDiffusionDS090", "hakurei/waifu-diffusion");
+		addDiffusersTGIG(ds090, "TrinartStableDiffusionDS090", "naclbit/trinart_stable_diffusion_v2");
+		addDiffusersTGIG(ds090, "ChiyodaMomoTrinartWaifuDS090", "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+		addDiffusersTGIG(ds090, "MidjourneyV4DS090", "prompthero/midjourney-v4-diffusion",
+			"mdjrny-v4 style");
+		addDiffusersTGIG(ds090, "GhibliDS090", "nitrosocke/Ghibli-Diffusion",
+			"ghibli style");
+
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
@@ -123,43 +136,54 @@ public class ServiceInvoker {
 
 	}
 	
-	private void addDiffusers081TGIG(String name, String modelPath){
+	private void addDiffusersTGIG(String procPath, String name, String modelPath){
 		serviceImples.put(name, new DiffusersTextGuidedImageGenerationService(
-			"./procs/diffusers_0_8_1", modelPath));
+			procPath, modelPath));
 	}
-		
+
+	private void addDiffusersTGIG(String procPath, String name, String modelPath, String additionalPrompt){
+		serviceImples.put(name, new DiffusersTextGuidedImageGenerationService(
+			procPath, modelPath, additionalPrompt));
+	}
 
 	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
-		// serviceIdに対応する実装クラスを探す
-		var s = serviceImples.get(serviceId);
-		if(s != null){
-			System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
-			var mn = invocation.getMethod();
-			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
-			if(m == null){
-				throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
+		try(var sic = ServiceInvokerContext.create()){
+			// serviceIdに対応する実装クラスを探す
+			var s = serviceImples.get(serviceId);
+			if(s != null){
+				System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
+				var mn = invocation.getMethod();
+				var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
+				if(m == null){
+					throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
+				}
+				var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
+				var r = new Response(ObjectUtil.invoke(s, mn, args));
+				sic.timer().close();
+				r.putHeader("timer", sic.timer());
+				return r;
 			}
-			var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
-			return new Response(ObjectUtil.invoke(s, mn, args));
-		}
-		// 実装クラスがなければグループを探す
-		var g = serviceGroups.get(serviceId);
-		if(g == null) {
-			// 見つからなければ前方一致で検索
-			for(var e : serviceGroups.entrySet()) {
-				if(!serviceId.startsWith(e.getKey())) continue;
-				g = e.getValue();
+			// 実装クラスがなければグループを探す
+			var g = serviceGroups.get(serviceId);
+			if(g == null) {
+				// 見つからなければ前方一致で検索
+				for(var e : serviceGroups.entrySet()) {
+					if(!serviceId.startsWith(e.getKey())) continue;
+					g = e.getValue();
+				}
 			}
+			if(g == null) {
+				throw new ProcessFailedException("service " + serviceId + " not found.");
+			}
+			System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
+			var r = g.invoke(serviceId, invocation);
+			sic.timer().close();
+			r.getHeaders().put("timer", sic.timer());
+			serviceGroups.put(serviceId, g); // 処理が正常に終了した場合はserviceIdとグループを関連付けておく。
+			return r;
 		}
-		if(g == null) {
-			throw new ProcessFailedException("service " + serviceId + " not found.");
-		}
-		System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
-		var r = g.invoke(serviceId, invocation);
-		serviceGroups.put(serviceId, g); // 処理が正常に終了した場合はserviceIdとグループを関連付けておく。
-		return r;
 	}
 
 	private Converter c = new Converter();

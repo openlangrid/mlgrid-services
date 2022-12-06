@@ -57,9 +57,9 @@ public class WebSocketServer implements ApplicationContextAware {
 			System.out.println(message);
 			var req = jmapper.readValue(message, WebSocketRequest.class);
 			reqId = req.getReqId();
+			var r = invoker().invoke(req.getServiceId(), req);
 			var res = new WebSocketResponse(
-					req.getReqId(),
-					invoker().invoke(req.getServiceId(), req).getResult());
+					req.getReqId(), r.getHeaders(), r.getResult());
 			var resMsg = jmapper.writeValueAsString(res);
 			return resMsg;
 		} catch(RuntimeException e) {
@@ -80,9 +80,9 @@ public class WebSocketServer implements ApplicationContextAware {
 			InvocationTargetException, NoSuchMethodException, ProcessFailedException {
 		System.out.println("bin message");
 		var i = bmapper.readValue(message, WebSocketRequest.class);
+		var r = invoker().invoke(i.getServiceId(), i);
 		return bmapper.writeValueAsBytes(new WebSocketResponse(
-			i.getReqId(),
-			invoker().invoke(i.getServiceId(), i).getResult()));
+			i.getReqId(), r.getHeaders(), r.getResult()));
 	}
 
 	@OnClose

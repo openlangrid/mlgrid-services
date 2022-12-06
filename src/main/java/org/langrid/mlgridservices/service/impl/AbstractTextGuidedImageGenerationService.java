@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
@@ -62,7 +63,9 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(),
 					modelPath);
 			System.out.println(cmd);
-			ProcessUtil.runAndWait(cmd, baseDir);
+			try(var t = ServiceInvokerContext.get().timer().startChild("Service")){
+				ProcessUtil.runAndWait(cmd, baseDir);
+			}
 			var ret = new ArrayList<Image>();
 			for(var i = 0; i < numberOfTimes; i++){
 				var imgFile = new File(temp.toString() + "_" + i + ".png");
