@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
@@ -40,7 +41,9 @@ public class CodeFormerImageToImageConversionService implements ImageToImageConv
 					"python inference_codeformer.py --test_path /%s/%s/%s --w 0.7 --bg_upsampler realesrgan --face_upsample",
 					tempDir.getName(), inputsDir.getName(), inputDir.getName());
 			System.out.println(cmd);
-			ProcessUtil.runAndWait(cmd, baseDir);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				ProcessUtil.runAndWait(cmd, baseDir);
+			}
 			var resultFile = new File(new File(new File(resultsDir, inputDir.getName() + "_0.7"), "final_results"), "input.png");
 			System.out.println("result: " + resultFile);
 			if(resultFile.exists()){

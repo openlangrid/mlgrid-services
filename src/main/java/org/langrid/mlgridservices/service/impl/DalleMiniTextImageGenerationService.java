@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.interim.Image;
@@ -65,23 +66,26 @@ public class DalleMiniTextImageGenerationService implements TextGuidedImageGener
 			System.out.println(cmd);
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
-			var proc = pb.start();
-			try {
-				proc.waitFor();
-				var res = proc.exitValue();
-				if(res == 0) {
-					return;
-				} else {
-					var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-					var lines = new StringBuilder();
-					String line = null;
-					while ((line = br.readLine()) != null) {
-						lines.append(line);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var proc = pb.start();
+				try {
+					proc.waitFor();
+					t.close();
+					var res = proc.exitValue();
+					if(res == 0) {
+						return;
+					} else {
+						var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+						var lines = new StringBuilder();
+						String line = null;
+						while ((line = br.readLine()) != null) {
+							lines.append(line);
+						}
+						throw new RuntimeException(lines.toString());
 					}
-					throw new RuntimeException(lines.toString());
+				} finally {
+					proc.destroy();
 				}
-			} finally {
-				proc.destroy();
 			}
 		} catch(Exception e){
 			throw new RuntimeException(e);

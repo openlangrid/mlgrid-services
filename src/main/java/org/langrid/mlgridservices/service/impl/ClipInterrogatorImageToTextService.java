@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.file.Files;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
@@ -26,7 +27,9 @@ public class ClipInterrogatorImageToTextService implements ImageToTextService{
 					"python3 /work/run.py --infile \"/work/temp/%s\"",
 					infile.getName());
 			System.out.println(cmd);
-			ProcessUtil.runAndWait(cmd, baseDir);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				ProcessUtil.runAndWait(cmd, baseDir);
+			}
 			var resultFile = new File(infile.toString() + ".result.txt");
 			if(!resultFile.exists()) {
 				throw new ProcessFailedException("failed to generate text.");

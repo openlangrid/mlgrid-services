@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 
@@ -46,29 +47,32 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 					+ "helsinki-nlp python run.py " + modelName + " temp/" + file.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
-			var proc = pb.start();
-			try {
-				proc.waitFor();
-				var res = proc.exitValue();
-				if(res == 0) {
-					var br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-					String line = null;
-					while ((line = br.readLine()) != null) {
-						if(!line.startsWith("Result:")) continue;
-						return line.substring("Result: ".length());
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var proc = pb.start();
+				try {
+					proc.waitFor();
+					t.close();
+					var res = proc.exitValue();
+					if(res == 0) {
+						var br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+						String line = null;
+						while ((line = br.readLine()) != null) {
+							if(!line.startsWith("Result:")) continue;
+							return line.substring("Result: ".length());
+						}
+						throw new RuntimeException("no results found");
+					} else {
+						var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+						var lines = new StringBuilder();
+						String line = null;
+						while ((line = br.readLine()) != null) {
+							lines.append(line);
+						}
+						throw new RuntimeException(lines.toString());
 					}
-					throw new RuntimeException("no results found");
-				} else {
-					var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-					var lines = new StringBuilder();
-					String line = null;
-					while ((line = br.readLine()) != null) {
-						lines.append(line);
-					}
-					throw new RuntimeException(lines.toString());
+				} finally {
+					proc.destroy();
 				}
-			} finally {
-				proc.destroy();
 			}
 		} catch(Exception e){
 			throw new RuntimeException(e);

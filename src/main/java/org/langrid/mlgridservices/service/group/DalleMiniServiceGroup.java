@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
 import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,9 @@ public class DalleMiniServiceGroup  implements ServiceGroup {
 			var mn = invocation.getMethod();
 			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
 			var args = new Converter().convertEachElement(invocation.getArgs(), m.getParameterTypes());
-			return new Response(ObjectUtil.invoke(s, mn, args));
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				return new Response(ObjectUtil.invoke(s, mn, args));
+			}
 		} catch(RuntimeException e){
 			throw e;
 		} catch(Exception e){

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.HuggingFaceTextSentimentAnalysisService;
 import org.langrid.service.ml.TextSentimentAnalysisService;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ public class HuggingFaceServiceGroup  implements ServiceGroup {
 
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
-		try{
+		try(var t = ServiceInvokerContext.startServiceTimer()){
 			return new Response(
 					ObjectUtil.invoke(service(serviceId), invocation.getMethod(), invocation.getArgs()));
 		} catch(RuntimeException e){

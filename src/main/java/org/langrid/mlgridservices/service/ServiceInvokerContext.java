@@ -1,12 +1,14 @@
 package org.langrid.mlgridservices.service;
 
-import java.io.IOException;
-
 import org.langrid.mlgridservices.util.Timer;
 
 public class ServiceInvokerContext implements AutoCloseable{
 	public static ServiceInvokerContext get(){
 		return ctx.get();
+	}
+
+	public static Timer startServiceTimer(){
+		return get().timer().startChild("Service");
 	}
 
 	public static ServiceInvokerContext create(){

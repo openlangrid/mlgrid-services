@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +36,10 @@ public class LangridServiceGroup implements ServiceGroup{
 			}
 			System.out.println(serviceId);
 			var c = newClient(serviceId, intfs.get(serviceId));
-			var r = ObjectUtil.invoke(c, invocation.getMethod(), invocation.getArgs());
-			return new Response(r);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var r = ObjectUtil.invoke(c, invocation.getMethod(), invocation.getArgs());
+				return new Response(r);
+			}
 		} catch(RuntimeException e){
 			throw e;
 		} catch(Exception e){

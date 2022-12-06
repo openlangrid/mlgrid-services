@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
@@ -60,30 +61,32 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 					"whisper temp/%s -o temp --language %s --model small",
 					temp.getName(), lang);
 			System.out.println(cmd);
-			var proc = ProcessUtil.run(cmd, baseDir);
-			try{
-				var br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
-				String line = null;
-				var ret = new ArrayList<SpeechRecognitionResult>();
-				while ((line = br.readLine()) != null) {
-					var m = pat.matcher(line);
-					if(!m.matches()) continue;
-					ret.add(new SpeechRecognitionResult(
-						Integer.parseInt(m.group(1)) * 60 * 1000 +
-						Integer.parseInt(m.group(2)) * 1000 +
-						Integer.parseInt(m.group(3)) * 1000,
-						Integer.parseInt(m.group(4)) * 60 * 1000 +
-						Integer.parseInt(m.group(5)) * 1000 +
-						Integer.parseInt(m.group(6)) * 1000,
-						m.group(7)));
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var proc = ProcessUtil.run(cmd, baseDir);
+				try{
+					var br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
+					String line = null;
+					var ret = new ArrayList<SpeechRecognitionResult>();
+					while ((line = br.readLine()) != null) {
+						var m = pat.matcher(line);
+						if(!m.matches()) continue;
+						ret.add(new SpeechRecognitionResult(
+							Integer.parseInt(m.group(1)) * 60 * 1000 +
+							Integer.parseInt(m.group(2)) * 1000 +
+							Integer.parseInt(m.group(3)) * 1000,
+							Integer.parseInt(m.group(4)) * 60 * 1000 +
+							Integer.parseInt(m.group(5)) * 1000 +
+							Integer.parseInt(m.group(6)) * 1000,
+							m.group(7)));
+					}
+					proc.waitFor();
+					if(ret.size() == 0 && proc.exitValue() != 0){
+						throw new ProcessFailedException(StreamUtil.readAsString(proc.getErrorStream(), "UTF-8"));
+					}
+					return ret.toArray(new SpeechRecognitionResult[]{});
+				} finally{
+					proc.destroy();
 				}
-				proc.waitFor();
-				if(ret.size() == 0 && proc.exitValue() != 0){
-					throw new ProcessFailedException(StreamUtil.readAsString(proc.getErrorStream(), "UTF-8"));
-				}
-				return ret.toArray(new SpeechRecognitionResult[]{});
-			} finally{
-				proc.destroy();
 			}
 		} catch(RuntimeException e) {
 			throw e;

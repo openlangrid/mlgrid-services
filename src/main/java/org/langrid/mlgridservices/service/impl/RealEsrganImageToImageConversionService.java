@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.file.Files;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
@@ -32,7 +33,9 @@ public class RealEsrganImageToImageConversionService implements ImageToImageConv
 					inputFile.getName());
 			var outputFile = new File(tempDir, FileUtil.addFileNameSuffix(inputFile.getName(), "_out"));
 			System.out.println(cmd);
-			ProcessUtil.runAndWait(cmd, baseDir);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				ProcessUtil.runAndWait(cmd, baseDir);
+			}
 			do{
 				if(outputFile.exists()) break;
 				outputFile = new File(tempDir, FileUtil.changeFileExt(outputFile.getName(), ".png"));

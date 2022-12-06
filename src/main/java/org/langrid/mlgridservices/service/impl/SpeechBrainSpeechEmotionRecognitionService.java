@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
@@ -38,26 +39,29 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 					"python3 run.py temp/%s",
 					temp.getName());
 			System.out.println(cmd);
-			var proc = ProcessUtil.run(cmd, baseDir);
-			var om = new ObjectMapper();
-			EmotionRecognitionResult ret = null;
-			try{
-				var br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					line = line.trim();
-					if(line.length() == 0) continue;
-					ret = om.readValue(line, EmotionRecognitionResult.class);
-					break;
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var proc = ProcessUtil.run(cmd, baseDir);
+				var om = new ObjectMapper();
+				EmotionRecognitionResult ret = null;
+				try{
+					var br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
+					String line = null;
+					while ((line = br.readLine()) != null) {
+						line = line.trim();
+						if(line.length() == 0) continue;
+						ret = om.readValue(line, EmotionRecognitionResult.class);
+						break;
+					}
+					proc.waitFor();
+					t.close();
+					if(ret == null && proc.exitValue() != 0){
+						throw new ProcessFailedException(StreamUtil.readAsString(proc.getErrorStream(), "UTF-8"));
+					}
+					return new EmotionRecognitionResult[]{ret};
+				} finally{
+					new File(baseDir, temp.getName()).delete();
+					proc.destroy();
 				}
-				proc.waitFor();
-				if(ret == null && proc.exitValue() != 0){
-					throw new ProcessFailedException(StreamUtil.readAsString(proc.getErrorStream(), "UTF-8"));
-				}
-				return new EmotionRecognitionResult[]{ret};
-			} finally{
-				new File(baseDir, temp.getName()).delete();
-				proc.destroy();
 			}
 		} catch(RuntimeException e) {
 			throw e;

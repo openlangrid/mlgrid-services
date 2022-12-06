@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 
 import org.langrid.service.ml.TextSentimentLabel;
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.service.ml.TextSentimentAnalysisResult;
@@ -59,29 +60,32 @@ implements TextSentimentAnalysisService{
 			System.out.println(cmd);
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
-			var proc = pb.start();
-			try {
-				proc.waitFor();
-				var res = proc.exitValue();
-				if(res == 0) {
-					var br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-					String line = null;
-					while ((line = br.readLine()) != null) {
-						if(!line.startsWith("[{")) continue;
-						return mapper.readValue(line, Result[].class);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var proc = pb.start();
+				try {
+					proc.waitFor();
+					t.close();
+					var res = proc.exitValue();
+					if(res == 0) {
+						var br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+						String line = null;
+						while ((line = br.readLine()) != null) {
+							if(!line.startsWith("[{")) continue;
+							return mapper.readValue(line, Result[].class);
+						}
+						throw new RuntimeException("no results found.");
+					} else {
+						var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+						var lines = new StringBuilder();
+						String line = null;
+						while ((line = br.readLine()) != null) {
+							lines.append(line);
+						}
+						throw new RuntimeException(lines.toString());
 					}
-					throw new RuntimeException("no results found.");
-				} else {
-					var br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-					var lines = new StringBuilder();
-					String line = null;
-					while ((line = br.readLine()) != null) {
-						lines.append(line);
-					}
-					throw new RuntimeException(lines.toString());
+				} finally {
+					proc.destroy();
 				}
-			} finally {
-				proc.destroy();
 			}
 		} catch(Exception e){
 			throw new RuntimeException(e);

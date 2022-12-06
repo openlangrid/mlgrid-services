@@ -1,5 +1,6 @@
 package org.langrid.mlgridservices.service.impl;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.service.ml.interim.SpeechRecognitionResult;
 import org.langrid.service.ml.interim.SpeechRecognitionService;
 
@@ -11,7 +12,9 @@ public class DummySpeechRecognitionService implements SpeechRecognitionService{
 	@Override
 	public SpeechRecognitionResult[] recognize(String language, String format, byte[] audio)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		return new SpeechRecognitionResult[]{
-			new SpeechRecognitionResult(0, 2000, "こんにちは")};
+		try(var t = ServiceInvokerContext.startServiceTimer()){
+			return new SpeechRecognitionResult[]{
+				new SpeechRecognitionResult(0, 2000, "こんにちは")};
+		}
 	}
 }

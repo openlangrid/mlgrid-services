@@ -63,7 +63,7 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(),
 					modelPath);
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.get().timer().startChild("Service")){
+			try(var t = ServiceInvokerContext.startServiceTimer()){
 				ProcessUtil.runAndWait(cmd, baseDir);
 			}
 			var ret = new ArrayList<Image>();

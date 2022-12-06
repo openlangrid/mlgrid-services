@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,9 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 			throws AccessLimitExceededException, InvalidParameterException, NoAccessPermissionException,
 			NoValidEndpointsException, ProcessFailedException, ServerBusyException, ServiceNotActiveException,
 			ServiceNotFoundException, UnsupportedLanguageException {
-		return null;
+		try(var t = ServiceInvokerContext.startServiceTimer()){
+			return null;
+		}
 /*		var lang = language.toLowerCase();
 		var vt = voiceType.toLowerCase();
 		var c = configs.get(Config.key(lang, vt));

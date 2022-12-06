@@ -15,6 +15,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ValidationUtil;
 import org.langrid.service.ml.EmotionRecognitionResult;
@@ -59,7 +60,8 @@ public class EmpathService implements SpeechEmotionRecognitionService{
 		var httpPost = new HttpPost(endpoint);
 		httpPost.setEntity(builder.build());
 		var om = new ObjectMapper();
-		try (var client = HttpClients.createDefault();
+		try(var t = ServiceInvokerContext.startServiceTimer();
+				var client = HttpClients.createDefault();
 				var resp = client.execute(httpPost)) {
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				var node = om.readTree(EntityUtils.toString(resp.getEntity()));

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.service.ml.TextToImageGenerationResult;
 import org.langrid.service.ml.TextToImageGenerationService;
 
@@ -15,7 +16,7 @@ public class DummyTextImageGenerationService implements TextToImageGenerationSer
 	@Override
 	public TextToImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		try {
+		try(var t = ServiceInvokerContext.startServiceTimer()){
 			return new TextToImageGenerationResult[]{
 					new TextToImageGenerationResult(
 							Files.readAllBytes(Path.of("./procs/text_image_generation_dalle_mini/dummy.jpg")),
