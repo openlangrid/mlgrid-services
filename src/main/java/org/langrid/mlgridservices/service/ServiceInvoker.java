@@ -180,7 +180,7 @@ public class ServiceInvoker {
 			System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
 			var r = g.invoke(serviceId, invocation);
 			sic.timer().close();
-			r.getHeaders().put("timer", sic.timer());
+			r.putHeader("timer", sic.timer());
 			serviceGroups.put(serviceId, g); // 処理が正常に終了した場合はserviceIdとグループを関連付けておく。
 			return r;
 		}
