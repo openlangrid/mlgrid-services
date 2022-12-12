@@ -107,18 +107,36 @@ public class ServiceInvoker {
 		serviceImples.put("StableDiffusionV2", new DiffusersTextGuidedImageGenerationService(
 			"./procs/stable_diffusion_v2", "stabilityai/stable-diffusion-2"));
 
-		var ds090 = "./procs/diffusers_0_9_0";
-		addDiffusersTGIG(ds090, "StableDiffusionDS090SD14", "CompVis/stable-diffusion-v1-4");
-		addDiffusersTGIG(ds090, "StableDiffusionDS090SD15", "runwayml/stable-diffusion-v1-5");
-		addDiffusersTGIG(ds090, "DiscoDiffusionDS090", "sd-dreambooth-library/disco-diffusion-style");
-		addDiffusersTGIG(ds090, "WaifuDiffusionDS090", "hakurei/waifu-diffusion");
-		addDiffusersTGIG(ds090, "TrinartStableDiffusionDS090", "naclbit/trinart_stable_diffusion_v2");
-		addDiffusersTGIG(ds090, "ChiyodaMomoTrinartWaifuDS090", "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
-		addDiffusersTGIG(ds090, "MidjourneyV4DS090", "prompthero/midjourney-v4-diffusion",
-			"mdjrny-v4 style");
-		addDiffusersTGIG(ds090, "GhibliDS090", "nitrosocke/Ghibli-Diffusion",
-			"ghibli style");
-
+		{
+			var dir = "./procs/diffusers_0_9_0";
+			var postfix = "DS_0_9_0";
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
+			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
+			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
+			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
+			addDiffusersTGIG(dir, "ChiyodaMomoTrinartWaifu" + postfix, "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
+				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
+				"ghibli style");
+		}
+		{
+			var dir = "./procs/diffusers_0_10_2";
+			var postfix = "DS_0_10_2";
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
+			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
+			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
+			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
+			addDiffusersTGIG(dir, "ChiyodaMomoTrinartWaifu" + postfix, "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
+				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
+				"ghibli style");
+			addDiffusersTGIG(dir, "CoolJapanDiffusion" + postfix, "alfredplpl/cool-japan-diffusion-for-learning-2-0");
+		}
+	
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
@@ -144,6 +162,12 @@ public class ServiceInvoker {
 	private void addDiffusersTGIG(String procPath, String name, String modelPath, String additionalPrompt){
 		serviceImples.put(name, new DiffusersTextGuidedImageGenerationService(
 			procPath, modelPath, additionalPrompt));
+	}
+
+	private void addDiffusersTGIG(String procPath, String name, String modelPath, String additionalPrompt,
+		String scriptFile){
+		serviceImples.put(name, new DiffusersTextGuidedImageGenerationService(
+			procPath, modelPath, additionalPrompt, scriptFile));
 	}
 
 	public Response invoke(String serviceId, Request invocation)

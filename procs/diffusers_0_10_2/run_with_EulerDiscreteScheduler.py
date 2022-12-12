@@ -54,7 +54,8 @@ if args.modelTorchDType: modelOpts["torch_dtype"] = args.modelTorchDType
 pipeOpts = {
     "prompt": args.prompt,
     "nagetive_prompt": args.negativePrompt,
-    "init_image": args.initImage
+    "init_image": args.initImage,
+    "num_inference_steps": 25
 }
 
 # write options
@@ -89,6 +90,8 @@ else:
     from diffusers import StableDiffusionPipeline
     pipe = StableDiffusionPipeline.from_pretrained(
         modelPath, **modelOpts)
+    from diffusers import EulerDiscreteScheduler
+    pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
 #pipe.enable_attention_slicing()
 pipe = pipe.to("cuda")
 from diffusers.utils.import_utils import is_xformers_available
@@ -103,9 +106,9 @@ if is_xformers_available():
 
 # run
 #with autocast("cuda"):
-#def null_safety(images, **kwargs):
-#    return images, False
-#pipe.safety_checker = null_safety
+def null_safety(images, **kwargs):
+    return images, False
+pipe.safety_checker = null_safety
 images = pipe(**pipeOpts).images
 
 

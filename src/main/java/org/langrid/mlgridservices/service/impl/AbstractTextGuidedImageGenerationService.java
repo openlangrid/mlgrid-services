@@ -21,6 +21,7 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 	private String modelPath;
 	private String supportedLang = "en";
 	private String additionalPrompt;
+	private String scriptFile = "run.py";
 
 	public AbstractTextGuidedImageGenerationService(File baseDir){
 		this.baseDir = baseDir;
@@ -35,6 +36,10 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 
 	public void setAdditionalPrompt(String additionalPrompt) {
 		this.additionalPrompt = additionalPrompt;
+	}
+
+	public void setScriptFile(String scriptFile) {
+		this.scriptFile = scriptFile;
 	}
 
 	@Override
@@ -59,7 +64,8 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +
-					"python3 run.py \"%s\" %d temp/%s --modelPath \"%s\"",
+					"python3 %s \"%s\" %d temp/%s --modelPath \"%s\"",
+					scriptFile,
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(),
 					modelPath);
 			System.out.println(cmd);
