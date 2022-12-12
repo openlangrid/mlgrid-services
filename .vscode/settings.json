@@ -8,5 +8,6 @@
           "name": "JavaSE-17",
           "path": "/usr/lib/jvm/java-17-openjdk-amd64"
         }
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
