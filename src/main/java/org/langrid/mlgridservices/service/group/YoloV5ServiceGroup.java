@@ -22,10 +22,10 @@ public class YoloV5ServiceGroup implements ServiceGroup{
 		Class<?> clazz = ObjectDetectionService.class;
 		return Arrays.asList(
 				Pair.create("YoloV5n", clazz),
-				Pair.create("YoloV5n", clazz),
-				Pair.create("YoloV5n", clazz),
-				Pair.create("YoloV5n", clazz),
-				Pair.create("YoloV5s", clazz)
+				Pair.create("YoloV5s", clazz),
+				Pair.create("YoloV5m", clazz),
+				Pair.create("YoloV5l", clazz),
+				Pair.create("YoloV5x", clazz)
 			);
 	}
 
