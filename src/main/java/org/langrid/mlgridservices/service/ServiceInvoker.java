@@ -152,8 +152,10 @@ public class ServiceInvoker {
 			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
 				"ghibli style");
 			addDiffusersTGIG(dir, "CoolJapanDiffusion" + postfix, "alfredplpl/cool-japan-diffusion-for-learning-2-0");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD20", "stabilityai/stable-diffusion-2");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD21", "stabilityai/stable-diffusion-2-1");
 		}
-	
+
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
 		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
 		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
