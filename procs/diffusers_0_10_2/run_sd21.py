@@ -91,10 +91,17 @@ else:
     from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
     pipe = StableDiffusionPipeline.from_pretrained(modelPath, torch_dtype=torch.float16)
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-    pipe = pipe.to("cuda")
 #pipe.enable_attention_slicing()
 pipe = pipe.to("cuda")
-
+from diffusers.utils.import_utils import is_xformers_available
+if is_xformers_available():
+    try:
+        pipe.enable_xformers_memory_efficient_attention(True)
+    except Exception as e:
+        logger.warning(
+            "Could not enable memory efficient attention. Make sure xformers is installed"
+            f" correctly and a GPU is available: {e}"
+        )
 
 # run
 images = pipe(**pipeOpts).images

@@ -149,11 +149,17 @@ public class ServiceInvoker {
 			addDiffusersTGIG(dir, "ChiyodaMomoTrinartWaifu" + postfix, "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
 			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
 				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",
+				"mdjrny-v4 style");
 			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
 				"ghibli style");
 			addDiffusersTGIG(dir, "CoolJapanDiffusion" + postfix, "alfredplpl/cool-japan-diffusion-for-learning-2-0");
-			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD20", "stabilityai/stable-diffusion-2");
-			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD21", "stabilityai/stable-diffusion-2-1");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD20", 
+				"stabilityai/stable-diffusion-2", null,
+				"run_sd21.py");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD21",
+				"stabilityai/stable-diffusion-2-1", null,
+				"run_sd21.py");
 		}
 
 		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
