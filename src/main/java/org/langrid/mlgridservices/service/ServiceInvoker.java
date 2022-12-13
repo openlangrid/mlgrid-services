@@ -64,52 +64,69 @@ public class ServiceInvoker {
 		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
 
 
-		serviceImples.put("WaifuDiffusionDS030", waifuDiffusion);
-		serviceImples.put("StableDiffusionDS041", stableDiffusion);
-		serviceImples.put("DiscoDiffusionDS041", new StableDiffusionTextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionDS041", new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionDS041", new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuDS041", new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("StableDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService());
-		serviceImples.put("DiscoDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionDS051", new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuDS051", new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("StableDiffusionDS060SD15", new StableDiffusion060TextGuidedImageGenerationService());
-		serviceImples.put("StableDiffusionDS060SD14", new StableDiffusion060TextGuidedImageGenerationService());
-		serviceImples.put("DiscoDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionDS060", new StableDiffusion060TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuDS060", new StableDiffusion060TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("StableDiffusionDS070SD15", new StableDiffusion070TextGuidedImageGenerationService());
-		serviceImples.put("StableDiffusionDS070SD14", new StableDiffusion070TextGuidedImageGenerationService());
-		serviceImples.put("DiscoDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
-		serviceImples.put("WaifuDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionDS070", new StableDiffusion070TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuDS070", new StableDiffusion070TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("MidjourneyV4DS072", new DiffusersTextGuidedImageGenerationService(
-			"./procs/diffusers_0_7_2", "prompthero/midjourney-v4-diffusion", "mdjrny-v4 style"));
-		serviceImples.put("GhibliDS072", new DiffusersTextGuidedImageGenerationService(
-			"./procs/diffusers_0_7_2", "nitrosocke/Ghibli-Diffusion", "ghibli style"));
-
-		var ds081 = "./procs/diffusers_0_8_1";
-		addDiffusersTGIG(ds081, "StableDiffusionDS081SD14", "CompVis/stable-diffusion-v1-4");
-		addDiffusersTGIG(ds081, "StableDiffusionDS081SD15", "runwayml/stable-diffusion-v1-5");
-		addDiffusersTGIG(ds081, "DiscoDiffusionDS081", "sd-dreambooth-library/disco-diffusion-style");
-		addDiffusersTGIG(ds081, "WaifuDiffusionDS081", "hakurei/waifu-diffusion");
-		addDiffusersTGIG(ds081, "TrinartStableDiffusionDS081", "naclbit/trinart_stable_diffusion_v2");
-		addDiffusersTGIG(ds081, "ChiyodaMomoTrinartWaifuDS081", "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
-		addDiffusersTGIG(ds081, "MidjourneyV4DS081", "prompthero/midjourney-v4-diffusion",
-			"mdjrny-v4 style");
-		addDiffusersTGIG(ds081, "GhibliDS081", "nitrosocke/Ghibli-Diffusion",
-			"ghibli style");
+		serviceImples.put("WaifuDiffusionDS0_03_0", waifuDiffusion);
+		{
+			var postfix = "DS_0_04_1";
+			serviceImples.put("StableDiffusion" + postfix, stableDiffusion);
+			serviceImples.put("WaifuDiffusion" + postfix, new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+			serviceImples.put("TrinartStableDiffusion" + postfix, new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusionTextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		}
+		{
+			var postfix = "DS_0_05_1";
+			serviceImples.put("StableDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService());
+			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+			serviceImples.put("WaifuDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+			serviceImples.put("TrinartStableDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		}
+		{
+			var postfix = "DS_0_06_0";
+			serviceImples.put("StableDiffusion" + postfix + "SD14", new StableDiffusion060TextGuidedImageGenerationService());
+			serviceImples.put("StableDiffusion" + postfix + "SD15", new StableDiffusion060TextGuidedImageGenerationService());
+			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusion060TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+			serviceImples.put("WaifuDiffusion" + postfix, new StableDiffusion060TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+			serviceImples.put("TrinartStableDiffusion" + postfix, new StableDiffusion060TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusion060TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		}
+		{
+			var postfix = "DS_0_07_0";
+			serviceImples.put("StableDiffusion" + postfix + "SD14", new StableDiffusion070TextGuidedImageGenerationService());
+			serviceImples.put("StableDiffusion" + postfix + "SD15", new StableDiffusion070TextGuidedImageGenerationService());
+			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusion070TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
+			serviceImples.put("WaifuDiffusion" + postfix, new StableDiffusion070TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
+			serviceImples.put("TrinartStableDiffusion" + postfix, new StableDiffusion070TextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
+			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusion070TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
+		}
+		{
+			var postfix = "DS_0_07_2";
+			serviceImples.put("MidjourneyV4" + postfix, new DiffusersTextGuidedImageGenerationService(
+				"./procs/diffusers_0_7_2", "prompthero/midjourney-v4-diffusion", "mdjrny-v4 style"));
+			serviceImples.put("Ghibli" + postfix, new DiffusersTextGuidedImageGenerationService(
+				"./procs/diffusers_0_7_2", "nitrosocke/Ghibli-Diffusion", "ghibli style"));
+		}
+		{
+			var dir = "./procs/diffusers_0_8_1";
+			var postfix = "DS_0_08_1";
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
+			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
+			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
+			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
+			addDiffusersTGIG(dir, "ChiyodaMomoTrinartWaifu" + postfix, "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
+				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
+				"ghibli style");
+		}
 
 		serviceImples.put("StableDiffusionV2", new DiffusersTextGuidedImageGenerationService(
 			"./procs/stable_diffusion_v2", "stabilityai/stable-diffusion-2"));
 
 		{
 			var dir = "./procs/diffusers_0_9_0";
-			var postfix = "DS_0_9_0";
+			var postfix = "DS_0_09_0";
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
 			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
