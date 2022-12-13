@@ -35,6 +35,7 @@ import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGen
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
+import org.langrid.mlgridservices.service.impl.YoloV7ObjectDetectionService;
 import org.langrid.mlgridservices.service.management.ServiceManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -167,6 +168,13 @@ public class ServiceInvoker {
 		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
 		serviceImples.put("TrinartWaifuIMSD041", new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
 		serviceImples.put("DiscoDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
+
+		serviceImples.put("YoloV7", new YoloV7ObjectDetectionService("yolov7.pt"));
+		serviceImples.put("YoloV7x", new YoloV7ObjectDetectionService("yolov7x.pt"));
+		serviceImples.put("YoloV7w6", new YoloV7ObjectDetectionService("yolov7-w6.pt"));
+		serviceImples.put("YoloV7e6", new YoloV7ObjectDetectionService("yolov7-e6.pt"));
+		serviceImples.put("YoloV7d6", new YoloV7ObjectDetectionService("yolov7-d6.pt"));
+		serviceImples.put("YoloV7e2e", new YoloV7ObjectDetectionService("yolov7-e6e.pt"));
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
 

@@ -1,0 +1,98 @@
+package org.langrid.mlgridservices.service.impl;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.langrid.mlgridservices.service.ServiceInvokerContext;
+import org.langrid.mlgridservices.util.GPULock;
+import org.langrid.service.ml.Box2d;
+import org.langrid.service.ml.ObjectDetectionResult;
+import org.langrid.service.ml.ObjectDetectionService;
+
+import jp.go.nict.langrid.commons.io.FileNameUtil;
+import jp.go.nict.langrid.commons.io.FileUtil;
+import jp.go.nict.langrid.commons.io.StreamUtil;
+import jp.go.nict.langrid.commons.util.ArrayUtil;
+import lombok.Data;
+
+public class YoloV7ObjectDetectionService implements ObjectDetectionService{
+	@Data
+	static class YoloResult{
+		private double[] box;
+		private double conf;
+		private String label;
+	}
+
+	public YoloV7ObjectDetectionService(String modelName){
+		this.modelName = modelName;
+	}
+
+	@Override
+	public ObjectDetectionResult[] detect(String imageFormat, byte[] image,
+			String labelLanguage, int maxResults) {
+		try{
+			var tempDir = new File(baseDir, "temp");
+			tempDir.mkdirs();
+			var temp = FileUtil.createUniqueFile(tempDir, "image-", ".jpg");
+			Files.write(temp.toPath(), image);
+			var results = mapper.createParser(run(modelName, temp.getName())).readValueAs(YoloResult[].class);
+			return ArrayUtil.collect(results, ObjectDetectionResult.class, r->new ObjectDetectionResult(
+					new Box2d(r.box[0], r.box[1], r.box[2] - r.box[0], r.box[3] - r.box[1]),
+					r.getLabel(), r.getConf()));
+		} catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	public String run(String modelName, String imgFile){
+		try(var l = GPULock.acquire()){
+			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/"
+					+ "docker-compose run --rm "
+					+ "-v $(pwd)/detect.py:/workspace/yolov7/detect.py "
+					+ "-v $(pwd)/temp/" + imgFile + ":/workspace/yolov7/" + imgFile + " "
+					+ "-v $(pwd)/temp/" + imgFile + "_result:/workspace/yolov7/runs/detect/prj "
+					+ "service "
+					+ "python detect.py --source " + imgFile + " "
+					+ "--weights /work/weights/" + modelName + " "
+					+ "--conf 0.25 --img-size 1280 --device 0 --save-txt --nosave "
+					+ "--name prj --no-trace --save-conf"
+				  ;
+			var pb = new ProcessBuilder("bash", "-c", cmd);
+			pb.directory(baseDir);
+			try(var t = ServiceInvokerContext.startServiceTimer()){
+				var proc = pb.start();
+				try {
+					proc.waitFor();
+					t.close();
+					var res = proc.exitValue();
+					if(res == 0) {
+						var outDir = new File(new File(baseDir, "temp"), imgFile + "_result");
+						var outFile = new File(outDir, FileNameUtil.changeExt(imgFile, "txt"));
+						return new String(Files.readAllBytes(outFile.toPath()), StandardCharsets.UTF_8);
+					} else {
+						throw new RuntimeException(StreamUtil.readAsString(
+							proc.getErrorStream(), "UTF-8"));
+					}
+				} finally {
+					proc.destroy();
+				}
+			}
+		} catch(Exception e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	private String modelName = "yolov7s";
+	private File baseDir = new File("./procs/yolov7");
+	private ObjectMapper mapper = new ObjectMapper();
+}
