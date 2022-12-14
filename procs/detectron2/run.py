@@ -27,7 +27,7 @@ def main(config, infile):
 
     import os
     dir = f"{infile}_result"
-    os.makedirs(dir)
+    os.makedirs(dir, exist_ok=True)
     outtext = f"{dir}/result.json"
     outmaskprefix = f"{dir}/mask_"
 
@@ -40,6 +40,7 @@ def main(config, infile):
         ret = {}
         box = list(map(lambda t:float(t), o.pred_boxes[i].tensor.cpu().numpy()[0]))
         ret["label"] = names[o.pred_classes[i]]
+        ret["conf"] = o.scores[i].item()
         ret["box"] = box
         results.append(ret)
 
