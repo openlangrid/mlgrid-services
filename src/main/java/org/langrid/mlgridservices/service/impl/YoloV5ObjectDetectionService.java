@@ -9,12 +9,12 @@ import java.nio.file.Files;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
+import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.service.ml.Box2d;
 import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
 
-import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.commons.io.StreamUtil;
 import jp.go.nict.langrid.commons.util.ArrayUtil;
 import lombok.Data;
@@ -37,7 +37,7 @@ public class YoloV5ObjectDetectionService implements ObjectDetectionService{
 		try{
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var temp = FileUtil.createUniqueFile(tempDir, "image-", ".jpg");
+			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "image-", ".jpg");
 			Files.write(temp.toPath(), image);
 			var results = mapper.createParser(run(modelName, temp)).readValueAs(YoloResult[].class);
 			return ArrayUtil.collect(results, ObjectDetectionResult.class, r->new ObjectDetectionResult(

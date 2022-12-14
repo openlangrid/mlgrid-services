@@ -1,26 +1,20 @@
 package org.langrid.mlgridservices.service.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
+import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.service.ml.Box2d;
 import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
 
 import jp.go.nict.langrid.commons.io.FileNameUtil;
-import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.commons.io.StreamUtil;
 import jp.go.nict.langrid.commons.util.ArrayUtil;
 import lombok.Data;
@@ -43,7 +37,7 @@ public class YoloV7ObjectDetectionService implements ObjectDetectionService{
 		try{
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var temp = FileUtil.createUniqueFile(tempDir, "image-", ".jpg");
+			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "image-", ".jpg");
 			Files.write(temp.toPath(), image);
 			var results = mapper.createParser(run(modelName, temp.getName())).readValueAs(YoloResult[].class);
 			return ArrayUtil.collect(results, ObjectDetectionResult.class, r->new ObjectDetectionResult(
