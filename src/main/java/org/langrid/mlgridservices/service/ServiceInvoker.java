@@ -17,6 +17,7 @@ import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
+import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.DummySpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
@@ -175,6 +176,11 @@ public class ServiceInvoker {
 		serviceImples.put("YoloV7e6", new YoloV7ObjectDetectionService("yolov7-e6.pt"));
 		serviceImples.put("YoloV7d6", new YoloV7ObjectDetectionService("yolov7-d6.pt"));
 		serviceImples.put("YoloV7e2e", new YoloV7ObjectDetectionService("yolov7-e6e.pt"));
+
+		serviceImples.put("Detectron2CCR050FPN1x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"));
+		serviceImples.put("Detectron2CCR050FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"));
+		serviceImples.put("Detectron2CCR101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"));
+		serviceImples.put("Detectron2CCX101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"));
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
 

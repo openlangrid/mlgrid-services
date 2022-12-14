@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /work
+    runtime: nvidia
+    volumes:
+      - .:/work
+      - ../cache/torch:/root/.torch
