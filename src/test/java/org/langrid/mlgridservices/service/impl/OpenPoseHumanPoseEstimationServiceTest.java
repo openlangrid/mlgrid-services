@@ -15,10 +15,10 @@ public class OpenPoseHumanPoseEstimationServiceTest {
 	@Test
     public void test() throws Throwable{
         var s = new OpenPoseHumanPoseEstimationService();
-        var ret = s.estimate("image/jpeg",
+        var ret = s.estimate(
             Files.readAllBytes(Path.of("./procs/human_pose_estimation_openpose/IP210215TAN000004000.jpeg")),
-            100);
+            "image/jpeg");
         System.out.println(new ObjectMapper().writeValueAsString(ret));
-        assertEquals(3, ret.length);
+        assertEquals(10, ret.getPoses().length);
     }
 }

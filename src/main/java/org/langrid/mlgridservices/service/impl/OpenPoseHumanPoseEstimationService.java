@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
-import org.langrid.service.ml.HumanPoseEstimation3dService;
+import org.langrid.service.ml.interim.HumanPoseEstimation3dResult;
+import org.langrid.service.ml.interim.HumanPoseEstimation3dService;
 import org.langrid.service.ml.Point3d;
 
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
@@ -27,7 +27,7 @@ public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3d
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map<String, Point3d>[] estimate(String format, byte[] image, int maxResults)
+	public HumanPoseEstimation3dResult estimate(byte[] image, String imageFormat)
 	throws UnsupportedLanguageException{
 		try {
 			var tempDir = new File(baseDir, "temp");
@@ -36,17 +36,21 @@ public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3d
 			var outJsonFile = infile.toString() + ".out.json";
 			Files.write(infile.toPath(), image);
 			run("run.py", infile);
-			var ret = new ArrayList<Map<String, Point3d>>();
+			var poses = new ArrayList<Map<String, Point3d>>();
 			var json = Files.readString(Path.of(outJsonFile));
-			for(Map<String, double[]> r : mapper.readValue(json,
-					new TypeReference<List<Map<String, double[]>>>(){})) {
+			var result = mapper.readValue(json, Map.class);
+			for(Map<String, List<Double>> r : (List<Map<String, List<Double>>>)result.get("poses")){
 				var h = new HashMap<String, Point3d>();
-				for(Map.Entry<String, double[]> e : r.entrySet()){
-					h.put(e.getKey(), new Point3d(e.getValue()[0], e.getValue()[1], e.getValue()[2]));
+				for(Map.Entry<String, List<Double>> e : r.entrySet()){
+					h.put(e.getKey(), new Point3d(e.getValue().get(0),
+						e.getValue().get(1), e.getValue().get(2)));
 				}
-				ret.add(h);
+				poses.add(h);
 			}
-			return ret.toArray(new Map[]{});
+			return new HumanPoseEstimation3dResult(
+				((Number)result.get("width")).intValue(),
+				((Number)result.get("height")).intValue(),
+				poses.toArray(new Map[]{}));
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {
