@@ -31,13 +31,18 @@ datum = op.Datum()
 imageToProcess = cv2.imread(infile)
 datum.cvInputData = imageToProcess
 wrapper.emplaceAndPop(op.VectorDatum([datum]))
-result = list()
+poses = list()
 if len(datum.poseKeypoints) > 0:
   for i, kps in enumerate(datum.poseKeypoints):
     pose = dict()
     for j, kp in enumerate(kps):
       pose[partNames[j]] = kp.tolist()
-    result.append(pose)
+    poses.append(pose)
+h, w, _ = imageToProcess.shape
+result = {
+  "width": w, "height": h,
+  "poses": poses
+}
 
 # 結果の書き出し
 print("write result")
