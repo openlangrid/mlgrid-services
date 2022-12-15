@@ -10,6 +10,6 @@ public class YoloV7ObjectDetectionServiceTest {
 	public void test() throws Throwable{
 		var s = new YoloV7ObjectDetectionService("yolov7-e6e.pt");
 		var image = Files.readAllBytes(new File("procs/yolov7/sample/zidane.jpg").toPath());
-		s.detect("image/jpeg", image, "en", 100);
+		s.detect(image, "image/jpeg","en");
 	}
 }

@@ -17,13 +17,18 @@ file = pathlib.Path(input_file)
 results = model(file)
 
 # Results
+import cv2
+h, w, _ = cv2.imread(file).shape
+result = {"width": w, "height": h}
 crops = []
 for pred in results.pred:
   if pred.shape[0]:
     for *box, conf, cls in reversed(pred):  # xyxy, confidence, class
       label = f'{results.names[int(cls)]}'
       crops.append({
-        'box': list(map(lambda t:float(t), box)),
+        'label': label,
         'conf': float(conf),
-        'label': label})
-print("Pred:", json.dumps(crops))
+        'box': list(map(lambda t:float(t), box)),
+        })
+result["results"] = crops
+print("Pred:", json.dumps(result))

@@ -8,7 +8,7 @@ import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.YoloV5ObjectDetectionService;
-import org.langrid.service.ml.ObjectDetectionService;
+import org.langrid.service.ml.interim.ObjectDetectionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +32,9 @@ public class YoloV5ServiceGroup implements ServiceGroup{
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
-			var a2 = invocation.getArgs()[1];
-			if(a2 instanceof String){
-				invocation.getArgs()[1] = Base64.getDecoder().decode((String)a2);
+			var a1 = invocation.getArgs()[0];
+			if(a1 instanceof String){
+				invocation.getArgs()[0] = Base64.getDecoder().decode((String)a1);
 			}
 			try(var t = ServiceInvokerContext.startServiceTimer()){
 				return new Response(

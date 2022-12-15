@@ -120,15 +120,18 @@ def detect(save_img=False):
                 # Write results
                 if save_txt:
                     import json
-                    crops = []
                     with open(txt_path + '.txt', 'w') as f:
+                        crops = []
                         for *box, conf, cls in reversed(det):  # xyxy, confidence, class
                             label = f'{names[int(cls)]}'
                             crops.append({
-                                'box': list(map(lambda t:float(t), box)),
-                                'conf': float(conf),
-                                'label': label})
-                        f.write(json.dumps(crops))
+                                "label": label,
+                                "conf": float(conf),
+                                "box": list(map(lambda t:float(t), box))
+                            })
+                        h, w, _ = im0.shape
+                        result = {"width": w, "height": h, "results": crops}
+                        f.write(json.dumps(result))
 #                    if save_txt:  # Write to file
 #                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
 #                        label = f'{names[int(cls)]}'

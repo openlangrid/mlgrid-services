@@ -6,43 +6,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
-import org.langrid.service.ml.Box2d;
-import org.langrid.service.ml.ObjectDetectionResult;
-import org.langrid.service.ml.ObjectDetectionService;
+import org.langrid.service.ml.interim.ObjectDetectionResult;
+import org.langrid.service.ml.interim.ObjectDetectionService;
 
 import jp.go.nict.langrid.commons.io.StreamUtil;
-import jp.go.nict.langrid.commons.util.ArrayUtil;
-import lombok.Data;
 
-public class YoloV5ObjectDetectionService implements ObjectDetectionService{
-	@Data
-	static class YoloResult{
-		private double[] box;
-		private double conf;
-		private String label;
+public class YoloV5ObjectDetectionService
+extends AbstractObjectDetectionService
+implements ObjectDetectionService{
+	public YoloV5ObjectDetectionService(){
 	}
-
 	public YoloV5ObjectDetectionService(String modelName){
 		this.modelName = modelName;
 	}
 
 	@Override
-	public ObjectDetectionResult[] detect(String imageFormat, byte[] image,
-			String labelLanguage, int maxResults) {
+	public ObjectDetectionResult detect(byte[] image, String imageFormat, 
+			String labelLanguage) {
 		try{
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "image-", ".jpg");
 			Files.write(temp.toPath(), image);
-			var results = mapper.createParser(run(modelName, temp)).readValueAs(YoloResult[].class);
-			return ArrayUtil.collect(results, ObjectDetectionResult.class, r->new ObjectDetectionResult(
-					new Box2d(r.box[0], r.box[1], r.box[2] - r.box[0], r.box[3] - r.box[1]),
-					r.getLabel(), r.getConf()));
+			return buildResult(run(modelName, temp));
 		} catch(IOException e){
 			throw new RuntimeException(e);
 		}
@@ -82,6 +71,5 @@ public class YoloV5ObjectDetectionService implements ObjectDetectionService{
 	}
 
 	private String modelName = "yolov5s";
-	private File baseDir = new File("./procs/object_detection_yolov5");
-	private ObjectMapper mapper = new ObjectMapper();
+	private File baseDir = new File("./procs/yolov5");
 }
