@@ -10,16 +10,15 @@ import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.TextGuidedImageConversionService;
 import org.langrid.service.ml.interim.Image;
-import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
 import org.langrid.service.ml.interim.TextGuidedImageManipulationService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class AbstractTextGuidedImageManipulationService implements TextGuidedImageManipulationService{
+public class AbstractTextGuidedImageManipulationService
+implements TextGuidedImageManipulationService{
     private final File baseDir;
 	private String modelPath;
 	private String supportedLang = "en";
@@ -44,7 +43,7 @@ public class AbstractTextGuidedImageManipulationService implements TextGuidedIma
 	}
 
 	@Override
-	public Image manipulate(String language, String prompt, String format, byte[] image)
+	public Image[] manipulate(byte[] image, String imageFormat, String language, String prompt, int numberOfTimes)
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
 		if(!LanguageUtil.matches(supportedLang, language))
 			throw new UnsupportedLanguageException("language", language);
@@ -52,26 +51,26 @@ public class AbstractTextGuidedImageManipulationService implements TextGuidedIma
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "out-", "");
-			var infile = new File(tempDir, temp.getName() + "." + FileUtil.getExtFromFormat(format));
+			var infile = new File(tempDir, temp.getName() + "." + FileUtil.getExtFromFormat(imageFormat));
 			Files.write(infile.toPath(), image, StandardOpenOption.CREATE);
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python3 run.py \"%s\" %d temp/%s --modelPath \"%s\" --initImage \"temp/%s\"",
-					prompt.replaceAll("\"", "\\\""), 1, temp.getName(), 
+					prompt.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(), 
 					modelPath, infile.getName());
 			System.out.println(cmd);
 			try(var t = ServiceInvokerContext.startServiceTimer()){
 				ProcessUtil.runAndWait(cmd, baseDir);
 			}
-			var imgFile = new File(temp.toString() + "_0.png");
-			if(!imgFile.exists()){
-				throw new RuntimeException("failed to generate image.");
+			var ret = new ArrayList<Image>();
+			for(var i = 0; i < numberOfTimes; i++){
+				var imgFile = new File(temp.toString() + "_" + i + ".png");
+				if(!imgFile.exists()) break;
+				ret.add(new Image("image/png",
+					Files.readAllBytes(imgFile.toPath())));
 			}
-			return new Image(
-				"image/png",
-				Files.readAllBytes(imgFile.toPath())
-				);
+			return ret.toArray(new Image[]{});
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

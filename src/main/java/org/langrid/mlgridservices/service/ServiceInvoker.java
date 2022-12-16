@@ -164,18 +164,22 @@ public class ServiceInvoker {
 				"run_sd21.py");
 		}
 
-		serviceImples.put("StableDiffusionIMSD041", stableDiffusionI2I);
-		serviceImples.put("WaifuDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
-		serviceImples.put("TrinartStableDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
-		serviceImples.put("TrinartWaifuIMSD041", new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
-		serviceImples.put("DiscoDiffusionIMSD041", new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
+		// Image Manipulation
+		{
+			var postfix = "DS_0_04_1";
+			serviceImples.put("StableDiffusionIM" + postfix, stableDiffusionI2I);
+			serviceImples.put("WaifuDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
+			serviceImples.put("TrinartStableDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));
+			serviceImples.put("TrinartWaifuIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
+			serviceImples.put("DiscoDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
+		}
 
 		serviceImples.put("YoloV7", new YoloV7ObjectDetectionService("yolov7.pt"));
 		serviceImples.put("YoloV7x", new YoloV7ObjectDetectionService("yolov7x.pt"));
 		serviceImples.put("YoloV7w6", new YoloV7ObjectDetectionService("yolov7-w6.pt"));
 		serviceImples.put("YoloV7e6", new YoloV7ObjectDetectionService("yolov7-e6.pt"));
 		serviceImples.put("YoloV7d6", new YoloV7ObjectDetectionService("yolov7-d6.pt"));
-		serviceImples.put("YoloV7e2e", new YoloV7ObjectDetectionService("yolov7-e6e.pt"));
+		serviceImples.put("YoloV7e6e", new YoloV7ObjectDetectionService("yolov7-e6e.pt"));
 
 		serviceImples.put("Detectron2CCR050FPN1x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"));
 		serviceImples.put("Detectron2CCR050FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"));
