@@ -5,6 +5,6 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public interface SpeechRecognitionService {
-	SpeechRecognitionResult[] recognize(String language, String format, byte[] audio)
+	SpeechRecognitionResult[] recognize(byte[] audio, String audioFormat, String language)
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException;
 }

@@ -10,8 +10,10 @@ public class WhisperSpeechRecognitionServiceTest {
 	@Test
 	public void test() throws Throwable{
 		var sv = new WhisperSpeechRecognitionService();
-		for(var r : sv.recognize("ja", "audio/x-wav",
-			Files.readAllBytes(Paths.get("./procs/speech_recognition_whisper/test_ja_16k.wav")))){
+		for(var r : sv.recognize(
+			Files.readAllBytes(Paths.get("./procs/speech_recognition_whisper/test_ja_16k.wav")),
+			"audio/x-wav", "ja"
+			)){
 			var s = r.getStartMillis();
 			var sm = s / 1000 / 60;
 			var ss = (s - sm) / 1000;

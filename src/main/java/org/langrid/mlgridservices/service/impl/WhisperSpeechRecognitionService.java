@@ -42,7 +42,7 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 	}
 
 	@Override
-	public SpeechRecognitionResult[] recognize(String language, String format, byte[] audio)
+	public SpeechRecognitionResult[] recognize(byte[] audio, String audioFormat, String language)
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		var lang = codeToLang.get(language);
 		if(lang == null){
