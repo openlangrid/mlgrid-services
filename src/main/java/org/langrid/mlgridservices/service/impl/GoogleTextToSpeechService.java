@@ -26,8 +26,8 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 import jp.go.nict.langrid.service_1_2.speech.Speech;
 import jp.go.nict.langrid.service_1_2.speech.TextToSpeechService;
 
-//import com.google.api.gax.core.FixedCredentialsProvider;
-//import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.texttospeech.v1.AudioConfig;
 import com.google.cloud.texttospeech.v1.AudioEncoding;
 import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
@@ -46,10 +46,7 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 			throws AccessLimitExceededException, InvalidParameterException, NoAccessPermissionException,
 			NoValidEndpointsException, ProcessFailedException, ServerBusyException, ServiceNotActiveException,
 			ServiceNotFoundException, UnsupportedLanguageException {
-		try(var t = ServiceInvokerContext.startServiceTimer()){
-			return null;
-		}
-/*		var lang = language.toLowerCase();
+		var lang = language.toLowerCase();
 		var vt = voiceType.toLowerCase();
 		var c = configs.get(Config.key(lang, vt));
 		if(c == null){
@@ -68,7 +65,8 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 				 "no supported combinations of language and voiceType");
 		}
 
-		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create(settings)) {
+		try (var t = ServiceInvokerContext.startServiceTimer();
+			var textToSpeechClient = TextToSpeechClient.create(settings)) {
 			var input = SynthesisInput.newBuilder().setText(text).build();
 			var voice = VoiceSelectionParams.newBuilder()
 					.setLanguageCode(c.langCode)
@@ -82,8 +80,7 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 			return new Speech(voiceType, audioType, audioContents.toByteArray());
 		} catch(IOException e){
 			throw new ProcessFailedException(e);
-		}	
-*/
+		}
 	}
 
 	@Override
@@ -109,7 +106,7 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 
 	@PostConstruct
 	private void init() {
-/*		try(var is = new FileInputStream(apiKeyFile)){
+		try(var is = new FileInputStream(apiKeyFile)){
 			var credentialsProvider = FixedCredentialsProvider.create(
 				ServiceAccountCredentials.fromStream(is));
 			settings = TextToSpeechSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
@@ -133,7 +130,7 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}
-	*/	}
+	}
 
 	static class Config{
 		private String langCode;
