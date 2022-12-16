@@ -51,8 +51,8 @@ public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
-		serviceImples.put("DummySpeechRecognition", new DummySpeechRecognitionService());
-		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
+//		serviceImples.put("DummySpeechRecognition", new DummySpeechRecognitionService());
+//		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
 		serviceImples.put("CodeFormer", codeFormer);
 		serviceImples.put("Empath", empath);
 		serviceImples.put("GoogleTTS", googleTts);
