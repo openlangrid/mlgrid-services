@@ -97,6 +97,7 @@ def detect(save_img=False):
         if classify:
             pred = apply_classifier(pred, modelc, img, im0s)
 
+        print(f"images: {len(pred)}")
         # Process detections
         for i, det in enumerate(pred):  # detections per image
             if webcam:  # batch_size >= 1
@@ -108,6 +109,7 @@ def detect(save_img=False):
             save_path = str(save_dir / p.name)  # img.jpg
             txt_path = str(save_dir / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # img.txt
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
+            print(f"detections: {len(det)}")
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
@@ -117,21 +119,21 @@ def detect(save_img=False):
                     n = (det[:, -1] == c).sum()  # detections per class
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
-                # Write results
-                if save_txt:
-                    import json
-                    with open(txt_path + '.txt', 'w') as f:
-                        crops = []
-                        for *box, conf, cls in reversed(det):  # xyxy, confidence, class
-                            label = f'{names[int(cls)]}'
-                            crops.append({
-                                "label": label,
-                                "conf": float(conf),
-                                "box": list(map(lambda t:float(t), box))
-                            })
-                        h, w, _ = im0.shape
-                        result = {"width": w, "height": h, "results": crops}
-                        f.write(json.dumps(result))
+            # Write results
+            if save_txt:
+                import json
+                with open(txt_path + '.txt', 'w') as f:
+                    crops = []
+                    for *box, conf, cls in reversed(det):  # xyxy, confidence, class
+                        label = f'{names[int(cls)]}'
+                        crops.append({
+                            "label": label,
+                            "conf": float(conf),
+                            "box": list(map(lambda t:float(t), box))
+                        })
+                    h, w, _ = im0.shape
+                    result = {"width": w, "height": h, "results": crops}
+                    f.write(json.dumps(result))
 #                    if save_txt:  # Write to file
 #                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
 #                        label = f'{names[int(cls)]}'
