@@ -3,7 +3,7 @@ package org.langrid.service.ml.interim;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
-public interface ImageToTextService {
-	String generate(String format, byte[] image)
+public interface ImageConversionService {
+	Image convert(byte[] image, String imageFormat)
 	throws InvalidParameterException, ProcessFailedException;
 }

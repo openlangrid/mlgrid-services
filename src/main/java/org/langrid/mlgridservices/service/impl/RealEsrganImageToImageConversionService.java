@@ -7,22 +7,23 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.ImageToImageConversionResult;
-import org.langrid.service.ml.ImageToImageConversionService;
+import org.langrid.service.ml.interim.Image;
+import org.langrid.service.ml.interim.ImageConversionService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
-public class RealEsrganImageToImageConversionService implements ImageToImageConversionService{
+public class RealEsrganImageToImageConversionService
+implements ImageConversionService{
     private File baseDir = new File("./procs/image_to_image_real_esrgan");
 
 	@Override
-	public ImageToImageConversionResult convert(String format, byte[] image)
+	public Image convert(byte[] image, String format)
 			throws InvalidParameterException, ProcessFailedException {
 		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var inputFile = FileUtil.writeTempFile(tempDir, format, image);
+			var inputFile = FileUtil.writeTempFile(tempDir, image, format);
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +
@@ -42,7 +43,9 @@ public class RealEsrganImageToImageConversionService implements ImageToImageConv
 				if(outputFile.exists()) break;
 				throw new ProcessFailedException("failed to convert image.");
 			} while(false);
-			return new ImageToImageConversionResult(Files.readAllBytes(outputFile.toPath()));
+			return new Image(
+				Files.readAllBytes(outputFile.toPath()),
+				"image/png");
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

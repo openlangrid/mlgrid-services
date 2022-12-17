@@ -68,7 +68,7 @@ public class ServiceInvoker {
 
 		serviceImples.put("WaifuDiffusionDS0_03_0", waifuDiffusion);
 		{
-			var postfix = "DS_0_04_1";
+			var postfix = "_DS_0_04_1";
 			serviceImples.put("StableDiffusion" + postfix, stableDiffusion);
 			serviceImples.put("WaifuDiffusion" + postfix, new StableDiffusionTextGuidedImageGenerationService("hakurei/waifu-diffusion"));
 			serviceImples.put("TrinartStableDiffusion" + postfix, new StableDiffusionTextGuidedImageGenerationService("naclbit/trinart_stable_diffusion_v2"));
@@ -76,7 +76,7 @@ public class ServiceInvoker {
 			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusionTextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 		}
 		{
-			var postfix = "DS_0_05_1";
+			var postfix = "_DS_0_05_1";
 			serviceImples.put("StableDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService());
 			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
 			serviceImples.put("WaifuDiffusion" + postfix, new StableDiffusion051TextGuidedImageGenerationService("hakurei/waifu-diffusion"));
@@ -84,7 +84,7 @@ public class ServiceInvoker {
 			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusion051TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 		}
 		{
-			var postfix = "DS_0_06_0";
+			var postfix = "_DS_0_06_0";
 			serviceImples.put("StableDiffusion" + postfix + "SD14", new StableDiffusion060TextGuidedImageGenerationService());
 			serviceImples.put("StableDiffusion" + postfix + "SD15", new StableDiffusion060TextGuidedImageGenerationService());
 			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusion060TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
@@ -93,7 +93,7 @@ public class ServiceInvoker {
 			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusion060TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 		}
 		{
-			var postfix = "DS_0_07_0";
+			var postfix = "_DS_0_07_0";
 			serviceImples.put("StableDiffusion" + postfix + "SD14", new StableDiffusion070TextGuidedImageGenerationService());
 			serviceImples.put("StableDiffusion" + postfix + "SD15", new StableDiffusion070TextGuidedImageGenerationService());
 			serviceImples.put("DiscoDiffusion" + postfix, new StableDiffusion070TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
@@ -102,7 +102,7 @@ public class ServiceInvoker {
 			serviceImples.put("TrinartWaifu" + postfix, new StableDiffusion070TextGuidedImageGenerationService("doohickey/trinart-waifu-diffusion-50-50"));
 		}
 		{
-			var postfix = "DS_0_07_2";
+			var postfix = "_DS_0_07_2";
 			serviceImples.put("MidjourneyV4" + postfix, new DiffusersTextGuidedImageGenerationService(
 				"./procs/diffusers_0_7_2", "prompthero/midjourney-v4-diffusion", "mdjrny-v4 style"));
 			serviceImples.put("Ghibli" + postfix, new DiffusersTextGuidedImageGenerationService(
@@ -110,7 +110,7 @@ public class ServiceInvoker {
 		}
 		{
 			var dir = "./procs/diffusers_0_8_1";
-			var postfix = "DS_0_08_1";
+			var postfix = "_DS_0_08_1";
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
 			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
@@ -128,7 +128,7 @@ public class ServiceInvoker {
 
 		{
 			var dir = "./procs/diffusers_0_9_0";
-			var postfix = "DS_0_09_0";
+			var postfix = "_DS_0_09_0";
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
 			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
@@ -142,7 +142,7 @@ public class ServiceInvoker {
 		}
 		{
 			var dir = "./procs/diffusers_0_10_2";
-			var postfix = "DS_0_10_2";
+			var postfix = "_DS_0_10_2";
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
 			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
@@ -166,7 +166,7 @@ public class ServiceInvoker {
 
 		// Image Manipulation
 		{
-			var postfix = "DS_0_04_1";
+			var postfix = "_DS_0_04_1";
 			serviceImples.put("StableDiffusionIM" + postfix, stableDiffusionI2I);
 			serviceImples.put("WaifuDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("hakurei/waifu-diffusion"));
 			serviceImples.put("TrinartStableDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("naclbit/trinart_stable_diffusion_v2"));

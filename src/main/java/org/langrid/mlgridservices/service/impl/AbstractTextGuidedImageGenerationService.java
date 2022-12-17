@@ -76,8 +76,10 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 			for(var i = 0; i < numberOfTimes; i++){
 				var imgFile = new File(temp.toString() + "_" + i + ".png");
 				if(!imgFile.exists()) break;
-				ret.add(new Image("image/png",
-					Files.readAllBytes(imgFile.toPath())));
+				ret.add(new Image(
+					Files.readAllBytes(imgFile.toPath()),
+					"image/png"
+					));
 			}
 			return ret.toArray(new Image[]{});
 		} catch(RuntimeException e) {

@@ -7,20 +7,25 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.ImageToTextService;
+import org.langrid.service.ml.interim.ImageToTextConversionService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
-public class ClipInterrogatorImageToTextService implements ImageToTextService{
+public class ClipInterrogatorImageToTextService
+implements ImageToTextConversionService{
 	private File baseDir = new File("procs/image_to_text_clip_interrogator");
 	
 	@Override
-	public String generate(String format, byte[] image) throws InvalidParameterException, ProcessFailedException {
+	public String convert(byte[] image, String imageFormat, String textLang)
+	throws InvalidParameterException, ProcessFailedException {
+		if(textLang.length() == 0 || !textLang.split("-")[0].equals("en")){
+			throw new InvalidParameterException("textLang", "invalid textLang");
+		}
 		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var infile = FileUtil.writeTempFile(tempDir, format, image);
+			var infile = FileUtil.writeTempFile(tempDir, image, imageFormat);
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +

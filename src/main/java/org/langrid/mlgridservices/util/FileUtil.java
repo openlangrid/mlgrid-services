@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FileUtil {
-	public static File writeTempFile(File tempDir, String format, byte[] content)
+	public static File writeTempFile(File tempDir, byte[] content, String format)
 	throws IOException{
 		var file = FileUtil.createUniqueFileWithDateTime(
 			tempDir, "temp-", "." + FileUtil.getExtFromFormat(format));

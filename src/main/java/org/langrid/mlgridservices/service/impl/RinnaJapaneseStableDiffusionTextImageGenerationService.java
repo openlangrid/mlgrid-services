@@ -48,8 +48,8 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 				var imgFile = new File(temp.toString() + "_" + i + ".png");
 				if(!imgFile.exists()) break;
 				ret.add(new Image(
-					"image/jpeg",
-					Files.readAllBytes(imgFile.toPath())
+					Files.readAllBytes(imgFile.toPath()),
+					"image/jpeg"
 				));
 			}
 			return ret.toArray(new Image[]{});

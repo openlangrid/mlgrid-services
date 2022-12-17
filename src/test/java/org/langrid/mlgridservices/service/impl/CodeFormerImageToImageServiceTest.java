@@ -10,6 +10,6 @@ public class CodeFormerImageToImageServiceTest {
 	public void test() throws Throwable{
 		var s = new CodeFormerImageToImageConversionService();
 		var image = Files.readAllBytes(new File("procs/image_to_image_codeformer/inputs/04/04.jpg").toPath());
-		s.convert("image/jpeg", image);
+		s.convert(image, "image/jpeg");
 	}
 }

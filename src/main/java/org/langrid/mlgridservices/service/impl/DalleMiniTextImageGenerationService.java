@@ -45,8 +45,8 @@ public class DalleMiniTextImageGenerationService implements TextGuidedImageGener
 				var imgFile = new File(tempDir, temp.getName() + "_" + i + ".jpg");
 				if(!imgFile.exists()) break;
 				ret.add(new Image(
-					"image/jpeg",
-					Files.readAllBytes(imgFile.toPath())
+					Files.readAllBytes(imgFile.toPath()),
+					"image/jpeg"
 				));
 			}
 			return ret.toArray(new Image[]{});

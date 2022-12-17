@@ -8,22 +8,23 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.ImageToImageConversionResult;
-import org.langrid.service.ml.ImageToImageConversionService;
+import org.langrid.service.ml.interim.Image;
+import org.langrid.service.ml.interim.ImageConversionService;
 import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
 @Service
-public class CodeFormerImageToImageConversionService implements ImageToImageConversionService{
+public class CodeFormerImageToImageConversionService
+implements ImageConversionService{
     private File baseDir = new File("./procs/image_to_image_codeformer");
 
 	public CodeFormerImageToImageConversionService(){
 	}
 
 	@Override
-	public ImageToImageConversionResult convert(String format, byte[] image)
+	public Image convert(byte[] image, String imageFormat)
 			throws InvalidParameterException, ProcessFailedException {
 		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
@@ -31,7 +32,7 @@ public class CodeFormerImageToImageConversionService implements ImageToImageConv
 			inputsDir.mkdirs();
 			var resultsDir = new File(tempDir, "results"); // docker-composeでマウントされる
 			var inputDir = FileUtil.createUniqueDirectoryWithDateTime(inputsDir, "input-");
-			var fileName = "input." + FileUtil.getExtFromFormat(format);
+			var fileName = "input." + FileUtil.getExtFromFormat(imageFormat);
 			Files.write(
 				new File(inputDir, fileName).toPath(),
 				image, StandardOpenOption.CREATE_NEW);
@@ -47,7 +48,9 @@ public class CodeFormerImageToImageConversionService implements ImageToImageConv
 			var resultFile = new File(new File(new File(resultsDir, inputDir.getName() + "_0.7"), "final_results"), "input.png");
 			System.out.println("result: " + resultFile);
 			if(resultFile.exists()){
-				return new ImageToImageConversionResult(Files.readAllBytes(resultFile.toPath()));
+				return new Image(
+					Files.readAllBytes(resultFile.toPath()),
+					"image/png");
 			}
 			throw new ProcessFailedException("failed to convert image.");
 		} catch(RuntimeException e) {

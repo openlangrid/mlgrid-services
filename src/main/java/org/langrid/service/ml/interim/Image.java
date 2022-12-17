@@ -3,9 +3,9 @@ package org.langrid.service.ml.interim;
 public class Image {
 	public Image(){}
 	
-	public Image(String format, byte[] image) {
-		this.format = format;
+	public Image(byte[] image, String format) {
 		this.image = image;
+		this.format = format;
 	}
 
 	public String getFormat() {
