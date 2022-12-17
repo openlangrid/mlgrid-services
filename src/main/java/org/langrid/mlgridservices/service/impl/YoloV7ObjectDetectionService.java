@@ -52,19 +52,26 @@ implements ObjectDetectionService{
 				  ;
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
+			pb.redirectErrorStream(true);
 			try(var t = ServiceInvokerContext.startServiceTimer()){
 				var proc = pb.start();
 				try {
 					proc.waitFor();
 					t.close();
 					var res = proc.exitValue();
+					var outDir = new File(new File(baseDir, "temp"), imgFile + "_result");
+					var outFile = new File(outDir, FileNameUtil.changeExt(imgFile, "txt"));
 					if(res == 0) {
-						var outDir = new File(new File(baseDir, "temp"), imgFile + "_result");
-						var outFile = new File(outDir, FileNameUtil.changeExt(imgFile, "txt"));
-						return new String(Files.readAllBytes(outFile.toPath()), StandardCharsets.UTF_8);
+						if(outFile.exists()){
+							return new String(Files.readAllBytes(outFile.toPath()), StandardCharsets.UTF_8);
+						} else{
+							throw new RuntimeException("result not generated: " +
+								StreamUtil.readAsString(proc.getInputStream(), "UTF-8")
+							);
+						}
 					} else {
 						throw new RuntimeException(StreamUtil.readAsString(
-							proc.getErrorStream(), "UTF-8"));
+							proc.getInputStream(), "UTF-8"));
 					}
 				} finally {
 					proc.destroy();
