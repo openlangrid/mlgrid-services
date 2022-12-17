@@ -7,4 +7,4 @@ shift
 OUTPUT_PATH=${3:-temp/out}
 shift
 
-docker-compose run --rm service python run.py "$PROMPT" "$INPUT_FILE" "$OUTPUT_PATH" "$@"
+docker-compose run --rm service python run.py "$INPUT_FILE" "$PROMPT" 1 "$OUTPUT_PATH" "$@"
