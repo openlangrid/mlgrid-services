@@ -19,8 +19,6 @@ import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextServic
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
-import org.langrid.mlgridservices.service.impl.DummySpeechRecognitionService;
-import org.langrid.mlgridservices.service.impl.DummyTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
@@ -51,8 +49,6 @@ public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
-//		serviceImples.put("DummySpeechRecognition", new DummySpeechRecognitionService());
-//		serviceImples.put("DummyTextImageGeneration", new DummyTextImageGenerationService());
 		serviceImples.put("CodeFormer", codeFormer);
 		serviceImples.put("Empath", empath);
 		serviceImples.put("GoogleTTS", googleTts);

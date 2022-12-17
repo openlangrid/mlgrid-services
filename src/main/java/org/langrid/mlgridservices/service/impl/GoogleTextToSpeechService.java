@@ -1,8 +1,8 @@
 package org.langrid.mlgridservices.service.impl;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.mlgridservices.util.LanguageUtil;
+import org.langrid.mlgridservices.util.MapUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,7 @@ import jp.go.nict.langrid.service_1_2.ServiceNotFoundException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 import jp.go.nict.langrid.service_1_2.speech.Speech;
 import jp.go.nict.langrid.service_1_2.speech.TextToSpeechService;
+import lombok.Data;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -48,21 +49,15 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 			ServiceNotFoundException, UnsupportedLanguageException {
 		var lang = language.toLowerCase();
 		var vt = voiceType.toLowerCase();
-		var c = configs.get(Config.key(lang, vt));
-		if(c == null){
-			for(var e : configs.entrySet()){
-				var l = e.getKey();
-				if((LanguageUtil.matches(lang, l) || LanguageUtil.matches(l, lang)) &&
-						(vt.isEmpty() || vt.equals(e.getValue().modelName.toLowerCase()))){
-					c = e.getValue();
-					configs.put(Config.key(lang, vt), c);
-					break;
-				}
-			}
+		Config c = null;
+		var gmToConfig = MapUtil.findValueByPrefix(lang, langToGMToConfig);
+		if(gmToConfig != null){
+			c = MapUtil.findValueByPartial(vt, gmToConfig);
 		}
 		if(c == null){
 			throw new InvalidParameterException("language,voiceType",
-				 "no supported combinations of language and voiceType");
+				 String.format("no supported combinations of language: %s and voiceType: %s",
+				 lang, voiceType));
 		}
 
 		try (var t = ServiceInvokerContext.startServiceTimer();
@@ -106,24 +101,24 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 
 	@PostConstruct
 	private void init() {
-		try(var is = new FileInputStream(apiKeyFile)){
+ 		try(var is = new FileInputStream(apiKeyFile)){
 			var credentialsProvider = FixedCredentialsProvider.create(
 				ServiceAccountCredentials.fromStream(is));
 			settings = TextToSpeechSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}
-
 		try(var is = GoogleTextToSpeechService.class.getResourceAsStream("GoogleTextToSpeechService_langs.json")){
 			var node = new ObjectMapper().readTree(is);
 			for(var n : node.get("voices")){
 				var modelName = n.get("name").asText();
 				var ssmlGender = n.get("ssmlGender").asText();
-				voices.add(modelName);
+				voices.add(ssmlGender + "_" + modelName);
 				for(var langCode : n.get("languageCodes")){
 					var code = langCode.asText();
 					var c = new Config(code, ssmlGender, modelName);
-					configs.put(c.key(), c);
+					langToGMToConfig.computeIfAbsent(c.getLangCode(), k->new LinkedHashMap<>())
+						.put(c.getSsmlGender() + "_" + c.getModelName(), c);
 					languages.add(code);
 				}
 			}
@@ -132,6 +127,7 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 		}
 	}
 
+	@Data
 	static class Config{
 		private String langCode;
 		private String ssmlGender;
@@ -141,15 +137,9 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 			this.ssmlGender = ssmlGender;
 			this.modelName = modelName;
 		}
-		public String key(){
-			return langCode.toLowerCase() + "-" + modelName.toLowerCase();
-		}
-		public static String key(String langCode, String modelName){
-			return langCode.toLowerCase() + "-" + modelName.toLowerCase();
-		}
 	}
 
-	private Map<String, Config> configs = new TreeMap<>();
+	private Map<String, Map<String, Config>> langToGMToConfig = new LinkedHashMap<>();
 	private Set<String> voices = new TreeSet<>();
 	private Set<String> languages = new TreeSet<>();
 
