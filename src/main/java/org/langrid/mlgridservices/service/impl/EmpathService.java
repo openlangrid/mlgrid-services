@@ -18,8 +18,8 @@ import org.apache.http.util.EntityUtils;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ValidationUtil;
-import org.langrid.service.ml.EmotionRecognitionResult;
-import org.langrid.service.ml.SpeechEmotionRecognitionService;
+import org.langrid.service.ml.interim.SpeechEmotionRecognitionResult;
+import org.langrid.service.ml.interim.SpeechEmotionRecognitionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,8 @@ public class EmpathService implements SpeechEmotionRecognitionService{
 			"audio/wav", "audio/x-wav"));
 
 	@Override
-	public EmotionRecognitionResult[] recognize(String language, String audioFormat, byte[] audio)
+	public SpeechEmotionRecognitionResult[] recognize(
+		byte[] audio, String audioFormat, String audioLanguage)
 	throws InvalidParameterException, ProcessFailedException{
 		var temp = new File("temp/" + EmpathService.class.getName());
 		temp.mkdirs();
@@ -66,11 +67,11 @@ public class EmpathService implements SpeechEmotionRecognitionService{
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				var node = om.readTree(EntityUtils.toString(resp.getEntity()));
 				if(node.get("error").asInt() == 0) {
-					var ret = new ArrayList<EmotionRecognitionResult>();
+					var ret = new ArrayList<SpeechEmotionRecognitionResult>();
 					for(var emo : new String[] {"calm", "anger", "joy", "sorrow", "energy"}) {
-						ret.add(new EmotionRecognitionResult(emo, node.get(emo).asDouble() / 50));
+						ret.add(new SpeechEmotionRecognitionResult(emo, node.get(emo).asDouble() / 50));
 					}
-					return ret.toArray(new EmotionRecognitionResult[] {});
+					return ret.toArray(new SpeechEmotionRecognitionResult[] {});
 				} else {
 					throw new ProcessFailedException(node.get("msg").asText());
 				}

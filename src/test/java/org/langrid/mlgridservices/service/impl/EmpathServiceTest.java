@@ -14,9 +14,9 @@ public class EmpathServiceTest {
 	@Test
 	public void test() throws Throwable{
 		System.out.println(new ObjectMapper().writeValueAsString(
-				service.recognize("ja", "audio/x-wav", Files.readAllBytes(
-						new File("./procs/speech_recognition_vosk/test_ja_11k.wav").toPath()
-				))
+				service.recognize(
+					Files.readAllBytes(new File("./procs/speech_recognition_vosk/test_ja_11k.wav").toPath()),
+					"audio/x-wav", "ja")
 			));
 	}
 
