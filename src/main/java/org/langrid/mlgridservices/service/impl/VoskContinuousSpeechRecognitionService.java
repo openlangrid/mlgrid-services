@@ -19,8 +19,8 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.WavRecorder;
 import org.langrid.service.ml.ContinuousSpeechRecognitionConfig;
-import org.langrid.service.ml.ContinuousSpeechRecognitionService;
-import org.langrid.service.ml.ContinuousSpeechRecognitionTranscript;
+import org.langrid.service.ml.interim.ContinuousSpeechRecognitionService;
+import org.langrid.service.ml.interim.ContinuousSpeechRecognitionTranscript;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
@@ -103,16 +103,27 @@ public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechR
 					try{
 						var ret = mapper.readValue(message, Map.class);
 						if(ret.containsKey("partial")){
+							int start = 0;
+							int end = 0;
+							if(ret.containsKey("start")){
+								start = ((Number)ret.get("start")).intValue();
+							}
+							if(ret.containsKey("end")){
+								end = ((Number)ret.get("end")).intValue();
+							}
 							c.notifyResult(
 								new ContinuousSpeechRecognitionTranscript(
-									sentenceId, ret.get("partial").toString(),
+									sentenceId, start, end, ret.get("partial").toString(),
 									false, Double.NaN));
 						} else if(ret.containsKey("text")){
 							int count = 0;
 							double confSum = 0;
 							@SuppressWarnings("unchecked")
 							var result = (List<Map<?, ?>>)ret.get("result");
-							if(result != null){
+							int start = 0, end = 0;
+							if(result != null && result.size() > 0){
+								start = ((Number)result.get(0).get("start")).intValue();
+								end = ((Number)result.get(result.size() - 1).get("end")).intValue();
 								for(var r : result){
 									confSum += ((Number)r.get("conf")).doubleValue();
 									count++;
@@ -124,7 +135,7 @@ public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechR
 								confSum = Double.NaN;
 							}
 							c.notifyResult(new ContinuousSpeechRecognitionTranscript(
-								sentenceId, ret.get("text").toString(),
+								sentenceId, start, end, ret.get("text").toString(),
 								true, confSum));
 							c.sentenceCount++;
 							if(c.closing){
