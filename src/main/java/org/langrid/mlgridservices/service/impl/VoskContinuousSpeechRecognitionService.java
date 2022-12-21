@@ -107,10 +107,10 @@ public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechR
 							int start = 0;
 							int end = 0;
 							if(ret.containsKey("start")){
-								start = ((Number)ret.get("start")).intValue() * 1000;
+								start = (int)((Number)ret.get("start")).doubleValue() * 1000;
 							}
 							if(ret.containsKey("end")){
-								end = ((Number)ret.get("end")).intValue() * 1000;
+								end = (int)((Number)ret.get("end")).doubleValue() * 1000;
 							}
 							c.notifyResult(
 								new ContinuousSpeechRecognitionTranscript(
@@ -123,8 +123,8 @@ public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechR
 							var result = (List<Map<?, ?>>)ret.get("result");
 							int start = 0, end = 0;
 							if(result != null && result.size() > 0){
-								start = ((Number)result.get(0).get("start")).intValue();
-								end = ((Number)result.get(result.size() - 1).get("end")).intValue();
+								start = (int)((Number)result.get(0).get("start")).doubleValue() * 1000;
+								end = (int)((Number)result.get(result.size() - 1).get("end")).doubleValue() * 1000;
 								for(var r : result){
 									confSum += ((Number)r.get("conf")).doubleValue();
 									count++;
