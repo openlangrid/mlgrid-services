@@ -5,11 +5,12 @@ public class ContinuousSpeechRecognitionTranscript {
 	}
 
 	public ContinuousSpeechRecognitionTranscript(
-		int sentenceId, int start, int end, String sentence, boolean fixed, double accuracy) {
+		int sentenceId, int startMillis, int endMillis, String sentence,
+			boolean fixed, double accuracy) {
 		super();
 		this.sentenceId = sentenceId;
-		this.start = start;
-		this.end = end;
+		this.startMillis = startMillis;
+		this.endMillis = endMillis;
 		this.sentence = sentence;
 		this.fixed = fixed;
 		this.accuracy = accuracy;
@@ -21,17 +22,17 @@ public class ContinuousSpeechRecognitionTranscript {
 	public void setSentenceId(int sentenceId) {
 		this.sentenceId = sentenceId;
 	}
-	public int getStart() {
-		return start;
+	public int getStartMillis() {
+		return startMillis;
 	}
-	public void setStart(int start) {
-		this.start = start;
+	public void setStartMillis(int startMillis) {
+		this.startMillis = startMillis;
 	}
-	public int getEnd() {
-		return end;
+	public int getEndMillis() {
+		return endMillis;
 	}
-	public void setEnd(int end) {
-		this.end = end;
+	public void setEndMillis(int endMillis) {
+		this.endMillis = endMillis;
 	}
 	public String getSentence() {
 		return sentence;
@@ -53,8 +54,8 @@ public class ContinuousSpeechRecognitionTranscript {
 	}
 
 	private int sentenceId;
-	private int start;
-	private int end;
+	private int startMillis;
+	private int endMillis;
 	private String sentence;
 	private boolean fixed;
 	private double accuracy;

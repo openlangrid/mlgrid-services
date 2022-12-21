@@ -39,6 +39,9 @@ import org.langrid.mlgridservices.service.management.ServiceManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jp.go.nict.langrid.commons.beanutils.Converter;
 import jp.go.nict.langrid.commons.lang.ClassUtil;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
@@ -246,6 +249,15 @@ public class ServiceInvoker {
 			r.putHeader("timer", sic.timer());
 			serviceGroups.put(serviceId, g); // 処理が正常に終了した場合はserviceIdとグループを関連付けておく。
 			return r;
+		} catch(RuntimeException e){
+			try{
+				System.out.printf("Exception when calling %s.%s(%s)%n",
+					serviceId, invocation.getMethod(),
+					new ObjectMapper().writeValueAsString(invocation.getArgs()));
+			} catch(JsonProcessingException e2){
+				e2.printStackTrace();
+			}
+			throw e;
 		}
 	}
 

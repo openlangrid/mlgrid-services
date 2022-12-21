@@ -93,7 +93,8 @@ public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechR
 		contexts.put(sessionId, c);
 		try{
 			String ds = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
-			var f = FileUtil.createUniqueFile(new File("./procs/speech_recognition_vosk/temp"), "recording-" + ds + "-");
+			var f = FileUtil.createUniqueFile(new File(
+				"./procs/vosk/temp"), "recording-" + ds + "-");
 			c.recorder = new WavRecorder(f.toString(), config.getChannels(), config.getSampleSizeInBits(), config.getSampleRate());
 			c.ws = factory.createSocket(uri);
 			c.ws.addListener(new WebSocketAdapter() {
@@ -106,10 +107,10 @@ public class VoskContinuousSpeechRecognitionService implements ContinuousSpeechR
 							int start = 0;
 							int end = 0;
 							if(ret.containsKey("start")){
-								start = ((Number)ret.get("start")).intValue();
+								start = ((Number)ret.get("start")).intValue() * 1000;
 							}
 							if(ret.containsKey("end")){
-								end = ((Number)ret.get("end")).intValue();
+								end = ((Number)ret.get("end")).intValue() * 1000;
 							}
 							c.notifyResult(
 								new ContinuousSpeechRecognitionTranscript(
