@@ -7,5 +7,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN pip install -q espnet==0.10.3 espnet_model_zoo
 
-import warnings
-warnings.filterwarnings('ignore')
+RUN apt install -y libsndfile1-dev
