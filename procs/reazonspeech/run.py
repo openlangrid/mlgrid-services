@@ -36,7 +36,7 @@ reazonspeech = Speech2Text.from_pretrained(
 
 import librosa
 
-speech, sample_rate = librosa.load(inputFilePath)
+speech, sample_rate = librosa.load(inputFilePath, sr=16000)
 
 with open(outputFilePath, "w") as f:
   f.write(reazonspeech(speech)[0][0])
