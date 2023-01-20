@@ -24,6 +24,7 @@ import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
 import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
+import org.langrid.mlgridservices.service.impl.ReasonSpeechSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.SpeechBrainSpeechEmotionRecognitionService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImageGenerationService;
@@ -63,6 +64,7 @@ public class ServiceInvoker {
 		serviceImples.put("SpeechBrainSER", new SpeechBrainSpeechEmotionRecognitionService());
 		serviceImples.put("VOSK", new VoskContinuousSpeechRecognitionService());
 		serviceImples.put("Whisper", new WhisperSpeechRecognitionService());
+		serviceImples.put("ReasonSpeech", new ReasonSpeechSpeechRecognitionService());
 
 
 		serviceImples.put("WaifuDiffusionDS0_03_0", waifuDiffusion);
