@@ -48,6 +48,7 @@ public class FileUtil {
 		if(format.endsWith("png")) return "png";
 		if(format.endsWith("wav")) return "wav";
 		if(format.endsWith("mp4")) return "mp4";
+		if(format.equalsIgnoreCase("text/plain")) return "txt";
 		var parts = format.split("\\/");
 		return parts[parts.length - 1];
 	}

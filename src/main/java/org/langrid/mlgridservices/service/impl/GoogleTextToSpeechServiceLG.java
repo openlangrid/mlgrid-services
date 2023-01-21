@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.MapUtil;
-import org.langrid.service.ml.interim.Audio;
-import org.langrid.service.ml.interim.TextToSpeechService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +23,8 @@ import jp.go.nict.langrid.service_1_2.ServerBusyException;
 import jp.go.nict.langrid.service_1_2.ServiceNotActiveException;
 import jp.go.nict.langrid.service_1_2.ServiceNotFoundException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
+import jp.go.nict.langrid.service_1_2.speech.Speech;
+import jp.go.nict.langrid.service_1_2.speech.TextToSpeechService;
 import lombok.Data;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -41,21 +41,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 @Service
-public class GoogleTextToSpeechService implements TextToSpeechService{
+public class GoogleTextToSpeechServiceLG implements TextToSpeechService{
 	@Override
-	public Audio speak(String language, String text)
-			throws InvalidParameterException, ProcessFailedException,
-			UnsupportedLanguageException {
+	public Speech speak(String language, String text, String voiceType, String audioType)
+			throws AccessLimitExceededException, InvalidParameterException, NoAccessPermissionException,
+			NoValidEndpointsException, ProcessFailedException, ServerBusyException, ServiceNotActiveException,
+			ServiceNotFoundException, UnsupportedLanguageException {
 		var lang = language.toLowerCase();
+		var vt = voiceType.toLowerCase();
 		Config c = null;
 		var gmToConfig = MapUtil.findValueByPrefix(lang, langToGMToConfig);
 		if(gmToConfig != null){
-			c = MapUtil.findValueByPartial("FEMALE", gmToConfig);
+			c = MapUtil.findValueByPartial(vt, gmToConfig);
 		}
 		if(c == null){
 			throw new InvalidParameterException("language,voiceType",
 				 String.format("no supported combinations of language: %s and voiceType: %s",
-				 lang, "FEMALE"));
+				 lang, voiceType));
 		}
 
 		try (var t = ServiceInvokerContext.startServiceTimer();
@@ -70,10 +72,31 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 					.setAudioEncoding(AudioEncoding.MP3).build();
 			var response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
 			var audioContents = response.getAudioContent();
-			return new Audio(audioContents.toByteArray(), "audio/mpeg");
+			return new Speech(voiceType, audioType, audioContents.toByteArray());
 		} catch(IOException e){
 			throw new ProcessFailedException(e);
 		}
+	}
+
+	@Override
+	public String[] getSupportedLanguages()
+			throws AccessLimitExceededException, NoAccessPermissionException, NoValidEndpointsException,
+			ProcessFailedException, ServerBusyException, ServiceNotActiveException, ServiceNotFoundException {
+		return languages.toArray(new String[]{});
+	}
+
+	@Override
+	public String[] getSupportedAudioTypes()
+			throws AccessLimitExceededException, NoAccessPermissionException, NoValidEndpointsException,
+			ProcessFailedException, ServerBusyException, ServiceNotActiveException, ServiceNotFoundException {
+		return new String[]{"audio/mpeg"};
+	}
+
+	@Override
+	public String[] getSupportedVoiceTypes()
+			throws AccessLimitExceededException, NoAccessPermissionException, NoValidEndpointsException,
+			ProcessFailedException, ServerBusyException, ServiceNotActiveException, ServiceNotFoundException {
+		return voices.toArray(new String[]{});
 	}
 
 	@PostConstruct
