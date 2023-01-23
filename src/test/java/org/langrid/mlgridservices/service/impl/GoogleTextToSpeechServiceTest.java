@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class GoogleTextToSpeechServiceTest {
 	@Test
 	public void test() throws Throwable{
-		var ret = service.speak("ja", "こんにちは", "ja-JP-Wavenet-C", "audio/mpeg");
+		var ret = service.speak("こんにちは", "ja");
 		var temp = new File("./temp/" + GoogleTextToSpeechServiceTest.class.getName());
 		temp.mkdirs();
 		var f = FileUtil.createUniqueFileWithDateTime(temp, "tts-", ".mp3");
