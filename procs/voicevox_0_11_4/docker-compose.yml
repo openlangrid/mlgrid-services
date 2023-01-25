@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /workspace/voicevox_core
+    runtime: nvidia
+    volumes:
+      - .:/work
+      - ./run.py:/workspace/voicevox_core/example/python/run.py
