@@ -6,7 +6,6 @@ import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.interim.Audio;
 import org.langrid.service.ml.interim.TextToSpeechService;
-import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
@@ -16,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-@Service
 public class VoiceVoxTextToSpeechService implements TextToSpeechService{
 	public VoiceVoxTextToSpeechService(String baseDir, String speakerId){
 		this.baseDir = new File(baseDir);
