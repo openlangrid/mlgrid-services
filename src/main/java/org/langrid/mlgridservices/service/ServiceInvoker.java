@@ -31,6 +31,7 @@ import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImage
 import org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion070TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
+import org.langrid.mlgridservices.service.impl.VoiceVoxTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGenerationService;
@@ -56,6 +57,13 @@ public class ServiceInvoker {
 		serviceImples.put("CodeFormer", codeFormer);
 		serviceImples.put("Empath", empath);
 		serviceImples.put("GoogleTTS", googleTts);
+
+		for(var i = 0; i < 20; i++){
+			serviceImples.put(
+				String.format("VoiceVox_0_11_4_%02d", i),
+				new VoiceVoxTextToSpeechService("./procs/voicevox_0_11_4", "" + i));
+		}
+
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("ClipInterrogator", new ClipInterrogatorImageToTextService());
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());

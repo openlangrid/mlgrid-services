@@ -10,20 +10,13 @@ import javax.annotation.PostConstruct;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.mlgridservices.util.MapUtil;
 import org.langrid.service.ml.interim.Audio;
 import org.langrid.service.ml.interim.TextToSpeechService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import jp.go.nict.langrid.service_1_2.AccessLimitExceededException;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
-import jp.go.nict.langrid.service_1_2.NoAccessPermissionException;
-import jp.go.nict.langrid.service_1_2.NoValidEndpointsException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
-import jp.go.nict.langrid.service_1_2.ServerBusyException;
-import jp.go.nict.langrid.service_1_2.ServiceNotActiveException;
-import jp.go.nict.langrid.service_1_2.ServiceNotFoundException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 import lombok.Data;
 
@@ -43,19 +36,15 @@ import java.io.IOException;
 @Service
 public class GoogleTextToSpeechService implements TextToSpeechService{
 	@Override
-	public Audio speak(String language, String text)
+	public Audio speak(String text, String textLanguage)
 			throws InvalidParameterException, ProcessFailedException,
 			UnsupportedLanguageException {
-		var lang = language.toLowerCase();
-		Config c = null;
-		var gmToConfig = MapUtil.findValueByPrefix(lang, langToGMToConfig);
-		if(gmToConfig != null){
-			c = MapUtil.findValueByPartial("FEMALE", gmToConfig);
-		}
+		var lang = textLanguage.toLowerCase();
+		var c = findConfig(lang, "FEMALE");
 		if(c == null){
 			throw new InvalidParameterException("language,voiceType",
 				 String.format("no supported combinations of language: %s and voiceType: %s",
-				 lang, "FEMALE"));
+				 textLanguage, "FEMALE"));
 		}
 
 		try (var t = ServiceInvokerContext.startServiceTimer();
@@ -102,6 +91,17 @@ public class GoogleTextToSpeechService implements TextToSpeechService{
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}
+	}
+
+	private Config findConfig(String lang, String ssmlGender){
+		for(var e : langToGMToConfig.entrySet()){
+			if(!e.getKey().startsWith(lang.toLowerCase())) continue;
+			for(var e2 : e.getValue().entrySet()){
+				if(!e2.getKey().startsWith(ssmlGender)) continue;
+				return e2.getValue();
+			}
+		}
+		return null;
 	}
 
 	@Data
