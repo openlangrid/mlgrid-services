@@ -250,7 +250,9 @@ public class ServiceInvoker {
 	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
-		try(var sic = ServiceInvokerContext.create()){
+		try(var sic = ServiceInvokerContext.create((name, intf)->{
+			return serviceImples.get(name);
+		})){
 			// serviceIdに対応する実装クラスを探す
 			var s = serviceImples.get(serviceId);
 			if(s != null){

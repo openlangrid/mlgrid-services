@@ -10,10 +10,10 @@ import java.nio.file.Files;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
+import org.langrid.service.ml.interim.TranslationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguagePairException;
-import jp.go.nict.langrid.service_1_2.translation.TranslationService;
 
 public class HelsinkiNlpTranslationService implements TranslationService{
 	private String getModelName(String sourceLang, String targetLang) {
@@ -25,16 +25,18 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 		}
 		return null;
 	}
+
 	@Override
-	public String translate(String sourceLang, String targetLang, String source)
+	public String translate(String text, String textLanguage, String targetLanguage)
 	throws UnsupportedLanguagePairException{
-		var modelName = getModelName(sourceLang, targetLang);
-		if(modelName == null) throw new UnsupportedLanguagePairException("sourceLang", "targetLang", sourceLang, targetLang);
+		var modelName = getModelName(textLanguage, targetLanguage);
+		if(modelName == null) throw new UnsupportedLanguagePairException(
+			"textLanguage", "targetLanguage", textLanguage, targetLanguage);
 		try{
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFile(tempDir, "source-", ".txt");
-			Files.writeString(temp.toPath(), source, StandardCharsets.UTF_8);
+			Files.writeString(temp.toPath(), text, StandardCharsets.UTF_8);
 			return run(modelName, temp);
 		} catch(IOException e){
 			throw new RuntimeException(e);

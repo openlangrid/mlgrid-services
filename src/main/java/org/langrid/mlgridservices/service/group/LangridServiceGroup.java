@@ -10,13 +10,18 @@ import java.util.Map;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
+import org.langrid.service.ml.interim.TranslationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.client.soap.SoapClientFactory;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.commons.util.Pair;
-import jp.go.nict.langrid.service_1_2.translation.TranslationService;
+import jp.go.nict.langrid.service_1_2.AccessLimitExceededException;
+import jp.go.nict.langrid.service_1_2.InvalidParameterException;
+import jp.go.nict.langrid.service_1_2.LangridException;
+import jp.go.nict.langrid.service_1_2.ProcessFailedException;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguagePairException;
 
 @Service
 public class LangridServiceGroup implements ServiceGroup{
@@ -34,7 +39,6 @@ public class LangridServiceGroup implements ServiceGroup{
 			if(serviceId.startsWith("Langrid")){
 				serviceId = serviceId.substring("Langrid".length());
 			}
-			System.out.println(serviceId);
 			var c = newClient(serviceId, intfs.get(serviceId));
 			try(var t = ServiceInvokerContext.startServiceTimer()){
 				var r = ObjectUtil.invoke(c, invocation.getMethod(), invocation.getArgs());
@@ -49,6 +53,24 @@ public class LangridServiceGroup implements ServiceGroup{
 
 	private Object newClient(String serviceId, Class<?> intfClass)
 			throws MalformedURLException{
+		if(intfClass.equals(TranslationService.class)){
+			var orig = new SoapClientFactory().create(
+				jp.go.nict.langrid.service_1_2.translation.TranslationService.class,
+				new URL(url + serviceId), username, password);
+			return new TranslationService(){
+				@Override
+				public String translate(String text, String textLanguage, String targetLanguage)
+						throws InvalidParameterException, ProcessFailedException, UnsupportedLanguagePairException {
+					try{
+						return orig.translate(textLanguage, targetLanguage, text);
+					} catch(InvalidParameterException | ProcessFailedException e){
+						throw e;
+					} catch(LangridException e){
+						throw new ProcessFailedException(e);
+					}
+				}
+			};
+		}
 		return new SoapClientFactory().create(
 			intfClass, new URL(url + serviceId), username, password);
 	}
