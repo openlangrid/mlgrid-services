@@ -15,6 +15,7 @@ import org.langrid.mlgridservices.service.group.KerasServiceGroup;
 import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
+import org.langrid.mlgridservices.service.impl.composite.BindedTextGuidedImageGenerationWithTranslationService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
@@ -197,6 +198,8 @@ public class ServiceInvoker {
 			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
 			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
 		}
+		serviceImples.put("StableDiffusion_DS_0_14_0SD21WithFuguMt",
+			new BindedTextGuidedImageGenerationWithTranslationService("en", "FuguMT", "StableDiffusion_DS_0_14_0SD21"));
 
 		// Image Manipulation
 		{
