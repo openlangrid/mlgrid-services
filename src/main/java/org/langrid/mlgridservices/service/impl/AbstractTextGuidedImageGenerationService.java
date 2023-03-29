@@ -43,16 +43,16 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 	}
 
 	@Override
-	public Image generate(String language, String text)
+	public Image generate(String text, String textLanguage)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		return generateMultiTimes(language, text, 1)[0];
+		return generateMultiTimes(text, textLanguage, 1)[0];
 	}
 
 	@Override
-	public Image[] generateMultiTimes(String language, String text, int numberOfTimes)
+	public Image[] generateMultiTimes(String text, String textLanguage, int numberOfTimes)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		if(!LanguageUtil.matches(supportedLang, language))
-			throw new UnsupportedLanguageException("language", language);
+		if(!LanguageUtil.matches(supportedLang, textLanguage))
+			throw new UnsupportedLanguageException("textLanguage", textLanguage);
 		try(var l = GPULock.acquire()){
 			if(additionalPrompt != null){
 				text = additionalPrompt + ", " + text;

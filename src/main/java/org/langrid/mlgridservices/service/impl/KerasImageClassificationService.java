@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
-import org.langrid.service.ml.ImageClassificationResult;
-import org.langrid.service.ml.ImageClassificationService;
+import org.langrid.service.ml.interim.ImageClassificationResult;
+import org.langrid.service.ml.interim.ImageClassificationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
@@ -24,7 +24,7 @@ public class KerasImageClassificationService implements ImageClassificationServi
 	}
 
 	@Override
-	public ImageClassificationResult[] classify(String format, byte[] image, String labelLanguage, int maxResults)
+	public ImageClassificationResult[] classify(byte[] image, String imageFormat, String labelLanguage, int maxResults)
 	throws UnsupportedLanguageException{
 		if(!LanguageUtil.matches("en", labelLanguage))
 			throw new UnsupportedLanguageException("labelLanguage", labelLanguage);

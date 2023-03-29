@@ -6,12 +6,12 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public interface TextGuidedImageGenerationService {
 	default Image generate(
-			String language, String text)
+			String text, String textLanguage)
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException{
-		return generateMultiTimes(language, text, 1)[0];
+		return generateMultiTimes(text, textLanguage, 1)[0];
 	}
 
 	Image[] generateMultiTimes(
-			String language, String text, int numberOfTimes)
+			String text, String textLanguage, int numberOfTimes)
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException;
 }

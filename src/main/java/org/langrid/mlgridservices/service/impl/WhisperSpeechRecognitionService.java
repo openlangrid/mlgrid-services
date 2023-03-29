@@ -42,11 +42,11 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 	}
 
 	@Override
-	public SpeechRecognitionResult[] recognize(byte[] audio, String audioFormat, String language)
+	public SpeechRecognitionResult[] recognize(byte[] audio, String audioFormat, String audioLanguage)
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		var lang = codeToLang.get(language);
+		var lang = codeToLang.get(audioLanguage);
 		if(lang == null){
-			throw new UnsupportedLanguageException("language", language);
+			throw new UnsupportedLanguageException("audioLanguage", audioLanguage);
 		}
 		lang = lang.substring(0, 1).toUpperCase() + lang.substring(1);
 		try(var l = GPULock.acquire()){

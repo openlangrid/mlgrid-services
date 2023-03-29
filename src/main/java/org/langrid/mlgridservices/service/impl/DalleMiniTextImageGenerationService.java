@@ -30,10 +30,10 @@ public class DalleMiniTextImageGenerationService implements TextGuidedImageGener
 	}
 
 	@Override
-	public Image[] generateMultiTimes(String language, String text, int maxResults)
+	public Image[] generateMultiTimes(String text, String textLanguage, int maxResults)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		if(!LanguageUtil.matches("en", language))
-			throw new UnsupportedLanguageException("language", language);
+		if(!LanguageUtil.matches("en", textLanguage))
+			throw new UnsupportedLanguageException("textLanguage", textLanguage);
 		try {
 			maxResults = Math.min(maxResults, 8);
 			var tempDir = new File(baseDir, "temp");

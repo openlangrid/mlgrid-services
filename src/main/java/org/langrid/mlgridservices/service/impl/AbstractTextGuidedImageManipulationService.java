@@ -43,10 +43,10 @@ implements TextGuidedImageManipulationService{
 	}
 
 	@Override
-	public Image[] manipulate(byte[] image, String imageFormat, String language, String prompt, int numberOfTimes)
+	public Image[] manipulate(byte[] image, String imageFormat, String text, String textLanguage, int numberOfTimes)
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
-		if(!LanguageUtil.matches(supportedLang, language))
-			throw new UnsupportedLanguageException("language", language);
+		if(!LanguageUtil.matches(supportedLang, textLanguage))
+			throw new UnsupportedLanguageException("textLanguage", textLanguage);
 		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
@@ -57,7 +57,7 @@ implements TextGuidedImageManipulationService{
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python3 run.py \"%s\" %d temp/%s --modelPath \"%s\" --initImage \"temp/%s\"",
-					prompt.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(), 
+					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(), 
 					modelPath, infile.getName());
 			System.out.println(cmd);
 			try(var t = ServiceInvokerContext.startServiceTimer()){

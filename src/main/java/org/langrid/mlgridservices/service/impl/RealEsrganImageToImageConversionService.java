@@ -18,12 +18,12 @@ implements ImageConversionService{
     private File baseDir = new File("./procs/image_to_image_real_esrgan");
 
 	@Override
-	public Image convert(byte[] image, String format)
+	public Image convert(byte[] image, String imageFormat)
 			throws InvalidParameterException, ProcessFailedException {
 		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
-			var inputFile = FileUtil.writeTempFile(tempDir, image, format);
+			var inputFile = FileUtil.writeTempFile(tempDir, image, imageFormat);
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +

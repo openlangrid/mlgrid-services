@@ -25,10 +25,10 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 	}
 
 	@Override
-	public Image[] generateMultiTimes(String language, String text, int numberOfTimes)
+	public Image[] generateMultiTimes(String text, String textLanguage, int numberOfTimes)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		if(!LanguageUtil.matches("ja", language))
-			throw new UnsupportedLanguageException("language", language);
+		if(!LanguageUtil.matches("ja", textLanguage))
+			throw new UnsupportedLanguageException("textLanguage", textLanguage);
 		try(var l = GPULock.acquire()){
 			numberOfTimes = Math.min(numberOfTimes, 8);
 			var tempDir = new File(baseDir, "temp");

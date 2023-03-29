@@ -14,7 +14,7 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public class DummyTextImageGenerationService implements TextToImageGenerationService{
 	@Override
-	public TextToImageGenerationResult[] generate(String language, String text, String imageFormat, int maxResults)
+	public TextToImageGenerationResult[] generate(String text, String textLanguage, String imageFormat, int maxResults)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		try(var t = ServiceInvokerContext.startServiceTimer()){
 			return new TextToImageGenerationResult[]{

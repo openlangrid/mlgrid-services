@@ -25,10 +25,10 @@ implements TextSentimentAnalysisService{
 	}
 
 	@Override
-	public TextSentimentAnalysisResult analyze(String language, String text)
+	public TextSentimentAnalysisResult analyze(String text, String textLanguage)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		if(!LanguageUtil.matches("ja", language))
-				throw new UnsupportedLanguageException("language", language);
+		if(!LanguageUtil.matches("ja", textLanguage))
+				throw new UnsupportedLanguageException("textLanguage", textLanguage);
 		try {
 			var r = run(text)[0];
 			return new TextSentimentAnalysisResult(
