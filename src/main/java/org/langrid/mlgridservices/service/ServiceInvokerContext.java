@@ -38,6 +38,10 @@ public class ServiceInvokerContext implements AutoCloseable{
 		return timer;
 	}
 
+	public <T> T resolveService(String bindingName, Class<T> intf){
+		return (T)factory.apply(bindingName, intf);
+	}
+
 	public <T> T getService(String serviceName, Class<T> intf){
 		return (T)factory.apply(serviceName, intf);
 	}
