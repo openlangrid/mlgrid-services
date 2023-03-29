@@ -86,9 +86,9 @@ if pipeOpts["init_image"] != None:
 else:
     del pipeOpts["init_image"]
     if pipeOpts["nagetive_prompt"] == None: del pipeOpts["nagetive_prompt"]
-    from diffusers import StableDiffusionPipeline
-    pipe = StableDiffusionPipeline.from_pretrained(
-        modelPath, **modelOpts)
+    from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
+    pipe = StableDiffusionPipeline.from_pretrained(modelPath, torch_dtype=torch.float16)
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 #pipe.enable_attention_slicing()
 pipe = pipe.to("cuda")
 from diffusers.utils.import_utils import is_xformers_available
