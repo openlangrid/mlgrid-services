@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    runtime: nvidia
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ./cache/huggingface:/root/.cache/huggingface
+      - ./cache/flexgen/opt_weights:/root/opt_weights
+      - ./cache/flexgen/flexgen_offload_dir:/root/flexgen_offload_dir
