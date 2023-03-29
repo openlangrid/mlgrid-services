@@ -20,6 +20,7 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
+import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
@@ -65,6 +66,7 @@ public class ServiceInvoker {
 		}
 
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
+		serviceImples.put("FuguMT", new FuguMtTranslationService());
 		serviceImples.put("ClipInterrogator", new ClipInterrogatorImageToTextService());
 		serviceImples.put("OpenPose", new OpenPoseHumanPoseEstimationService());
 		serviceImples.put("RealESRGAN", new RealEsrganImageToImageConversionService());
@@ -158,6 +160,28 @@ public class ServiceInvoker {
 			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
 			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
 			addDiffusersTGIG(dir, "ChiyodaMomoTrinartWaifu" + postfix, "V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50");
+			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
+				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",
+				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
+				"ghibli style");
+			addDiffusersTGIG(dir, "CoolJapanDiffusion" + postfix, "alfredplpl/cool-japan-diffusion-for-learning-2-0");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD20", 
+				"stabilityai/stable-diffusion-2", null,
+				"run_sd21.py");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD21",
+				"stabilityai/stable-diffusion-2-1", null,
+				"run_sd21.py");
+		}
+		{
+			var dir = "./procs/diffusers_0_14_0";
+			var postfix = "_DS_0_14_0";
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
+			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
+			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
+			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
 			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
 				"mdjrny-v4 style");
 			addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",

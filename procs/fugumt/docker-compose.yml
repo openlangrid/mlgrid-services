@@ -7,4 +7,4 @@ services:
     working_dir: /work
     volumes:
       - .:/work
-      - ./cache/huggingface:/root/.cache/huggingface
+      - ../cache/huggingface:/root/.cache/huggingface
