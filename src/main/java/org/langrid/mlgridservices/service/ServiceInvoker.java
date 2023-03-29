@@ -177,24 +177,25 @@ public class ServiceInvoker {
 		{
 			var dir = "./procs/diffusers_0_14_0";
 			var postfix = "_DS_0_14_0";
-			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
-			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
+			addDiffusersTGIG(dir, "CoolJapanDiffusion" + postfix, "alfredplpl/cool-japan-diffusion-for-learning-2-0");
 			addDiffusersTGIG(dir, "DiscoDiffusion" + postfix, "sd-dreambooth-library/disco-diffusion-style");
-			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
-			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
-			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
-				"mdjrny-v4 style");
-			addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",
-				"mdjrny-v4 style");
 			addDiffusersTGIG(dir, "Ghibli" + postfix, "nitrosocke/Ghibli-Diffusion",
 				"ghibli style");
-			addDiffusersTGIG(dir, "CoolJapanDiffusion" + postfix, "alfredplpl/cool-japan-diffusion-for-learning-2-0");
+			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
+				"mdjrny-v4 style");
+				addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",
+				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "PicassoDiffusion" + postfix, "alfredplpl/picasso-diffusion-1-1");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
+			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD20", 
 				"stabilityai/stable-diffusion-2", null,
 				"run_sd21.py");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD21",
 				"stabilityai/stable-diffusion-2-1", null,
 				"run_sd21.py");
+			addDiffusersTGIG(dir, "TrinartStableDiffusion" + postfix, "naclbit/trinart_stable_diffusion_v2");
+			addDiffusersTGIG(dir, "WaifuDiffusion" + postfix, "hakurei/waifu-diffusion");
 		}
 
 		// Image Manipulation
