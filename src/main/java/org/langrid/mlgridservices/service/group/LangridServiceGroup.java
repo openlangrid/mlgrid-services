@@ -24,8 +24,8 @@ public class LangridServiceGroup implements ServiceGroup{
 	public List<Pair<String, Class<?>>> listServices() {
 		Class<?> clazz = TranslationService.class;
 		return Arrays.asList(
-				Pair.create("LangridGoogleTranslateNMT", clazz),
-				Pair.create("LangridKyotoUJServer", clazz)
+				Pair.create("LangridGoogleTranslateNMT", clazz)
+//				Pair.create("LangridKyotoUJServer", clazz)
 			);
 	}
 
