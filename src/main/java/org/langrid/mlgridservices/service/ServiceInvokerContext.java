@@ -1,7 +1,5 @@
 package org.langrid.mlgridservices.service;
 
-import java.util.function.BiFunction;
-
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.Timer;
 
