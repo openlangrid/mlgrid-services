@@ -10,7 +10,7 @@ import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.TranslationService;
+import org.langrid.service.ml.TranslationService;
 
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguagePairException;
 

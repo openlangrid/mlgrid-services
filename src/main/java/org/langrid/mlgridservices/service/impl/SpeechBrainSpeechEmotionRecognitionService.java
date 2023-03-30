@@ -10,7 +10,7 @@ import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.EmotionRecognitionResult;
-import org.langrid.service.ml.interim.SpeechEmotionRecognitionService;
+import org.langrid.service.ml.SpeechEmotionRecognitionService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

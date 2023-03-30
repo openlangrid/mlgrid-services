@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
-import org.langrid.service.ml.interim.ImageClassificationResult;
-import org.langrid.service.ml.interim.ImageClassificationService;
+import org.langrid.service.ml.ImageClassificationResult;
+import org.langrid.service.ml.ImageClassificationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;

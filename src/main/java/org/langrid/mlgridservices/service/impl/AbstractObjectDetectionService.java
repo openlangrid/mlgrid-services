@@ -3,8 +3,8 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.IOException;
 
 import org.langrid.service.ml.Box2d;
-import org.langrid.service.ml.interim.ObjectDetection;
-import org.langrid.service.ml.interim.ObjectDetectionResult;
+import org.langrid.service.ml.ObjectDetection;
+import org.langrid.service.ml.ObjectDetectionResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

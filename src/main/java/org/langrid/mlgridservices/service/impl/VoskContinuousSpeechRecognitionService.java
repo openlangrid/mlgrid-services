@@ -19,8 +19,8 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.WavRecorder;
 import org.langrid.service.ml.ContinuousSpeechRecognitionConfig;
-import org.langrid.service.ml.interim.ContinuousSpeechRecognitionService;
-import org.langrid.service.ml.interim.ContinuousSpeechRecognitionTranscript;
+import org.langrid.service.ml.ContinuousSpeechRecognitionService;
+import org.langrid.service.ml.ContinuousSpeechRecognitionTranscript;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;

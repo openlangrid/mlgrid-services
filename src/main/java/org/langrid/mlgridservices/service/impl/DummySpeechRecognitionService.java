@@ -1,8 +1,8 @@
 package org.langrid.mlgridservices.service.impl;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.service.ml.interim.SpeechRecognitionResult;
-import org.langrid.service.ml.interim.SpeechRecognitionService;
+import org.langrid.service.ml.SpeechRecognitionResult;
+import org.langrid.service.ml.SpeechRecognitionService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;

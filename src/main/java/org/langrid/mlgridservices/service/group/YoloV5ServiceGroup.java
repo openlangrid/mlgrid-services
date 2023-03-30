@@ -8,7 +8,7 @@ import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.YoloV5ObjectDetectionService;
-import org.langrid.service.ml.interim.ObjectDetectionService;
+import org.langrid.service.ml.ObjectDetectionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 

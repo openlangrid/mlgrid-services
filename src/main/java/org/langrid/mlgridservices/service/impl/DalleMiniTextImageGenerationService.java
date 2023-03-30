@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
-import org.langrid.service.ml.interim.Image;
-import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
+import org.langrid.service.ml.Image;
+import org.langrid.service.ml.TextGuidedImageGenerationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;

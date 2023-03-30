@@ -11,9 +11,9 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.service.ml.Box2d;
-import org.langrid.service.ml.interim.ObjectSegmentation;
-import org.langrid.service.ml.interim.ObjectSegmentationResult;
-import org.langrid.service.ml.interim.ObjectSegmentationService;
+import org.langrid.service.ml.ObjectSegmentation;
+import org.langrid.service.ml.ObjectSegmentationResult;
+import org.langrid.service.ml.ObjectSegmentationService;
 
 import jp.go.nict.langrid.commons.io.StreamUtil;
 import jp.go.nict.langrid.commons.util.ArrayUtil;

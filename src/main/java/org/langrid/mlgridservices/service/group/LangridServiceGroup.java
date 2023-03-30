@@ -10,7 +10,7 @@ import java.util.Map;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.service.ml.interim.TranslationService;
+import org.langrid.service.ml.TranslationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

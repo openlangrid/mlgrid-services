@@ -1,9 +1,9 @@
 package org.langrid.mlgridservices.service.impl.composite;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.service.ml.interim.Image;
-import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
-import org.langrid.service.ml.interim.TranslationService;
+import org.langrid.service.ml.TextGuidedImageGenerationService;
+import org.langrid.service.ml.Image;
+import org.langrid.service.ml.TranslationService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;

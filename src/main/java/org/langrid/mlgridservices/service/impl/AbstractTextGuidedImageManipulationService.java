@@ -10,8 +10,8 @@ import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.Image;
-import org.langrid.service.ml.interim.TextGuidedImageManipulationService;
+import org.langrid.service.ml.Image;
+import org.langrid.service.ml.TextGuidedImageManipulationService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;

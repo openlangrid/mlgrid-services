@@ -8,7 +8,7 @@ import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.KerasImageClassificationService;
-import org.langrid.service.ml.interim.ImageClassificationService;
+import org.langrid.service.ml.ImageClassificationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;

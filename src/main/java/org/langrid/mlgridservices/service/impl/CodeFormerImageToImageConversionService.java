@@ -8,8 +8,8 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.Image;
-import org.langrid.service.ml.interim.ImageConversionService;
+import org.langrid.service.ml.Image;
+import org.langrid.service.ml.ImageConversionService;
 import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;

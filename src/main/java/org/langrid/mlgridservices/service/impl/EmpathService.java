@@ -19,7 +19,7 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ValidationUtil;
 import org.langrid.service.ml.EmotionRecognitionResult;
-import org.langrid.service.ml.interim.SpeechEmotionRecognitionService;
+import org.langrid.service.ml.SpeechEmotionRecognitionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

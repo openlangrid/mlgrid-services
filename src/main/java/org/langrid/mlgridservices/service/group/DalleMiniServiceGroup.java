@@ -7,7 +7,7 @@ import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
-import org.langrid.service.ml.interim.TextGuidedImageGenerationService;
+import org.langrid.service.ml.TextGuidedImageGenerationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 

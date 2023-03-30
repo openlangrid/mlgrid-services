@@ -10,8 +10,8 @@ import javax.annotation.PostConstruct;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.service.ml.interim.Audio;
-import org.langrid.service.ml.interim.TextToSpeechService;
+import org.langrid.service.ml.Audio;
+import org.langrid.service.ml.TextToSpeechService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
