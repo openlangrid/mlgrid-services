@@ -21,6 +21,7 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
+import org.langrid.mlgridservices.service.impl.ExternalTextGenerationService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
@@ -222,6 +223,11 @@ public class ServiceInvoker {
 		serviceImples.put("Detectron2CCR050FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"));
 		serviceImples.put("Detectron2CCR101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"));
 		serviceImples.put("Detectron2CCX101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"));
+
+		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
+//		serviceImples.put("JapaneseAlpacaLoRA65b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-65b-hf"));
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
 
