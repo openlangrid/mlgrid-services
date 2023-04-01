@@ -16,6 +16,7 @@ import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.composite.BindedTextGuidedImageGenerationWithTranslationService;
+import org.langrid.mlgridservices.service.impl.test.ProcessFailedExceptionService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
@@ -228,6 +229,8 @@ public class ServiceInvoker {
 		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
 		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
 //		serviceImples.put("JapaneseAlpacaLoRA65b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-65b-hf"));
+
+		serviceImples.put("ProcessFailedExceptionService", new ProcessFailedExceptionService());
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
 
