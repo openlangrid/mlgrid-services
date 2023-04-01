@@ -54,23 +54,20 @@ public class WebSocketServer implements ApplicationContextAware {
 			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		int reqId = -1;
 		try {
-			System.out.println(message);
 			var req = jmapper.readValue(message, WebSocketRequest.class);
 			reqId = req.getReqId();
-			var r = invoker().invoke(req.getServiceId(), req);
-			var res = new WebSocketResponse(
-					req.getReqId(), r.getHeaders(), r.getResult());
-			var resMsg = jmapper.writeValueAsString(res);
-			return resMsg;
-		} catch(RuntimeException e) {
+			try{
+				var r = invoker().invoke(req.getServiceId(), req);
+				var res = new WebSocketResponse(
+						req.getReqId(), r.getHeaders(), r.getResult());
+				return jmapper.writeValueAsString(res);
+			} catch(InvocationTargetException e){
+				throw e.getCause();
+			}
+		} catch(Throwable e) {
 			e.printStackTrace();
-			return jmapper.writeValueAsString(new WebSocketResponse(reqId, new Error(-1, e.toString())));
-		} catch(java.lang.Error e) {
-			e.printStackTrace();
-			return jmapper.writeValueAsString(new WebSocketResponse(reqId, new Error(-1, e.toString())));
-		} catch(Exception e) {
-			e.printStackTrace();
-			return jmapper.writeValueAsString(new WebSocketResponse(reqId, new Error(-1, e.toString())));
+			return jmapper.writeValueAsString(new WebSocketResponse(
+				reqId, new Error(e.getClass().getSimpleName(), e.toString())));
 		}
 	}
 
@@ -78,11 +75,22 @@ public class WebSocketServer implements ApplicationContextAware {
 	public byte[] onMessage(Session session, byte[] message)
 			throws StreamReadException, DatabindException, IOException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, ProcessFailedException {
-		System.out.println("bin message");
-		var i = bmapper.readValue(message, WebSocketRequest.class);
-		var r = invoker().invoke(i.getServiceId(), i);
-		return bmapper.writeValueAsBytes(new WebSocketResponse(
-			i.getReqId(), r.getHeaders(), r.getResult()));
+		int reqId = -1;
+		try{
+			var req = bmapper.readValue(message, WebSocketRequest.class);
+			reqId = req.getReqId();
+			try{
+				var r = invoker().invoke(req.getServiceId(), req);
+				return bmapper.writeValueAsBytes(new WebSocketResponse(
+					reqId, r.getHeaders(), r.getResult()));
+			} catch(InvocationTargetException e){
+				throw e.getCause();
+			}
+		} catch(Throwable e) {
+			e.printStackTrace();
+			return bmapper.writeValueAsBytes(new WebSocketResponse(
+				reqId, new Error(e.getClass().getSimpleName(), e.toString())));
+		}
 	}
 
 	@OnClose

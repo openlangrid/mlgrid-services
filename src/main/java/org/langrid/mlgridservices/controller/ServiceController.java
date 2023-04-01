@@ -24,7 +24,8 @@ public class ServiceController {
 			return invoker.invoke(serviceId, request);
 		} catch(Exception e) {
 			e.printStackTrace();
-			return new Response(null, null, new Error(-1, e.toString()));
+			return new Response(new Error(
+				e.getClass().getSimpleName(), e.toString()));
 		}
 	}
 
