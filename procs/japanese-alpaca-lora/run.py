@@ -4,10 +4,10 @@
 # parse args
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--inputPath", nargs="?", type=str, default="input.txt")
+parser.add_argument("--utterancePath", nargs="?", type=str, default="input.txt")
 parser.add_argument("--instructionPath", nargs="?", type=str, default="instruction.txt")
 parser.add_argument("--outPathPrefix",type=str, default="input")
-parser.add_argument("--baseModel", nargs="?", type=str, default="decapoda-research/llama-7b-hf")
+parser.add_argument("--model", nargs="?", type=str, default="decapoda-research/llama-7b-hf")
 args = parser.parse_args()
 
 
@@ -25,20 +25,20 @@ def loadFile(path):
 # "decapoda-research/llama-30b-hf"
 # "decapoda-research/llama-65b-hf"
 
-def generate_prompt(instruction, input):
-    if input and instruction:
+def generate_prompt(instruction, utterance):
+    if utterance and instruction:
         return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 ### Instruction:
 {instruction}
 ### Input:
-{input}
+{utterance}
 ### Response:"""
-    elif input == None and instruction == None:
+    elif utterance == None and instruction == None:
         return "Tell me about alpacas."
     else:
         return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 ### Instruction:
-{instruction if instruction else input}
+{instruction if instruction else utterance}
 ### Response:"""
 
 
@@ -85,7 +85,7 @@ def evaluate(
     return output.split("### Response:")[1].strip()
 
 
-def main(instructionPath, inputPath, outPathPrefix, baseModel):
+def main(instructionPath, utterancePath, outPathPrefix, model):
     import torch
     from peft import PeftModel
     import transformers
@@ -95,13 +95,13 @@ def main(instructionPath, inputPath, outPathPrefix, baseModel):
     ), "LLaMA is now in HuggingFace's main branch.\nPlease reinstall it: pip uninstall transformers && pip install git+https://github.com/huggingface/transformers.git"
     from transformers import LlamaTokenizer, LlamaForCausalLM
 
-    tokenizer = LlamaTokenizer.from_pretrained(baseModel, device_map={'': 0})
+    tokenizer = LlamaTokenizer.from_pretrained(model, device_map={'': 0})
 
     loraWeights = {
         "decapoda-research/llama-7b-hf": "kunishou/Japanese-Alpaca-LoRA-7b-v0",
         "decapoda-research/llama-13b-hf": "kunishou/Japanese-Alpaca-LoRA-13b-v0",
         "decapoda-research/llama-30b-hf": "kunishou/Japanese-Alpaca-LoRA-30b-v0"}
-    LORA_WEIGHTS = loraWeights.get(baseModel, "kunishou/Japanese-Alpaca-LoRA-65b-v0")
+    LORA_WEIGHTS = loraWeights.get(model, "kunishou/Japanese-Alpaca-LoRA-65b-v0")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     try:
@@ -112,7 +112,7 @@ def main(instructionPath, inputPath, outPathPrefix, baseModel):
 
     if device == "cuda":
         model = LlamaForCausalLM.from_pretrained(
-            baseModel, torch_dtype=torch.float16, load_in_8bit=True,
+            model, torch_dtype=torch.float16, load_in_8bit=True,
             device_map={'': 0}, # device_map="auto",
         )
         model = PeftModel.from_pretrained(
@@ -120,7 +120,7 @@ def main(instructionPath, inputPath, outPathPrefix, baseModel):
             device_map={'': 0},)
     elif device == "mps":
         model = LlamaForCausalLM.from_pretrained(
-            baseModel, torch_dtype=torch.float16,
+            model, torch_dtype=torch.float16,
             device_map={'': 0}, # device_map={"": device},
         )
         model = PeftModel.from_pretrained(
@@ -129,7 +129,7 @@ def main(instructionPath, inputPath, outPathPrefix, baseModel):
         )
     else:
         model = LlamaForCausalLM.from_pretrained(
-            baseModel, low_cpu_mem_usage=True,
+            model, low_cpu_mem_usage=True,
             device_map={'': 0}, # device_map={"": device},
         )
         model = PeftModel.from_pretrained(
@@ -142,7 +142,7 @@ def main(instructionPath, inputPath, outPathPrefix, baseModel):
         model = torch.compile(model)
 
     instruction = loadFile(instructionPath)
-    input = loadFile(inputPath)
+    input = loadFile(utterancePath)
     result = evaluate(model, device, tokenizer, instruction, input)
     with open(f"{outPathPrefix}.result.txt", 'w', encoding='UTF-8') as f:
         f.write(result)

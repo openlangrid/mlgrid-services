@@ -23,7 +23,7 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
-import org.langrid.mlgridservices.service.impl.ExternalTextGenerationService;
+import org.langrid.mlgridservices.service.impl.ExternalChatService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
@@ -226,10 +226,12 @@ public class ServiceInvoker {
 		serviceImples.put("Detectron2CCR101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"));
 		serviceImples.put("Detectron2CCX101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"));
 
-		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
-		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
-		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalChatService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalChatService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalChatService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
 //		serviceImples.put("JapaneseAlpacaLoRA65b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-65b-hf"));
+		serviceImples.put("Cerebras-GPT2.7B", new ExternalChatService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-2.7B"));
+		serviceImples.put("Cerebras-GPT6.7B", new ExternalChatService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-6.7B"));
 
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));

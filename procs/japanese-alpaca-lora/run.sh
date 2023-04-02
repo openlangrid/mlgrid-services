@@ -11,6 +11,6 @@ shift
 
 docker-compose run --rm service python run.py \
   --instructionPath ${INSTRUCTION_PATH} \
-  --inputPath ${INPUT_PATH} \
+  --utterancePath ${INPUT_PATH} \
   --outPathPrefix ${OUT_PATH_PREFIX} \
-  --baseModel ${MODEL} $*
+  --model ${MODEL} $*
