@@ -67,7 +67,7 @@ public class WebSocketServer implements ApplicationContextAware {
 		} catch(Throwable e) {
 			e.printStackTrace();
 			return jmapper.writeValueAsString(new WebSocketResponse(
-				reqId, new Error(e.getClass().getSimpleName(), e.toString())));
+				reqId, new Error(e.getClass().getSimpleName(), e.getMessage())));
 		}
 	}
 
@@ -89,7 +89,7 @@ public class WebSocketServer implements ApplicationContextAware {
 		} catch(Throwable e) {
 			e.printStackTrace();
 			return bmapper.writeValueAsBytes(new WebSocketResponse(
-				reqId, new Error(e.getClass().getSimpleName(), e.toString())));
+				reqId, new Error(e.getClass().getSimpleName(), e.getMessage())));
 		}
 	}
 
