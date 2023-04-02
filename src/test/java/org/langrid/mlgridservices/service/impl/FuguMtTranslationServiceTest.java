@@ -1,18 +1,17 @@
 package org.langrid.mlgridservices.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import jp.go.nict.langrid.service_1_2.translation.TranslationService;
+import org.langrid.service.ml.TranslationService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FuguMtTranslationServiceTest {
 	@BeforeAll
 	public void setUp() throws Throwable{
-		service = new FuguMtTranslationService("./procs/fugumt")
+		service = new FuguMtTranslationService("./procs/fugumt");
 	}
 
 	@Test
@@ -24,5 +23,5 @@ public class FuguMtTranslationServiceTest {
 	}
 
 	@Autowired
-	privatTranslationServicece service;
+	private TranslationService service;
 }
