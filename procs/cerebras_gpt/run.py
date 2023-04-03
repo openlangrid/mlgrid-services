@@ -27,10 +27,10 @@ parser.add_argument('-cu', '--model', type=str, help='Specify a custom model')
 parser.add_argument('-p', '--prompt', type=str, default="AI is", help='Text prompt to generate from (default: "AI is")')
 parser.add_argument('-s', '--size', type=int, default=256)
 parser.add_argument('-l', '--length', type=int, default=256)
-parser.add_argument('-tk', '--topk', type=float, default=None)
-parser.add_argument('-tp', '--topp', type=float, default=None)
+parser.add_argument('-tk', '--topk', type=float, default=40)
+parser.add_argument('-tp', '--topp', type=float, default=0.9)
 parser.add_argument('-ty', '--typp', type=float, default=None)
-parser.add_argument('-tm', '--temp', type=float, default=None)
+parser.add_argument('-tm', '--temp', type=float, default=0.7)
 parser.add_argument('-t', '--time', action='store_true', help='Print execution time')
 parser.add_argument('-c', '--cmdline', action='store_true', help='cmdline mode, no webserver')
 parser.add_argument("--utterancePath", nargs="?", type=str, default="input.txt")
@@ -38,8 +38,6 @@ parser.add_argument("--outPathPrefix",type=str, default="input")
 args = parser.parse_args()
 if args.model:
 	model_size = args.model
-if args.prompt:
-	prompt_text = args.prompt
 top_p = args.topp
 top_k = args.topk
 typ_p = args.typp
@@ -51,11 +49,11 @@ def get_model():
 model_name = get_model()
 max_length = int(args.length)
 
-def banner():
+def banner(prompt):
     global model_name
     print(Style.BRIGHT + f"VTSTech-GPT {build} - www: VTS-Tech.org git: Veritas83")
     print("Using Model : " + Fore.RED + f"{model_name}")
-    print("Using Prompt: " + Fore.YELLOW + f"{prompt_text}")
+    print("Using Prompt: " + Fore.YELLOW + f"{prompt}")
     print("Using Params: " + Fore.YELLOW + f"max_new_tokens:{max_length} do_sample:True use_cache:True no_repeat_ngram_size:2 top_k:{top_k} top_p:{top_p} typical_p:{typ_p} temp:{temp}")
 
 def CerbGPT(prompt_text):
@@ -63,10 +61,18 @@ def CerbGPT(prompt_text):
     temp=None
     top_k=None
     top_p=None
-    start_time = time.time()	
+    start_time = time.time()
     #model_name = get_model()
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name)
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+    except:
+        from transformers import LlamaTokenizer
+        tokenizer = LlamaTokenizer.from_pretrained(model_name)
+    try:
+        model = AutoModelForCausalLM.from_pretrained(model_name)
+    except:
+        from transformers import LlamaForCausalLM
+        model = LlamaForCausalLM.from_pretrained(model_name)
     opts = {}
     if temp is not None:
         opts["temperature"] = temp
@@ -102,9 +108,8 @@ def loadFile(path):
 
 if __name__ == '__main__':
     global start_time, end_time	    
-    banner()
-
     input = loadFile(args.utterancePath)
+    banner(input)
     result = CerbGPT(input)
     with open(f"{args.outPathPrefix}.result.txt", 'w', encoding='UTF-8') as f:
         f.write(result)
