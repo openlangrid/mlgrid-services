@@ -1,6 +1,7 @@
 package org.langrid.mlgridservices.service.impl;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
@@ -32,8 +33,11 @@ public class AbstractTextSimilarityCalculationService implements TextSimilarityC
 		try(var l = GPULock.acquire()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
+			var utf8 = StandardCharsets.UTF_8;
 			var input1Path = FileUtil.createUniqueFileWithDateTime(tempDir, "", "input1.txt");
+			Files.writeString(input1Path.toPath(), text1, utf8);
 			var input2Path = FileUtil.createUniqueFileWithDateTime(tempDir, "", "input2.txt");
+			Files.writeString(input2Path.toPath(), text2, utf8);
 			var outputPath = FileUtil.createUniqueFileWithDateTime(tempDir, "", "output.txt");
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
