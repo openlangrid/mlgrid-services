@@ -187,8 +187,9 @@ public class ServiceInvoker {
 				"ghibli style");
 			addDiffusersTGIG(dir, "MidjourneyV4" + postfix, "prompthero/midjourney-v4-diffusion",
 				"mdjrny-v4 style");
-				addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",
+			addDiffusersTGIG(dir, "Openjourney" + postfix, "prompthero/openjourney",
 				"mdjrny-v4 style");
+			addDiffusersTGIG(dir, "OpenjourneyV4" + postfix, "prompthero/openjourney-v4");
 			addDiffusersTGIG(dir, "PicassoDiffusion" + postfix, "alfredplpl/picasso-diffusion-1-1");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD14", "CompVis/stable-diffusion-v1-4");
 			addDiffusersTGIG(dir, "StableDiffusion" + postfix + "SD15", "runwayml/stable-diffusion-v1-5");
