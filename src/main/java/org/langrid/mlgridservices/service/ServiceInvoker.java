@@ -36,6 +36,7 @@ import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImage
 import org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion070TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
+import org.langrid.mlgridservices.service.impl.USETextSimilarityCalculation;
 import org.langrid.mlgridservices.service.impl.VoiceVoxTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -214,6 +215,9 @@ public class ServiceInvoker {
 			serviceImples.put("TrinartWaifuIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("doohickey/trinart-waifu-diffusion-50-50"));
 			serviceImples.put("DiscoDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
 		}
+
+		// Text Similarity Calculation
+		serviceImples.put("USETextSimilarityCalculation", new USETextSimilarityCalculation());
 
 		serviceImples.put("YoloV7", new YoloV7ObjectDetectionService("yolov7.pt"));
 		serviceImples.put("YoloV7x", new YoloV7ObjectDetectionService("yolov7x.pt"));
