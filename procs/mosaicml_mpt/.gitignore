@@ -1,0 +1,6 @@
+/build/xformers-*
+/cache
+/temp
+/docker-compose.yml
+out.*
+__pycache__
