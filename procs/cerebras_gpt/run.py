@@ -33,8 +33,9 @@ parser.add_argument('-ty', '--typp', type=float, default=None)
 parser.add_argument('-tm', '--temp', type=float, default=0.7)
 parser.add_argument('-t', '--time', action='store_true', help='Print execution time')
 parser.add_argument('-c', '--cmdline', action='store_true', help='cmdline mode, no webserver')
-parser.add_argument("--utterancePath", nargs="?", type=str, default="input.txt")
-parser.add_argument("--outPathPrefix",type=str, default="input")
+parser.add_argument("--inputPath", nargs="?", type=str, default="input.txt")
+parser.add_argument("--inputLanguage", type=str, default="en")
+parser.add_argument("--outputPath",type=str, default="input")
 args = parser.parse_args()
 if args.model:
 	model_size = args.model
@@ -108,10 +109,10 @@ def loadFile(path):
 
 if __name__ == '__main__':
     global start_time, end_time	    
-    input = loadFile(args.utterancePath)
+    input = loadFile(args.inputPath)
     banner(input)
     result = CerbGPT(input)
-    with open(f"{args.outPathPrefix}.result.txt", 'w', encoding='UTF-8') as f:
+    with open(args.outputPath, 'w', encoding='UTF-8') as f:
         f.write(result)
     print(result)
 
