@@ -1,16 +1,6 @@
 # 参考: https://github.com/kunishou/Japanese-Alpaca-LoRA
 
 
-# parse args
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("--utterancePath", nargs="?", type=str, default="input.txt")
-parser.add_argument("--instructionPath", nargs="?", type=str, default="instruction.txt")
-parser.add_argument("--outPathPrefix",type=str, default="input")
-parser.add_argument("--model", nargs="?", type=str, default="decapoda-research/llama-7b-hf")
-args = parser.parse_args()
-
-
 def loadFile(path):
     import os
     if path and os.path.exists(path):
@@ -85,7 +75,7 @@ def evaluate(
     return output.split("### Response:")[1].strip()
 
 
-def main(instructionPath, utterancePath, outPathPrefix, model):
+def main(model: str, inputPath: str, inputLanguage: str, instructionPath: str, outputPath: str):
     import torch
     from peft import PeftModel
     import transformers
@@ -141,12 +131,20 @@ def main(instructionPath, utterancePath, outPathPrefix, model):
     if torch.__version__ >= "2":
         model = torch.compile(model)
 
+    input = loadFile(inputPath)
     instruction = loadFile(instructionPath)
-    input = loadFile(utterancePath)
     result = evaluate(model, device, tokenizer, instruction, input)
-    with open(f"{outPathPrefix}.result.txt", 'w', encoding='UTF-8') as f:
+    with open(outputPath, 'w', encoding='UTF-8') as f:
         f.write(result)
     print(result)
 
 
-main(**vars(args))
+if __name__ == "__main__": 
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", type=str, default="decapoda-research/llama-7b-hf")
+    parser.add_argument("--inputPath", type=str, default="./sample/input.txt")
+    parser.add_argument("--inputLanguage", type=str, default="en")
+    parser.add_argument("--instructionPath", type=str, default=None)
+    parser.add_argument("--outputPath",type=str, default="./sample/output.txt")
+    main(**vars(parser.parse_args()))
