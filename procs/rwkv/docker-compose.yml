@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /workspace/RWKV-LM-LoRA/RWKV-v4neo
+    volumes:
+      - ./sample:/workspace/RWKV-LM-LoRA/RWKV-v4neo/sample
+      - ./temp:/workspace/RWKV-LM-LoRA/RWKV-v4neo/temp
+      - ./instruct.py:/workspace/RWKV-LM-LoRA/RWKV-v4neo/instruct.py
+      - ../cache/rwkv:/models
+      - ../cache/huggingface:/root/.cache/huggingface

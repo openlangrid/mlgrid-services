@@ -240,6 +240,7 @@ public class ServiceInvoker {
 		serviceImples.put("Cerebras-GPT2.7B", new ExternalTextInstructionService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-2.7B"));
 		serviceImples.put("Cerebras-GPT6.7B", new ExternalTextInstructionService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-6.7B"));
 		serviceImples.put("MosaicML-MPT7B", new ExternalTextInstructionService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
+		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalTextInstructionService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
 
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));
