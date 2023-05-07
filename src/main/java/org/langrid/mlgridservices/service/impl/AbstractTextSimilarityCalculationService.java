@@ -16,10 +16,12 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguagePairException;
 
 public class AbstractTextSimilarityCalculationService implements TextSimilarityCalculationService{
     private final File baseDir;
+	private String model = "normal";
 	private String scriptFile = "calc_similarity.py";
 
-	public AbstractTextSimilarityCalculationService(File baseDir){
+	public AbstractTextSimilarityCalculationService(File baseDir, String model){
 		this.baseDir = baseDir;
+		this.model = model;
 	}
 
 	public void setScriptFile(String scriptFile) {
@@ -42,10 +44,11 @@ public class AbstractTextSimilarityCalculationService implements TextSimilarityC
 			var cmd = String.format(
 					"PATH=$PATH:/usr/local/bin " +
 					"/usr/local/bin/docker-compose run --rm service " +
-					"python3 %s --input1Path \"%s\" --input1Lang \"%s\" " +
+					"python3 %s --model \"%s\" " +
+						"--input1Path \"%s\" --input1Lang \"%s\" " +
 						"--input2Path \"%s\" --input2Lang \"%s\" " +
 						"--outputPath \"%s\"",
-					scriptFile,
+					scriptFile, model,
 					"temp/" + input1Path.getName(), text1Lang,
 					"temp/" + input2Path.getName(), text2Lang,
 					"temp/" + outputPath.getName());

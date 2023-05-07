@@ -217,7 +217,8 @@ public class ServiceInvoker {
 		}
 
 		// Text Similarity Calculation
-		serviceImples.put("USETextSimilarityCalculation", new USETextSimilarityCalculation());
+		serviceImples.put("USETextSimilarityCalculation", new USETextSimilarityCalculation("normal"));
+		serviceImples.put("USELargeTextSimilarityCalculation", new USETextSimilarityCalculation("large"));
 
 		serviceImples.put("YoloV7", new YoloV7ObjectDetectionService("yolov7.pt"));
 		serviceImples.put("YoloV7x", new YoloV7ObjectDetectionService("yolov7x.pt"));
