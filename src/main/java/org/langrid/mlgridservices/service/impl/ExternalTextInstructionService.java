@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.ChatService;
+import org.langrid.service.ml.interim.TextInstructionService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
@@ -63,7 +63,7 @@ implements TextInstructionService{
 				"service python instruct.py --model %1$s " +
 				"--inputPath ./%2$s/%3$s " +
 				"--inputLanguage %4$s " + 
-				"--outPathPrefix ./%2$s/%5$s",
+				"--outputPath ./%2$s/%5$s",
 				modelName, dirName,
 				inputFileName, inputLanguage,
 				outputFileName);

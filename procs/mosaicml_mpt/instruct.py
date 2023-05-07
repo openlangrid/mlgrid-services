@@ -37,7 +37,7 @@ def run(model: str, text: str) -> str:
     return generate.tokenizer.decode(token)
 
 
-def main(model: str, inputPath: str, inputLang: str, outputPath: str):
+def main(model: str, inputPath: str, inputLanguage: str, outputPath: str):
     with open(inputPath) as f:
         text = f.read()
     ret = run(model, text)
@@ -50,6 +50,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, default="mosaicml/mpt-7b-instruct")
     parser.add_argument("--inputPath", type=str, default="./sample/input.txt")
-    parser.add_argument("--inputLang", type=str, default="en")
+    parser.add_argument("--inputLanguage", type=str, default="en")
     parser.add_argument("--outputPath", type=str, default="./sample/output.txt")
     main(**vars(parser.parse_args()))
