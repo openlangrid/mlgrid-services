@@ -1,20 +1,18 @@
 
-def run(model: str, t1: str, t2: str) -> float:
+def run(t1: str, t2: str) -> float:
     import tensorflow_hub as hub
+    import tensorflow as tf
+    import tensorflow_text as text  # Needed for loading universal-sentence-encoder-cmlm/multilingual-preprocess
     import numpy as np
-    import tensorflow_text
 
-    # for avoiding error
-    import ssl
-    ssl._create_default_https_context = ssl._create_unverified_context
+    preprocessor = hub.KerasLayer(
+        "https://tfhub.dev/google/universal-sentence-encoder-cmlm/multilingual-preprocess/2")
+    encoder = hub.KerasLayer("https://tfhub.dev/google/LaBSE/2")
 
-    prefix = "https://tfhub.dev/google/universal-sentence-encoder-multilingual"
-    model_url = f"{prefix}{'-large' if model == 'large' else ''}/3"
-    embed = hub.load(model_url)
-#    vecs = embed([t1, t2])
-#    cos_sim = lambda v1, v2 : np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
-#    return cos_sim(vecs[0], vecs[1])
-    return np.inner(embed(t1), embed(t2))[0][0]
+    normalization = lambda embeds: embeds / np.linalg.norm(embeds, 2, axis=1, keepdims=True)
+    embeds1 = normalization(encoder(preprocessor([t1]))["default"])
+    embeds2 = normalization(encoder(preprocessor([t2]))["default"])
+    return (np.matmul(embeds1, np.transpose(embeds2)))[0][0]
 
 
 def main(model: str, input1Path: str, input1Lang: str,
@@ -23,7 +21,7 @@ def main(model: str, input1Path: str, input1Lang: str,
         t1 = f.read()
     with open(input2Path) as f:
         t2 = f.read()
-    r = run(model, t1, t2)
+    r = run(t1, t2)
     with open(outputPath, mode="w") as f:
         f.write(str(r))
 

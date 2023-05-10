@@ -25,6 +25,7 @@ import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGeneratio
 import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.ExternalChatService;
 import org.langrid.mlgridservices.service.impl.ExternalTextInstructionService;
+import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
@@ -37,7 +38,6 @@ import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImage
 import org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion070TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
-import org.langrid.mlgridservices.service.impl.USETextSimilarityCalculation;
 import org.langrid.mlgridservices.service.impl.VoiceVoxTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -218,8 +218,9 @@ public class ServiceInvoker {
 		}
 
 		// Text Similarity Calculation
-		serviceImples.put("USETextSimilarityCalculation", new USETextSimilarityCalculation("normal"));
-		serviceImples.put("USELargeTextSimilarityCalculation", new USETextSimilarityCalculation("large"));
+		serviceImples.put("USETextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/use", "normal"));
+		serviceImples.put("USELargeTextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/use", "large"));
+		serviceImples.put("LabSETextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/labse"));
 
 		serviceImples.put("YoloV7", new YoloV7ObjectDetectionService("yolov7.pt"));
 		serviceImples.put("YoloV7x", new YoloV7ObjectDetectionService("yolov7x.pt"));

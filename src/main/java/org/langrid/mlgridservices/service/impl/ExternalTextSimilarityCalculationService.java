@@ -14,14 +14,18 @@ import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguagePairException;
 
-public class AbstractTextSimilarityCalculationService implements TextSimilarityCalculationService{
+public class ExternalTextSimilarityCalculationService implements TextSimilarityCalculationService{
     private final File baseDir;
-	private String model = "normal";
+	private String model = "default";
 	private String scriptFile = "calc_similarity.py";
 
-	public AbstractTextSimilarityCalculationService(File baseDir, String model){
-		this.baseDir = baseDir;
+	public ExternalTextSimilarityCalculationService(String baseDir, String model){
+		this.baseDir = new File(baseDir);
 		this.model = model;
+	}
+
+	public ExternalTextSimilarityCalculationService(String baseDir){
+		this.baseDir = new File(baseDir);
 	}
 
 	public void setScriptFile(String scriptFile) {
