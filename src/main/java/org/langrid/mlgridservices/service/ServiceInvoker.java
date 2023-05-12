@@ -15,7 +15,7 @@ import org.langrid.mlgridservices.service.group.KerasServiceGroup;
 import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
-import org.langrid.mlgridservices.service.impl.composite.BindedTextGenerationWithTextToSpeech;
+import org.langrid.mlgridservices.service.impl.composite.BindedTextInstructionWithTextToSpeech;
 import org.langrid.mlgridservices.service.impl.composite.BindedTextGuidedImageGenerationWithTranslationService;
 import org.langrid.mlgridservices.service.impl.test.ProcessFailedExceptionService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
@@ -23,7 +23,6 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
-import org.langrid.mlgridservices.service.impl.ExternalChatService;
 import org.langrid.mlgridservices.service.impl.ExternalTextInstructionService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
@@ -243,9 +242,9 @@ public class ServiceInvoker {
 		serviceImples.put("MosaicML-MPT7B", new ExternalTextInstructionService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
 		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalTextInstructionService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
 
-		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
+		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextInstructionWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));
-		serviceImples.put("JapaneseAlpacaLoRA13bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
+		serviceImples.put("JapaneseAlpacaLoRA13bWithVoiceVox_0_11_4_08", new BindedTextInstructionWithTextToSpeech(
 			"JapaneseAlpacaLoRA13b", "VoiceVox_0_11_4_08"));
 
 		serviceImples.put("ProcessFailedExceptionService", new ProcessFailedExceptionService());
