@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.group.DalleMiniServiceGroup;
-import org.langrid.mlgridservices.service.group.HuggingFaceServiceGroup;
 import org.langrid.mlgridservices.service.group.KerasServiceGroup;
 import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
@@ -25,6 +24,7 @@ import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGeneratio
 import org.langrid.mlgridservices.service.impl.EmpathService;
 import org.langrid.mlgridservices.service.impl.ExternalTextInstructionService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
+import org.langrid.mlgridservices.service.impl.ExternalTextSentimentAnalysisService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
@@ -216,10 +216,20 @@ public class ServiceInvoker {
 			serviceImples.put("DiscoDiffusionIM" + postfix, new StableDiffusionTextGuidedImageManipulationService("sd-dreambooth-library/disco-diffusion-style"));
 		}
 
+		// Text Sentiment Analysis
+		serviceImples.put("DaigoBertJapaneseSentiment", new ExternalTextSentimentAnalysisService(
+			"./procs/text_sentiment_analysis_huggingface",
+			"daigo/bert-base-japanese-sentiment",
+			"cl-tohoku/bert-base-japanese-whole-word-masking"));
+		serviceImples.put("KoheiduckBertJapaneseFinetunedSentiment", new ExternalTextSentimentAnalysisService(
+			"./procs/text_sentiment_analysis_huggingface",
+			"koheiduck/bert-japanese-finetuned-sentiment",
+			"cl-tohoku/bert-base-japanese-whole-word-masking"));
+	
 		// Text Similarity Calculation
 		serviceImples.put("USETextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/use", "normal"));
 		serviceImples.put("USELargeTextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/use", "large"));
-		serviceImples.put("LabSETextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/labse"));
+		serviceImples.put("LaBSETextSimilarityCalculation", new ExternalTextSimilarityCalculationService("./procs/labse"));
 
 		serviceImples.put("YoloV7", new YoloV7ObjectDetectionService("yolov7.pt"));
 		serviceImples.put("YoloV7x", new YoloV7ObjectDetectionService("yolov7x.pt"));
@@ -252,12 +262,10 @@ public class ServiceInvoker {
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
 
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
-		serviceGroups.put("ClTohokuSentimentAnalysis", huggingFaceServices);
 		serviceGroups.put("DalleMini", dalleMiniServices);
 		serviceGroups.put("Keras", kerasServices);
 		serviceGroups.put("Langrid", langridServices);
 		serviceGroups.put("YoloV5", yoloV5Services);
-
 	}
 	
 	private void addDiffusersTGIG(String procPath, String name, String modelPath){
@@ -351,8 +359,6 @@ public class ServiceInvoker {
 
 	@Autowired
 	private LangridServiceGroup langridServices;
-	@Autowired
-	private HuggingFaceServiceGroup huggingFaceServices;
 	@Autowired
 	private KerasServiceGroup kerasServices;
 	@Autowired
