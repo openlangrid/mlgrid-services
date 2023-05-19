@@ -252,6 +252,24 @@ public class ServiceInvoker {
 		serviceImples.put("MosaicML-MPT7B", new ExternalTextInstructionService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
 		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalTextInstructionService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
 
+		serviceImples.put("OpenCalmSmall", new ExternalTextInstructionService(
+			"./procs/open-calm", "cyberagent/open-calm-small"));
+		serviceImples.put("OpenCalmMedium", new ExternalTextInstructionService(
+			"./procs/open-calm", "cyberagent/open-calm-medium"));
+		serviceImples.put("OpenCalmLarge", new ExternalTextInstructionService(
+			"./procs/open-calm", "cyberagent/open-calm-large"));
+		serviceImples.put("OpenCalm1B", new ExternalTextInstructionService(
+			"./procs/open-calm", "cyberagent/open-calm-1b"));
+		serviceImples.put("OpenCalm3B", new ExternalTextInstructionService(
+			"./procs/open-calm", "cyberagent/open-calm-3b"));
+		serviceImples.put("OpenCalm7B", new ExternalTextInstructionService(
+			"./procs/open-calm", "cyberagent/open-calm-7b"));
+
+		serviceImples.put("RinnaJapaneseGPT3.6B", new ExternalTextInstructionService(
+			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b"));
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction", new ExternalTextInstructionService(
+			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-sft"));
+
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextInstructionWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));
 		serviceImples.put("JapaneseAlpacaLoRA13bWithVoiceVox_0_11_4_08", new BindedTextInstructionWithTextToSpeech(
