@@ -14,7 +14,7 @@ import org.langrid.mlgridservices.service.group.KerasServiceGroup;
 import org.langrid.mlgridservices.service.group.LangridServiceGroup;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
-import org.langrid.mlgridservices.service.impl.composite.BindedTextInstructionWithTextToSpeech;
+import org.langrid.mlgridservices.service.impl.composite.BindedTextGenerationWithTextToSpeech;
 import org.langrid.mlgridservices.service.impl.composite.BindedTextGuidedImageGenerationWithTranslationService;
 import org.langrid.mlgridservices.service.impl.test.ProcessFailedExceptionService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
@@ -22,7 +22,7 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
-import org.langrid.mlgridservices.service.impl.ExternalTextInstructionService;
+import org.langrid.mlgridservices.service.impl.ExternalTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSentimentAnalysisService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
@@ -243,36 +243,36 @@ public class ServiceInvoker {
 		serviceImples.put("Detectron2CCR101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"));
 		serviceImples.put("Detectron2CCX101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"));
 
-		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalTextInstructionService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
-		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalTextInstructionService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
-		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalTextInstructionService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
 //		serviceImples.put("JapaneseAlpacaLoRA65b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-65b-hf"));
-		serviceImples.put("Cerebras-GPT2.7B", new ExternalTextInstructionService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-2.7B"));
-		serviceImples.put("Cerebras-GPT6.7B", new ExternalTextInstructionService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-6.7B"));
-		serviceImples.put("MosaicML-MPT7B", new ExternalTextInstructionService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
-		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalTextInstructionService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
+		serviceImples.put("Cerebras-GPT2.7B", new ExternalTextGenerationService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-2.7B"));
+		serviceImples.put("Cerebras-GPT6.7B", new ExternalTextGenerationService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-6.7B"));
+		serviceImples.put("MosaicML-MPT7B", new ExternalTextGenerationService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
+		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalTextGenerationService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
 
-		serviceImples.put("OpenCalmSmall", new ExternalTextInstructionService(
+		serviceImples.put("OpenCalmSmall", new ExternalTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-small"));
-		serviceImples.put("OpenCalmMedium", new ExternalTextInstructionService(
+		serviceImples.put("OpenCalmMedium", new ExternalTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-medium"));
-		serviceImples.put("OpenCalmLarge", new ExternalTextInstructionService(
+		serviceImples.put("OpenCalmLarge", new ExternalTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-large"));
-		serviceImples.put("OpenCalm1B", new ExternalTextInstructionService(
+		serviceImples.put("OpenCalm1B", new ExternalTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-1b"));
-		serviceImples.put("OpenCalm3B", new ExternalTextInstructionService(
+		serviceImples.put("OpenCalm3B", new ExternalTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-3b"));
-		serviceImples.put("OpenCalm7B", new ExternalTextInstructionService(
+		serviceImples.put("OpenCalm7B", new ExternalTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-7b"));
 
-		serviceImples.put("RinnaJapaneseGPT3.6B", new ExternalTextInstructionService(
+		serviceImples.put("RinnaJapaneseGPT3.6B", new ExternalTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b"));
-		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction", new ExternalTextInstructionService(
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction", new ExternalTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-sft"));
 
-		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextInstructionWithTextToSpeech(
+		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));
-		serviceImples.put("JapaneseAlpacaLoRA13bWithVoiceVox_0_11_4_08", new BindedTextInstructionWithTextToSpeech(
+		serviceImples.put("JapaneseAlpacaLoRA13bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA13b", "VoiceVox_0_11_4_08"));
 
 		serviceImples.put("ProcessFailedExceptionService", new ProcessFailedExceptionService());

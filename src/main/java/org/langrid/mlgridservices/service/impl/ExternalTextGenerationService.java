@@ -8,20 +8,20 @@ import java.nio.file.Files;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.TextInstructionService;
+import org.langrid.service.ml.interim.TextGenerationService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class ExternalTextInstructionService
-implements TextInstructionService{
-	public ExternalTextInstructionService(){
+public class ExternalTextGenerationService
+implements TextGenerationService{
+	public ExternalTextGenerationService(){
 		this.baseDir = new File("./procs/japanese-alpaca-lora");
 		this.modelName = "decapoda-research/llama-7b-hf";
 	}
 
-	public ExternalTextInstructionService(String baseDir, String modelName) {
+	public ExternalTextGenerationService(String baseDir, String modelName) {
 		this.baseDir = new File(baseDir);
 		this.modelName = modelName;
 	}
@@ -38,7 +38,7 @@ implements TextInstructionService{
 		this.modelName = modelName;
 	}
 
-	public String instruct(String text, String textLanguage)
+	public String generate(String text, String textLanguage)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var tempDir = new File(baseDir, "temp");
@@ -60,7 +60,7 @@ implements TextInstructionService{
 		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = String.format(
 				"PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm " +
-				"service python instruct.py --model %1$s " +
+				"service python generate.py --model %1$s " +
 				"--inputPath ./%2$s/%3$s " +
 				"--inputLanguage %4$s " + 
 				"--outputPath ./%2$s/%5$s",
