@@ -5,6 +5,8 @@ mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとし
 現在以下の17種類のサービスインタフェースが定義され、149のサービスが実装されています。
 
 * 機械翻訳([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TranslationService.java))
+    * [FuguMT](https://huggingface.co/staka/fugumt-en-ja)
+    * [HelsinkiNLPOpusMT](https://huggingface.co/Helsinki-NLP/opus-mt-en-jap)
 * テキスト生成([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextGenerationService.java))
 * テキスト生成音声合成([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextGenerationWithTextToSpeechService.java))
 * テキスト感情分析([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextSentimentAnalysisService.java))
