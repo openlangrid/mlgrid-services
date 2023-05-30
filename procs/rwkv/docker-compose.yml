@@ -7,6 +7,6 @@ services:
     volumes:
       - ./sample:/workspace/RWKV-LM-LoRA/RWKV-v4neo/sample
       - ./temp:/workspace/RWKV-LM-LoRA/RWKV-v4neo/temp
-      - ./instruct.py:/workspace/RWKV-LM-LoRA/RWKV-v4neo/instruct.py
+      - ./generate.py:/workspace/RWKV-LM-LoRA/RWKV-v4neo/generate.py
       - ../cache/rwkv:/models
       - ../cache/huggingface:/root/.cache/huggingface
