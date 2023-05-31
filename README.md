@@ -15,6 +15,8 @@ mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとし
     * RinnaJapaneseGPT
     * RWKV(LoRA-Alpaca-Cleaned-Japan)
 * テキスト生成音声合成([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextGenerationWithTextToSpeechService.java))
+    * DaigoBertJapaneseSentiment
+    * KoheiduckBertJapaneseFinetunedSentiment
 * テキスト感情分析([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextSentimentAnalysisService.java))
 * テキスト類似度計算([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextSimilarityCalculationService.java))
 * 画像生成([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextGuidedImageGenerationService.java))
