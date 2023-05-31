@@ -8,6 +8,12 @@ mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとし
     * [FuguMT](https://huggingface.co/staka/fugumt-en-ja)
     * [HelsinkiNLPOpusMT](https://huggingface.co/Helsinki-NLP/opus-mt-en-jap)
 * テキスト生成([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextGenerationService.java))
+    * Cerebras-GPT
+    * JapaneseAlpacaLoRA
+    * MosaicML-MPT
+    * OpenCalm
+    * RinnaJapaneseGPT
+    * RWKV(LoRA-Alpaca-Cleaned-Japan)
 * テキスト生成音声合成([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextGenerationWithTextToSpeechService.java))
 * テキスト感情分析([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextSentimentAnalysisService.java))
 * テキスト類似度計算([インタフェース定義](https://github.com/openlangrid/mlgrid-services/blob/master/src/main/java/org/langrid/service/ml/interim/TextSimilarityCalculationService.java))
