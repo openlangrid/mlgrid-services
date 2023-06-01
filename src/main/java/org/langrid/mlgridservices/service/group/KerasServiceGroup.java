@@ -31,9 +31,9 @@ public class KerasServiceGroup implements ServiceGroup {
 	@Override
 	public Response invoke(String serviceId, Request invocation) {
 		try{
-			var a2 = invocation.getArgs()[1];
+			var a2 = invocation.getArgs()[0];
 			if(a2 instanceof String){
-				invocation.getArgs()[1] = Base64.getDecoder().decode((String)a2);
+				invocation.getArgs()[0] = Base64.getDecoder().decode((String)a2);
 			}
 			try(var t = ServiceInvokerContext.startServiceTimer()){
 				return new Response(
