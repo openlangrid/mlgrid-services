@@ -64,6 +64,70 @@ mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとし
     * [Google Cloud Text-to-Speech](https://cloud.google.com/text-to-speech)
     * [VoiceVox](https://github.com/VOICEVOX/voicevox_core/)
 
+## 起動方法
+
+### 必要なソフトウェア
+
+以下のソフトウェアを使用しています。mlgrid-serviceを起動するシステムに、あらかじめインストールしておく必要があります。
+
+* JDK 17 ([Temurin](https://adoptium.net/temurin/releases/))
+* Docker 20.10 + docker-compose 1.29 ([Docker Engine](https://docs.docker.com/engine/), [Docker Compose](https://docs.docker.com/compose/))
+
+### ビルド方法
+
+JDK17をインストールした状態で、以下のコマンドを実行してください。
+
+```bash
+git clone https://github.com/openlangrid/mlgrid-services/
+cd mlgrid-services
+./gradlew build -x test
+```
+
+### 起動方法
+
+まず、設定ファイルをコピーしてください。
+
+```bash
+cp ./src/main/resources/application.yml.sample ./src/main/resources/application.yml
+```
+
+次に、コピーした設定ファイルの環境に応じて編集してください。
+
+```yaml
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ${CONTEXT_PATH:/mlgrid-services}
+
+services:
+  langrid:
+    url: ${LANGRID_URL:https://langrid.org/service_manager/invoker/}
+    username: ${LANGRID_USERNAME:langrid-user}
+    password: ${LANGRID_PASSWORD:langrid-pass}
+
+  keras:
+    docker-service-name: ${KERAS_SERVICE_NAME:keras-gpu}
+
+  empath:
+    endpoint: ${EMPATH_ENDPOINT:https://api.webempath.net/v2/analyzeWav}
+    api-key: ${EMPATH_APIKEY:empath-api-key}
+
+  google:
+    tts-api-key-file: ${GOOGLE_TTS_APIKEY:./google-tts-key.json}
+```
+
+[言語グリッド](https://langrid.org/), [Empath](https://webempath.net/lp-jpn/), [Google Cloud TTS](https://cloud.google.com/text-to-speech) を利用する場合、それぞれのURLや認証情報を変更してください。
+
+Kerasを用いた画像認識でCPUを使用する場合は、keras.docker-service-nameをkeras-cpuに変更してください。
+
+ファイル変更後、以下のコマンドを実行すると、mlgrid-servicesが起動します。
+
+```bash
+java -jar ./build/libs/mlgrid-services-0.0.1-SNAPSHOT.jar
+```
+
+
+
 ## Acknowledgements
 このソフトウェアは、科研費19K20243の助成を受けた研究において作成されたものです。
 
