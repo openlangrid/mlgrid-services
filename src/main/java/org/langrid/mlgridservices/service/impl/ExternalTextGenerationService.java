@@ -17,13 +17,18 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 public class ExternalTextGenerationService
 implements TextGenerationService{
 	public ExternalTextGenerationService(){
-		this.baseDir = new File("./procs/japanese-alpaca-lora");
-		this.modelName = "decapoda-research/llama-7b-hf";
+		this("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf");
 	}
 
 	public ExternalTextGenerationService(String baseDir, String modelName) {
+		this(baseDir, modelName, "generate.py");
+	}
+
+	public ExternalTextGenerationService(String baseDir, String modelName,
+			String scriptName) {
 		this.baseDir = new File(baseDir);
 		this.modelName = modelName;
+		this.scriptName = scriptName;
 	}
 
 	public File getBaseDir() {
@@ -60,11 +65,11 @@ implements TextGenerationService{
 		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = String.format(
 				"PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm " +
-				"service python generate.py --model %1$s " +
-				"--inputPath ./%2$s/%3$s " +
-				"--inputLanguage %4$s " + 
-				"--outputPath ./%2$s/%5$s",
-				modelName, dirName,
+				"service python %3$s --model %1$s " +
+				"--inputPath ./%2$s/%4$s " +
+				"--inputLanguage %5$s " + 
+				"--outputPath ./%2$s/%6$s",
+				modelName, dirName, scriptName,
 				inputFileName, inputLanguage,
 				outputFileName);
 			try(var t = ServiceInvokerContext.startServiceTimer()){
@@ -77,4 +82,5 @@ implements TextGenerationService{
 
 	private File baseDir;
 	private String modelName;
+	private String scriptName;
 }
