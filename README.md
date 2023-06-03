@@ -67,6 +67,13 @@ Java17およびSpringbootを使って開発されています。
 
 ## 起動方法
 
+### 必要なハードウェア
+
+mlgrid-servicesに含まれている多くのサービスは、GPUを利用します。どのサービスがどの程度のGPUを使用するかは、
+各学習モデルのドキュメント等を参照してください。
+開発・テストにはNVIDIA Quadro RTX A6000(48GB RAM)を利用しています。
+
+
 ### 必要なソフトウェア
 
 以下のソフトウェアを使用しています。mlgrid-serviceを起動するシステムに、あらかじめインストールしておく必要があります。
@@ -92,7 +99,7 @@ cd mlgrid-services
 cp ./src/main/resources/application.yml.sample ./src/main/resources/application.yml
 ```
 
-次に、コピーした設定ファイルの環境に応じて編集してください。
+次に、コピーした設定ファイル(`application.yml`)の内容を環境に応じて編集してください。
 
 ```yaml
 server:
@@ -126,6 +133,19 @@ Kerasを用いた画像認識でCPUを使用する場合は、keras.docker-servi
 ```bash
 java -jar ./build/libs/mlgrid-services-0.0.1-SNAPSHOT.jar
 ```
+
+### 簡易UIによる動作確認
+
+mlgrid-servicesが起動すると、以下のURLで、[簡易UI](https://github.com/openlangrid/mlgrid-ui)が利用できます(簡易UIのビルド結果がmlgrid-servicesのsrc/main/resouces/static/ 以下に取り込まれており、それがブラウザに返されます)。
+```
+http://localhost:8080/mlgrid-services/index.html
+```
+
+![簡易UI](webui.png)
+
+サービスの種別毎にタブが表示され、タブ内にサービスとサービスへの入力を指定するテキストボックスや画像ファイルなどを選択するボタン、実行ボタンなどが配置されています。入力を指定し、実行するサービスをチェックし、実行ボタンをクリックすると、サービスが実行され結果が表示されます。
+
+多くのサービスが、実行されるたびにDockerを用いて環境構築、モデルのロード、実行を行うため、相応の時間がかかります(十数秒から数分)。
 
 
 
