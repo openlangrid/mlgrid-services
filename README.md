@@ -1,9 +1,9 @@
 # 機械学習サービス基盤 - mlgrid-services
 
-mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとして提供する機械学習サービス基盤です。
+mlgrid-servicesは、様々な機械学習ソフトウェアをWebサービスとして提供する機械学習サービス基盤です。
 Java17およびSpringbootを使って開発されています。
 
-現在以下の17種類のサービスインタフェースが定義され、149のサービスが実装されています。以下はインタフェースの一覧と、各サービスに使用されている学習モデルや外部サービスです。各モデルの利用により生成されたデータの扱いは、それぞれの利用規約を参照してください。
+現在以下の17種類のサービスインタフェースが定義され、149のサービスが実装されています。以下はインタフェースの一覧と、各サービスに使用されている学習モデルや外部サービスです。学習モデルを利用するための環境はDockerコンテナとして構築されています。[procsディレクトリ](https://github.com/openlangrid/mlgrid-services/tree/master/procs)以下にそれぞれのモデル毎の設定ファイルや実行スクリプト(bash, pythonなど)が格納されています。各モデルの利用により生成されたデータの扱いは、それぞれの利用規約を参照してください。
 
 * 機械翻訳([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TranslationService.java))
     * [FuguMT](https://huggingface.co/staka/fugumt-en-ja)
