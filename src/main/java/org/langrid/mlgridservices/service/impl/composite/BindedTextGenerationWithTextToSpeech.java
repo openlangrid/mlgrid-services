@@ -12,8 +12,8 @@ import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public class BindedTextGenerationWithTextToSpeech
 implements TextGenerationWithTextToSpeechService {
-	public BindedTextGenerationWithTextToSpeech(String tiServiceName, String ttsServiceName){
-		this.tiServiceName = tiServiceName;
+	public BindedTextGenerationWithTextToSpeech(String tgServiceName, String ttsServiceName){
+		this.tgServiceName = tgServiceName;
 		this.ttsServiceName = ttsServiceName;
 	}
 
@@ -21,12 +21,12 @@ implements TextGenerationWithTextToSpeechService {
 	public Audio generate(String text, String textLanguage)
 			throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		var si = ServiceInvokerContext.get();
-		var gen = si.getService(tiServiceName, TextGenerationService.class)
+		var gen = si.getService(tgServiceName, TextGenerationService.class)
 				.generate(text, textLanguage);
 		return si.getService(ttsServiceName, TextToSpeechService.class)
 				.speak(gen, textLanguage);
 	}
 
-	private String tiServiceName;
+	private String tgServiceName;
 	private String ttsServiceName;
 }
