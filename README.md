@@ -2,7 +2,7 @@
 
 mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとして提供する機械学習サービス基盤です。
 
-現在以下の17種類のサービスインタフェースが定義され、149のサービスが実装されています。以下はインタフェースの一覧と、サービスに使用されている学習モデルの例です。
+現在以下の17種類のサービスインタフェースが定義され、149のサービスが実装されています。以下はインタフェースの一覧と、各サービスに使用されている学習モデルや外部サービスです。各モデルの利用により生成されたデータの扱いは、それぞれの利用規約を参照してください。
 
 * 機械翻訳([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TranslationService.java))
     * [FuguMT](https://huggingface.co/staka/fugumt-en-ja)
@@ -24,21 +24,45 @@ mlgrid-serviceは、様々な機械学習ソフトウェアをサービスとし
 * 画像生成([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextGuidedImageGenerationService.java))
     * [ChiyodamomoTrinartWaifu50-50](https://huggingface.co/V3B4/chiyoda-momo-trinart-waifu-diffusion-50-50)
     * [Cool Japan Diffusion for learning 2.0](https://huggingface.co/alfredplpl/cool-japan-diffusion-for-learning-2-0)
+    * [Dalle Mega](https://huggingface.co/dalle-mini/dalle-mega)
+    * [Dalle Mini](https://huggingface.co/dalle-mini/dalle-mini)
+    * [Disco Diffusion style on Stable Diffusion via Dreamboot](https://huggingface.co/sd-dreambooth-library/disco-diffusion-style)
+    * [Ghibli Diffusion](https://huggingface.co/nitrosocke/Ghibli-Diffusion)
+    * [Japanese Stable Diffusion](https://huggingface.co/rinna/japanese-stable-diffusion)
+    * [Midjourney style](https://huggingface.co/prompthero/midjourney-v4-diffusion)
+    * [Openjourney](https://huggingface.co/prompthero/openjourney-v4)
+    * [Picasso Diffusion 1.1](https://huggingface.co/aipicasso/picasso-diffusion-1-1)
     * [Stable Diffusion v1-4](https://huggingface.co/CompVis/stable-diffusion-v1-4)
     * [Stable Diffusion v1-5](https://huggingface.co/runwayml/stable-diffusion-v1-5)
     * [Stable Diffusion v2](https://huggingface.co/stabilityai/stable-diffusion-2)
     * [Stable Diffusion v2-1](https://huggingface.co/stabilityai/stable-diffusion-2-1)
+    * [Trinart Stable Diffusion v2](https://huggingface.co/naclbit/trinart_stable_diffusion_v2)
+    * [Trinart Waifu Diffusion 50-50](https://huggingface.co/doohickey/trinart-waifu-diffusion-50-50)
+    * [waifu-diffusion v1.4](https://huggingface.co/hakurei/waifu-diffusion)
 * テキスト指示での画像編集([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextGuidedImageManipulationService.java))
+    * 画像生成のモデルの一部を利用
 * 画像変換([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/ImageConversionService.java))
+    * [CodeFormer](https://github.com/sczhou/CodeFormer)
+    * [RealESRGAN](https://github.com/xinntao/Real-ESRGAN)
 * 画像テキスト化([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/ImageToTextConversionService.java))
+    * [clip-interrogator](https://github.com/pharmapsychotic/clip-interrogator)
 * 画像分類([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/ImageClassificationService.java))
+    * [Keras](https://www.tensorflow.org/api_docs/python/tf/keras)
 * 物体検出([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/ObjectDetectionService.java))
+    * [YoloV5](https://github.com/ultralytics/yolov5)
+    * [YoloV7](https://github.com/WongKinYiu/yolov7)
 * セグメンテーション([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/ImageSegmentationService.java))
+    * [Detectron](https://github.com/facebookresearch/detectron2)
 * 姿勢推定([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/HumanPoseEstimation3dService.java))
+    * [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 * 音声感情認識([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/SpeechEmotionRecognitionService.java))
 * 音声認識([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/SpeechRecognitionService.java))
+    * [SpeechBrain](https://github.com/speechbrain/speechbrain)
 * リアルタイム音声認識([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/ContinuousSpeechRecognitionService.java))
+    * [VOSK](https://alphacephei.com/vosk/server)
 * 音声合成([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TextToSpeechService.java))
+    * [Google Cloud Text-to-Speech](https://cloud.google.com/text-to-speech)
+    * [VoiceVox](https://github.com/VOICEVOX/voicevox_core/)
 
 ## Acknowledgements
 このソフトウェアは、科研費19K20243の助成を受けた研究において作成されたものです。
