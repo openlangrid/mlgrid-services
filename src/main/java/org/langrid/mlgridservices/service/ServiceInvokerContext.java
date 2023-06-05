@@ -84,10 +84,16 @@ public class ServiceInvokerContext implements AutoCloseable{
 	@SuppressWarnings("unchecked")
 	public <T> T getBindedService(String invocationName, Class<T> intf){
 		var bindings = (Map<String, Object>)headers.get("bindings");
-		var serviceName = (String)bindings.get(invocationName);
+		var binding = bindings.get(invocationName);
+		String serviceName = null;
+		if(binding instanceof String){
+			serviceName = (String)binding;
+		} else if(binding instanceof Map){
+			serviceName = (String)((Map<String, Object>)binding).get("serviceId");
+		}
 		var s = getService(serviceName, intf);
 		return (T)Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-			new Class[]{intf}, (Object instance, Method method, Object[] args) -> {
+			new Class[]{intf}, (Object proxy, Method method, Object[] args) -> {
 					ServiceInvokerContext.start(invocationName);
 					try{
 						return method.invoke(s, args);
