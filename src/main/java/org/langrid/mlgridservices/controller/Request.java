@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode
 public class Request {
-	private Map<String, String> headers;
+	private Map<String, Object> headers;
 	private String method;
 	private Object[] args;
 }

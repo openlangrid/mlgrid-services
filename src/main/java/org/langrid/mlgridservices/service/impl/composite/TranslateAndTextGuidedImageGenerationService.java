@@ -16,9 +16,9 @@ implements TranslationWithTextGuidedImageGenerationService{
 	public Image generate(String text, String textLanguage, String targetLanguage)
 		throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException, UnsupportedLanguagePairException{
 		var sc = ServiceInvokerContext.get();
-		var transResult = sc.resolveService("Translation", TranslationService.class)
+		var transResult = sc.getBindedService("Translation", TranslationService.class)
 			.translate(text, textLanguage, targetLanguage);
-		var genResult = sc.resolveService("TextGuidedImageGeneration", TextGuidedImageGenerationService.class)
+		var genResult = sc.getBindedService("TextGuidedImageGeneration", TextGuidedImageGenerationService.class)
 			.generate(transResult, targetLanguage);
 		return genResult;
 	}

@@ -16,6 +16,7 @@ import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.group.YoloV5ServiceGroup;
 import org.langrid.mlgridservices.service.impl.composite.BindedTextGenerationWithTextToSpeech;
 import org.langrid.mlgridservices.service.impl.composite.BindedTextGuidedImageGenerationWithTranslationService;
+import org.langrid.mlgridservices.service.impl.composite.TextGenerationWithTranslation;
 import org.langrid.mlgridservices.service.impl.test.ProcessFailedExceptionService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
@@ -277,14 +278,18 @@ public class ServiceInvoker {
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-ppo",
 			"generate_ppo.py"));
 			
+		// composite
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));
 		serviceImples.put("JapaneseAlpacaLoRA13bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA13b", "VoiceVox_0_11_4_08"));
+		serviceImples.put("TextGenerationWithTranslation", new TextGenerationWithTranslation());
 
+		
 		serviceImples.put("ProcessFailedExceptionService", new ProcessFailedExceptionService());
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
+
 
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("DalleMini", dalleMiniServices);
@@ -312,12 +317,12 @@ public class ServiceInvoker {
 	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
-		try(var sic = ServiceInvokerContext.create(new ServiceFactory(){
+		try(var sic = ServiceInvokerContext.start(new ServiceFactory(){
 			@SuppressWarnings("unchecked")
 			public <T> T create(String name, Class<T> intf) {
 				return (T)serviceImples.get(name);
 			}
-		})){
+		}, invocation.getHeaders())){
 			// serviceIdに対応する実装クラスを探す
 			var s = serviceImples.get(serviceId);
 			if(s != null){
