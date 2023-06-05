@@ -267,9 +267,12 @@ public class ServiceInvoker {
 
 		serviceImples.put("RinnaJapaneseGPT3.6B", new ExternalTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b"));
-		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction", new ExternalTextGenerationService(
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-sft", new ExternalTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-sft",
 			"generate_sft.py"));
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-sft-v2", new ExternalTextGenerationService(
+			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-sft-v2",
+			"generate_sft_v2.py"));
 		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-ppo", new ExternalTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-ppo",
 			"generate_ppo.py"));

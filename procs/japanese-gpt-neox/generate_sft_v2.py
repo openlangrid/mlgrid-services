@@ -35,8 +35,8 @@ def main(model: str, inputPath: str, inputLanguage: str, outputPath: str):
 if __name__ == "__main__": 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", type=str, default="rinna/japanese-gpt-neox-3.6b-instruction-ppo")
+    parser.add_argument("--model", type=str, default="rinna/japanese-gpt-neox-3.6b-instruction-sft-v2")
     parser.add_argument("--inputPath", type=str, default="./sample/input.txt")
     parser.add_argument("--inputLanguage", type=str, default="ja")
-    parser.add_argument("--outputPath", type=str, default="./sample/output_ppo.txt")
+    parser.add_argument("--outputPath", type=str, default="./sample/output_sft_v2.txt")
     main(**vars(parser.parse_args()))

@@ -19,7 +19,7 @@ def run(model_name: str, text: str):
             eos_token_id=tokenizer.eos_token_id
         )
     output = tokenizer.decode(output_ids.tolist()[0][token_ids.size(1):])
-    output = output.replace("<NL>", "\n").replace("<s/>", "")
+    output = output.replace("<NL>", "\n").rstrip("</s>")
     return output
 
 
@@ -37,5 +37,5 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str, default="rinna/japanese-gpt-neox-3.6b-instruction-sft")
     parser.add_argument("--inputPath", type=str, default="./sample/input.txt")
     parser.add_argument("--inputLanguage", type=str, default="ja")
-    parser.add_argument("--outputPath", type=str, default="./sample/output.txt")
+    parser.add_argument("--outputPath", type=str, default="./sample/output_sft.txt")
     main(**vars(parser.parse_args()))
