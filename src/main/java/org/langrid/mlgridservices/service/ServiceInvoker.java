@@ -317,44 +317,40 @@ public class ServiceInvoker {
 	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
-		try(var sic = ServiceInvokerContext.start(new ServiceFactory(){
-			@SuppressWarnings("unchecked")
-			public <T> T create(String name, Class<T> intf) {
-				return (T)serviceImples.get(name);
-			}
-		}, invocation.getHeaders())){
+		var sic = ServiceInvokerContext.start(new ServiceFactory(){
+				@SuppressWarnings("unchecked")
+				public <T> T create(String serviceId, Class<T> intf) {
+					return (T)serviceImples.get(serviceId);
+				}
+			}, invocation.getHeaders());
+		try{
 			// serviceIdに対応する実装クラスを探す
 			var s = serviceImples.get(serviceId);
-			if(s != null){
-				System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
-				var mn = invocation.getMethod();
-				var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
-				if(m == null){
-					throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
+			if(s == null){
+				// 実装クラスがなければグループを探す
+				var g = serviceGroups.get(serviceId);
+				if(g == null) {
+					// 見つからなければ前方一致で検索
+					for(var e : serviceGroups.entrySet()) {
+						if(!serviceId.startsWith(e.getKey())) continue;
+						g = e.getValue();
+					}
 				}
-				var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
-				var r = new Response(ObjectUtil.invoke(s, mn, args));
-				sic.timer().close();
-				r.putHeader("timer", sic.timer());
-				return r;
-			}
-			// 実装クラスがなければグループを探す
-			var g = serviceGroups.get(serviceId);
-			if(g == null) {
-				// 見つからなければ前方一致で検索
-				for(var e : serviceGroups.entrySet()) {
-					if(!serviceId.startsWith(e.getKey())) continue;
-					g = e.getValue();
+				if(g == null) {
+					throw new ProcessFailedException("service " + serviceId + " not found.");
 				}
+				s = g.get(serviceId);
 			}
-			if(g == null) {
-				throw new ProcessFailedException("service " + serviceId + " not found.");
+			System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
+			var mn = invocation.getMethod();
+			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
+			if(m == null){
+				throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
 			}
-			System.out.printf("[invokeGroup] %s -> %s%n", serviceId, g);
-			var r = g.invoke(serviceId, invocation);
+			var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
+			var r = new Response(ObjectUtil.invoke(s, mn, args));
 			sic.timer().close();
 			r.putHeader("timer", sic.timer());
-			serviceGroups.put(serviceId, g); // 処理が正常に終了した場合はserviceIdとグループを関連付けておく。
 			return r;
 		} catch(RuntimeException e){
 			try{
