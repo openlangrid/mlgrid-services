@@ -7,17 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.langrid.mlgridservices.controller.Request;
-import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.service.ml.TranslationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import jp.go.nict.langrid.client.soap.SoapClientFactory;
-import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.commons.util.Pair;
-import jp.go.nict.langrid.service_1_2.AccessLimitExceededException;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.LangridException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
@@ -34,16 +30,14 @@ public class LangridServiceGroup implements ServiceGroup{
 			);
 	}
 
-	public Response invoke(String serviceId, Request invocation) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T get(String serviceId) {
+		if(serviceId.startsWith("Langrid")){
+			serviceId = serviceId.substring("Langrid".length());
+		}
 		try{
-			if(serviceId.startsWith("Langrid")){
-				serviceId = serviceId.substring("Langrid".length());
-			}
-			var c = newClient(serviceId, intfs.get(serviceId));
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				var r = ObjectUtil.invoke(c, invocation.getMethod(), invocation.getArgs());
-				return new Response(r);
-			}
+			return (T)newClient(serviceId, intfs.get(serviceId));
 		} catch(RuntimeException e){
 			throw e;
 		} catch(Exception e){
@@ -51,17 +45,18 @@ public class LangridServiceGroup implements ServiceGroup{
 		}
 	}
 
-	private Object newClient(String serviceId, Class<?> intfClass)
+	@SuppressWarnings("unchecked")
+	private <T> T newClient(String serviceId, Class<T> intfClass)
 			throws MalformedURLException{
 		if(intfClass.equals(TranslationService.class)){
 			var orig = new SoapClientFactory().create(
 				jp.go.nict.langrid.service_1_2.translation.TranslationService.class,
 				new URL(url + serviceId), username, password);
-			return new TranslationService(){
+			return (T)new TranslationService(){
 				@Override
 				public String translate(String text, String textLanguage, String targetLanguage)
 						throws InvalidParameterException, ProcessFailedException, UnsupportedLanguagePairException {
-					try{
+					try(var t = ServiceInvokerContext.startServiceTimer()){
 						return orig.translate(textLanguage, targetLanguage, text);
 					} catch(InvalidParameterException | ProcessFailedException e){
 						throw e;

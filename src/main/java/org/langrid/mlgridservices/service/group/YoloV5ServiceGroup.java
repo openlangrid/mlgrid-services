@@ -1,19 +1,19 @@
 package org.langrid.mlgridservices.service.group;
 
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
-import org.langrid.mlgridservices.controller.Request;
-import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.YoloV5ObjectDetectionService;
+import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.commons.util.Pair;
+import jp.go.nict.langrid.service_1_2.InvalidParameterException;
+import jp.go.nict.langrid.service_1_2.ProcessFailedException;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 @Service
 public class YoloV5ServiceGroup implements ServiceGroup{
@@ -30,21 +30,22 @@ public class YoloV5ServiceGroup implements ServiceGroup{
 	}
 
 	@Override
-	public Response invoke(String serviceId, Request invocation) {
-		try{
-			var a1 = invocation.getArgs()[0];
-			if(a1 instanceof String){
-				invocation.getArgs()[0] = Base64.getDecoder().decode((String)a1);
+	@SuppressWarnings("unchecked")
+	public <T> T get(String serviceId) {
+		var s = service(serviceId);
+		return (T)new ObjectDetectionService() {
+			@Override
+			public ObjectDetectionResult detect(byte[] image, String imageFormat, String labelLanguage)
+					throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+				try(var t = ServiceInvokerContext.startServiceTimer()){
+					return s.detect(image, imageFormat, labelLanguage);
+				} catch(RuntimeException e){
+					throw e;
+				} catch(Exception e){
+					throw new RuntimeException(e);
+				}
 			}
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				return new Response(
-						ObjectUtil.invoke(service(serviceId), invocation.getMethod(), invocation.getArgs()));
-			}
-		} catch(RuntimeException e){
-			throw e;
-		} catch(Exception e){
-			throw new RuntimeException(e);
-		}
+		};
 	}
 
 	private ObjectDetectionService service(String serviceId){

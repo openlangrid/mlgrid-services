@@ -8,13 +8,16 @@ import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.KerasImageClassificationService;
+import org.langrid.service.ml.ImageClassificationResult;
 import org.langrid.service.ml.ImageClassificationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.commons.util.Pair;
+import jp.go.nict.langrid.service_1_2.InvalidParameterException;
+import jp.go.nict.langrid.service_1_2.ProcessFailedException;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 @Service
 public class KerasServiceGroup implements ServiceGroup {
@@ -29,21 +32,23 @@ public class KerasServiceGroup implements ServiceGroup {
 	}
 
 	@Override
-	public Response invoke(String serviceId, Request invocation) {
-		try{
-			var a2 = invocation.getArgs()[0];
-			if(a2 instanceof String){
-				invocation.getArgs()[0] = Base64.getDecoder().decode((String)a2);
+	@SuppressWarnings("unchecked")
+	public <T> T get(String serviceId) {
+		var s = service(serviceId);
+		return (T)new ImageClassificationService() {
+			@Override
+			public ImageClassificationResult[] classify(byte[] image, String format, String labelLanguage,
+					int maxResults)
+					throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+				try(var t = ServiceInvokerContext.startServiceTimer()){
+					return s.classify(image, format, labelLanguage, maxResults);
+				} catch(RuntimeException e){
+					throw e;
+				} catch(Exception e){
+					throw new RuntimeException(e);
+				}
 			}
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				return new Response(
-						ObjectUtil.invoke(service(serviceId), invocation.getMethod(), invocation.getArgs()));
-			}
-		} catch(RuntimeException e){
-			throw e;
-		} catch(Exception e){
-			throw new RuntimeException(e);
-		}
+		};
 	}
 
 	private ImageClassificationService service(String serviceId){

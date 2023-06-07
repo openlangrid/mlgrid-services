@@ -3,18 +3,17 @@ package org.langrid.mlgridservices.service.group;
 import java.util.Arrays;
 import java.util.List;
 
-import org.langrid.mlgridservices.controller.Request;
-import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
+import org.langrid.service.ml.Image;
 import org.langrid.service.ml.TextGuidedImageGenerationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import jp.go.nict.langrid.commons.beanutils.Converter;
-import jp.go.nict.langrid.commons.lang.ClassUtil;
-import jp.go.nict.langrid.commons.lang.ObjectUtil;
 import jp.go.nict.langrid.commons.util.Pair;
+import jp.go.nict.langrid.service_1_2.InvalidParameterException;
+import jp.go.nict.langrid.service_1_2.ProcessFailedException;
+import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 @Service
 public class DalleMiniServiceGroup  implements ServiceGroup {
@@ -28,15 +27,19 @@ public class DalleMiniServiceGroup  implements ServiceGroup {
 	}
 
 	@Override
-	public Response invoke(String serviceId, Request invocation) {
+	@SuppressWarnings("unchecked")
+	public <T> T get(String serviceId) {
 		try{
 			var s = service(serviceId);
-			var mn = invocation.getMethod();
-			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
-			var args = new Converter().convertEachElement(invocation.getArgs(), m.getParameterTypes());
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				return new Response(ObjectUtil.invoke(s, mn, args));
-			}
+			return (T)new TextGuidedImageGenerationService(){
+				@Override
+				public Image[] generateMultiTimes(String text, String textLanguage, int numberOfTimes)
+						throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+					try(var t = ServiceInvokerContext.startServiceTimer()){
+						return s.generateMultiTimes(text, textLanguage, numberOfTimes);
+					}
+				}
+			};
 		} catch(RuntimeException e){
 			throw e;
 		} catch(Exception e){
