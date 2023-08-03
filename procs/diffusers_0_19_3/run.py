@@ -3,8 +3,34 @@
 # "doohickey/trinart-waifu-diffusion-50-50", "sd-dreambooth-library/disco-diffusion-style"
 # "hakurei/waifu-diffusion", "naclbit/trinart_stable_diffusion_v2"(diffusers-60k, diffusers-95k / diffusers-115k)
 
+
+# get env var
+import os
+
+TOKEN = os.environ['HUGGINGFACE_TOKEN']
+
+
+# load defaults
+import torch
+import yaml
+def convDict(value):
+    return dict(map(convItem, value.items()))
+
+def convItem(item):
+    [key, value] = item
+    if isinstance(value, dict):
+        return (key, convDict(value))
+    if key == "torch_dtype":
+        return (key, eval(value))
+    return (key, value)
+
+with open('defaults.yml', 'r') as yml:
+    config = yaml.safe_load(yml)["defaults"]
+    config = convDict(config)
+
+
 # parse args
-import argparse
+import argparse, os
 parser = argparse.ArgumentParser()
 parser.add_argument("prompt", nargs="?", type=str, default="sunset over a lake in the mountains")
 parser.add_argument("numOfSamples", nargs="?", type=int, default=1)
@@ -14,53 +40,72 @@ parser.add_argument("--modelRevision", type=str, default=None)
 parser.add_argument("--modelTorchDType", type=str, default=None)
 parser.add_argument("--initImage", type=str, default=None)
 parser.add_argument("--negativePrompt", type=str, default=None)
-parser.add_argument("--useRefiner", action='store_true')
 args = parser.parse_args()
 
 # construct opts
+import torch
 modelPath = args.modelPath
 outPathPrefix = args.outPathPrefix
-prompt = args.prompt
 
-import torch
-from diffusers import DiffusionPipeline
+modelOpts = config[args.modelPath] if args.modelPath in config else {}
+if args.modelRevision: modelOpts["revision"] = args.modelRevision
+if args.modelTorchDType: modelOpts["torch_dtype"] = args.modelTorchDType
 
-if args.useRefiner:
-    n_steps = 40
-    high_noise_frac = 0.8
-    base = DiffusionPipeline.from_pretrained(
-        modelPath,
-        torch_dtype=torch.float16, variant="fp16",
-        use_safetensors=True)
-    base.to("cuda")
-    images = base(
-        prompt=prompt,
-        num_inference_steps=n_steps,
-        denoising_end=high_noise_frac
-        ).images
-    refiner = DiffusionPipeline.from_pretrained(
-        "stabilityai/stable-diffusion-xl-refiner-1.0",
-        text_encoder_2=base.text_encoder_2,
-        vae=base.vae,
-        torch_dtype=torch.float16,
-        use_safetensors=True,
-        variant="fp16",)
-    refiner.to("cuda")
-    images = refiner(
-        prompt=prompt,
-        image=images,
-        num_inference_steps=n_steps,
-        denoising_start=high_noise_frac
-        ).images
+pipeOpts = {
+    "prompt": args.prompt,
+    "nagetive_prompt": args.negativePrompt,
+    "init_image": args.initImage
+}
+
+# write options
+import json
+class Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, torch.dtype):
+            return str(obj)
+        return json.JSONEncoder.default(self, obj)
+with open(f"{outPathPrefix}.modelOpts.txt", 'w', encoding='UTF-8') as f:
+    modelOpts["modelPath"] = modelPath
+    f.write(json.dumps(modelOpts, indent=2, cls=Encoder))
+with open(f"{outPathPrefix}.pipeOpts.txt", 'w', encoding='UTF-8') as f:
+    f.write(json.dumps(pipeOpts, indent=2, cls=Encoder))
+
+# adjust options after save
+from PIL import Image
+modelOpts["use_auth_token"] = TOKEN
+pipeOpts["prompt"] = [args.prompt] * args.numOfSamples
+pipeOpts["init_image"] = Image.open(pipeOpts["init_image"]) if pipeOpts["init_image"] != None else None
+
+
+# prepare model
+del modelOpts["modelPath"]
+if pipeOpts["init_image"] != None:
+    from diffusers import StableDiffusionImg2ImgPipeline
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
+        modelPath, **modelOpts)
 else:
-    base = DiffusionPipeline.from_pretrained(
-        modelPath,
-        torch_dtype=torch.float16, variant="fp16",
-        use_safetensors=True)
-    base.to("cuda")
-    images = base(prompt=prompt).images
+    del pipeOpts["init_image"]
+    if pipeOpts["nagetive_prompt"] == None: del pipeOpts["nagetive_prompt"]
+    from diffusers import StableDiffusionPipeline
+    pipe = StableDiffusionPipeline.from_pretrained(
+        modelPath, **modelOpts)
+#pipe.enable_attention_slicing()
+pipe = pipe.to("cuda")
+from diffusers.utils.import_utils import is_xformers_available
+if is_xformers_available():
+    try:
+        pipe.enable_xformers_memory_efficient_attention(True)
+    except Exception as e:
+        logger.warning(
+            "Could not enable memory efficient attention. Make sure xformers is installed"
+            f" correctly and a GPU is available: {e}"
+        )
+
+# run
+images = pipe(**pipeOpts).images
+
 
 # save images
-for i in range(len(images)):
+for i in range(len(pipeOpts["prompt"])):
     image = images[i]
     image.save(f"{outPathPrefix}_{i}.png")

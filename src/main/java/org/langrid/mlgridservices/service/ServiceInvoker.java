@@ -206,7 +206,16 @@ public class ServiceInvoker {
 		}
 		serviceImples.put("StableDiffusion_DS_0_14_0SD21WithFuguMt",
 			new BindedTextGuidedImageGenerationWithTranslationService("en", "FuguMT", "StableDiffusion_DS_0_14_0SD21"));
-
+		{
+			var dir = "./procs/diffusers_0_19_3";
+			var postfix = "_DS_0_19_3";
+			addDiffusersTGIG(dir, "SDXLBase" + postfix,
+				"stabilityai/stable-diffusion-xl-base-1.0",
+				"", "runSDXL.py");
+			addDiffusersTGIG(dir, "SDXLBaseWithRefiner" + postfix,
+				"stabilityai/stable-diffusion-xl-base-1.0",
+				"", "runSDXLWithRefiner.py");
+		}
 		// Image Manipulation
 		{
 			var postfix = "_DS_0_04_1";
