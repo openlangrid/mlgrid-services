@@ -10,25 +10,19 @@ import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.interim.TextGenerationService;
 
+import jp.go.nict.langrid.commons.lang.StringUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class ExternalTextGenerationService
+public class ExternalCommandTextGenerationService
 implements TextGenerationService{
-	public ExternalTextGenerationService(){
-		this("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf");
-	}
-
-	public ExternalTextGenerationService(String baseDir, String modelName) {
-		this(baseDir, modelName, "generate.py");
-	}
-
-	public ExternalTextGenerationService(String baseDir, String modelName,
-			String scriptName) {
+	public ExternalCommandTextGenerationService(
+		String baseDir, String command, String modelName, String... params) {
 		this.baseDir = new File(baseDir);
+		this.command = command;
 		this.modelName = modelName;
-		this.scriptName = scriptName;
+		this.params = params;
 	}
 
 	public File getBaseDir() {
@@ -53,7 +47,7 @@ implements TextGenerationService{
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var outputFile = new File(baseFile.toString() + ".output.txt");
 			Files.writeString(inputFile.toPath(), text, StandardCharsets.UTF_8);
-			run(modelName, "temp", inputFile.getName(), textLanguage, outputFile.getName());
+			run("temp", inputFile.getName(), textLanguage, outputFile.getName());
 			if(!outputFile.exists()) return null;
 			return Files.readString(outputFile.toPath());
 		} catch(IOException e){
@@ -61,17 +55,17 @@ implements TextGenerationService{
 		}
 	}
 
-	public void run(String modelName, String dirName, String inputFileName, String inputLanguage, String outputFileName){
+	public void run(String dirName, String inputFileName, String inputLanguage, String outputFileName){
 		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = String.format(
-				"PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm " +
-				"service python %3$s --model %1$s " +
-				"--inputPath ./%2$s/%4$s " +
+				"%s " +
+				"--model %s " +
+				"--inputPath ./%3$s/%4$s " +
 				"--inputLanguage %5$s " + 
-				"--outputPath ./%2$s/%6$s",
-				modelName, dirName, scriptName,
-				inputFileName, inputLanguage,
-				outputFileName);
+				"--outputPath ./%3$s/%6$s ",
+				command, modelName, dirName,
+				inputFileName, inputLanguage, outputFileName);
+			cmd += StringUtil.join(params, " ");
 			try(var t = ServiceInvokerContext.startServiceTimer()){
 				ProcessUtil.runAndWait(cmd, baseDir);
 			}
@@ -81,6 +75,7 @@ implements TextGenerationService{
 	}
 
 	private File baseDir;
+	private String command;
 	private String modelName;
-	private String scriptName;
+	private String[] params;
 }

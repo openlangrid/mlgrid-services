@@ -1,0 +1,4 @@
+ユーザー: Hello, you are an assistant that helps me learn Japanese.
+システム: Sure, what can I do for you?
+ユーザー: VRはなんですか。
+システム: 

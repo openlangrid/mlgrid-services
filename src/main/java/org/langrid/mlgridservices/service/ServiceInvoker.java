@@ -23,7 +23,8 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
-import org.langrid.mlgridservices.service.impl.ExternalTextGenerationService;
+import org.langrid.mlgridservices.service.impl.ExternalDockerComposeTextGenerationService;
+import org.langrid.mlgridservices.service.impl.ExternalCommandTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSentimentAnalysisService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
@@ -253,40 +254,46 @@ public class ServiceInvoker {
 		serviceImples.put("Detectron2CCR101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"));
 		serviceImples.put("Detectron2CCX101FPN3x", new Detectron2ObjectSegmentationService("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"));
 
-		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
-		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
-		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA07b", new ExternalDockerComposeTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-7b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA13b", new ExternalDockerComposeTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-13b-hf"));
+		serviceImples.put("JapaneseAlpacaLoRA30b", new ExternalDockerComposeTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-30b-hf"));
 //		serviceImples.put("JapaneseAlpacaLoRA65b", new ExternalTextGenerationService("./procs/japanese-alpaca-lora", "decapoda-research/llama-65b-hf"));
-		serviceImples.put("Cerebras-GPT2.7B", new ExternalTextGenerationService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-2.7B"));
-		serviceImples.put("Cerebras-GPT6.7B", new ExternalTextGenerationService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-6.7B"));
-		serviceImples.put("MosaicML-MPT7B", new ExternalTextGenerationService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
-		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalTextGenerationService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
+		serviceImples.put("Cerebras-GPT2.7B", new ExternalDockerComposeTextGenerationService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-2.7B"));
+		serviceImples.put("Cerebras-GPT6.7B", new ExternalDockerComposeTextGenerationService("./procs/cerebras_gpt", "cerebras/Cerebras-GPT-6.7B"));
+		serviceImples.put("MosaicML-MPT7B", new ExternalDockerComposeTextGenerationService("./procs/mosaicml_mpt", "mosaicml/mpt-7b-instruct"));
+		serviceImples.put("RWKV-LoRA-Alpaca-Cleaned-Japan", new ExternalDockerComposeTextGenerationService("./procs/rwkv", "/models/RWKV-4-Pile-14B-Instruct-test5-20230329-ctx4096"));
 
-		serviceImples.put("OpenCalmSmall", new ExternalTextGenerationService(
+		serviceImples.put("OpenCalmSmall", new ExternalDockerComposeTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-small"));
-		serviceImples.put("OpenCalmMedium", new ExternalTextGenerationService(
+		serviceImples.put("OpenCalmMedium", new ExternalDockerComposeTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-medium"));
-		serviceImples.put("OpenCalmLarge", new ExternalTextGenerationService(
+		serviceImples.put("OpenCalmLarge", new ExternalDockerComposeTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-large"));
-		serviceImples.put("OpenCalm1B", new ExternalTextGenerationService(
+		serviceImples.put("OpenCalm1B", new ExternalDockerComposeTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-1b"));
-		serviceImples.put("OpenCalm3B", new ExternalTextGenerationService(
+		serviceImples.put("OpenCalm3B", new ExternalDockerComposeTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-3b"));
-		serviceImples.put("OpenCalm7B", new ExternalTextGenerationService(
+		serviceImples.put("OpenCalm7B", new ExternalDockerComposeTextGenerationService(
 			"./procs/open-calm", "cyberagent/open-calm-7b"));
 
-		serviceImples.put("RinnaJapaneseGPT3.6B", new ExternalTextGenerationService(
+		serviceImples.put("RinnaJapaneseGPT3.6B", new ExternalDockerComposeTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b"));
-		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-sft", new ExternalTextGenerationService(
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-sft", new ExternalDockerComposeTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-sft",
 			"generate_sft.py"));
-		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-sft-v2", new ExternalTextGenerationService(
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-sft-v2", new ExternalDockerComposeTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-sft-v2",
 			"generate_sft_v2.py"));
-		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-ppo", new ExternalTextGenerationService(
+		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-ppo", new ExternalDockerComposeTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-ppo",
 			"generate_ppo.py"));
-			
+		serviceImples.put("RinnaBilingualGPT4B", new ExternalCommandTextGenerationService(
+			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_gpt.sh", "rinna/bilingual-gpt-neox-4b"));
+		serviceImples.put("RinnaBilingualGPT4B-Instruction-sft", new ExternalCommandTextGenerationService(
+			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_sft_ppo.sh", "rinna/bilingual-gpt-neox-4b-instruction-sft"));
+		serviceImples.put("RinnaBilingualGPT4B-Instruction-ppo", new ExternalCommandTextGenerationService(
+			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_sft_ppo.sh", "rinna/bilingual-gpt-neox-4b-instruction-ppo"));
+
 		// composite
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
 			"JapaneseAlpacaLoRA07b", "VoiceVox_0_11_4_08"));
@@ -294,7 +301,7 @@ public class ServiceInvoker {
 			"JapaneseAlpacaLoRA13b", "VoiceVox_0_11_4_08"));
 		serviceImples.put("TextGenerationWithTranslation", new TextGenerationWithTranslation());
 
-		
+
 		serviceImples.put("ProcessFailedExceptionService", new ProcessFailedExceptionService());
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
