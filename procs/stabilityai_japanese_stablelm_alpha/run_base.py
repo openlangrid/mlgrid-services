@@ -1,9 +1,11 @@
 
 def main(tokenizer_model: str, model: str, inputPath: str, inputLanguage: str, outputPath: str):
+    import torch
     import _run
     with open(inputPath) as f:
         text = f.read()
-    ret = _run.run(tokenizer_model, model, text)
+    ret = _run.run(tokenizer_model, model, text,
+        model_args={"variant": "fp16", "torch_dtype": torch.float16})
     with open(outputPath, mode="w") as f:
         f.write(str(ret))
 

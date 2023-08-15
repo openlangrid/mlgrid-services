@@ -305,6 +305,25 @@ public class ServiceInvoker {
 			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_base.sh", "stabilityai/japanese-stablelm-base-alpha-7b"));
 		serviceImples.put("StabilityAIJapaneseStableLMInstructAlpha-7B", new ExternalCommandTextGenerationService(
 			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct.sh", "stabilityai/japanese-stablelm-instruct-alpha-7b"));
+		serviceImples.put("LightblueJapaneseMpt7B", new ExternalCommandTextGenerationService(
+			"./procs/lightblue_japanese_mpt", "/bin/bash run.sh",
+			"lightblue/japanese-mpt-7b"));
+		serviceImples.put("LineJapaneseLargeLM1_7B", new ExternalCommandTextGenerationService(
+			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
+			"line-corporation/japanese-large-lm-1.7b"));
+		serviceImples.put("LineJapaneseLargeLM3_6B", new ExternalCommandTextGenerationService(
+			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
+			"line-corporation/japanese-large-lm-3.6b"));
+		serviceImples.put("StockmarkGptNeoxJapanese1_4B", new ExternalCommandTextGenerationService(
+			"./procs/stockmark_gpt_neox_japanese", "/bin/bash run.sh",
+			"stockmark/gpt-neox-japanese-1.4b"));
+		serviceImples.put("LMSYSVicuna7B-v1.5", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-7b-v1.5"));
+		serviceImples.put("LMSYSVicuna13B-v1.5", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-13b-v1.5"));
+
 
 		// composite
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
