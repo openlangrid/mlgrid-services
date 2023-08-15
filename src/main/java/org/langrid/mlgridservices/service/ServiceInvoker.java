@@ -320,9 +320,15 @@ public class ServiceInvoker {
 		serviceImples.put("LMSYSVicuna7B-v1.5", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.5"));
+		serviceImples.put("LMSYSVicuna7B-v1.5-16k", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-7b-v1.5-16k"));
 		serviceImples.put("LMSYSVicuna13B-v1.5", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.5"));
+		serviceImples.put("LMSYSVicuna13B-v1.5-16k", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-13b-v1.5-16k"));
 
 
 		// composite
