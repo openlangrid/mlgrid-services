@@ -301,6 +301,10 @@ public class ServiceInvoker {
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-hf"));
 		serviceImples.put("MetaLLama2-13BChat", new ExternalCommandTextGenerationService(
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-chat-hf"));
+		serviceImples.put("StabilityAIJapaneseStableLMBaseAlpha-7B", new ExternalCommandTextGenerationService(
+			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_base.sh", "stabilityai/japanese-stablelm-base-alpha-7b"));
+		serviceImples.put("StabilityAIJapaneseStableLMInstructAlpha-7B", new ExternalCommandTextGenerationService(
+			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct.sh", "stabilityai/japanese-stablelm-instruct-alpha-7b"));
 
 		// composite
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
