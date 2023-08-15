@@ -67,7 +67,7 @@ implements TextGenerationService{
 				inputFileName, inputLanguage, outputFileName);
 			cmd += StringUtil.join(params, " ");
 			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
 			}
 		} catch(Exception e){
 			throw new RuntimeException(e);
