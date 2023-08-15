@@ -1,5 +1,5 @@
 
-def run(tokenizer_model_name: str, model_name: str, text: str):
+def run(tokenizer_model_name: str, model_name: str, text: str, generate_args: dict = {}):
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM
 
@@ -20,15 +20,19 @@ def run(tokenizer_model_name: str, model_name: str, text: str):
 
     token_ids = tokenizer.encode(text, add_special_tokens=False, return_tensors="pt")
     with torch.no_grad():
+        args = {
+            "max_new_tokens": 1024,
+            "do_sample": True,
+            "temperature": 0.7,
+            "top_p": 0.85,
+            "pad_token_id": tokenizer.pad_token_id,
+            "bos_token_id": tokenizer.bos_token_id,
+            "eos_token_id": tokenizer.eos_token_id,
+        }
+        args.update(generate_args)
         output_ids = model.generate(
             token_ids.to(model.device),
-            max_new_tokens=512,
-            do_sample=True,
-            temperature=0.7,
-            top_p=0.85,
-            pad_token_id=tokenizer.pad_token_id,
-            bos_token_id=tokenizer.bos_token_id,
-            eos_token_id=tokenizer.eos_token_id
+            **args
         )
     return tokenizer.decode(
         output_ids.tolist()[0][token_ids.size(1):]
@@ -38,7 +42,11 @@ def run(tokenizer_model_name: str, model_name: str, text: str):
 def main(tokenizer_model: str, model: str, inputPath: str, inputLanguage: str, outputPath: str):
     with open(inputPath) as f:
         text = f.read()
-    ret = run(tokenizer_model, model, text)
+    if model.endswith("-16k"):
+        generate_args = {"max_new_tokens": 1024 * 16}
+    else:
+        generate_args = {}
+    ret = run(tokenizer_model, model, text, generate_args=generate_args)
     with open(outputPath, mode="w") as f:
         f.write(str(ret))
 
