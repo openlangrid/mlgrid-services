@@ -30,9 +30,10 @@ def run(tokenizer_model_name: str, model_name: str, text: str):
             bos_token_id=tokenizer.bos_token_id,
             eos_token_id=tokenizer.eos_token_id
         )
-    return tokenizer.decode(output_ids.tolist()[0][token_ids.size(1):])
+    return tokenizer.decode(
+        output_ids.tolist()[0][token_ids.size(1):]
+        ).strip().rstrip("</s>")
 
-#        ).strip().rstrip("<|endoftext|>")
 
 def main(tokenizer_model: str, model: str, inputPath: str, inputLanguage: str, outputPath: str):
     with open(inputPath) as f:
