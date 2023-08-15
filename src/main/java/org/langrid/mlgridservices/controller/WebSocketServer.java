@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.controller;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.CloseReason;
@@ -56,10 +57,16 @@ public class WebSocketServer implements ApplicationContextAware {
 		try {
 			var req = jmapper.readValue(message, WebSocketRequest.class);
 			reqId = req.getReqId();
+			var sid = req.getServiceId();
+			if(sid.equals("__PingService")){
+				return jmapper.writeValueAsString(new WebSocketResponse(
+					reqId, new HashMap<>(), "Pong"
+				));
+			}
 			try{
-				var r = invoker().invoke(req.getServiceId(), req);
+				var r = invoker().invoke(sid, req);
 				var res = new WebSocketResponse(
-						req.getReqId(), r.getHeaders(), r.getResult());
+					reqId, r.getHeaders(), r.getResult());
 				return jmapper.writeValueAsString(res);
 			} catch(InvocationTargetException e){
 				throw e.getCause();
