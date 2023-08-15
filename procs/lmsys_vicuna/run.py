@@ -43,7 +43,7 @@ def main(tokenizer_model: str, model: str, inputPath: str, inputLanguage: str, o
     with open(inputPath) as f:
         text = f.read()
     if model.endswith("-16k"):
-        generate_args = {"max_new_tokens": 1024 * 16}
+        generate_args = {"max_new_tokens": 1024 * 4}
     else:
         generate_args = {}
     ret = run(tokenizer_model, model, text, generate_args=generate_args)
