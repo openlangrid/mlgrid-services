@@ -289,10 +289,18 @@ public class ServiceInvoker {
 			"generate_ppo.py"));
 		serviceImples.put("RinnaBilingualGPT4B", new ExternalCommandTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_gpt.sh", "rinna/bilingual-gpt-neox-4b"));
-		serviceImples.put("RinnaBilingualGPT4B-Instruction-sft", new ExternalCommandTextGenerationService(
+		serviceImples.put("RinnaBilingualGPT4BInstructionSft", new ExternalCommandTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_sft_ppo.sh", "rinna/bilingual-gpt-neox-4b-instruction-sft"));
-		serviceImples.put("RinnaBilingualGPT4B-Instruction-ppo", new ExternalCommandTextGenerationService(
+		serviceImples.put("RinnaBilingualGPT4BInstructionPpo", new ExternalCommandTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_sft_ppo.sh", "rinna/bilingual-gpt-neox-4b-instruction-ppo"));
+		serviceImples.put("MetaLLama2-7B", new ExternalCommandTextGenerationService(
+			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-7b-hf"));
+		serviceImples.put("MetaLLama2-7BChat", new ExternalCommandTextGenerationService(
+			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-7b-chat-hf"));
+		serviceImples.put("MetaLLama2-13B", new ExternalCommandTextGenerationService(
+			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-hf"));
+		serviceImples.put("MetaLLama2-13BChat", new ExternalCommandTextGenerationService(
+			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-chat-hf"));
 
 		// composite
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
