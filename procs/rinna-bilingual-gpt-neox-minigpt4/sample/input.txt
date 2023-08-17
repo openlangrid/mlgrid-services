@@ -1,0 +1,4 @@
+ユーザー: <Img><ImageHere></Img> What can you see?
+システム: a cat on a table with a laptop
+ユーザー: 猫はどんな体勢をしていますか？
+システム: 

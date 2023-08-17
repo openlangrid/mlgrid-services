@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /work/MiniGPT-4
+    volumes:
+      - ../cache/huggingface:/root/.cache/huggingface
+      - ./sample:/work/MiniGPT-4/sample
+      - ./temp:/work/MiniGPT-4/temp
+      - ./run.py:/work/MiniGPT-4/run.py
+      - ./files/checkpoint.pth:/work/MiniGPT-4/checkpoint.pth
+      - ./files/customized_mini_gpt4.py:/work/MiniGPT-4/customized_mini_gpt4.py
