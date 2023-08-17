@@ -308,27 +308,45 @@ public class ServiceInvoker {
 		serviceImples.put("LightblueJapaneseMpt7B", new ExternalCommandTextGenerationService(
 			"./procs/lightblue_japanese_mpt", "/bin/bash run.sh",
 			"lightblue/japanese-mpt-7b"));
-		serviceImples.put("LineJapaneseLargeLM1_7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("LineJapaneseLargeLM1.7B", new ExternalCommandTextGenerationService(
 			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
 			"line-corporation/japanese-large-lm-1.7b"));
-		serviceImples.put("LineJapaneseLargeLM3_6B", new ExternalCommandTextGenerationService(
+		serviceImples.put("LineJapaneseLargeLM3.6B", new ExternalCommandTextGenerationService(
 			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
 			"line-corporation/japanese-large-lm-3.6b"));
-		serviceImples.put("StockmarkGptNeoxJapanese1_4B", new ExternalCommandTextGenerationService(
+		serviceImples.put("StockmarkGptNeoxJapanese1.4B", new ExternalCommandTextGenerationService(
 			"./procs/stockmark_gpt_neox_japanese", "/bin/bash run.sh",
 			"stockmark/gpt-neox-japanese-1.4b"));
+		serviceImples.put("LMSYSVicuna7B-v1.1", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-7b-v1.1"));
+		serviceImples.put("LMSYSVicuna7B-v1.3", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-7b-v1.3"));
 		serviceImples.put("LMSYSVicuna7B-v1.5", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.5"));
 		serviceImples.put("LMSYSVicuna7B-v1.5-16k", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.5-16k"));
+		serviceImples.put("LMSYSVicuna13B-v1.1", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-13b-v1.1"));
+		serviceImples.put("LMSYSVicuna13B-v1.3", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"lmsys/vicuna-13b-v1.3"));
 		serviceImples.put("LMSYSVicuna13B-v1.5", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.5"));
 		serviceImples.put("LMSYSVicuna13B-v1.5-16k", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.5-16k"));
+		serviceImples.put("Qwen7B", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"Qwen/Qwen-7B"));
+		serviceImples.put("Qwen7BChat", new ExternalCommandTextGenerationService(
+			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"Qwen/Qwen-7B-Chat"));
 
 
 		// composite
