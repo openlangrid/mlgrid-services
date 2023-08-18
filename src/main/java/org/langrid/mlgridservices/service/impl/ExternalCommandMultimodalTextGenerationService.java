@@ -43,6 +43,7 @@ implements MultimodalTextGenerationService{
 			throw new InvalidParameterException("files", "files must have 1 content.");
 		}
 		var f = files[0];
+		System.out.printf("file[0] size: %d%n", f.getContent() != null ? f.getContent().length : -1);
 		try{
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
@@ -70,7 +71,7 @@ implements MultimodalTextGenerationService{
 				"--model %s " +
 				"--inputPromptPath ./%3$s/%4$s " +
 				"--inputPromptLanguage %5$s " + 
-				"--inputImagePath %6$s " + 
+				"--inputImagePath ./%3$s/%6$s " + 
 				"--outputPath ./%3$s/%7$s ",
 				command, modelName, dirName,
 				inputPromptFileName, inputPromptLanguage,
