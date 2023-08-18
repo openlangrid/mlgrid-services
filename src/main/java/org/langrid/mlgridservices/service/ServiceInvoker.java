@@ -23,6 +23,7 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
+import org.langrid.mlgridservices.service.impl.ExternalCommandMultimodalTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalDockerComposeTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalCommandTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
@@ -348,10 +349,10 @@ public class ServiceInvoker {
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"Qwen/Qwen-7B-Chat"));
 
-		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandTextGenerationService(
+		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(
 			"rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
 			"rinna/bilingual-gpt-neox-4b"));
-		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new ExternalCommandTextGenerationService(
+		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new ExternalCommandMultimodalTextGenerationService(
 			"stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct_blip.sh",
 			"stabilityai/japanese-instructblip-alpha"));
 
