@@ -41,9 +41,11 @@ def run(model_name: str, prompt: str, image: Image):
     return tokenizer.decode(output_ids.tolist()[0], skip_special_tokens=True)
 
 
-def main(model: str, inputPromptPath: str, inputImagePath: str, inputLanguage: str, outputPath: str):
+def main(model: str, inputPromptPath: str, inputPromptLanguage: str, inputImagePath: str, outputPath: str):
     with open(inputPromptPath) as f:
         text = f.read()
+    if text.find("<Img><ImageHere></Img>") == -1:
+        text = f"ユーザー: <Img><ImageHere></Img> {text}\nシステム: "
     image = Image.open(inputImagePath)
     ret = run(model, text, image)
     with open(outputPath, mode="w") as f:
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, default="rinna/bilingual-gpt-neox-4b")
     parser.add_argument("--inputPromptPath", type=str, default="./sample/input.txt")
+    parser.add_argument("--inputPromptLanguage", type=str, default="ja")
     parser.add_argument("--inputImagePath", type=str, default="./sample/input.jpg")
-    parser.add_argument("--inputLanguage", type=str, default="ja")
     parser.add_argument("--outputPath", type=str, default="./sample/output.txt")
     main(**vars(parser.parse_args()))
