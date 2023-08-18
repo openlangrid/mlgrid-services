@@ -348,6 +348,12 @@ public class ServiceInvoker {
 		serviceImples.put("Qwen7BChat", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"Qwen/Qwen-7B-Chat"));
+		serviceImples.put("MatsuoLabWeblab7B", new ExternalCommandTextGenerationService(
+			"./procs/matsuolab_weblab", "/bin/bash run.sh",
+			"matsuo-lab/weblab-10b"));
+		serviceImples.put("MatsuoLabWeblab7BInstruct", new ExternalCommandTextGenerationService(
+			"./procs/matsuolab_weblab", "/bin/bash run.sh",
+			"matsuo-lab/weblab-10b-instruction-sft"));
 
 		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
