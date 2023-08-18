@@ -348,6 +348,13 @@ public class ServiceInvoker {
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"Qwen/Qwen-7B-Chat"));
 
+		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandTextGenerationService(
+			"rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
+			"rinna/bilingual-gpt-neox-4b"));
+		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new ExternalCommandTextGenerationService(
+			"stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct_blip.sh",
+			"stabilityai/japanese-instructblip-alpha"));
+
 
 		// composite
 		serviceImples.put("JapaneseAlpacaLoRA07bWithVoiceVox_0_11_4_08", new BindedTextGenerationWithTextToSpeech(
