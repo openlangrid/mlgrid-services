@@ -350,10 +350,10 @@ public class ServiceInvoker {
 			"Qwen/Qwen-7B-Chat"));
 
 		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(
-			"rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
+			"./procs/rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
 			"rinna/bilingual-gpt-neox-4b"));
 		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new ExternalCommandMultimodalTextGenerationService(
-			"stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct_blip.sh",
+			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct_blip.sh",
 			"stabilityai/japanese-instructblip-alpha"));
 
 
