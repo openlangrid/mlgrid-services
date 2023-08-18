@@ -9,3 +9,11 @@ RUN apt update && \
 RUN pip install transformers accelerate
 RUN pip install sentencepiece
 RUN pip install bitsandbytes einops scipy
+
+RUN git clone -b v1.0.8 https://github.com/Dao-AILab/flash-attention && \
+  cd flash-attention && \
+  pip install . && \
+  pip install csrc/layer_norm csrc/rotary && \
+  cd ..
+
+RUN pip install pillow-avif-plugin
