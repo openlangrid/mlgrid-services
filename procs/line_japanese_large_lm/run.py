@@ -30,10 +30,12 @@ def run(tokenizer_model_name: str, model_name: str, text: str):
     return output[0]["generated_text"]
 
 
-def main(tokenizer_model: str, model: str, inputPath: str, inputLanguage: str, outputPath: str):
+def main(tokenizerModel: str, model: str, inputPath: str, inputLanguage: str, outputPath: str):
     with open(inputPath) as f:
         text = f.read()
-    ret = run(tokenizer_model, model, text)
+    ret = run(
+        tokenizerModel if tokenizerModel else model,
+        model, text)
     with open(outputPath, mode="w") as f:
         f.write(str(ret))
 
@@ -41,7 +43,7 @@ def main(tokenizer_model: str, model: str, inputPath: str, inputLanguage: str, o
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tokenizer_model", type=str, default=None)
+    parser.add_argument("--tokenizerModel", type=str, default=None)
     parser.add_argument("--model", type=str, default="line-corporation/japanese-large-lm-1.7b")
     parser.add_argument("--inputPath", type=str, default="./sample/input.txt")
     parser.add_argument("--inputLanguage", type=str, default="ja")
