@@ -312,9 +312,15 @@ public class ServiceInvoker {
 		serviceImples.put("LineJapaneseLargeLM1.7B", new ExternalCommandTextGenerationService(
 			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
 			"line-corporation/japanese-large-lm-1.7b"));
+		serviceImples.put("LineJapaneseLargeLM1.7BInstractionSft", new ExternalCommandTextGenerationService(
+			"./procs/line_japanese_large_lm", "/bin/bash run_sft.sh",
+			"line-corporation/japanese-large-lm-1.7b-instruction-sft"));
 		serviceImples.put("LineJapaneseLargeLM3.6B", new ExternalCommandTextGenerationService(
 			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
 			"line-corporation/japanese-large-lm-3.6b"));
+		serviceImples.put("LineJapaneseLargeLM3.6BInstructionSft", new ExternalCommandTextGenerationService(
+			"./procs/line_japanese_large_lm", "/bin/bash run_sft.sh",
+			"line-corporation/japanese-large-lm-3.6b-instruction-sft"));
 		serviceImples.put("StockmarkGptNeoxJapanese1.4B", new ExternalCommandTextGenerationService(
 			"./procs/stockmark_gpt_neox_japanese", "/bin/bash run.sh",
 			"stockmark/gpt-neox-japanese-1.4b"));
