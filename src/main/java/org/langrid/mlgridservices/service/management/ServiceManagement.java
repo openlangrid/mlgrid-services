@@ -1,6 +1,8 @@
 package org.langrid.mlgridservices.service.management;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +10,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.langrid.mlgridservices.service.CompositeService;
 import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.service.ml.interim.management.MatchingCondition;
 import org.langrid.service.ml.interim.management.Order;
 import org.langrid.service.ml.interim.management.SearchServicesResult;
 import org.langrid.service.ml.interim.management.ServiceEntry;
+import org.langrid.service.ml.interim.management.ServiceInvocation;
 import org.langrid.service.ml.interim.management.ServiceManagementService;
 
 public class ServiceManagement implements ServiceManagementService{
@@ -52,6 +56,13 @@ public class ServiceManagement implements ServiceManagementService{
 			entries.size(), true);
 	}
 
+	@Override
+	public ServiceInvocation[] getServiceInvocations(String serviceId) {
+		var ret = serviceNameToServiceInvocations.getOrDefault(serviceId, new ServiceInvocation[]{});
+		System.out.printf("getServiceInvocations(\"%s\") -> %s%n", serviceId, Arrays.toString(ret));
+		return ret;
+	}
+
 	private void initDB(){
 		for(var g : serviceGroups.values()){
 			for(var p : g.listServices()){
@@ -66,11 +77,16 @@ public class ServiceManagement implements ServiceManagementService{
 		}
 		for(var e : serviceImples.entrySet()){
 			var sid = e.getKey();
-			var stype = findInterface(e.getValue()).getSimpleName();
+			var simpl = e.getValue();
+			var stype = findInterface(simpl).getSimpleName();
 			serviceNameAndServiceTypes.put(sid, stype);
 			serviceTypeToServiceIds
 				.computeIfAbsent(stype, k->new TreeSet<>())
 				.add(sid);
+			if(simpl instanceof CompositeService){
+				serviceNameToServiceInvocations.put(sid, ((CompositeService)simpl).getInvocations());
+				System.out.println("composite: " + sid);
+			}
 			System.out.printf("%s: %s added.%n", sid, stype);
 		}
 	}
@@ -78,9 +94,11 @@ public class ServiceManagement implements ServiceManagementService{
 	private Class<?> findInterface(Object service){
 		var clz = service.getClass();
 		while(clz != null){
-			var ifs = clz.getInterfaces();
-			if(ifs.length > 0){
-				return ifs[0];
+			for(var intf : clz.getInterfaces()){
+				if(intf.equals(CompositeService.class)) continue;
+				if(intf.getName().startsWith("java.")) continue;
+				if(intf.getName().startsWith("javax.")) continue;
+				return intf;
 			}
 			clz = clz.getSuperclass();
 		}
@@ -89,6 +107,7 @@ public class ServiceManagement implements ServiceManagementService{
 
 	private Map<String, String> serviceNameAndServiceTypes = new TreeMap<>();
 	private Map<String, Set<String>> serviceTypeToServiceIds = new LinkedHashMap<>();
+	private Map<String, ServiceInvocation[]> serviceNameToServiceInvocations = new HashMap<>();
 
 	private Map<String, ServiceGroup> serviceGroups;
 	private Map<String, Object> serviceImples;
