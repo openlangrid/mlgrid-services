@@ -78,9 +78,10 @@ implements MultimodalTextGenerationService{
 				inputImageFileName,
 				outputFileName);
 			cmd += StringUtil.join(params, " ");
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
-			}
+			var c = cmd;
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(c, baseDir);
+			}, "execution", command);
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}

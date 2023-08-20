@@ -16,7 +16,7 @@ public class DummyTextImageGenerationService implements TextToImageGenerationSer
 	@Override
 	public TextToImageGenerationResult[] generate(String text, String textLanguage, String imageFormat, int maxResults)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-		try(var t = ServiceInvokerContext.startServiceTimer()){
+		try{
 			return new TextToImageGenerationResult[]{
 					new TextToImageGenerationResult(
 							Files.readAllBytes(Path.of("./procs/text_image_generation_dalle_mini/dummy.jpg")),

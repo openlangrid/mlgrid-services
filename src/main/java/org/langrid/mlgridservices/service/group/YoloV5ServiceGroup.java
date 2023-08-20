@@ -3,7 +3,6 @@ package org.langrid.mlgridservices.service.group;
 import java.util.Arrays;
 import java.util.List;
 
-import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.YoloV5ObjectDetectionService;
 import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
@@ -37,12 +36,12 @@ public class YoloV5ServiceGroup implements ServiceGroup{
 			@Override
 			public ObjectDetectionResult detect(byte[] image, String imageFormat, String labelLanguage)
 					throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-				try(var t = ServiceInvokerContext.startServiceTimer()){
+				try{
 					return s.detect(image, imageFormat, labelLanguage);
 				} catch(RuntimeException e){
 					throw e;
 				} catch(Exception e){
-					throw new RuntimeException(e);
+					throw new ProcessFailedException(e);
 				}
 			}
 		};

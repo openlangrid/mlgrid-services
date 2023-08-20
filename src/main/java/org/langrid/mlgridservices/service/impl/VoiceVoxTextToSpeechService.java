@@ -43,13 +43,13 @@ public class VoiceVoxTextToSpeechService implements TextToSpeechService{
 				"--out_file_name=\"/work/%s/%s\"", 
 				text, speakerId, tempDir.getName(), tf.getName() + ".wav");
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
 			return new Audio(
 				Files.readAllBytes(new File(tempDir, tf.getName() + ".wav").toPath()),
 				"audio/x-wav");
-		} catch(IOException | InterruptedException | org.langrid.mlgridservices.util.ProcessUtil.ProcessFailedException e){
+		} catch(IOException | InterruptedException e){
 			throw new ProcessFailedException(e);
 		}
 	}

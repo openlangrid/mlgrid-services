@@ -106,8 +106,8 @@ public class ServiceManagement implements ServiceManagementService{
 	}
 
 	private Map<String, String> serviceNameAndServiceTypes = new TreeMap<>();
-	private Map<String, Set<String>> serviceTypeToServiceIds = new LinkedHashMap<>();
-	private Map<String, ServiceInvocation[]> serviceNameToServiceInvocations = new HashMap<>();
+	private Map<String, Set<String>> serviceTypeToServiceIds = new TreeMap<>();
+	private Map<String, ServiceInvocation[]> serviceNameToServiceInvocations = new TreeMap<>();
 
 	private Map<String, ServiceGroup> serviceGroups;
 	private Map<String, Object> serviceImples;

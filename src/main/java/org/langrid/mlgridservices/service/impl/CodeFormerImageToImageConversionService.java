@@ -42,9 +42,9 @@ implements ImageConversionService{
 					"python inference_codeformer.py --test_path /%s/%s/%s --w 0.7 --bg_upsampler realesrgan --face_upsample",
 					tempDir.getName(), inputsDir.getName(), inputDir.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			ServiceInvokerContext.exec(()->{
 				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			}, "execution", "docker-compose");
 			var resultFile = new File(new File(new File(resultsDir, inputDir.getName() + "_0.7"), "final_results"), "input.png");
 			System.out.println("result: " + resultFile);
 			if(resultFile.exists()){

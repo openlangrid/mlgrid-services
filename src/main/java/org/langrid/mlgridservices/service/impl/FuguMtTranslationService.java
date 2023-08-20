@@ -56,9 +56,9 @@ public class FuguMtTranslationService implements TranslationService{
 				"PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm " +
 				"service python run.py %s --inPath %s --outPathPrefix %2$s",
 				modelName, inFilePath);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
 			var outFile = new File(baseDir, inFilePath + ".result.txt");
 			if(!outFile.exists()) return null;
 			return Files.readString(outFile.toPath());

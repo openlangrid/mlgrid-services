@@ -39,7 +39,7 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 					"python3 run.py temp/%s",
 					temp.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			return ServiceInvokerContext.exec(()->{
 				var proc = ProcessUtil.run(cmd, baseDir);
 				var om = new ObjectMapper();
 				EmotionRecognitionResult ret = null;
@@ -53,7 +53,6 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 						break;
 					}
 					proc.waitFor();
-					t.close();
 					if(ret == null && proc.exitValue() != 0){
 						throw new ProcessFailedException(StreamUtil.readAsString(proc.getErrorStream(), "UTF-8"));
 					}
@@ -62,7 +61,7 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 					new File(baseDir, temp.getName()).delete();
 					proc.destroy();
 				}
-			}
+			}, "execution", "docker-compose");
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

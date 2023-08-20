@@ -65,8 +65,14 @@ public class WebSocketServer implements ApplicationContextAware {
 			}
 			try{
 				var r = invoker().invoke(sid, req);
-				var res = new WebSocketResponse(
-					reqId, r.getHeaders(), r.getResult());
+				WebSocketResponse res = null;
+				if(r.getError() != null){
+					res = new WebSocketResponse(
+						reqId, r.getHeaders(), r.getError());
+				} else{
+					res = new WebSocketResponse(
+						reqId, r.getHeaders(), r.getResult());
+				}
 				return jmapper.writeValueAsString(res);
 			} catch(InvocationTargetException e){
 				throw e.getCause();
@@ -88,8 +94,15 @@ public class WebSocketServer implements ApplicationContextAware {
 			reqId = req.getReqId();
 			try{
 				var r = invoker().invoke(req.getServiceId(), req);
-				return bmapper.writeValueAsBytes(new WebSocketResponse(
-					reqId, r.getHeaders(), r.getResult()));
+				WebSocketResponse res = null;
+				if(r.getError() != null){
+					res = new WebSocketResponse(
+						reqId, r.getHeaders(), r.getError());
+				} else{
+					res = new WebSocketResponse(
+						reqId, r.getHeaders(), r.getResult());
+				}
+				return bmapper.writeValueAsBytes(res);
 			} catch(InvocationTargetException e){
 				throw e.getCause();
 			}

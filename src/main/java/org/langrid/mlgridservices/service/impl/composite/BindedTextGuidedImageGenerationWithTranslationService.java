@@ -23,7 +23,7 @@ implements TextGuidedImageGenerationService{
 	public Image[] generateMultiTimes(
 			String text, String textLanguage, int numberOfTimes)
 	throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException{
-		var sc = ServiceInvokerContext.get();
+		var sc = ServiceInvokerContext.current();
 		var trans = sc.getService(transServiceName, TranslationService.class)
 			.translate(text, textLanguage, targetLanguage);
 		return sc.getService(tgigServiceName, TextGuidedImageGenerationService.class)

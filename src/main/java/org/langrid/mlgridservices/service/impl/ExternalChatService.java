@@ -61,9 +61,9 @@ implements ChatService{
 				"--utterancePath ./temp/%s " +
 				"--outPathPrefix ./temp/%s",
 				modelName, utteranceFile.getName(), outFileBase.getName());
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			ServiceInvokerContext.exec(()->{
 				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			}, "execution", "docker-compose");
 			var outFile = new File(baseDir, String.format("./temp/%s.result.txt", outFileBase.getName()));
 			if(!outFile.exists()) return null;
 			return Files.readString(outFile.toPath());

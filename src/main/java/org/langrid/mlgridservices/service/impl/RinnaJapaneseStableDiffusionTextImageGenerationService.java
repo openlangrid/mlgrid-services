@@ -40,9 +40,9 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 					"python3 run.py \"%s\" %d temp/%s",
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
 			var ret = new ArrayList<Image>();
 			for(var i = 0; i < numberOfTimes; i++){
 				var imgFile = new File(temp.toString() + "_" + i + ".png");

@@ -61,7 +61,7 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 					"whisper temp/%s -o temp --language %s --model small",
 					temp.getName(), lang);
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			return ServiceInvokerContext.exec(()->{
 				var proc = ProcessUtil.run(cmd, baseDir);
 				try{
 					var br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
@@ -87,7 +87,7 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 				} finally{
 					proc.destroy();
 				}
-			}
+			}, "execution", "docker-compose");
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

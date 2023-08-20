@@ -57,9 +57,9 @@ public class ExternalTextSimilarityCalculationService implements TextSimilarityC
 					"temp/" + input2Path.getName(), text2Lang,
 					"temp/" + outputPath.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
 			return Double.parseDouble(Files.readString(outputPath.toPath()));
 		} catch(RuntimeException e) {
 			throw e;

@@ -53,11 +53,10 @@ implements ObjectDetectionService{
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
 			pb.redirectErrorStream(true);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			return ServiceInvokerContext.exec(()->{
 				var proc = pb.start();
 				try {
 					proc.waitFor();
-					t.close();
 					var res = proc.exitValue();
 					var outDir = new File(new File(baseDir, "temp"), imgFile + "_result");
 					var outFile = new File(outDir, FileNameUtil.changeExt(imgFile, "txt"));
@@ -76,7 +75,7 @@ implements ObjectDetectionService{
 				} finally {
 					proc.destroy();
 				}
-			}
+			}, "execution", "docker-compose");
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}

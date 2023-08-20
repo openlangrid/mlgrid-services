@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.service.ml.TranslationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class LangridServiceGroup implements ServiceGroup{
 				@Override
 				public String translate(String text, String textLanguage, String targetLanguage)
 						throws InvalidParameterException, ProcessFailedException, UnsupportedLanguagePairException {
-					try(var t = ServiceInvokerContext.startServiceTimer()){
+					try{
 						return orig.translate(textLanguage, targetLanguage, text);
 					} catch(InvalidParameterException | ProcessFailedException e){
 						throw e;

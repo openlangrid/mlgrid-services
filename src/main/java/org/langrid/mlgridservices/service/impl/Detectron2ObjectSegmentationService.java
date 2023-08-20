@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.GPULock;
+import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.Box2d;
 import org.langrid.service.ml.ObjectSegmentation;
 import org.langrid.service.ml.ObjectSegmentationResult;
@@ -63,11 +64,10 @@ public class Detectron2ObjectSegmentationService implements ObjectSegmentationSe
 					+ "--config %s --infile %s/%s", config, dir, file);
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			ServiceInvokerContext.exec(()->{
 				var proc = pb.start();
 				try {
 					proc.waitFor();
-					t.close();
 					var res = proc.exitValue();
 					if(res != 0) {
 						throw new RuntimeException(StreamUtil.readAsString(
@@ -76,7 +76,7 @@ public class Detectron2ObjectSegmentationService implements ObjectSegmentationSe
 				} finally {
 					proc.destroy();
 				}
-			}
+			}, "execution", "docker-compose");
 		} catch(RuntimeException | Error e){
 			throw e;
 		} catch(Exception e){

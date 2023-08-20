@@ -38,16 +38,16 @@ public class ReasonSpeechSpeechRecognitionService implements SpeechRecognitionSe
 					"python run.py temp/%s",
 					input.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-				var br = Files.newBufferedReader(output.toPath(), StandardCharsets.UTF_8);
-				String line = null;
-				var ret = new ArrayList<SpeechRecognitionResult>();
-				while ((line = br.readLine()) != null) {
-					ret.add(new SpeechRecognitionResult(-1, -1, line.trim()));
-				}
-				return ret.toArray(new SpeechRecognitionResult[]{});
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
+			var br = Files.newBufferedReader(output.toPath(), StandardCharsets.UTF_8);
+			String line = null;
+			var ret = new ArrayList<SpeechRecognitionResult>();
+			while ((line = br.readLine()) != null) {
+				ret.add(new SpeechRecognitionResult(-1, -1, line.trim()));
 			}
+			return ret.toArray(new SpeechRecognitionResult[]{});
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

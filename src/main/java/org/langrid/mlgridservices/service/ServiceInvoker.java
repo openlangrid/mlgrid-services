@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.langrid.mlgridservices.controller.Error;
 import org.langrid.mlgridservices.controller.Request;
 import org.langrid.mlgridservices.controller.Response;
 import org.langrid.mlgridservices.service.group.DalleMiniServiceGroup;
@@ -49,10 +50,6 @@ import org.langrid.mlgridservices.service.impl.YoloV7ObjectDetectionService;
 import org.langrid.mlgridservices.service.management.ServiceManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jp.go.nict.langrid.commons.beanutils.Converter;
 import jp.go.nict.langrid.commons.lang.ClassUtil;
 import jp.go.nict.langrid.commons.lang.ObjectUtil;
@@ -408,51 +405,70 @@ public class ServiceInvoker {
 	public Response invoke(String serviceId, Request invocation)
 	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
 	ProcessFailedException{
-		var sic = ServiceInvokerContext.start(new ServiceFactory(){
-				@SuppressWarnings("unchecked")
-				public <T> T create(String serviceId, Class<T> intf) {
-					return (T)serviceImples.get(serviceId);
-				}
-			}, invocation.getHeaders());
-		try{
-			// serviceIdに対応する実装クラスを探す
-			var s = serviceImples.get(serviceId);
-			if(s == null){
-				// 実装クラスがなければグループを探す
-				var g = serviceGroups.get(serviceId);
-				if(g == null) {
-					// 見つからなければ前方一致で検索
-					for(var e : serviceGroups.entrySet()) {
-						if(!serviceId.startsWith(e.getKey())) continue;
-						g = e.getValue();
+		var sf = new ServiceFactory(){
+			public Object create(String serviceId){
+				// serviceIdに対応する実装クラスを探す
+				var s = serviceImples.get(serviceId);
+				if(s == null){
+					// 実装クラスがなければグループを探す
+					var g = serviceGroups.get(serviceId);
+					if(g == null) {
+						// 見つからなければ前方一致で検索
+						for(var e : serviceGroups.entrySet()) {
+							if(!serviceId.startsWith(e.getKey())) continue;
+							g = e.getValue();
+						}
 					}
+					if(g == null) return null;
+					s = g.get(serviceId);
 				}
-				if(g == null) {
+				return s;
+			}
+		};
+		ServiceInvokerContext.initialize(
+			sf, invocation.getHeaders(), "execution", "ServiceInvoker.invoke", new Object[]{serviceId, invocation});
+		Object result = null;
+		Throwable exception = null;
+		Response r = null;
+		try{
+			ServiceInvokerContext.start("call", serviceId + "." + invocation.getMethod(), invocation.getArgs());
+			try{
+				var s = sf.create(serviceId);
+				if(s == null){
 					throw new ProcessFailedException("service " + serviceId + " not found.");
 				}
-				s = g.get(serviceId);
+				System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
+				var mn = invocation.getMethod();
+				var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
+				if(m == null){
+					throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
+				}
+				var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
+				result = ObjectUtil.invoke(s, mn, args);
+				ServiceInvokerContext.finishWithResult(result);
+			} catch(InvocationTargetException e){
+				exception = e.getTargetException();
+				ServiceInvokerContext.finishWithException(exception);
+			} catch(Throwable e){
+				exception = e;
+				ServiceInvokerContext.finishWithException(e);
 			}
-			System.out.printf("[invokeService] %s -> %s%n", serviceId, s);
-			var mn = invocation.getMethod();
-			var m = ClassUtil.findMethod(s.getClass(), mn, invocation.getArgs().length);
-			if(m == null){
-				throw new NoSuchMethodException(String.format("Failed to find %s.%s(%d args)", serviceId, mn, invocation.getArgs().length));
+		} finally{
+			if(result != null){
+				var span = ServiceInvokerContext.finalizeWithResult(result);
+				r = new Response(result);
+				r.putHeader("trace", span);
+			} else {
+				if(exception == null){
+					exception = new RuntimeException("no results");
+				}
+				var span = ServiceInvokerContext.finalizeWithException(exception);
+				r = new Response(new Error(
+					"error", exception.toString()));
+				r.putHeader("trace", span);
 			}
-			var args = c.convertEachElement(invocation.getArgs(), m.getParameterTypes());
-			var r = new Response(ObjectUtil.invoke(s, mn, args));
-			sic.timer().close();
-			r.putHeader("timer", sic.timer());
-			return r;
-		} catch(RuntimeException e){
-			try{
-				System.out.printf("Exception when calling %s.%s(%s)%n",
-					serviceId, invocation.getMethod(),
-					new ObjectMapper().writeValueAsString(invocation.getArgs()));
-			} catch(JsonProcessingException e2){
-				e2.printStackTrace();
-			}
-			throw e;
 		}
+		return r;
 	}
 
 	private Converter c = new Converter();

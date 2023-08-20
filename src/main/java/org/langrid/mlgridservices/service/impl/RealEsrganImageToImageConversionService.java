@@ -34,9 +34,9 @@ implements ImageConversionService{
 					inputFile.getName());
 			var outputFile = new File(tempDir, FileUtil.addFileNameSuffix(inputFile.getName(), "_out"));
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
 			do{
 				if(outputFile.exists()) break;
 				outputFile = new File(tempDir, FileUtil.changeFileExt(outputFile.getName(), ".png"));

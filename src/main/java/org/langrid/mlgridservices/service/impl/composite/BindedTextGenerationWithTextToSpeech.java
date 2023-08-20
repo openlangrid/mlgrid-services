@@ -20,7 +20,7 @@ implements TextGenerationWithTextToSpeechService {
 	@Override
 	public Audio generate(String text, String textLanguage)
 			throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
-		var si = ServiceInvokerContext.get();
+		var si = ServiceInvokerContext.current();
 		var gen = si.getService(tgServiceName, TextGenerationService.class)
 				.generate(text, textLanguage);
 		return si.getService(ttsServiceName, TextToSpeechService.class)

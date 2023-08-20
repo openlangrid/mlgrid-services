@@ -110,9 +110,9 @@ implements TextSentimentAnalysisService{
 				modelName, tokenizerName, dirName,
 				inputFileName, inputLanguage,
 				outputFileName);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
-				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			ServiceInvokerContext.exec(()->{
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+			}, "execution", "docker-compose");
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}

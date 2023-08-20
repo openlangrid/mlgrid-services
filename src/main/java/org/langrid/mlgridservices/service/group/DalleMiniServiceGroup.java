@@ -35,9 +35,7 @@ public class DalleMiniServiceGroup  implements ServiceGroup {
 				@Override
 				public Image[] generateMultiTimes(String text, String textLanguage, int numberOfTimes)
 						throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-					try(var t = ServiceInvokerContext.startServiceTimer()){
-						return s.generateMultiTimes(text, textLanguage, numberOfTimes);
-					}
+					return s.generateMultiTimes(text, textLanguage, numberOfTimes);
 				}
 			};
 		} catch(RuntimeException e){

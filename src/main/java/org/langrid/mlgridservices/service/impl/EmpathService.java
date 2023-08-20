@@ -61,24 +61,25 @@ public class EmpathService implements SpeechEmotionRecognitionService{
 		var httpPost = new HttpPost(endpoint);
 		httpPost.setEntity(builder.build());
 		var om = new ObjectMapper();
-		try(var t = ServiceInvokerContext.startServiceTimer();
-				var client = HttpClients.createDefault();
-				var resp = client.execute(httpPost)) {
-			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				var node = om.readTree(EntityUtils.toString(resp.getEntity()));
-				if(node.get("error").asInt() == 0) {
-					var ret = new ArrayList<EmotionRecognitionResult>();
-					for(var emo : new String[] {"calm", "anger", "joy", "sorrow", "energy"}) {
-						ret.add(new EmotionRecognitionResult(emo, node.get(emo).asDouble() / 50));
+		return ServiceInvokerContext.exec(()->{
+			try(var client = HttpClients.createDefault();
+					var resp = client.execute(httpPost)) {
+				if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+					var node = om.readTree(EntityUtils.toString(resp.getEntity()));
+					if(node.get("error").asInt() == 0) {
+						var ret = new ArrayList<EmotionRecognitionResult>();
+						for(var emo : new String[] {"calm", "anger", "joy", "sorrow", "energy"}) {
+							ret.add(new EmotionRecognitionResult(emo, node.get(emo).asDouble() / 50));
+						}
+						return ret.toArray(new EmotionRecognitionResult[] {});
+					} else {
+						throw new ProcessFailedException(node.get("msg").asText());
 					}
-					return ret.toArray(new EmotionRecognitionResult[] {});
-				} else {
-					throw new ProcessFailedException(node.get("msg").asText());
 				}
+				throw new ProcessFailedException(resp.getStatusLine().toString());
+			} catch(IOException e) {
+				throw new ProcessFailedException(e);
 			}
-			throw new ProcessFailedException(resp.getStatusLine().toString());
-		} catch(IOException e) {
-			throw new ProcessFailedException(e);
-		}
+		}, "http-request", "empath-api");
 	}
 }

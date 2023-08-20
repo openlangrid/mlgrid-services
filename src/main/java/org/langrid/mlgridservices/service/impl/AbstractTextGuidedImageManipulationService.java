@@ -60,9 +60,9 @@ implements TextGuidedImageManipulationService{
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(), 
 					modelPath, infile.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			ServiceInvokerContext.exec(()->{
 				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			}, "execution", "docker-compose");
 			var ret = new ArrayList<Image>();
 			for(var i = 0; i < numberOfTimes; i++){
 				var imgFile = new File(temp.toString() + "_" + i + ".png");

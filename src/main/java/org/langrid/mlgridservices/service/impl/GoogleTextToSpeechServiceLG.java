@@ -59,23 +59,25 @@ public class GoogleTextToSpeechServiceLG implements TextToSpeechService{
 				 String.format("no supported combinations of language: %s and voiceType: %s",
 				 lang, voiceType));
 		}
+		var cfg = c;
 
-		try (var t = ServiceInvokerContext.startServiceTimer();
-			var textToSpeechClient = TextToSpeechClient.create(settings)) {
-			var input = SynthesisInput.newBuilder().setText(text).build();
-			var voice = VoiceSelectionParams.newBuilder()
-					.setLanguageCode(c.langCode)
-					.setSsmlGender(SsmlVoiceGender.valueOf(c.ssmlGender))
-					.setName(c.modelName)
-					.build();
-			var audioConfig = AudioConfig.newBuilder()
-					.setAudioEncoding(AudioEncoding.MP3).build();
-			var response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
-			var audioContents = response.getAudioContent();
-			return new Speech(voiceType, audioType, audioContents.toByteArray());
-		} catch(IOException e){
-			throw new ProcessFailedException(e);
-		}
+		return ServiceInvokerContext.exec(()->{
+			try (var textToSpeechClient = TextToSpeechClient.create(settings)) {
+				var input = SynthesisInput.newBuilder().setText(text).build();
+				var voice = VoiceSelectionParams.newBuilder()
+						.setLanguageCode(cfg.langCode)
+						.setSsmlGender(SsmlVoiceGender.valueOf(cfg.ssmlGender))
+						.setName(cfg.modelName)
+						.build();
+				var audioConfig = AudioConfig.newBuilder()
+						.setAudioEncoding(AudioEncoding.MP3).build();
+				var response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
+				var audioContents = response.getAudioContent();
+				return new Speech(voiceType, audioType, audioContents.toByteArray());
+			} catch(IOException e){
+				throw new ProcessFailedException(e);
+			}
+		}, "api-request", "Langrid");
 	}
 
 	@Override

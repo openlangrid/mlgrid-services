@@ -16,12 +16,12 @@ implements TextGenerationWithTranslationService, CompositeService{
 	@Override
 	public String generate(String text, String textLanguage, String generationLanguage)
 			throws InvalidParameterException, UnsupportedLanguagePairException, ProcessFailedException {
-		var si = ServiceInvokerContext.get();
-		var trans = si.getBindedService("Pretranslation", TranslationService.class)
+		var ctx = ServiceInvokerContext.current();
+		var trans = ctx.getBindedService("Pretranslation", TranslationService.class)
 				.translate(text, textLanguage, generationLanguage);
-		var gen = si.getBindedService("TextGeneration", TextGenerationService.class)
+		var gen = ctx.getBindedService("TextGeneration", TextGenerationService.class)
 				.generate(trans, generationLanguage);
-		var ret = si.getBindedService("Posttranslation", TranslationService.class)
+		var ret = ctx.getBindedService("Posttranslation", TranslationService.class)
 				.translate(gen, generationLanguage, textLanguage);
 		return ret;
 	}

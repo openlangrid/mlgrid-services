@@ -64,11 +64,10 @@ public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3d
 					+ dockerServiceName + " python " + scriptName + " temp/" + imgFile.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			return ServiceInvokerContext.exec(()->{
 				var proc = pb.start();
 				try {
 					proc.waitFor();
-					t.close();
 					var res = proc.exitValue();
 					if(res == 0) {
 						var br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -90,7 +89,7 @@ public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3d
 				} finally {
 					proc.destroy();
 				}
-			}
+			}, "execution", "docker-compose");
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}

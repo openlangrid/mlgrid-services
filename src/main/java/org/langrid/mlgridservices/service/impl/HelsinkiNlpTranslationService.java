@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
+import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.TranslationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;
@@ -49,11 +50,10 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 					+ "helsinki-nlp python run.py " + modelName + " temp/" + file.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			return ServiceInvokerContext.exec(()->{
 				var proc = pb.start();
 				try {
 					proc.waitFor();
-					t.close();
 					var res = proc.exitValue();
 					if(res == 0) {
 						var br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -75,7 +75,7 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 				} finally {
 					proc.destroy();
 				}
-			}
+			}, "execution", "docker-compose");
 		} catch(Exception e){
 			throw new RuntimeException(e);
 		}

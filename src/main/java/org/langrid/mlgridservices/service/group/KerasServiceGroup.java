@@ -1,12 +1,8 @@
 package org.langrid.mlgridservices.service.group;
 
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
-import org.langrid.mlgridservices.controller.Request;
-import org.langrid.mlgridservices.controller.Response;
-import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.KerasImageClassificationService;
 import org.langrid.service.ml.ImageClassificationResult;
 import org.langrid.service.ml.ImageClassificationService;
@@ -40,7 +36,7 @@ public class KerasServiceGroup implements ServiceGroup {
 			public ImageClassificationResult[] classify(byte[] image, String format, String labelLanguage,
 					int maxResults)
 					throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
-				try(var t = ServiceInvokerContext.startServiceTimer()){
+				try{
 					return s.classify(image, format, labelLanguage, maxResults);
 				} catch(RuntimeException e){
 					throw e;

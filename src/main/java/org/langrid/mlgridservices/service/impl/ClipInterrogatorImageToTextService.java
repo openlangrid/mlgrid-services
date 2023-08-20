@@ -32,9 +32,9 @@ implements ImageToTextConversionService{
 					"python3 /work/run.py --infile \"/work/temp/%s\"",
 					infile.getName());
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			ServiceInvokerContext.exec(()->{
 				ProcessUtil.runAndWait(cmd, baseDir);
-			}
+			}, "execution", "docker-compose");
 			var resultFile = new File(infile.toString() + ".result.txt");
 			if(!resultFile.exists()) {
 				throw new ProcessFailedException("failed to generate text.");
