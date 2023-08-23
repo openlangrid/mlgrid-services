@@ -110,7 +110,12 @@ public class ServiceInvokerContext {
 	}
 
 	public static GPULock acquireGpuLock() throws InterruptedException{
-		return GPULock.acquire();
+		start("execution", "GPULock.acquire");
+		try{
+			return GPULock.acquire();
+		} finally{
+			finishWithResult(null);
+		}
 	}
 
 	private ServiceInvokerContext(
