@@ -43,8 +43,11 @@ public class VoiceVoxTextToSpeechService implements TextToSpeechService{
 				"--out_file_name=\"/work/%s/%s\"", 
 				text, speakerId, tempDir.getName(), tf.getName() + ".wav");
 			System.out.println(cmd);
-			try(var t = ServiceInvokerContext.startServiceTimer()){
+			ServiceInvokerContext.start("execution", "docker-compose");
+			try{
 				ProcessUtil.runAndWait(cmd, baseDir);
+			} finally{
+				ServiceInvokerContext.finishWithResult(null);
 			}
 			return new Audio(
 				Files.readAllBytes(new File(tempDir, tf.getName() + ".wav").toPath()),
