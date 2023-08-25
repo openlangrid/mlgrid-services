@@ -19,6 +19,8 @@ import org.langrid.mlgridservices.service.impl.composite.BindedTextGenerationWit
 import org.langrid.mlgridservices.service.impl.composite.BindedTextGuidedImageGenerationWithTranslationService;
 import org.langrid.mlgridservices.service.impl.composite.TextGenerationWithTranslation;
 import org.langrid.mlgridservices.service.impl.test.ProcessFailedExceptionService;
+import org.langrid.mlgridservices.service.impl.test.TestGpuPipelineService;
+import org.langrid.mlgridservices.service.impl.test.TestGpuService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
@@ -33,6 +35,7 @@ import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
+import org.langrid.mlgridservices.service.impl.PipelineExternalCommandTextGenerationService;
 import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.ReasonSpeechSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
@@ -357,6 +360,9 @@ public class ServiceInvoker {
 		serviceImples.put("MatsuoLabWeblab7BInstruct", new ExternalCommandTextGenerationService(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
+		serviceImples.put("MatsuoLabWeblab7BInstructP", new PipelineExternalCommandTextGenerationService(
+			"./procs/matsuolab_weblab", "/bin/bash run_pipeline.sh",
+			"matsuo-lab/weblab-10b-instruction-sft"));
 
 		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
@@ -375,6 +381,8 @@ public class ServiceInvoker {
 
 
 		serviceImples.put("ProcessFailedExceptionService", new ProcessFailedExceptionService());
+		serviceImples.put("TestGpuPipelineService", new TestGpuPipelineService());
+		serviceImples.put("TestGpuService", new TestGpuService());
 
 		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
 
