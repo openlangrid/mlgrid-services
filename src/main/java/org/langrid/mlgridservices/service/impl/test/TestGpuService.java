@@ -15,6 +15,6 @@ public class TestGpuService implements TestService{
 		} finally{
 			System.out.println("[TestGpuService] release lock.");
 		}
-		return null;
+		return "result";
 	}
 }
