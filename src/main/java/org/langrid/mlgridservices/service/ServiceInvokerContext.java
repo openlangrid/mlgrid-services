@@ -2,10 +2,10 @@ package org.langrid.mlgridservices.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.Timer;
@@ -109,7 +109,44 @@ public class ServiceInvokerContext {
 		return ctxList.get().getLast();
 	}
 
-	public static GPULock acquireGpuLock() throws InterruptedException{
+	public static synchronized Instance getInstance(String key, Supplier<Instance> supplier)
+	throws InterruptedException {
+		return instances.computeIfAbsent(key, k->supplier.get());
+	}
+
+	public static synchronized Instance getInstanceWithGpuLock(String key, Supplier<Instance> supplier)
+	throws InterruptedException {
+		if(gpuInstanceKey != null){
+			if(!key.equals(gpuInstanceKey)){
+				gpuInstance.terminateAndWait();
+				gpuInstance = null;
+				gpuInstanceKey = null;
+				gpuInstanceLock.release();
+				gpuInstanceLock = null;
+			} else{
+				return gpuInstance;
+			}
+		}
+		gpuInstanceLock = acquireGpuLock();
+		gpuInstance = supplier.get();
+		gpuInstanceKey = key;
+		return gpuInstance;
+	}
+
+	private static String gpuInstanceKey;
+	private static Instance gpuInstance;
+	private static GPULock gpuInstanceLock;
+	private static Map<String, Instance> instances = new HashMap<>();
+
+	public static synchronized GPULock acquireGpuLock() throws InterruptedException{
+		if(gpuInstanceLock != null && gpuInstance != null){
+			System.out.println("terminate other instance.");
+			gpuInstance.terminateAndWait();
+			gpuInstance = null;
+			gpuInstanceKey = null;
+			gpuInstanceLock.release();
+			gpuInstanceLock = null;
+		}
 		start("execution", "GPULock.acquire");
 		try{
 			return GPULock.acquire();

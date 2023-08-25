@@ -16,13 +16,13 @@ def run(tokenizer_model_name: str, model_name: str, text: str, generate_args: di
     with torch.no_grad():
         output_ids = model.generate(
             token_ids.to(model.device),
-            max_new_tokens=100,
+            max_new_tokens=256,
             do_sample=True,
-            temperature=0.6,
-            top_p=0.9,
-            pad_token_id=tokenizer.pad_token_id,
-            bos_token_id=tokenizer.bos_token_id,
-            eos_token_id=tokenizer.eos_token_id
+            temperature=0.7,
+            top_p=0.95,
+#            pad_token_id=tokenizer.pad_token_id,
+#            bos_token_id=tokenizer.bos_token_id,
+#            eos_token_id=tokenizer.eos_token_id
         )
 
     return tokenizer.decode(output_ids.tolist()[0])

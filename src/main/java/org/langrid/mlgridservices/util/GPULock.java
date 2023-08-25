@@ -13,6 +13,10 @@ public class GPULock implements AutoCloseable{
 		lock.acquire();
 	}
 
+	public void release(){
+		lock.release();
+	}
+
 	@Override
 	public void close() {
 		lock.release();
