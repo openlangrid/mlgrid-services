@@ -36,6 +36,7 @@ import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
 import org.langrid.mlgridservices.service.impl.PipelineExternalCommandTextGenerationService;
+import org.langrid.mlgridservices.service.impl.PipelineExternalCommandTextImageGenerationService;
 import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.ReasonSpeechSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
@@ -217,7 +218,12 @@ public class ServiceInvoker {
 			addDiffusersTGIG(dir, "SDXLBaseWithRefiner" + postfix,
 				"stabilityai/stable-diffusion-xl-base-1.0",
 				"", "runSDXLWithRefiner.py");
+
+			serviceImples.put("SDXLBaseWithRefinerP" + postfix, new PipelineExternalCommandTextImageGenerationService(
+				"./procs/diffusers_0_19_3", "bash run_sdxl_base_with_refiner_pipeline.sh",
+				"stabilityai/stable-diffusion-xl-base-1.0"));
 		}
+
 		// Image Manipulation
 		{
 			var postfix = "_DS_0_04_1";
