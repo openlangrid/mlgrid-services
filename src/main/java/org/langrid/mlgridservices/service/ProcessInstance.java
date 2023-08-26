@@ -45,7 +45,7 @@ implements Instance {
 	public synchronized void terminateAndWait() throws InterruptedException{
 		System.out.println("[ProcessInstance] terminate process");
 		writer.close();
-		if(!process.waitFor(5, TimeUnit.SECONDS)){
+		if(!process.waitFor(15, TimeUnit.MINUTES)){
 			System.out.println("[ProcessInstance] kill process");
 			process.destroyForcibly();
 		}
