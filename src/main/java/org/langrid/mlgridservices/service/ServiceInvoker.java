@@ -219,7 +219,10 @@ public class ServiceInvoker {
 				"stabilityai/stable-diffusion-xl-base-1.0",
 				"", "runSDXLWithRefiner.py");
 
-			serviceImples.put("SDXLBaseWithRefinerP" + postfix, new PipelineExternalCommandTextImageGenerationService(
+			serviceImples.put("SDXLBase" + postfix + "|P", new PipelineExternalCommandTextImageGenerationService(
+				"./procs/diffusers_0_19_3", "bash run_sdxl_base_pipeline.sh",
+				"stabilityai/stable-diffusion-xl-base-1.0"));
+			serviceImples.put("SDXLBaseWithRefiner" + postfix + "|P", new PipelineExternalCommandTextImageGenerationService(
 				"./procs/diffusers_0_19_3", "bash run_sdxl_base_with_refiner_pipeline.sh",
 				"stabilityai/stable-diffusion-xl-base-1.0"));
 		}
@@ -366,7 +369,7 @@ public class ServiceInvoker {
 		serviceImples.put("MatsuoLabWeblab7BInstruct", new ExternalCommandTextGenerationService(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
-		serviceImples.put("MatsuoLabWeblab7BInstructP", new PipelineExternalCommandTextGenerationService(
+		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new PipelineExternalCommandTextGenerationService(
 			"./procs/matsuolab_weblab", "/bin/bash run_pipeline.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
 

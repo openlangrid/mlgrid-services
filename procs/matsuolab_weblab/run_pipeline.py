@@ -14,20 +14,17 @@ def run(tokenizer_model_name: str, model_name: str):
 
     import sys
     for line in sys.stdin:
-        if(line.strip() == "terminate"):
-            break
         input = json.loads(line)
-        inputPath = input["inputPath"]
-        inputLanguage = input["inputLanguage"]
+        with open(input["promptPath"]) as f:
+            prompt = f.read()
+        inputLanguage = input["promptLanguage"]
         outputPath = input["outputPath"]
-        with open(inputPath) as f:
-            text = f.read()
         if model_name.endswith("-16k"):
             generate_args = {"max_new_tokens": 1024 * 4}
         else:
             generate_args = {}
 
-        token_ids = tokenizer.encode(text, add_special_tokens=False, return_tensors="pt")
+        token_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
         with torch.no_grad():
             output_ids = model.generate(
                 token_ids.to(model.device),

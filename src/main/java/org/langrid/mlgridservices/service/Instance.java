@@ -2,12 +2,10 @@ package org.langrid.mlgridservices.service;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 public interface Instance {
-	boolean exec(Object input)
-	throws IOException, JsonMappingException;
-	
+	boolean exec(String line)
+	throws IOException;
+
 	void terminateAndWait()
 	throws InterruptedException;
 }

@@ -11,9 +11,10 @@ import org.langrid.mlgridservices.service.Instance;
 import org.langrid.mlgridservices.service.ProcessInstance;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.Image;
 import org.langrid.service.ml.TextGuidedImageGenerationService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.commons.lang.StringUtil;
 import jp.go.nict.langrid.commons.util.ArrayUtil;
@@ -27,14 +28,14 @@ import lombok.NoArgsConstructor;
 public class PipelineExternalCommandTextImageGenerationService
 implements TextGuidedImageGenerationService{
 	public PipelineExternalCommandTextImageGenerationService(
-		String baseDir, String command, String modelName, String... params) {
+		String baseDir, String command, String modelName, String... modelParams) {
 		this.baseDir = new File(baseDir);
 		this.command = command;
 		this.modelName = modelName;
-		this.params = params;
+		this.modelParams = modelParams;
 
 		this.instanceKey = String.format("%s:%s:%s:%s", baseDir, command, modelName,
-			StringUtil.join(params, ":"));
+			StringUtil.join(modelParams, ":"));
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
 	}
@@ -63,16 +64,20 @@ implements TextGuidedImageGenerationService{
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
 				tempDir, "", "");
+			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
+			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
+			var outputFilePrefix = baseFile.getName() + ".output";
 			var inputFile = new File(baseFile.toString() + ".input.txt");
-			var outputFilePrefix = ".output";
-			Files.writeString(inputFile.toPath(), text, StandardCharsets.UTF_8);
-			var ins = getInstance();
-			var success = ins.exec(new TextImageGenerationCommandInput(
-				tempDir.getName() + "/" + inputFile.getName(),
+			var input = m.writeValueAsString(new TextImageGenerationCommandInput(
+				tempDir.getName() + "/" + inputTextFile.getName(),
 				textLanguage,
 				numberOfTimes,
 				tempDir.getName() + "/" + outputFilePrefix
 			));
+			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
+
+			var ins = getInstance();
+			var success = ins.exec(input);
 			if(success){
 				var ret = new ArrayList<Image>();
 				for(var i = 0; i < numberOfTimes; i++){
@@ -99,7 +104,7 @@ implements TextGuidedImageGenerationService{
 			instanceKey, ()->{
 				var commands = command.split(" ");
 				commands = ArrayUtil.append(commands, "--model", modelName);
-				commands = ArrayUtil.append(commands, params);
+				commands = ArrayUtil.append(commands, modelParams);
 				var pb = new ProcessBuilder(commands);
 				try{
 					pb.directory(baseDir);
@@ -117,34 +122,17 @@ implements TextGuidedImageGenerationService{
 	@Data
 	static class TextImageGenerationCommandInput{
 		private String promptPath;
-		private String language;
+		private String promptLanguage;
 		private int numberOfTimes;
 		private String outputPathPrefix;
 	}
-	public void run(String dirName, String inputFileName, String inputLanguage, String outputFileName){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
-			var cmd = String.format(
-				"%s " +
-				"--model %s " +
-				"--inputPath ./%3$s/%4$s " +
-				"--inputLanguage %5$s " + 
-				"--outputPath ./%3$s/%6$s ",
-				command, modelName, dirName,
-				inputFileName, inputLanguage, outputFileName);
-			cmd += StringUtil.join(params, " ");
-			var c = cmd;
-			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(c, baseDir);
-			}, "execution", command);
-		} catch(Exception e){
-			throw new RuntimeException(e);
-		}
-	}
+
+	private ObjectMapper m = new ObjectMapper();
 
 	private File baseDir;
 	private String command;
 	private String modelName;
-	private String[] params;
+	private String[] modelParams;
 
 	private String instanceKey;
 	private File tempDir;

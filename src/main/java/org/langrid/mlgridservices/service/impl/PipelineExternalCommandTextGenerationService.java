@@ -13,6 +13,8 @@ import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.service.ml.interim.TextGenerationService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jp.go.nict.langrid.commons.lang.StringUtil;
 import jp.go.nict.langrid.commons.util.ArrayUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
@@ -26,14 +28,14 @@ public class PipelineExternalCommandTextGenerationService
 extends AbstractPipelineService
 implements TextGenerationService{
 	public PipelineExternalCommandTextGenerationService(
-		String baseDir, String command, String modelName, String... params) {
+		String baseDir, String command, String modelName, String... modelParams) {
 		this.baseDir = new File(baseDir);
 		this.command = command;
 		this.modelName = modelName;
-		this.params = params;
+		this.modelParams = modelParams;
 
 		this.instanceKey = String.format("%s:%s:%s:%s", baseDir, command, modelName,
-			StringUtil.join(params, ":"));
+			StringUtil.join(modelParams, ":"));
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
 	}
@@ -50,20 +52,23 @@ implements TextGenerationService{
 		this.modelName = modelName;
 	}
 
-	public String generate(String text, String textLanguage)
+	public String generate(String prompt, String promptLanguage)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
 				tempDir, "", "");
+			var inputPromptFile = new File(baseFile.toString() + ".input_prompt.txt");
+			Files.writeString(inputPromptFile.toPath(), prompt, StandardCharsets.UTF_8);
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var outputFile = new File(baseFile.toString() + ".output.txt");
-			Files.writeString(inputFile.toPath(), text, StandardCharsets.UTF_8);
-			var i = getInstance();
-			var success = i.exec(new TextGenerationCommandInput(
-				tempDir.getName() + "/" + inputFile.getName(),
-				textLanguage,
+			var input = m.writeValueAsString(new TextGenerationCommandInput(
+				tempDir.getName() + "/" + inputPromptFile.getName(),
+				promptLanguage,
 				tempDir.getName() + "/" + outputFile.getName()
 			));
+			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
+			var i = getInstance();
+			var success = i.exec(input);
 			if(success && outputFile.exists())
 				return Files.readString(outputFile.toPath());
 			return null;
@@ -80,7 +85,7 @@ implements TextGenerationService{
 			instanceKey, ()->{
 				var commands = command.split(" ");
 				commands = ArrayUtil.append(commands, "--model", modelName);
-				commands = ArrayUtil.append(commands, params);
+				commands = ArrayUtil.append(commands, modelParams);
 				var pb = new ProcessBuilder(commands);
 				try{
 					pb.directory(baseDir);
@@ -97,15 +102,18 @@ implements TextGenerationService{
 	@AllArgsConstructor
 	@Data
 	static class TextGenerationCommandInput{
-		private String inputPath;
-		private String inputLanguage;
+		private String promptPath;
+		private String promptLanguage;
 		private String outputPath;
 	}
+
+	private ObjectMapper m = new ObjectMapper();;
 
 	private File baseDir;
 	private String command;
 	private String modelName;
-	private String[] params;
+	private String[] modelParams;
+
 	private String instanceKey;
 	private File tempDir;
 }

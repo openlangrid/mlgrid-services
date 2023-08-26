@@ -19,7 +19,7 @@ public class TestGpuPipelineService implements TestService{
 						{
 							System.out.println("[TestGpuPipelineService] created.");
 						}
-						public boolean exec(Object input){
+						public boolean exec(String input){
 							System.out.println("[TestGpuPipelineService] executed.");
 							return true;
 						}

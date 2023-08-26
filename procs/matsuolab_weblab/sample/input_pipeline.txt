@@ -1,2 +1,1 @@
 {"inputPath": "./sample/input_pipeline_text.txt", "inputLanguage": "ja", "outputPath": "./sample/output_pipeline.txt"}
-terminate
