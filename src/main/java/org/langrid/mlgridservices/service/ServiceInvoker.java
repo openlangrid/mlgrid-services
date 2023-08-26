@@ -357,11 +357,14 @@ public class ServiceInvoker {
 		serviceImples.put("LMSYSVicuna13B-v1.5-16k", new ExternalCommandTextGenerationService(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.5-16k"));
-		serviceImples.put("Qwen7B", new ExternalCommandTextGenerationService(
-			"./procs/lmsys_vicuna", "/bin/bash run.sh",
-			"Qwen/Qwen-7B"));
 		serviceImples.put("Qwen7BChat", new ExternalCommandTextGenerationService(
-			"./procs/lmsys_vicuna", "/bin/bash run.sh",
+			"./procs/qwenlm", "/bin/bash run.sh",
+			"Qwen/Qwen-7B-Chat"));
+		serviceImples.put("Qwen7B|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/qwenlm", "bash", "run_completion_pipeline.sh",
+			"Qwen/Qwen-7B"));
+		serviceImples.put("Qwen7BChat|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/qwenlm", "bash", "run_chat_pipeline.sh",
 			"Qwen/Qwen-7B-Chat"));
 		serviceImples.put("MatsuoLabWeblab7B", new ExternalCommandTextGenerationService(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
