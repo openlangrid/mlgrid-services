@@ -1,0 +1,1 @@
+{"textPath": "./sample/chat_pipeline_input_text.txt", "textLanguage": "ja", "outputPath": "./sample/chat_pipeline_output.txt"}
