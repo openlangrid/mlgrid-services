@@ -382,9 +382,9 @@ public class ServiceInvoker {
 		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b4k|P", new PipelineExternalCommandTextGenerationService(
 			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-completion-alpha-3b-4k"));
-		serviceImples.put("StabilityAIStableCodeInstructionAlpha3b|P", new PipelineExternalCommandTextGenerationService(
+		serviceImples.put("StabilityAIStableCodeInstructAlpha3b|P", new PipelineExternalCommandTextGenerationService(
 			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
-			"stabilityai/stablecode-instruction-alpha-3b"));
+			"stabilityai/stablecode-instruct-alpha-3b"));
 
 		serviceImples.put("MetaCodeLlama7b|P", new PipelineExternalCommandTextGenerationService(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
