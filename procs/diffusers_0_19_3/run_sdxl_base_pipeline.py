@@ -7,9 +7,6 @@ def run(model_name: str):
         torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
     base.to("cuda")
 
-    n_steps = 40
-    high_noise_frac = 0.8
-
     print("ready", flush=True)
 
     import json, sys
