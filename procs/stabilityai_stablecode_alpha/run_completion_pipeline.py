@@ -46,6 +46,6 @@ def main(tokenizerModel: str, model: str):
 if __name__ == "__main__": 
     import argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument("model", type=str, nargs="?", default="stabilityai/stablecode-completion-alpha-3b")
     parser.add_argument("--tokenizerModel", type=str, default=None)
-    parser.add_argument("--model", type=str, default="stabilityai/stablecode-completion-alpha-3b")
     main(**vars(parser.parse_args()))

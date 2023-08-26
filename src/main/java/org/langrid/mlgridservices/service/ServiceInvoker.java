@@ -220,10 +220,10 @@ public class ServiceInvoker {
 				"", "runSDXLWithRefiner.py");
 
 			serviceImples.put("SDXLBase" + postfix + "|P", new PipelineExternalCommandTextImageGenerationService(
-				"./procs/diffusers_0_19_3", "bash run_sdxl_base_pipeline.sh",
+				"./procs/diffusers_0_19_3", "bash", "run_sdxl_base_pipeline.sh",
 				"stabilityai/stable-diffusion-xl-base-1.0"));
 			serviceImples.put("SDXLBaseWithRefiner" + postfix + "|P", new PipelineExternalCommandTextImageGenerationService(
-				"./procs/diffusers_0_19_3", "bash run_sdxl_base_with_refiner_pipeline.sh",
+				"./procs/diffusers_0_19_3", "bash", "run_sdxl_base_with_refiner_pipeline.sh",
 				"stabilityai/stable-diffusion-xl-base-1.0"));
 		}
 
@@ -370,21 +370,46 @@ public class ServiceInvoker {
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
 		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new PipelineExternalCommandTextGenerationService(
-			"./procs/matsuolab_weblab", "/bin/bash run_pipeline.sh",
+			"./procs/matsuolab_weblab", "bash", "run_pipeline.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
 
-		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new ExternalCommandMultimodalTextGenerationService(
-			"./procs/stabilityai_stablecode_alpha",
-			"/bin/bash run_completion_pipeline.sh",
+		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-completion-alpha-3b"));
-		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b4k|P", new ExternalCommandMultimodalTextGenerationService(
-			"./procs/stabilityai_stablecode_alpha",
-			"/bin/bash run_completion_pipeline.sh",
+		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b4k|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-completion-alpha-3b-4k"));
-		serviceImples.put("StabilityAIStableCodeInstructionAlpha3b|P", new ExternalCommandMultimodalTextGenerationService(
-			"./procs/stabilityai_stablecode_alpha",
-			"/bin/bash run_completion_pipeline.sh",
+		serviceImples.put("StabilityAIStableCodeInstructionAlpha3b|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-instruction-alpha-3b"));
+
+		serviceImples.put("MetaCodeLlama7b|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-7b-hf"));
+		serviceImples.put("MetaCodeLlama13b|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-13b-hf"));
+		serviceImples.put("MetaCodeLlama34b|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-34b-hf"));
+		serviceImples.put("MetaCodeLlama7bPython|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-7b-Python-hf"));
+		serviceImples.put("MetaCodeLlama13bPython|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-13b-Python-hf"));
+		serviceImples.put("MetaCodeLlama34bPython|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-34b-Python-hf"));
+		serviceImples.put("MetaCodeLlama7bInstruct|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-7b-Instruct-hf"));
+		serviceImples.put("MetaCodeLlama13bInstruct|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-13b-Instruct-hf"));
+		serviceImples.put("MetaCodeLlama34bInstruct|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
+			"codellama/CodeLlama-34b-Instruct-hf"));
 
 
 		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(

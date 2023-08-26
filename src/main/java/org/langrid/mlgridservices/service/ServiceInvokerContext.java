@@ -123,6 +123,7 @@ public class ServiceInvokerContext {
 				gpuInstanceKey = null;
 				gpuInstanceLock.release();
 				gpuInstanceLock = null;
+				gpuInstanceLockedAtMs = -1;
 			} else{
 				return gpuInstance;
 			}
@@ -130,11 +131,18 @@ public class ServiceInvokerContext {
 		gpuInstanceLock = acquireGpuLock();
 		gpuInstance = supplier.get();
 		gpuInstanceKey = key;
+		gpuInstanceLockedAtMs = System.currentTimeMillis();
+
 		return gpuInstance;
+	}
+
+	public static long getGpuInstanceLockedAtMs() {
+		return gpuInstanceLockedAtMs;
 	}
 
 	private static String gpuInstanceKey;
 	private static Instance gpuInstance;
+	private static long gpuInstanceLockedAtMs;
 	private static GPULock gpuInstanceLock;
 	private static Map<String, Instance> instances = new HashMap<>();
 

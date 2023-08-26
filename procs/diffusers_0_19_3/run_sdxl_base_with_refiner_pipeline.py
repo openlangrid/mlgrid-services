@@ -53,6 +53,6 @@ def main(model: str, refinerModel: str):
 if __name__ == "__main__": 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", type=str, default="stabilityai/stable-diffusion-xl-base-1.0")
+    parser.add_argument("model", type=str, nargs="?", default="stabilityai/stable-diffusion-xl-base-1.0")
     parser.add_argument("--refinerModel", type=str, default="stabilityai/stable-diffusion-xl-refiner-1.0")
     main(**vars(parser.parse_args()))

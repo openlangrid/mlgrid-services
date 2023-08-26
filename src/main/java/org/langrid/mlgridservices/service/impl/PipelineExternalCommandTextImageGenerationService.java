@@ -17,7 +17,6 @@ import org.langrid.service.ml.TextGuidedImageGenerationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.commons.lang.StringUtil;
-import jp.go.nict.langrid.commons.util.ArrayUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
@@ -28,28 +27,13 @@ import lombok.NoArgsConstructor;
 public class PipelineExternalCommandTextImageGenerationService
 implements TextGuidedImageGenerationService{
 	public PipelineExternalCommandTextImageGenerationService(
-		String baseDir, String command, String modelName, String... modelParams) {
+		String baseDir, String... commands) {
 		this.baseDir = new File(baseDir);
-		this.command = command;
-		this.modelName = modelName;
-		this.modelParams = modelParams;
+		this.commands = commands;
 
-		this.instanceKey = String.format("%s:%s:%s:%s", baseDir, command, modelName,
-			StringUtil.join(modelParams, ":"));
+		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
-	}
-
-	public File getBaseDir() {
-		return baseDir;
-	}
-
-	public String getModelName() {
-		return modelName;
-	}
-
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
 	}
 
 	@Override
@@ -102,9 +86,6 @@ implements TextGuidedImageGenerationService{
 	throws InterruptedException{
 		var instance = ServiceInvokerContext.getInstanceWithGpuLock(
 			instanceKey, ()->{
-				var commands = command.split(" ");
-				commands = ArrayUtil.append(commands, "--model", modelName);
-				commands = ArrayUtil.append(commands, modelParams);
 				var pb = new ProcessBuilder(commands);
 				try{
 					pb.directory(baseDir);
@@ -130,9 +111,7 @@ implements TextGuidedImageGenerationService{
 	private ObjectMapper m = new ObjectMapper();
 
 	private File baseDir;
-	private String command;
-	private String modelName;
-	private String[] modelParams;
+	private String[] commands;
 
 	private String instanceKey;
 	private File tempDir;

@@ -1,72 +1,49 @@
-import torch\nimport torch.nn as nn
+import torch
+import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-import torch.utils.data
-import torchvision
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
-import torchvision.models as models
-import torch.utils.data
-import torch.utils.data.distributed
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.utils.data.distributed
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as dist
-import torch.nn.parallel
-import torch.distributed as dist
-import torch.multiprocessing as mp
-import torch.distributed as
+from torch.autograd import Variable
+import numpy as np
+import math
+import random
+from torch.nn.parameter import Parameter
+import torch.nn.init as init
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+from torch.nn.utils.weight_norm import weight_norm
+from torch.nn.utils.clip_grad import clip_grad_norm
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from torch.nn.utils.rnn import pack_padded_sequence, pad_

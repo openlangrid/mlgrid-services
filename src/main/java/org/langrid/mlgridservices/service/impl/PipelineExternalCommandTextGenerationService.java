@@ -28,28 +28,13 @@ public class PipelineExternalCommandTextGenerationService
 extends AbstractPipelineService
 implements TextGenerationService{
 	public PipelineExternalCommandTextGenerationService(
-		String baseDir, String command, String modelName, String... modelParams) {
+		String baseDir, String... commands) {
 		this.baseDir = new File(baseDir);
-		this.command = command;
-		this.modelName = modelName;
-		this.modelParams = modelParams;
+		this.commands = commands;
 
-		this.instanceKey = String.format("%s:%s:%s:%s", baseDir, command, modelName,
-			StringUtil.join(modelParams, ":"));
+		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
-	}
-
-	public File getBaseDir() {
-		return baseDir;
-	}
-
-	public String getModelName() {
-		return modelName;
-	}
-
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
 	}
 
 	public String generate(String text, String textLanguage)
@@ -83,9 +68,6 @@ implements TextGenerationService{
 	throws InterruptedException{
 		var instance = ServiceInvokerContext.getInstanceWithGpuLock(
 			instanceKey, ()->{
-				var commands = command.split(" ");
-				commands = ArrayUtil.append(commands, "--model", modelName);
-				commands = ArrayUtil.append(commands, modelParams);
 				var pb = new ProcessBuilder(commands);
 				try{
 					pb.directory(baseDir);
@@ -110,9 +92,7 @@ implements TextGenerationService{
 	private ObjectMapper m = new ObjectMapper();;
 
 	private File baseDir;
-	private String command;
-	private String modelName;
-	private String[] modelParams;
+	private String[] commands;
 
 	private String instanceKey;
 	private File tempDir;
