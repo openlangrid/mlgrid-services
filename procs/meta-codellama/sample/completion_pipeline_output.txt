@@ -1,0 +1,13 @@
+ def read_text(file_name):
+    with open(file_name, 'r') as f:
+        return f.read()
+
+
+def write_text(file_name, text):
+    with open(file_name, 'w') as f:
+        f.write(text)
+
+
+def read_lines(file_name):
+    with open(file_name, 'r') as f:
+        return f
