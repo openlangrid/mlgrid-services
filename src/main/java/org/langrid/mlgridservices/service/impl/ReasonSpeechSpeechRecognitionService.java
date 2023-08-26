@@ -25,7 +25,7 @@ public class ReasonSpeechSpeechRecognitionService implements SpeechRecognitionSe
 		if(!language.startsWith("ja")){
 			throw new UnsupportedLanguageException("language", language);
 		}
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var input = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");

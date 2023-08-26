@@ -59,7 +59,7 @@ public class OpenPoseHumanPoseEstimationService implements HumanPoseEstimation3d
 	}
 
 	public String run(String scriptName, File imgFile){
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm "
 					+ dockerServiceName + " python " + scriptName + " temp/" + imgFile.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);

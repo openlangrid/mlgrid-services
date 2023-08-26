@@ -29,7 +29,7 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches("ja", textLanguage))
 			throw new UnsupportedLanguageException("textLanguage", textLanguage);
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			numberOfTimes = Math.min(numberOfTimes, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();

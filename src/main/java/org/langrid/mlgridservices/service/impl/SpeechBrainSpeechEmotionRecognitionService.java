@@ -27,7 +27,7 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 		byte[] audio, String audioFormat, String audioLanguage)
 			throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException
 	{
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");

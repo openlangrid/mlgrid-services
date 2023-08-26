@@ -51,7 +51,7 @@ public class FuguMtTranslationService implements TranslationService{
 	}
 
 	public String run(String modelName, String inFilePath){
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = String.format(
 				"PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm " +
 				"service python run.py %s --inPath %s --outPathPrefix %2$s",

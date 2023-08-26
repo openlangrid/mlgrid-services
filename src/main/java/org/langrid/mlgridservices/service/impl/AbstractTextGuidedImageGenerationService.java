@@ -53,7 +53,7 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches(supportedLang, textLanguage))
 			throw new UnsupportedLanguageException("textLanguage", textLanguage);
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			if(additionalPrompt != null){
 				text = additionalPrompt + ", " + text;
 			}

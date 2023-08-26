@@ -28,7 +28,7 @@ public class VoiceVoxTextToSpeechService implements TextToSpeechService{
 		if(!lang.startsWith("ja")){
 			throw new UnsupportedLanguageException("language", textLanguage);
 		}
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var tf = FileUtil.writeTempFile(tempDir, text.getBytes("UTF-8"), "text/plain");

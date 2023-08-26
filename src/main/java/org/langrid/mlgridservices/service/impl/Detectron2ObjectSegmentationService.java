@@ -58,7 +58,7 @@ public class Detectron2ObjectSegmentationService implements ObjectSegmentationSe
 	}
 
 	private void run(String config, String dir, String file){
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = String.format("PATH=$PATH:/usr/local/bin /usr/local/bin/"
 					+ "docker-compose run --rm service python run.py "
 					+ "--config %s --infile %s/%s", config, dir, file);

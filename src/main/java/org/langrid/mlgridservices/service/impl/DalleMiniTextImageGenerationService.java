@@ -59,7 +59,7 @@ public class DalleMiniTextImageGenerationService implements TextGuidedImageGener
 	}
 	
 	public void run(String model, String text, int maxResults, String outimagePrefix){
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
 					"run --rm dalle-mini python3 run.py " +
 				model + " \"" + text.replaceAll("\"", "\\\"") + "\" " +

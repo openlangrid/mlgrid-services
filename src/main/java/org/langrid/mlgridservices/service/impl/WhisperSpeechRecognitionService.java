@@ -49,7 +49,7 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 			throw new UnsupportedLanguageException("audioLanguage", audioLanguage);
 		}
 		lang = lang.substring(0, 1).toUpperCase() + lang.substring(1);
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");

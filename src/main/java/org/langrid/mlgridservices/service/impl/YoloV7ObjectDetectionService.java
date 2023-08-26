@@ -38,7 +38,7 @@ implements ObjectDetectionService{
 	}
 
 	public String run(String modelName, String imgFile){
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/"
 					+ "docker-compose run --rm "
 					+ "-v $(pwd)/detect.py:/workspace/yolov7/detect.py "

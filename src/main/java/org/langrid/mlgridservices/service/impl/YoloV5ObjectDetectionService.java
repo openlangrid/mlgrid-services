@@ -39,7 +39,7 @@ implements ObjectDetectionService{
 	}
 
 	public String run(String modelName, File imgFile){
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm "
 					+ "yolov5 python runYoloV5.py " + modelName + " temp/" + imgFile.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);

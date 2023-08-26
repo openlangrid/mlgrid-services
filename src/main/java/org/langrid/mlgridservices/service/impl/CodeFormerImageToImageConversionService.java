@@ -26,7 +26,7 @@ implements ImageConversionService{
 	@Override
 	public Image convert(byte[] image, String imageFormat)
 			throws InvalidParameterException, ProcessFailedException {
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			var inputsDir = new File(tempDir, "inputs");
 			inputsDir.mkdirs();

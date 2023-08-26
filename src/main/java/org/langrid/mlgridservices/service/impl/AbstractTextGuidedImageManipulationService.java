@@ -47,7 +47,7 @@ implements TextGuidedImageManipulationService{
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
 		if(!LanguageUtil.matches(supportedLang, textLanguage))
 			throw new UnsupportedLanguageException("textLanguage", textLanguage);
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "out-", "");

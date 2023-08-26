@@ -36,7 +36,7 @@ public class ExternalTextSimilarityCalculationService implements TextSimilarityC
 	public double calculate(String text1, String text1Lang,
 		String text2, String text2Lang)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguagePairException {
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var utf8 = StandardCharsets.UTF_8;

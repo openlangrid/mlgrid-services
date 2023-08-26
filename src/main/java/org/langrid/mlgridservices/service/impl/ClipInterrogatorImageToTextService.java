@@ -22,7 +22,7 @@ implements ImageToTextConversionService{
 		if(textLang.length() == 0 || !textLang.split("-")[0].equals("en")){
 			throw new InvalidParameterException("textLang", "invalid textLang");
 		}
-		try(var l = GPULock.acquire()){
+		try(var l = ServiceInvokerContext.acquireGpuLock()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var infile = FileUtil.writeTempFile(tempDir, image, imageFormat);
