@@ -373,6 +373,20 @@ public class ServiceInvoker {
 			"./procs/matsuolab_weblab", "/bin/bash run_pipeline.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
 
+		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new ExternalCommandMultimodalTextGenerationService(
+			"./procs/stabilityai_stablecode_alpha",
+			"/bin/bash run_completion_pipeline.sh",
+			"stabilityai/stablecode-completion-alpha-3b"));
+		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b4k|P", new ExternalCommandMultimodalTextGenerationService(
+			"./procs/stabilityai_stablecode_alpha",
+			"/bin/bash run_completion_pipeline.sh",
+			"stabilityai/stablecode-completion-alpha-3b-4k"));
+		serviceImples.put("StabilityAIStableCodeInstructionAlpha3b|P", new ExternalCommandMultimodalTextGenerationService(
+			"./procs/stabilityai_stablecode_alpha",
+			"/bin/bash run_completion_pipeline.sh",
+			"stabilityai/stablecode-instruction-alpha-3b"));
+
+
 		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
 			"rinna/bilingual-gpt-neox-4b"));

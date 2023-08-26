@@ -1,1 +1,1 @@
-{"inputPath": "./sample/input_pipeline_text.txt", "inputLanguage": "ja", "outputPath": "./sample/output_pipeline.txt"}
+{"textPath": "./sample/input_pipeline_text.txt", "textLanguage": "ja", "outputPath": "./sample/output_pipeline.txt"}

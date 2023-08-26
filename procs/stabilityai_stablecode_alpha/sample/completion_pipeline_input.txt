@@ -1,0 +1,1 @@
+{"textPath": "./sample/completion_pipeline_input_text.txt", "textLanguage": "ja", "outputPath": "./sample/completion_pipeline_output.txt"}

@@ -52,18 +52,18 @@ implements TextGenerationService{
 		this.modelName = modelName;
 	}
 
-	public String generate(String prompt, String promptLanguage)
+	public String generate(String text, String textLanguage)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
 				tempDir, "", "");
-			var inputPromptFile = new File(baseFile.toString() + ".input_prompt.txt");
-			Files.writeString(inputPromptFile.toPath(), prompt, StandardCharsets.UTF_8);
+			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
+			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var outputFile = new File(baseFile.toString() + ".output.txt");
 			var input = m.writeValueAsString(new TextGenerationCommandInput(
-				tempDir.getName() + "/" + inputPromptFile.getName(),
-				promptLanguage,
+				tempDir.getName() + "/" + inputTextFile.getName(),
+				textLanguage,
 				tempDir.getName() + "/" + outputFile.getName()
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
@@ -102,8 +102,8 @@ implements TextGenerationService{
 	@AllArgsConstructor
 	@Data
 	static class TextGenerationCommandInput{
-		private String promptPath;
-		private String promptLanguage;
+		private String textPath;
+		private String textLanguage;
 		private String outputPath;
 	}
 
