@@ -26,19 +26,30 @@ implements Instance {
 		}
 	}
 
+	protected boolean shouldIgnoreStdout(String line){
+		return false;
+	}
+
 	public synchronized boolean exec(String input)
 	throws IOException, JsonMappingException {
 		writer.println(input);
 		writer.flush();
-		var response = reader.readLine();
-		if(response == null){
-			var is = process.getErrorStream();
-			var a = is.available();
-			var buff = new byte[a];
-			is.read(buff);
-			System.out.println("stderr: " + new String(buff, "UTF-8"));
+		String response = null;
+		while(true){
+			response = reader.readLine();
+			if(response == null){
+				var is = process.getErrorStream();
+				var a = is.available();
+				var buff = new byte[a];
+				is.read(buff);
+				System.out.println("stderr: " + new String(buff, "UTF-8"));
+				break;
+			}
+			System.out.println("stdout: " + response);
+			if(!shouldIgnoreStdout(response)){
+				break;
+			}
 		}
-		System.out.println("stdout: " + response);
 		return response != null && response.equals("ok");
 	}
 

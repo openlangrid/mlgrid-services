@@ -1,0 +1,1 @@
+{"textPath": "./sample/pipeline_input_text.txt", "textLanguage": "ja", "outputPath": "./sample/pipeline_output.wav"}

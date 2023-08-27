@@ -11,7 +11,8 @@ import org.langrid.mlgridservices.service.Instance;
 import org.langrid.mlgridservices.service.ProcessInstance;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.service.ml.interim.TextGenerationService;
+import org.langrid.service.ml.Audio;
+import org.langrid.service.ml.TextToSpeechService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,10 +24,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class PipelineExternalCommandTextGenerationService
+public class PipelineExternalCommandTextToSpeech 
 extends AbstractPipelineService
-implements TextGenerationService{
-	public PipelineExternalCommandTextGenerationService(
+implements TextToSpeechService{
+	public PipelineExternalCommandTextToSpeech(
 		String baseDir, String... commands) {
 		this.baseDir = new File(baseDir);
 		this.commands = commands;
@@ -34,9 +35,11 @@ implements TextGenerationService{
 		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
+		System.out.println("[PipelineExternalCommandTextToSpeech.speak] created");
 	}
 
-	public String generate(String text, String textLanguage)
+	@Override
+	public Audio speak(String text, String textLanguage)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
@@ -44,8 +47,8 @@ implements TextGenerationService{
 			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
 			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
 			var inputFile = new File(baseFile.toString() + ".input.txt");
-			var outputFile = new File(baseFile.toString() + ".output.txt");
-			var input = m.writeValueAsString(new TextGenerationCommandInput(
+			var outputFile = new File(baseFile.toString() + ".output.wav");
+			var input = m.writeValueAsString(new TextToSpeechCommandInput(
 				tempDir.getName() + "/" + inputTextFile.getName(),
 				textLanguage,
 				tempDir.getName() + "/" + outputFile.getName()
@@ -53,14 +56,22 @@ implements TextGenerationService{
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 			var i = getInstance();
 			var success = i.exec(input);
-			if(success && outputFile.exists())
-				return Files.readString(outputFile.toPath());
+			if(success && outputFile.exists()){
+				return new Audio(
+					Files.readAllBytes(outputFile.toPath()),
+					"audio/x-wav");
+			}
 			return null;
 		} catch(IOException e){
 			throw new RuntimeException(e);
 		} catch(InterruptedException e){
 			return null;
 		}
+	}
+
+	protected ProcessInstance newProcessInstance(Process process)
+	throws IOException{
+		return new ProcessInstance(process);
 	}
 
 	private Instance getInstance()
@@ -71,7 +82,7 @@ implements TextGenerationService{
 				try{
 					pb.directory(baseDir);
 					pb.redirectError(Redirect.INHERIT);
-					return new ProcessInstance(pb.start());
+					return newProcessInstance(pb.start());
 				} catch(IOException e){
 					throw new RuntimeException(e);
 				}
@@ -82,7 +93,7 @@ implements TextGenerationService{
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Data
-	static class TextGenerationCommandInput{
+	static class TextToSpeechCommandInput{
 		private String textPath;
 		private String textLanguage;
 		private String outputPath;

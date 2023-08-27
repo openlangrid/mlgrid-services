@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /workspace/VALL-E-X
+    volumes:
+      - ../cache/huggingface:/root/.cache/huggingface
+      - ../cache/torch/hub:/root/.cache/torch/hub
+      - ./cache/checkpoints:/workspace/VALL-E-X/checkpoints
+      - ./cache/open_jtalk_dic_utf_8-1.11:/opt/conda/lib/python3.10/site-packages/pyopenjtalk/open_jtalk_dic_utf_8-1.11
+      - ./sample:/workspace/VALL-E-X/sample
+      - ./temp:/workspace/VALL-E-X/temp
+      - ./sample.py:/workspace/VALL-E-X/sample.py
+      - ./run_pipeline.py:/workspace/VALL-E-X/run_pipeline.py

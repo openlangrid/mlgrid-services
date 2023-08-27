@@ -45,6 +45,7 @@ import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImage
 import org.langrid.mlgridservices.service.impl.StableDiffusion060TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusion070TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageManipulationService;
+import org.langrid.mlgridservices.service.impl.VallexPipeline;
 import org.langrid.mlgridservices.service.impl.VoiceVoxTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.StableDiffusionTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.VoskContinuousSpeechRecognitionService;
@@ -68,11 +69,30 @@ public class ServiceInvoker {
 		serviceImples.put("Empath", empath);
 		serviceImples.put("GoogleTTS", googleTts);
 
+		// TextToSpeech
 		for(var i = 0; i < 20; i++){
 			serviceImples.put(
 				String.format("VoiceVox_0_11_4_%02d", i),
 				new VoiceVoxTextToSpeechService("./procs/voicevox_0_11_4", "" + i));
 		}
+		serviceImples.put("Plachtaa/VALL-E-X/cafe|P", new VallexPipeline(
+			"./procs/vallex", "bash", "run_pipeline.sh", "cafe"
+		));
+		serviceImples.put("Plachtaa/VALL-E-X/dingzhen|P", new VallexPipeline(
+			"./procs/vallex", "bash", "run_pipeline.sh", "dingzhen"
+		));
+		serviceImples.put("Plachtaa/VALL-E-X/esta|P", new VallexPipeline(
+			"./procs/vallex", "bash", "run_pipeline.sh", "esta"
+		));
+		serviceImples.put("Plachtaa/VALL-E-X/rosalia|P", new VallexPipeline(
+			"./procs/vallex", "bash", "run_pipeline.sh", "rosalia"
+		));
+		serviceImples.put("Plachtaa/VALL-E-X/seel|P", new VallexPipeline(
+			"./procs/vallex", "bash", "run_pipeline.sh", "seel"
+		));
+		serviceImples.put("Plachtaa/VALL-E-X/yaesakura|P", new VallexPipeline(
+			"./procs/vallex", "bash", "run_pipeline.sh", "yaesakura"
+		));
 
 		serviceImples.put("HelsinkiNLPOpusMT", new HelsinkiNlpTranslationService());
 		serviceImples.put("FuguMT", new FuguMtTranslationService());
