@@ -118,12 +118,7 @@ public class ServiceInvokerContext {
 	throws InterruptedException {
 		if(gpuInstanceKey != null){
 			if(!key.equals(gpuInstanceKey)){
-				gpuInstance.terminateAndWait();
-				gpuInstance = null;
-				gpuInstanceKey = null;
-				gpuInstanceLock.release();
-				gpuInstanceLock = null;
-				gpuInstanceLockedAtMs = -1;
+				terminateGpuInstance();
 			} else{
 				return gpuInstance;
 			}
@@ -140,6 +135,24 @@ public class ServiceInvokerContext {
 		return gpuInstanceLockedAtMs;
 	}
 
+	public static synchronized void terminateGpuInstanceOlderMsThan(
+		long threshold)
+	throws InterruptedException {
+		if(gpuInstanceLockedAtMs <= 0) return;
+		if((System.currentTimeMillis() - gpuInstanceLockedAtMs) >= threshold){
+			terminateGpuInstance();
+		}
+	}
+
+	private static void terminateGpuInstance() throws InterruptedException{
+		gpuInstance.terminateAndWait();
+		gpuInstance = null;
+		gpuInstanceKey = null;
+		gpuInstanceLock.release();
+		gpuInstanceLock = null;
+		gpuInstanceLockedAtMs = -1;
+	}
+
 	private static String gpuInstanceKey;
 	private static Instance gpuInstance;
 	private static long gpuInstanceLockedAtMs;
@@ -149,11 +162,7 @@ public class ServiceInvokerContext {
 	public static synchronized GPULock acquireGpuLock() throws InterruptedException{
 		if(gpuInstanceLock != null && gpuInstance != null){
 			System.out.println("terminate other instance.");
-			gpuInstance.terminateAndWait();
-			gpuInstance = null;
-			gpuInstanceKey = null;
-			gpuInstanceLock.release();
-			gpuInstanceLock = null;
+			terminateGpuInstance();
 		}
 		start("execution", "GPULock.acquire");
 		try{
