@@ -395,6 +395,19 @@ public class ServiceInvoker {
 		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new PipelineExternalCommandTextGenerationService(
 			"./procs/matsuolab_weblab", "bash", "run_pipeline.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
+		serviceImples.put("ELYZAJapaneseLlama2-7b|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
+			"elyza/ELYZA-japanese-Llama-2-7b"));
+		serviceImples.put("ELYZAJapaneseLlama2-7bInstruct|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
+			"elyza/ELYZA-japanese-Llama-2-7b-instruct"));
+		serviceImples.put("ELYZAJapaneseLlama2-7bFast|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
+			"elyza/ELYZA-japanese-Llama-2-7b-fast"));
+		serviceImples.put("ELYZAJapaneseLlama2-7bFastInstruct|P", new PipelineExternalCommandTextGenerationService(
+			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
+			"elyza/ELYZA-japanese-Llama-2-7b-fast-instruct"));
+
 
 		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new PipelineExternalCommandTextGenerationService(
 			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
