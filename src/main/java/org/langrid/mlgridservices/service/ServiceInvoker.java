@@ -408,10 +408,10 @@ public class ServiceInvoker {
 			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
 			"elyza/ELYZA-japanese-Llama-2-7b-fast-instruct"));
 		serviceImples.put("StabilityAiStableBeluga7b|P", new PipelineExternalCommandTextGenerationService(
-			"./procs/stabilityai-StableBeluga", "bash", "run_completion_repl.sh",
+			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-7B"));
 		serviceImples.put("StabilityAiStableBeluga13b|P", new PipelineExternalCommandTextGenerationService(
-			"./procs/stabilityai-StableBeluga", "bash", "run_completion_repl.sh",
+			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-13B"));
 
 
