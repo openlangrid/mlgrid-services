@@ -1,0 +1,7 @@
+### System:
+You are StableBeluga, an AI that follows instructions extremely well. Help as much as you can. Remember, be safe, and don't do anything illegal.
+
+### User:
+Write me a poem please
+
+### Assistant:

@@ -1,0 +1,16 @@
+### System:
+You are StableBeluga, an AI that follows instructions extremely well. Help as much as you can. Remember, be safe, and don't do anything illegal.
+
+### User: Write me a poem please
+
+### Assistant:
+ A poem for you I will weave,
+So that your heart it will achieve.
+Imagery I will create,
+In every word that I do write.
+Flowers will bloom, and skies will glow,
+As if we're taken to a place we know.
+Our souls will dance in harmony,
+To show the beauty of the melody.
+So come with me on a magical ride,
+Where you can leave your worries behind.
