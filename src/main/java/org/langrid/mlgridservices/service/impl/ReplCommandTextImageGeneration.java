@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
-import org.langrid.mlgridservices.service.AbstractPipelineService;
 import org.langrid.mlgridservices.service.Instance;
 import org.langrid.mlgridservices.service.ProcessInstance;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.service.ml.interim.TextGenerationService;
+import org.langrid.service.ml.Image;
+import org.langrid.service.ml.TextGuidedImageGenerationService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,10 +24,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class PipelineExternalCommandTextGenerationService
-extends AbstractPipelineService
-implements TextGenerationService{
-	public PipelineExternalCommandTextGenerationService(
+public class ReplCommandTextImageGeneration
+implements TextGuidedImageGenerationService{
+	public ReplCommandTextImageGeneration(
 		String baseDir, String... commands) {
 		this.baseDir = new File(baseDir);
 		this.commands = commands;
@@ -36,25 +36,44 @@ implements TextGenerationService{
 		tempDir.mkdirs();
 	}
 
-	public String generate(String text, String textLanguage)
-	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
+	@Override
+	public Image generate(String text, String textLanguage)
+			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
+		return generateMultiTimes(text, textLanguage, 1)[0];
+	}
+
+	@Override
+	public Image[] generateMultiTimes(String text, String textLanguage, int numberOfTimes)
+			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
 				tempDir, "", "");
 			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
 			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
+			var outputFilePrefix = baseFile.getName() + ".output";
 			var inputFile = new File(baseFile.toString() + ".input.txt");
-			var outputFile = new File(baseFile.toString() + ".output.txt");
-			var input = m.writeValueAsString(new TextGenerationCommandInput(
+			var input = m.writeValueAsString(new TextImageGenerationCommandInput(
 				tempDir.getName() + "/" + inputTextFile.getName(),
 				textLanguage,
-				tempDir.getName() + "/" + outputFile.getName()
+				numberOfTimes,
+				tempDir.getName() + "/" + outputFilePrefix
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
-			var i = getInstance();
-			var success = i.exec(input);
-			if(success && outputFile.exists())
-				return Files.readString(outputFile.toPath());
+
+			var ins = getInstance();
+			var success = ins.exec(input);
+			if(success){
+				var ret = new ArrayList<Image>();
+				for(var i = 0; i < numberOfTimes; i++){
+					var imgFile = new File(tempDir, outputFilePrefix + "_" + i + ".png");
+					if(!imgFile.exists()) break;
+					ret.add(new Image(
+						Files.readAllBytes(imgFile.toPath()),
+						"image/png"
+					));
+				}
+				return ret.toArray(new Image[]{});
+			}
 			return null;
 		} catch(IOException e){
 			throw new RuntimeException(e);
@@ -82,13 +101,14 @@ implements TextGenerationService{
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Data
-	static class TextGenerationCommandInput{
-		private String textPath;
-		private String textLanguage;
-		private String outputPath;
+	static class TextImageGenerationCommandInput{
+		private String promptPath;
+		private String promptLanguage;
+		private int numberOfTimes;
+		private String outputPathPrefix;
 	}
 
-	private ObjectMapper m = new ObjectMapper();;
+	private ObjectMapper m = new ObjectMapper();
 
 	private File baseDir;
 	private String[] commands;
