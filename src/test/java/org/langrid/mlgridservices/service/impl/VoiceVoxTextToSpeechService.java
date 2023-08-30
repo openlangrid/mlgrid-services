@@ -2,7 +2,6 @@ package org.langrid.mlgridservices.service.impl;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.Audio;
 import org.langrid.service.ml.TextToSpeechService;
