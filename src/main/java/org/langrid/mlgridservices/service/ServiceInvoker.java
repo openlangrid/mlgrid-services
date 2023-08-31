@@ -1,9 +1,12 @@
 package org.langrid.mlgridservices.service;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
 
@@ -53,6 +56,7 @@ import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGeneration
 import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.YoloV7ObjectDetectionService;
 import org.langrid.mlgridservices.service.management.ServiceManagement;
+import org.langrid.service.ml.interim.management.ServiceEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jp.go.nict.langrid.commons.beanutils.Converter;
@@ -64,6 +68,19 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
+		// services.ymlを検索してサービス登録
+		try{
+			new ServiceFinder(Path.of("./procs")).find((si, impl)->{
+				serviceImples.put(si.getServiceId(), impl);
+				serviceEntries.put(si.getServiceId(), new ServiceEntry(
+					si.getServiceId(), findInterface(impl).getSimpleName(),
+					si.getDescription(), si.getLicense(), si.getUrl()
+				));
+			});
+		} catch(IOException e){
+			throw new RuntimeException(e);
+		}
+
 		// serviceImplesにはあるサービスIDに対応する実装クラスを登録する。
 		serviceImples.put("CodeFormer", codeFormer);
 		serviceImples.put("Empath", empath);
@@ -395,6 +412,7 @@ public class ServiceInvoker {
 		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new ReplCommandTextGeneration(
 			"./procs/matsuolab_weblab", "bash", "run_pipeline.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
+/* services.ymlに移行
 		serviceImples.put("ELYZAJapaneseLlama2-7b|P", new ReplCommandTextGeneration(
 			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
 			"elyza/ELYZA-japanese-Llama-2-7b"));
@@ -407,6 +425,7 @@ public class ServiceInvoker {
 		serviceImples.put("ELYZAJapaneseLlama2-7bFastInstruct|P", new ReplCommandTextGeneration(
 			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
 			"elyza/ELYZA-japanese-Llama-2-7b-fast-instruct"));
+*/
 		serviceImples.put("StabilityAiStableBeluga7b|P", new ReplCommandTextGeneration(
 			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-7B"));
@@ -474,16 +493,45 @@ public class ServiceInvoker {
 		serviceImples.put("TestGpuPipelineService", new TestGpuPipelineService());
 		serviceImples.put("TestGpuService", new TestGpuService());
 
-		serviceImples.put("ServiceManagement", new ServiceManagement(serviceGroups, serviceImples));
-
 
 		// serviceGroupsは共通のprefixを持つサービス群をまとめたサービスグループを登録する。
 		serviceGroups.put("DalleMini", dalleMiniServices);
 		serviceGroups.put("Keras", kerasServices);
 		serviceGroups.put("Langrid", langridServices);
 		serviceGroups.put("YoloV5", yoloV5Services);
+
+
+		// serviceEntriesを完成させてServiceManagementを生成し登録
+		for(var kv : serviceImples.entrySet()){
+			serviceEntries.putIfAbsent(
+				kv.getKey(),
+				new ServiceEntry(kv.getKey(), findInterface(kv.getValue()).getSimpleName())
+				);
+		}
+		for(var g : serviceGroups.values()){
+			for(var p : g.listServices()){
+				var sid = p.getFirst();
+				var stype = p.getSecond().getSimpleName();
+				serviceEntries.put(sid, new ServiceEntry(sid, stype));
+			}
+		}
+		serviceImples.put("ServiceManagement", new ServiceManagement(serviceEntries, serviceImples));
 	}
-	
+
+	private Class<?> findInterface(Object service){
+		var clz = service.getClass();
+		while(clz != null){
+			for(var intf : clz.getInterfaces()){
+				if(intf.equals(CompositeService.class)) continue;
+				if(intf.getName().startsWith("java.")) continue;
+				if(intf.getName().startsWith("javax.")) continue;
+				return intf;
+			}
+			clz = clz.getSuperclass();
+		}
+		throw new RuntimeException("no interfaces found for class " + service.getClass());
+	}
+
 	private void addDiffusersTGIG(String procPath, String name, String modelPath){
 		serviceImples.put(name, new DiffusersTextGuidedImageGenerationService(
 			procPath, modelPath));
@@ -564,6 +612,7 @@ public class ServiceInvoker {
 				r = new Response(new Error(
 					"error", exception.toString()));
 				r.putHeader("trace", span);
+				exception.printStackTrace(System.err);
 			}
 		}
 		return r;
@@ -572,6 +621,7 @@ public class ServiceInvoker {
 	private Converter c = new Converter();
 	private Map<String, ServiceGroup> serviceGroups = new HashMap<>();
 	private Map<String, Object> serviceImples = new HashMap<>();
+	private Map<String, ServiceEntry> serviceEntries = new HashMap<>();
 
 	@Autowired
 	private EmpathService empath;

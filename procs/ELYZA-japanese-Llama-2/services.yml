@@ -1,0 +1,40 @@
+common:
+  description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+  license: Llama 2 is licensed under the LLAMA 2 Community License, Copyright (c) Meta Platforms, Inc. All Rights Reserved.
+  url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b
+
+services:
+  # completion services
+  - serviceId: ELYZAJapaneseLlama2-7B|R
+    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b
+
+  - serviceId: ELYZAJapaneseLlama2-7BInstruct|R
+    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-instruct
+
+  - serviceId: ELYZAJapaneseLlama2-7BFast|R
+    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast
+
+  - serviceId: ELYZAJapaneseLlama2-7BFastInstruct|R
+    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+
+  # instruction services

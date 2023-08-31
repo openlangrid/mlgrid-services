@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 import org.langrid.mlgridservices.service.AbstractPipelineService;
 import org.langrid.mlgridservices.service.Instance;
@@ -27,13 +29,22 @@ public class ReplCommandTextGeneration
 extends AbstractPipelineService
 implements TextGenerationService{
 	public ReplCommandTextGeneration(
-		String baseDir, String... commands) {
-		this.baseDir = new File(baseDir);
-		this.commands = commands;
-
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
-		this.tempDir = new File(baseDir, "temp");
+		String basePath) {
+		this.basePath = Path.of(basePath);
+		this.tempDir = new File(this.basePath.toFile(), "temp");
 		tempDir.mkdirs();
+	}
+
+	public ReplCommandTextGeneration(
+		String basePath, String... commands) {
+		this(basePath);
+		setCommands(commands);
+	}
+
+	public void setCommands(String[] commands) {
+		System.out.printf("setCommands(%s)%n", Arrays.toString(commands));
+		this.commands = commands;
+		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 	}
 
 	public String generate(String text, String textLanguage)
@@ -69,7 +80,7 @@ implements TextGenerationService{
 			instanceKey, ()->{
 				var pb = new ProcessBuilder(commands);
 				try{
-					pb.directory(baseDir);
+					pb.directory(basePath.toFile());
 					pb.redirectError(Redirect.INHERIT);
 					return new ProcessInstance(pb.start());
 				} catch(IOException e){
@@ -90,7 +101,7 @@ implements TextGenerationService{
 
 	private ObjectMapper m = new ObjectMapper();;
 
-	private File baseDir;
+	private Path basePath;
 	private String[] commands;
 
 	private String instanceKey;

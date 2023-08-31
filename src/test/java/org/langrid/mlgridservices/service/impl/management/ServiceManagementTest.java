@@ -3,18 +3,17 @@ package org.langrid.mlgridservices.service.impl.management;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
-import org.langrid.mlgridservices.service.group.LangridServiceGroup;
-import org.langrid.mlgridservices.service.group.ServiceGroup;
 import org.langrid.mlgridservices.service.impl.StableDiffusion051TextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.management.ServiceManagement;
 import org.langrid.service.ml.interim.management.MatchingCondition;
+import org.langrid.service.ml.interim.management.ServiceEntry;
 
 public class ServiceManagementTest {
 	@Test
 	public void test() throws Throwable{
-		var sgs = new HashMap<String, ServiceGroup>();
+		var sgs = new HashMap<String, ServiceEntry>();
 		var sis = new HashMap<String, Object>();
-		sgs.put("Langrid", new LangridServiceGroup());
+		sgs.put("Langrid", new ServiceEntry("LangridGoogleTranslate", "TranslationService"));
 		sis.put("StableDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService());
 		sis.put("DiscoDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
 		var s = new ServiceManagement(sgs, sis);
@@ -26,9 +25,9 @@ public class ServiceManagementTest {
 
 	@Test
 	public void test_TextGuidedImageGenerationService() throws Throwable{
-		var sgs = new HashMap<String, ServiceGroup>();
+		var sgs = new HashMap<String, ServiceEntry>();
 		var sis = new HashMap<String, Object>();
-		sgs.put("Langrid", new LangridServiceGroup());
+		sgs.put("Langrid", new ServiceEntry("LangridGoogleTranslate", "TranslationService"));
 		sis.put("StableDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService());
 		sis.put("DiscoDiffusionSD051", new StableDiffusion051TextGuidedImageGenerationService("sd-dreambooth-library/disco-diffusion-style"));
 		var s = new ServiceManagement(sgs, sis);
