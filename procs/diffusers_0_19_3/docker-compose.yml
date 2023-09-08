@@ -3,10 +3,6 @@ version: '3'
 services:
   service:
     build: ./build
-<<<<<<< HEAD
-=======
-    runtime: nvidia
->>>>>>> d8ceb86f387554dabba9a6fac0647642bf4c7b86
     working_dir: /work
     volumes:
       - .:/work
