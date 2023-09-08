@@ -107,8 +107,9 @@ public class GoogleTextToSpeechServiceLG implements TextToSpeechService{
 			var credentialsProvider = FixedCredentialsProvider.create(
 				ServiceAccountCredentials.fromStream(is));
 			settings = TextToSpeechSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
-		} catch(Exception e){
-			throw new RuntimeException(e);
+		} catch(IOException e){
+			System.err.println(e);
+			return;
 		}
 		try(var is = GoogleTextToSpeechService.class.getResourceAsStream("GoogleTextToSpeechService_langs.json")){
 			var node = new ObjectMapper().readTree(is);
