@@ -15,13 +15,17 @@ import jp.go.nict.langrid.commons.util.function.Functions.RunnableWithException;
 import jp.go.nict.langrid.commons.util.function.Functions.SupplierWithException;
 
 public class ServiceInvokerContext {
+	@SuppressWarnings("unchecked")
 	public static ServiceInvokerContext initialize(
 		ServiceFactory factory, Map<String, Object> requestHeaders,
 		String type, String target, Object... args){
 		ctxList.remove();
 		var rootSpan = new Span(type, target, args);
-		@SuppressWarnings("unchecked")
-		var bindings = (Map<String, Object>)requestHeaders.get("bindings");
+		if(requestHeaders == null){
+			requestHeaders = new HashMap<>();
+		}
+		var bindings = (Map<String, Object>)requestHeaders.getOrDefault(
+			"bindings", new HashMap<>());
 		var root = new ServiceInvokerContext(factory, rootSpan, requestHeaders, bindings);
 		ctxList.get().addLast(root);
 		return root;
