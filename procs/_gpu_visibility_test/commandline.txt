@@ -1,0 +1,1 @@
+NVIDIA_VISIBLE_DEVICES=0 bash run_nvidia_smi.sh
