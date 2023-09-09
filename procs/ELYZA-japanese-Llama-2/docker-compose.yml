@@ -7,3 +7,5 @@ services:
     volumes:
       - ../cache/huggingface:/root/.cache/huggingface
       - .:/work
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}

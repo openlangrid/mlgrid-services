@@ -69,11 +69,14 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
-		var gpuIds = new int[additionalGpuCount];
-		for(int i = 1; i <= additionalGpuCount; i++){
-			gpuIds[i - 1] = i;
+		// GPU0は共通で使用。GPU1以降がある場合は、GPUの切り替えに対応しているprocで使う。
+		if(additionalGpuCount > 0){
+			var gpuIds = new int[additionalGpuCount];
+			for(int i = 1; i <= additionalGpuCount; i++){
+				gpuIds[i - 1] = i;
+			}
+			ServiceInvokerContext.setGpuPool(new GpuPool(gpuIds));
 		}
-		ServiceInvokerContext.setGpuPool(new GpuPool(gpuIds));
 
 		// services.ymlを検索してサービス登録
 		try{

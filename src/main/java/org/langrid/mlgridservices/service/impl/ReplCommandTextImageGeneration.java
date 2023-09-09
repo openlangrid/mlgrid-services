@@ -17,6 +17,7 @@ import org.langrid.service.ml.TextGuidedImageGenerationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.commons.lang.StringUtil;
+import jp.go.nict.langrid.commons.util.ArrayUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
@@ -84,9 +85,10 @@ implements TextGuidedImageGenerationService{
 
 	private Instance getInstance()
 	throws InterruptedException{
-		var instance = ServiceInvokerContext.getInstanceWithGpuLock(
-			instanceKey, ()->{
-				var pb = new ProcessBuilder(commands);
+		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
+			instanceKey, (gpuId)->{
+				String[] gpudef = {"NVIDIA_VISIBLE_DEVICES=" + gpuId};
+				var pb = new ProcessBuilder(ArrayUtil.append(gpudef, commands));
 				try{
 					pb.directory(baseDir);
 					pb.redirectError(Redirect.INHERIT);
