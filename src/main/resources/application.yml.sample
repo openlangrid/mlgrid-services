@@ -4,6 +4,9 @@ server:
   servlet:
     context-path: ${CONTEXT_PATH:/mlgrid-services}
 
+mlgrid:
+  additionalGpuCount: ${ADDITIONAL_GPU_COUNT:0}
+
 services:
   langrid:
     url: ${LANGRID_URL:https://langrid.org/service_manager/invoker/}

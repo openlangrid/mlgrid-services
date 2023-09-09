@@ -63,7 +63,7 @@ public class GpuPool {
 				}
 			}
 			if(gpuIndex != -1){
-				System.out.printf("[GPUPool.acquire] acquire %d", gpuIds[gpuIndex]);
+				System.out.printf("[GPUPool.acquire] acquire %d%n", gpuIds[gpuIndex]);
 				gpuAllocated[gpuIndex] = true;
 				lastAllocated = gpuIndex;
 			} else{
@@ -76,7 +76,7 @@ public class GpuPool {
 
 	private void release(Gpu gpu){
 		synchronized(gpuAllocated){
-			System.out.printf("[GPUPool.release] release %d", gpuIds[gpu.index]);
+			System.out.printf("[GPUPool.release] release %d%n", gpuIds[gpu.index]);
 			gpuAllocated[gpu.index] = false;
 		}
 		semaphore.release();
@@ -85,5 +85,5 @@ public class GpuPool {
 	private boolean[] gpuAllocated;
 	private int[] gpuIds;
 	private Semaphore semaphore;
-	private int lastAllocated;
+	private int lastAllocated = -1;
 }

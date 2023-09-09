@@ -140,6 +140,9 @@ public class ServiceInvokerContext {
 
 	public static synchronized Instance getInstanceWithPooledGpu(String key, Function<Integer, Instance> supplier)
 	throws InterruptedException {
+		if(gpuPool.getGpuCount() == 0){
+			return getInstanceWithGpuLock(key, ()->supplier.apply(0));
+		}
 		var instance = keyToInstance.get(key);
 		if(instance != null) return instance;
 

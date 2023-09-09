@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
 
@@ -56,8 +55,10 @@ import org.langrid.mlgridservices.service.impl.WaifuDiffusionTextImageGeneration
 import org.langrid.mlgridservices.service.impl.WhisperSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.YoloV7ObjectDetectionService;
 import org.langrid.mlgridservices.service.management.ServiceManagement;
+import org.langrid.mlgridservices.util.GpuPool;
 import org.langrid.service.ml.interim.management.ServiceEntry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jp.go.nict.langrid.commons.beanutils.Converter;
 import jp.go.nict.langrid.commons.lang.ClassUtil;
@@ -68,6 +69,12 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 public class ServiceInvoker {
 	@PostConstruct
 	private void init() {
+		var gpuIds = new int[additionalGpuCount];
+		for(int i = 1; i <= additionalGpuCount; i++){
+			gpuIds[i - 1] = i;
+		}
+		ServiceInvokerContext.setGpuPool(new GpuPool(gpuIds));
+
 		// services.ymlを検索してサービス登録
 		try{
 			new ServiceFinder(Path.of("./procs")).find((si, impl)->{
@@ -617,6 +624,9 @@ public class ServiceInvoker {
 		}
 		return r;
 	}
+
+	@Value("${mlgrid.additionalGpuCount}")
+	private int additionalGpuCount;
 
 	private Converter c = new Converter();
 	private Map<String, ServiceGroup> serviceGroups = new HashMap<>();
