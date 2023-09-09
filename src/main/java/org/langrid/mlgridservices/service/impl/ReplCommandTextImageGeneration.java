@@ -87,8 +87,9 @@ implements TextGuidedImageGenerationService{
 	throws InterruptedException{
 		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
 			instanceKey, (gpuId)->{
-				String[] gpudef = {"NVIDIA_VISIBLE_DEVICES=" + gpuId};
-				var pb = new ProcessBuilder(ArrayUtil.append(gpudef, commands));
+				System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, gpuId);
+				var pb = new ProcessBuilder(commands);
+				pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + gpuId);
 				try{
 					pb.directory(baseDir);
 					pb.redirectError(Redirect.INHERIT);

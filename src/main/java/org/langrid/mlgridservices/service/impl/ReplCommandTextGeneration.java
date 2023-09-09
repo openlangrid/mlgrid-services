@@ -76,9 +76,11 @@ implements TextGenerationService{
 
 	private Instance getInstance()
 	throws InterruptedException{
-		var instance = ServiceInvokerContext.getInstanceWithGpuLock(
-			instanceKey, ()->{
+		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
+			instanceKey, (gpuId)->{
+				System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, gpuId);
 				var pb = new ProcessBuilder(commands);
+				pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + gpuId);
 				try{
 					pb.directory(basePath.toFile());
 					pb.redirectError(Redirect.INHERIT);
