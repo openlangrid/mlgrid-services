@@ -3,11 +3,14 @@ package org.langrid.mlgridservices.service;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.langrid.mlgridservices.util.GPULock;
+import org.langrid.mlgridservices.util.GpuPool;
 import org.langrid.mlgridservices.util.Timer;
 import org.springframework.cglib.proxy.Proxy;
 
@@ -135,6 +138,35 @@ public class ServiceInvokerContext {
 		return gpuInstance;
 	}
 
+	public static synchronized Instance getInstanceWithPooledGpu(String key, Function<Integer, Instance> supplier)
+	throws InterruptedException {
+		var instance = keyToInstance.get(key);
+		if(instance != null) return instance;
+
+		if(gpuPool.getAvailableGpuCount() == 0){
+			var it = keyToInstance.entrySet().iterator();
+			var entry = it.next();
+			entry.getValue().terminateAndWait();
+			keyToGpu.get(entry.getKey()).release();
+			it.remove();
+		}
+
+		var gpu = gpuPool.acquire();
+		instance = supplier.apply(gpu.getId());
+		keyToInstance.put(key, instance);
+		keyToGpu.put(key, gpu);
+
+		return instance;
+	}
+	private static Map<String, GpuPool.Gpu> keyToGpu = new HashMap<>();
+	private static Map<String, Instance> keyToInstance = new LinkedHashMap<>();
+
+	public GpuPool.Gpu acquireGpu() throws InterruptedException{
+		return gpuPool.acquire();
+	}
+
+
+
 	public static long getGpuInstanceLockedAtMs() {
 		return gpuInstanceLockedAtMs;
 	}
@@ -238,6 +270,10 @@ public class ServiceInvokerContext {
 		};
 	};
 
+	public static void setGpuPool(GpuPool pool){
+		gpuPool = pool;
+	}
+	private static GpuPool gpuPool = new GpuPool(0);
 	private ServiceFactory factory;
 	private Span span;
 	private Timer timer;
