@@ -1,9 +1,10 @@
 # 機械学習サービス基盤 - mlgrid-services
 
 mlgrid-servicesは、様々な機械学習ソフトウェアをWebサービスとして提供する機械学習サービス基盤です。
+定義ファイルを読み込んでサービスを登録する機能、JSON-RPC(又はBSON/WebSocket)でのサービス呼び出し機能、GPU管理機能(GPUを使用するサービスにラウンドロビンでGPUを割り当て。一部サービスのみ対応)などを備えています。
 Java17およびSpringbootを使って開発されています。
 
-現在以下の17種類のサービスインタフェースが定義され、170のサービスが実装されています。以下はインタフェースの一覧と、各サービスに使用されている学習モデルや外部サービスです。学習モデルを利用するための環境はDockerコンテナとして構築されています。[procsディレクトリ](https://github.com/openlangrid/mlgrid-services/tree/master/procs)以下にそれぞれのモデル毎の設定ファイルや実行スクリプト(bash, pythonなど)が格納されています。各モデルの利用により生成されたデータの扱いは、それぞれの利用規約を参照してください。
+現在以下の17種類のサービスインタフェースが定義され、214のサービスが実装されています。以下はインタフェースの一覧と、各サービスに使用されている学習モデルや外部サービスです。学習モデルを利用するための環境はDockerコンテナとして構築されています。[procsディレクトリ](https://github.com/openlangrid/mlgrid-services/tree/master/procs)以下にそれぞれのモデル毎の設定ファイルや実行スクリプト(bash, pythonなど)が格納されています。各モデルの利用により生成されたデータの扱いは、それぞれの利用規約を参照してください。
 
 * 機械翻訳([インタフェース定義](https://github.com/openlangrid/mlgrid/blob/master/org.langrid.service.ml/src/main/java/org/langrid/service/ml/TranslationService.java))
     * [FuguMT](https://huggingface.co/staka/fugumt-en-ja)
@@ -91,15 +92,7 @@ mlgrid-servicesに含まれている多くのサービスは、GPUを利用し�
 
 ### ビルド方法
 
-JDK17をインストールした状態で、以下のコマンドを実行してください。
-
-```bash
-git clone https://github.com/openlangrid/mlgrid-services/
-cd mlgrid-services
-./gradlew build -x test
-```
-
-### 起動方法
+#### 準備
 
 まず、設定ファイルをコピーしてください。
 
@@ -136,7 +129,19 @@ services:
 
 Kerasを用いた画像認識でCPUを使用する場合は、keras.docker-service-nameをkeras-cpuに変更してください。
 
-ファイル変更後、以下のコマンドを実行すると、mlgrid-servicesが起動します。
+#### ビルド
+
+上記の準備を行なった上で、JDK17をインストールした状態で、以下のコマンドを実行してください。
+
+```bash
+git clone https://github.com/openlangrid/mlgrid-services/
+cd mlgrid-services
+./gradlew build -x test
+```
+
+### 起動方法
+
+ビルド後、以下のコマンドを実行すると、mlgrid-servicesが起動します。
 
 ```bash
 java -jar ./build/libs/mlgrid-services-0.0.1-SNAPSHOT.jar
