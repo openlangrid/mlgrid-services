@@ -17,7 +17,6 @@ import org.langrid.service.ml.TextGuidedImageGenerationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.commons.lang.StringUtil;
-import jp.go.nict.langrid.commons.util.ArrayUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
@@ -35,6 +34,15 @@ implements TextGuidedImageGenerationService{
 		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
+	}
+
+	public void setCommands(String[] commands) {
+		this.commands = commands;
+		this.instanceKey = "process:" + StringUtil.join(commands, ":");
+	}
+
+	public void setRequiredCount(int requiredGpuCount){
+		this.requiredGpuCount = requiredGpuCount;
 	}
 
 	@Override
@@ -86,10 +94,13 @@ implements TextGuidedImageGenerationService{
 	private Instance getInstance()
 	throws InterruptedException{
 		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
-			instanceKey, (gpuId)->{
-				System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, gpuId);
+			instanceKey, requiredGpuCount, (gpuIds)->{
 				var pb = new ProcessBuilder(commands);
-				pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + gpuId);
+				if(gpuIds.length > 0){
+					var ids = org.langrid.mlgridservices.util.StringUtil.join(gpuIds, v->""+v, ",");
+					System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, ids);
+					pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + ids);
+				}
 				try{
 					pb.directory(baseDir);
 					pb.redirectError(Redirect.INHERIT);
@@ -115,6 +126,7 @@ implements TextGuidedImageGenerationService{
 
 	private File baseDir;
 	private String[] commands;
+	private int requiredGpuCount = 1;
 
 	private String instanceKey;
 	private File tempDir;

@@ -6,7 +6,6 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 import org.langrid.mlgridservices.service.AbstractPipelineService;
 import org.langrid.mlgridservices.service.Instance;
@@ -42,9 +41,12 @@ implements TextGenerationService{
 	}
 
 	public void setCommands(String[] commands) {
-		System.out.printf("setCommands(%s)%n", Arrays.toString(commands));
 		this.commands = commands;
 		this.instanceKey = "process:" + StringUtil.join(commands, ":");
+	}
+
+	public void setRequiredCount(int requiredGpuCount){
+		this.requiredGpuCount = requiredGpuCount;
 	}
 
 	public String generate(String text, String textLanguage)
@@ -77,10 +79,13 @@ implements TextGenerationService{
 	private Instance getInstance()
 	throws InterruptedException{
 		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
-			instanceKey, (gpuId)->{
-				System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, gpuId);
+			instanceKey, requiredGpuCount, (gpuIds)->{
 				var pb = new ProcessBuilder(commands);
-				pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + gpuId);
+				if(gpuIds.length > 0){
+					var ids = org.langrid.mlgridservices.util.StringUtil.join(gpuIds, v->""+v, ",");
+					System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, ids);
+					pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + ids);
+				}
 				try{
 					pb.directory(basePath.toFile());
 					pb.redirectError(Redirect.INHERIT);
@@ -105,6 +110,7 @@ implements TextGenerationService{
 
 	private Path basePath;
 	private String[] commands;
+	private int requiredGpuCount = 1;
 
 	private String instanceKey;
 	private File tempDir;

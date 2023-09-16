@@ -138,10 +138,19 @@ public class ServiceInvokerContext {
 		return gpuInstance;
 	}
 
-	public static synchronized Instance getInstanceWithPooledGpu(String key, Function<Integer, Instance> supplier)
+	/**
+	 * 今はadditionalGpuIdsに設定されているidから1つだけ割り当てている。gpuCountパラメータは無視。
+	 * @param key
+	 * @param gpuCount
+	 * @param supplier
+	 * @return
+	 * @throws InterruptedException
+	 */
+	public static synchronized Instance getInstanceWithPooledGpu(
+		String key, int gpuCount, Function<int[], Instance> supplier)
 	throws InterruptedException {
 		if(gpuPool.getGpuCount() == 0){
-			return getInstanceWithGpuLock(key, ()->supplier.apply(0));
+			return getInstanceWithGpuLock(key, ()->supplier.apply(new int[]{}));
 		}
 		var instance = keyToInstance.get(key);
 		if(instance != null) return instance;
@@ -150,25 +159,28 @@ public class ServiceInvokerContext {
 			var it = keyToInstance.entrySet().iterator();
 			var entry = it.next();
 			entry.getValue().terminateAndWait();
-			keyToGpu.get(entry.getKey()).release();
+			var id = entry.getKey();
+			keyToGpu.remove(id).release();
+			keyToInstanceStartedAt.remove(id);
 			it.remove();
 		}
 
 		var gpu = gpuPool.acquire();
-		instance = supplier.apply(gpu.getId());
+		instance = supplier.apply(new int[]{gpu.getId()});
 		keyToInstance.put(key, instance);
+		keyToInstanceStartedAt.put(key, System.currentTimeMillis());
 		keyToGpu.put(key, gpu);
 
 		return instance;
 	}
 	private static Map<String, GpuPool.Gpu> keyToGpu = new HashMap<>();
 	private static Map<String, Instance> keyToInstance = new LinkedHashMap<>();
+	private static Map<String, Long> keyToInstanceStartedAt = new HashMap<>();
+
 
 	public GpuPool.Gpu acquireGpu() throws InterruptedException{
 		return gpuPool.acquire();
 	}
-
-
 
 	public static long getGpuInstanceLockedAtMs() {
 		return gpuInstanceLockedAtMs;
@@ -181,9 +193,21 @@ public class ServiceInvokerContext {
 		if((System.currentTimeMillis() - gpuInstanceLockedAtMs) >= threshold){
 			terminateGpuInstance();
 		}
+		var it = keyToInstance.entrySet().iterator();
+		while(it.hasNext()){
+			var entry = it.next();
+			var id = entry.getKey();
+			var startedAt = keyToInstanceStartedAt.get(id);
+			if((System.currentTimeMillis() - startedAt) >= threshold){
+				entry.getValue().terminateAndWait();
+				keyToGpu.remove(id).release();
+				keyToInstanceStartedAt.remove(id);
+				it.remove();
+			}
+		}
 	}
 
-	private static void terminateGpuInstance() throws InterruptedException{
+	private static synchronized void terminateGpuInstance() throws InterruptedException{
 		gpuInstance.terminateAndWait();
 		gpuInstance = null;
 		gpuInstanceKey = null;

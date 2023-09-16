@@ -13,7 +13,7 @@ public class GpuPoolTest {
 		for(var i = 0; i < 10; i++){
 			var instanceId = i;
 			ServiceInvokerContext.getInstanceWithPooledGpu(
-				"instance" + i, id->{
+				"instance" + i, 0, id->{
 					System.out.println("instance" + instanceId + " with GPU " + id + " is created.");
 					return new Instance() {
 						public boolean exec(String line)

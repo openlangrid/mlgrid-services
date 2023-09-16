@@ -12,6 +12,7 @@ services:
         - bash
         - run_completion_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b
+      requiredGpuCount: 1
 
   - serviceId: ELYZAJapaneseLlama2-7BInstruct|R
     implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
@@ -20,6 +21,7 @@ services:
         - bash
         - run_completion_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-instruct
+      requiredGpuCount: 1
 
   - serviceId: ELYZAJapaneseLlama2-7BFast|R
     implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
@@ -28,6 +30,7 @@ services:
         - bash
         - run_completion_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-fast
+      requiredGpuCount: 1
 
   - serviceId: ELYZAJapaneseLlama2-7BFastInstruct|R
     implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
@@ -36,5 +39,6 @@ services:
         - bash
         - run_completion_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpuCount: 1
 
   # instruction services
