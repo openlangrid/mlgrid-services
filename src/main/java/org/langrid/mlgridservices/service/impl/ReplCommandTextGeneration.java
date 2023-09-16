@@ -45,7 +45,7 @@ implements TextGenerationService{
 		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 	}
 
-	public void setRequiredCount(int requiredGpuCount){
+	public void setRequiredGpuCount(int requiredGpuCount){
 		this.requiredGpuCount = requiredGpuCount;
 	}
 
