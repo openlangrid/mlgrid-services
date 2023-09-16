@@ -31,14 +31,16 @@ public class ServiceFinder {
 						var sy = new Yaml().loadAs(r, ServicesYml.class);
 						for(var s : sy.services){
 							var si = new ServiceInfo();
-							si.setDescription(sy.common.description);
-							si.setLicense(sy.common.license);
-							si.setUrl(sy.common.url);
+							si.setDescription(s.description != null ? s.description : sy.common.description);
+							si.setLicense(s.license != null ? s.license : sy.common.license);
+							si.setUrl(s.url != null ? s.url : sy.common.url);
 							si.setServiceId(s.serviceId);
 							var clazz = Class.forName(s.implementation);
 							var impl = clazz.getConstructor(String.class).newInstance(p.getParent().toString());
 							for(var kv : s.properties.entrySet()){
 								var setter = ClassUtil.findSetter(clazz, kv.getKey());
+								if(setter == null)
+									throw new RuntimeException("no setter found for property: " + kv.getKey());
 								setter.invoke(impl, c.convert(kv.getValue(), setter.getParameterTypes()[0]));
 							}
 							onFound.accept(si, impl);
@@ -71,7 +73,10 @@ public class ServiceFinder {
 		@Data
 		@NoArgsConstructor
 		@AllArgsConstructor
-		static class Service{
+		static class Service {
+			public String description;
+			public String license;
+			public String url;
 			public String serviceId;
 			public String implementation;
 			public Map<String, Object> properties;
