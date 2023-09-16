@@ -1,0 +1,1 @@
+{"promptPath": "./sample/instruction_repl_input_prompt.txt", "promptLanguage": "ja", "imagePath": "./sample/instruction_repl_input_image.jpeg", "outputPath": "./sample/instruction_repl_output.txt"}
