@@ -28,9 +28,9 @@ import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionS
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
-import org.langrid.mlgridservices.service.impl.ExternalCommandMultimodalTextGenerationService;
+import org.langrid.mlgridservices.service.impl.CmdMultimodalTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalDockerComposeTextGenerationService;
-import org.langrid.mlgridservices.service.impl.ExternalCommandTextGenerationService;
+import org.langrid.mlgridservices.service.impl.CmdTextGeneration;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
 import org.langrid.mlgridservices.service.impl.ExternalTextSentimentAnalysisService;
 import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
@@ -344,67 +344,67 @@ public class ServiceInvoker {
 		serviceImples.put("RinnaJapaneseGPT3.6B-Instruction-ppo", new ExternalDockerComposeTextGenerationService(
 			"./procs/japanese-gpt-neox", "rinna/japanese-gpt-neox-3.6b-instruction-ppo",
 			"generate_ppo.py"));
-		serviceImples.put("RinnaBilingualGPT4B", new ExternalCommandTextGenerationService(
+		serviceImples.put("RinnaBilingualGPT4B", new CmdTextGeneration(
 			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_gpt.sh", "rinna/bilingual-gpt-neox-4b"));
-		serviceImples.put("RinnaBilingualGPT4BInstructionSft", new ExternalCommandTextGenerationService(
+		serviceImples.put("RinnaBilingualGPT4BInstructionSft", new CmdTextGeneration(
 			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_sft_ppo.sh", "rinna/bilingual-gpt-neox-4b-instruction-sft"));
-		serviceImples.put("RinnaBilingualGPT4BInstructionPpo", new ExternalCommandTextGenerationService(
+		serviceImples.put("RinnaBilingualGPT4BInstructionPpo", new CmdTextGeneration(
 			"./procs/rinna-bilingual-gpt-neox", "/bin/bash run_sft_ppo.sh", "rinna/bilingual-gpt-neox-4b-instruction-ppo"));
-		serviceImples.put("MetaLLama2-7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("MetaLLama2-7B", new CmdTextGeneration(
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-7b-hf"));
-		serviceImples.put("MetaLLama2-7BChat", new ExternalCommandTextGenerationService(
+		serviceImples.put("MetaLLama2-7BChat", new CmdTextGeneration(
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-7b-chat-hf"));
-		serviceImples.put("MetaLLama2-13B", new ExternalCommandTextGenerationService(
+		serviceImples.put("MetaLLama2-13B", new CmdTextGeneration(
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-hf"));
-		serviceImples.put("MetaLLama2-13BChat", new ExternalCommandTextGenerationService(
+		serviceImples.put("MetaLLama2-13BChat", new CmdTextGeneration(
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-chat-hf"));
-		serviceImples.put("StabilityAIJapaneseStableLMBaseAlpha-7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("StabilityAIJapaneseStableLMBaseAlpha-7B", new CmdTextGeneration(
 			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_base.sh", "stabilityai/japanese-stablelm-base-alpha-7b"));
-		serviceImples.put("StabilityAIJapaneseStableLMInstructAlpha-7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("StabilityAIJapaneseStableLMInstructAlpha-7B", new CmdTextGeneration(
 			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct.sh", "stabilityai/japanese-stablelm-instruct-alpha-7b"));
-		serviceImples.put("LightblueJapaneseMpt7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("LightblueJapaneseMpt7B", new CmdTextGeneration(
 			"./procs/lightblue_japanese_mpt", "/bin/bash run.sh",
 			"lightblue/japanese-mpt-7b"));
-		serviceImples.put("LineJapaneseLargeLM1.7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("LineJapaneseLargeLM1.7B", new CmdTextGeneration(
 			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
 			"line-corporation/japanese-large-lm-1.7b"));
-		serviceImples.put("LineJapaneseLargeLM1.7BInstractionSft", new ExternalCommandTextGenerationService(
+		serviceImples.put("LineJapaneseLargeLM1.7BInstractionSft", new CmdTextGeneration(
 			"./procs/line_japanese_large_lm", "/bin/bash run_sft.sh",
 			"line-corporation/japanese-large-lm-1.7b-instruction-sft"));
-		serviceImples.put("LineJapaneseLargeLM3.6B", new ExternalCommandTextGenerationService(
+		serviceImples.put("LineJapaneseLargeLM3.6B", new CmdTextGeneration(
 			"./procs/line_japanese_large_lm", "/bin/bash run.sh",
 			"line-corporation/japanese-large-lm-3.6b"));
-		serviceImples.put("LineJapaneseLargeLM3.6BInstructionSft", new ExternalCommandTextGenerationService(
+		serviceImples.put("LineJapaneseLargeLM3.6BInstructionSft", new CmdTextGeneration(
 			"./procs/line_japanese_large_lm", "/bin/bash run_sft.sh",
 			"line-corporation/japanese-large-lm-3.6b-instruction-sft"));
-		serviceImples.put("StockmarkGptNeoxJapanese1.4B", new ExternalCommandTextGenerationService(
+		serviceImples.put("StockmarkGptNeoxJapanese1.4B", new CmdTextGeneration(
 			"./procs/stockmark_gpt_neox_japanese", "/bin/bash run.sh",
 			"stockmark/gpt-neox-japanese-1.4b"));
-		serviceImples.put("LMSYSVicuna7B-v1.1", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna7B-v1.1", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.1"));
-		serviceImples.put("LMSYSVicuna7B-v1.3", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna7B-v1.3", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.3"));
-		serviceImples.put("LMSYSVicuna7B-v1.5", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna7B-v1.5", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.5"));
-		serviceImples.put("LMSYSVicuna7B-v1.5-16k", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna7B-v1.5-16k", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-7b-v1.5-16k"));
-		serviceImples.put("LMSYSVicuna13B-v1.1", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna13B-v1.1", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.1"));
-		serviceImples.put("LMSYSVicuna13B-v1.3", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna13B-v1.3", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.3"));
-		serviceImples.put("LMSYSVicuna13B-v1.5", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna13B-v1.5", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.5"));
-		serviceImples.put("LMSYSVicuna13B-v1.5-16k", new ExternalCommandTextGenerationService(
+		serviceImples.put("LMSYSVicuna13B-v1.5-16k", new CmdTextGeneration(
 			"./procs/lmsys_vicuna", "/bin/bash run.sh",
 			"lmsys/vicuna-13b-v1.5-16k"));
-		serviceImples.put("Qwen7BChat", new ExternalCommandTextGenerationService(
+		serviceImples.put("Qwen7BChat", new CmdTextGeneration(
 			"./procs/qwenlm", "/bin/bash run.sh",
 			"Qwen/Qwen-7B-Chat"));
 		serviceImples.put("Qwen7B|P", new ReplCommandTextGeneration(
@@ -413,10 +413,10 @@ public class ServiceInvoker {
 		serviceImples.put("Qwen7BChat|P", new ReplCommandTextGeneration(
 			"./procs/qwenlm", "bash", "run_chat_pipeline.sh",
 			"Qwen/Qwen-7B-Chat"));
-		serviceImples.put("MatsuoLabWeblab7B", new ExternalCommandTextGenerationService(
+		serviceImples.put("MatsuoLabWeblab7B", new CmdTextGeneration(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b"));
-		serviceImples.put("MatsuoLabWeblab7BInstruct", new ExternalCommandTextGenerationService(
+		serviceImples.put("MatsuoLabWeblab7BInstruct", new CmdTextGeneration(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
 		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new ReplCommandTextGeneration(
@@ -483,10 +483,10 @@ public class ServiceInvoker {
 			"codellama/CodeLlama-34b-Instruct-hf"));
 
 
-		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new ExternalCommandMultimodalTextGenerationService(
+		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new CmdMultimodalTextGenerationService(
 			"./procs/rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
 			"rinna/bilingual-gpt-neox-4b"));
-		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new ExternalCommandMultimodalTextGenerationService(
+		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new CmdMultimodalTextGenerationService(
 			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct_blip.sh",
 			"stabilityai/japanese-instructblip-alpha"));
 
