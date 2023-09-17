@@ -24,11 +24,11 @@ import org.langrid.mlgridservices.service.impl.test.ProcessFailedExceptionServic
 import org.langrid.mlgridservices.service.impl.test.TestGpuPipelineService;
 import org.langrid.mlgridservices.service.impl.test.TestGpuService;
 import org.langrid.mlgridservices.service.impl.ClipInterrogatorImageToTextService;
+import org.langrid.mlgridservices.service.impl.CmdInstructionWithImage;
 import org.langrid.mlgridservices.service.impl.CodeFormerImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.Detectron2ObjectSegmentationService;
 import org.langrid.mlgridservices.service.impl.DiffusersTextGuidedImageGenerationService;
 import org.langrid.mlgridservices.service.impl.EmpathService;
-import org.langrid.mlgridservices.service.impl.CmdMultimodalTextGenerationService;
 import org.langrid.mlgridservices.service.impl.ExternalDockerComposeTextGenerationService;
 import org.langrid.mlgridservices.service.impl.CmdTextGeneration;
 import org.langrid.mlgridservices.service.impl.ExternalTextSimilarityCalculationService;
@@ -483,10 +483,10 @@ public class ServiceInvoker {
 			"codellama/CodeLlama-34b-Instruct-hf"));
 
 
-		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new CmdMultimodalTextGenerationService(
+		serviceImples.put("RinnaBilingualGptNeox4BMiniGPT4", new CmdInstructionWithImage(
 			"./procs/rinna-bilingual-gpt-neox-minigpt4", "/bin/bash run.sh",
 			"rinna/bilingual-gpt-neox-4b"));
-		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new CmdMultimodalTextGenerationService(
+		serviceImples.put("StabilityAIJapaneseInstructBlipAlpha", new CmdInstructionWithImage(
 			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct_blip.sh",
 			"stabilityai/japanese-instructblip-alpha"));
 
