@@ -30,6 +30,7 @@ public class ServiceFinder {
 					try(var r = Files.newBufferedReader(p, StandardCharsets.UTF_8)){
 						var sy = new Yaml().loadAs(r, ServicesYml.class);
 						for(var s : sy.services){
+							if(s.disabled) continue;
 							var si = new ServiceInfo();
 							si.setDescription(s.description != null ? s.description : sy.common.description);
 							si.setLicense(s.license != null ? s.license : sy.common.license);
@@ -79,6 +80,7 @@ public class ServiceFinder {
 			public String url;
 			public String serviceId;
 			public String implementation;
+			public boolean disabled;
 			public Map<String, Object> properties;
 		}
 	}
