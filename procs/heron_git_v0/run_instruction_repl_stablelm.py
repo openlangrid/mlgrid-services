@@ -2,10 +2,10 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoProcessor
-    from heron.models.git_llm.git_gpt_neox import GitGPTNeoXForCausalLM
+    from heron.models.git_llm.git_japanese_stablelm_alpha import GitJapaneseStableLMAlphaForCausalLM
 
     # prepare a pretrained model
-    model = GitGPTNeoXForCausalLM.from_pretrained(
+    model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
         model_name, torch_dtype=torch.float16
     )
     model.eval()
@@ -27,26 +27,21 @@ def run(tokenizer_model_name: str, model_name: str):
         image = Image.open(input["imagePath"])
         outputPath = input["outputPath"]
 
-        # do preprocessing
-        prompt = f"##human: {prompt}\n##gpt: "
         inputs = processor(
             prompt, image,
             return_tensors="pt",
-            truncation=True,
-        )
+            truncation=True)
         inputs = {k: v.to("cuda:0") for k, v in inputs.items()}
-
         # set eos token
         eos_token_id_list = [
             processor.tokenizer.pad_token_id,
             processor.tokenizer.eos_token_id,
         ]
-
         # do inference
         with torch.no_grad():
-            out = model.generate(
-                **inputs,
-                max_length=256, do_sample=False, temperature=0.,
+            out = model.generate(**inputs, max_length=256,
+                do_sample=False,
+                temperature=0.,
                 eos_token_id=eos_token_id_list)
 
 #        ret = ret.rstrip("<|endoftext|>")
@@ -64,6 +59,6 @@ def main(tokenizerModel: str, model: str):
 if __name__ == "__main__": 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("model", type=str, nargs="?", default="turing-motors/heron-chat-git-ELYZA-fast-7b-v0")
+    parser.add_argument("model", type=str, nargs="?", default="turing-motors/heron-chat-git-ja-stablelm-base-7b-v0")
     parser.add_argument("--tokenizerModel", type=str, default=None)
     main(**vars(parser.parse_args()))
