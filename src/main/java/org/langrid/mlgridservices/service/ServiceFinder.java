@@ -38,11 +38,13 @@ public class ServiceFinder {
 							si.setServiceId(s.serviceId);
 							var clazz = Class.forName(s.implementation);
 							var impl = clazz.getConstructor(String.class).newInstance(p.getParent().toString());
-							for(var kv : s.properties.entrySet()){
-								var setter = ClassUtil.findSetter(clazz, kv.getKey());
-								if(setter == null)
-									throw new RuntimeException("no setter found for property: " + kv.getKey());
-								setter.invoke(impl, c.convert(kv.getValue(), setter.getParameterTypes()[0]));
+							if(s.properties != null){
+								for(var kv : s.properties.entrySet()){
+									var setter = ClassUtil.findSetter(clazz, kv.getKey());
+									if(setter == null)
+										throw new RuntimeException("no setter found for property: " + kv.getKey());
+									setter.invoke(impl, c.convert(kv.getValue(), setter.getParameterTypes()[0]));
+								}
 							}
 							onFound.accept(si, impl);
 						}
