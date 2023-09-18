@@ -94,9 +94,11 @@ mlgrid-servicesに含まれている多くのサービスは、GPUを利用し�
 
 #### 準備
 
-まず、設定ファイルをコピーしてください。
+まず、このリポジトリをcloneし、設定ファイルをコピーしてください。
 
 ```bash
+git clone https://github.com/openlangrid/mlgrid-services/
+cd ./mlgrid-services
 cp ./src/main/resources/application.yml.sample ./src/main/resources/application.yml
 ```
 
@@ -131,11 +133,9 @@ Kerasを用いた画像認識でCPUを使用する場合は、keras.docker-servi
 
 #### ビルド
 
-上記の準備を行なった上で、JDK17をインストールした状態で、以下のコマンドを実行してください。
+上記の準備を行なった上で、JDK17をインストールし、以下のコマンドを実行してください。
 
 ```bash
-git clone https://github.com/openlangrid/mlgrid-services/
-cd mlgrid-services
 ./gradlew build -x test
 ```
 
