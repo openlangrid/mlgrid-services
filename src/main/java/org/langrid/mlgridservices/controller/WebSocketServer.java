@@ -3,7 +3,11 @@ package org.langrid.mlgridservices.controller;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.CloseReason;
@@ -50,67 +54,112 @@ public class WebSocketServer implements ApplicationContextAware {
 	}
 
 	@OnMessage
-	public String onMessage(Session session, String message)
-			throws JsonMappingException, JsonProcessingException, MalformedURLException,
+	public void onMessage(Session session, String message)
+			throws JsonMappingException, JsonProcessingException, IOException, MalformedURLException,
 			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		int reqId = -1;
 		try {
-			var req = jmapper.readValue(message, WebSocketRequest.class);
+			var req = recvReq(message);
 			reqId = req.getReqId();
 			var sid = req.getServiceId();
 			if(sid.equals("__PingService")){
-				return jmapper.writeValueAsString(new WebSocketResponse(
+				sendResTextSync(session, new WebSocketResponse(
 					reqId, new HashMap<>(), "Pong"
 				));
+				return;
 			}
 			try{
-				var r = invoker().invoke(sid, req);
-				WebSocketResponse res = null;
-				if(r.getError() != null){
-					res = new WebSocketResponse(
-						reqId, r.getHeaders(), r.getError());
-				} else{
-					res = new WebSocketResponse(
-						reqId, r.getHeaders(), r.getResult());
-				}
-				return jmapper.writeValueAsString(res);
+				handleInvocation(req, res->{
+					try {
+						sendResTextSync(session, res);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
 			} catch(InvocationTargetException e){
 				throw e.getCause();
 			}
 		} catch(Throwable e) {
 			e.printStackTrace();
-			return jmapper.writeValueAsString(new WebSocketResponse(
+			sendResTextSync(session, new WebSocketResponse(
 				reqId, new Error(e.getClass().getSimpleName(), e.getMessage())));
 		}
 	}
 
 	@OnMessage
-	public byte[] onMessage(Session session, byte[] message)
+	public void onMessage(Session session, byte[] message)
 			throws StreamReadException, DatabindException, IOException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, ProcessFailedException {
 		int reqId = -1;
 		try{
-			var req = bmapper.readValue(message, WebSocketRequest.class);
+			var req = recvReq(message);
 			reqId = req.getReqId();
+			var sid = req.getServiceId();
+			if(sid.equals("__PingService")){
+				sendResBytesSync(session, new WebSocketResponse(
+					reqId, new HashMap<>(), "Pong"
+				));
+				return;
+			}
 			try{
-				var r = invoker().invoke(req.getServiceId(), req);
-				WebSocketResponse res = null;
-				if(r.getError() != null){
-					res = new WebSocketResponse(
-						reqId, r.getHeaders(), r.getError());
-				} else{
-					res = new WebSocketResponse(
-						reqId, r.getHeaders(), r.getResult());
-				}
-				return bmapper.writeValueAsBytes(res);
+				handleInvocation(req, res->{
+					try{
+						sendResBytesSync(session, res);
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				});
 			} catch(InvocationTargetException e){
 				throw e.getCause();
 			}
 		} catch(Throwable e) {
 			e.printStackTrace();
-			return bmapper.writeValueAsBytes(new WebSocketResponse(
+			sendResBytesSync(session, new WebSocketResponse(
 				reqId, new Error(e.getClass().getSimpleName(), e.getMessage())));
 		}
+	}
+
+	private ExecutorService es = Executors.newFixedThreadPool(19);
+	private void handleInvocation(WebSocketRequest req, Consumer<WebSocketResponse> onResponse)
+	throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ProcessFailedException{
+		es.submit((Runnable)()->{
+			var reqId = req.getReqId();
+			try {
+				var r = invoker().invoke(req.getServiceId(), req);
+				if(r.getError() != null){
+					onResponse.accept(new WebSocketResponse(
+						reqId, r.getHeaders(), r.getError()));
+				} else{
+					onResponse.accept(new WebSocketResponse(
+						reqId, r.getHeaders(), r.getResult()));
+				}
+			} catch (MalformedURLException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
+					| ProcessFailedException e) {
+				e.printStackTrace();
+				onResponse.accept(new WebSocketResponse(
+						reqId, new Error("server.error", e.toString())
+				));
+			}
+		});
+	}
+
+	private WebSocketRequest recvReq(String message)
+	throws JsonMappingException, JsonProcessingException{
+		return jmapper.readValue(message, WebSocketRequest.class);
+	}
+
+	private WebSocketRequest recvReq(byte[] message)
+	throws IOException{
+		return bmapper.readValue(message, WebSocketRequest.class);
+	}
+
+	private void sendResBytesSync(Session session, WebSocketResponse res) throws IOException{
+		var bb = ByteBuffer.wrap(bmapper.writeValueAsBytes(res));
+		session.getBasicRemote().sendBinary(bb);
+	}
+
+	private void sendResTextSync(Session session, WebSocketResponse res) throws IOException{
+		session.getBasicRemote().sendText(jmapper.writeValueAsString(res));
 	}
 
 	@OnClose
