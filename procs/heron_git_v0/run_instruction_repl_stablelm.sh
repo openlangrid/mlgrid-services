@@ -1,2 +1,2 @@
 #!/bin/bash
-docker compose run -T --rm service python run_generation_repl_stablelm.py $@
+docker compose run -T --rm service python run_instruction_repl_stablelm.py $@

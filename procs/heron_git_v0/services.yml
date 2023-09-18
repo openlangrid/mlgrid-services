@@ -2,16 +2,16 @@ common:
   license: CC-BY-NC 4.0
   url: https://huggingface.co/turing-motors
 
+# https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0 は正常に動かない
 services:
-  - serviceId: HeronChatGitJaStableLmBase7bV0|R
-    description: Heron GIT Japanese StableLM Base 7B is a vision-language model that can converse about input images.
+  - serviceId: HeronChatBlipJaStableLmBase7bV0|R
+    description: Heron BLIP Japanese StableLM Base 7B is a vision-language model that can converse about input images.
     implementation: org.langrid.mlgridservices.service.impl.CmdReplInstructionWithImage
-    disabled: true
     properties:
       commands:
         - bash
-        - run_generation_repl.sh
-        - turing-motors/heron-chat-git-ja-stablelm-base-7b-v0
+        - run_instruction_repl_stablelm.sh
+        - turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0
       requiredGpuCount: 1
 
   - serviceId: HeronChatGitElyzaFast7bV0|R
