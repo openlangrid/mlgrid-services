@@ -37,8 +37,8 @@ import org.langrid.mlgridservices.service.impl.FuguMtTranslationService;
 import org.langrid.mlgridservices.service.impl.GoogleTextToSpeechService;
 import org.langrid.mlgridservices.service.impl.HelsinkiNlpTranslationService;
 import org.langrid.mlgridservices.service.impl.OpenPoseHumanPoseEstimationService;
-import org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration;
-import org.langrid.mlgridservices.service.impl.ReplCommandTextImageGeneration;
+import org.langrid.mlgridservices.service.impl.CmdReplTextGeneration;
+import org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration;
 import org.langrid.mlgridservices.service.impl.RealEsrganImageToImageConversionService;
 import org.langrid.mlgridservices.service.impl.ReasonSpeechSpeechRecognitionService;
 import org.langrid.mlgridservices.service.impl.RinnaJapaneseStableDiffusionTextImageGenerationService;
@@ -266,10 +266,10 @@ public class ServiceInvoker {
 				"stabilityai/stable-diffusion-xl-base-1.0",
 				"", "runSDXLWithRefiner.py");
 
-			serviceImples.put("SDXLBase" + postfix + "|P", new ReplCommandTextImageGeneration(
+			serviceImples.put("SDXLBase" + postfix + "|P", new CmdReplTextImageGeneration(
 				"./procs/diffusers_0_19_3", "bash", "run_sdxl_base_pipeline.sh",
 				"stabilityai/stable-diffusion-xl-base-1.0"));
-			serviceImples.put("SDXLBaseWithRefiner" + postfix + "|P", new ReplCommandTextImageGeneration(
+			serviceImples.put("SDXLBaseWithRefiner" + postfix + "|P", new CmdReplTextImageGeneration(
 				"./procs/diffusers_0_19_3", "bash", "run_sdxl_base_with_refiner_pipeline.sh",
 				"stabilityai/stable-diffusion-xl-base-1.0"));
 		}
@@ -407,10 +407,10 @@ public class ServiceInvoker {
 		serviceImples.put("Qwen7BChat", new CmdTextGeneration(
 			"./procs/qwenlm", "/bin/bash run.sh",
 			"Qwen/Qwen-7B-Chat"));
-		serviceImples.put("Qwen7B|P", new ReplCommandTextGeneration(
+		serviceImples.put("Qwen7B|P", new CmdReplTextGeneration(
 			"./procs/qwenlm", "bash", "run_completion_pipeline.sh",
 			"Qwen/Qwen-7B"));
-		serviceImples.put("Qwen7BChat|P", new ReplCommandTextGeneration(
+		serviceImples.put("Qwen7BChat|P", new CmdReplTextGeneration(
 			"./procs/qwenlm", "bash", "run_chat_pipeline.sh",
 			"Qwen/Qwen-7B-Chat"));
 		serviceImples.put("MatsuoLabWeblab7B", new CmdTextGeneration(
@@ -419,7 +419,7 @@ public class ServiceInvoker {
 		serviceImples.put("MatsuoLabWeblab7BInstruct", new CmdTextGeneration(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
-		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new ReplCommandTextGeneration(
+		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new CmdReplTextGeneration(
 			"./procs/matsuolab_weblab", "bash", "run_pipeline.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
 /* services.ymlに移行
@@ -436,49 +436,49 @@ public class ServiceInvoker {
 			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
 			"elyza/ELYZA-japanese-Llama-2-7b-fast-instruct"));
 */
-		serviceImples.put("StabilityAiStableBeluga7b|P", new ReplCommandTextGeneration(
+		serviceImples.put("StabilityAiStableBeluga7b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-7B"));
-		serviceImples.put("StabilityAiStableBeluga13b|P", new ReplCommandTextGeneration(
+		serviceImples.put("StabilityAiStableBeluga13b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-13B"));
 
 
-		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new ReplCommandTextGeneration(
+		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-completion-alpha-3b"));
-		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b4k|P", new ReplCommandTextGeneration(
+		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b4k|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-completion-alpha-3b-4k"));
-		serviceImples.put("StabilityAIStableCodeInstructAlpha3b|P", new ReplCommandTextGeneration(
+		serviceImples.put("StabilityAIStableCodeInstructAlpha3b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_stablecode_alpha", "bash", "run_completion_pipeline.sh",
 			"stabilityai/stablecode-instruct-alpha-3b"));
 
-		serviceImples.put("MetaCodeLlama7b|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama7b|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-7b-hf"));
-		serviceImples.put("MetaCodeLlama13b|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama13b|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-13b-hf"));
-		serviceImples.put("MetaCodeLlama34b|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama34b|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-34b-hf"));
-		serviceImples.put("MetaCodeLlama7bPython|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama7bPython|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-7b-Python-hf"));
-		serviceImples.put("MetaCodeLlama13bPython|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama13bPython|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-13b-Python-hf"));
-		serviceImples.put("MetaCodeLlama34bPython|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama34bPython|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-34b-Python-hf"));
-		serviceImples.put("MetaCodeLlama7bInstruct|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama7bInstruct|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-7b-Instruct-hf"));
-		serviceImples.put("MetaCodeLlama13bInstruct|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama13bInstruct|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-13b-Instruct-hf"));
-		serviceImples.put("MetaCodeLlama34bInstruct|P", new ReplCommandTextGeneration(
+		serviceImples.put("MetaCodeLlama34bInstruct|P", new CmdReplTextGeneration(
 			"./procs/meta-codellama", "bash", "run_completion_pipeline.sh",
 			"codellama/CodeLlama-34b-Instruct-hf"));
 

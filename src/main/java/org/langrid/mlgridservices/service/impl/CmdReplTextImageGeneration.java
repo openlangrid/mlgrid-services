@@ -24,9 +24,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class ReplCommandTextImageGeneration
+public class CmdReplTextImageGeneration
 implements TextGuidedImageGenerationService{
-	public ReplCommandTextImageGeneration(
+	public CmdReplTextImageGeneration(
 		String baseDir, String... commands) {
 		this.baseDir = new File(baseDir);
 		this.commands = commands;

@@ -6,7 +6,7 @@ common:
 services:
   # completion services
   - serviceId: ELYZAJapaneseLlama2-7B|R
-    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
         - bash
@@ -15,7 +15,7 @@ services:
       requiredGpuCount: 1
 
   - serviceId: ELYZAJapaneseLlama2-7BInstruct|R
-    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
         - bash
@@ -24,7 +24,7 @@ services:
       requiredGpuCount: 1
 
   - serviceId: ELYZAJapaneseLlama2-7BFast|R
-    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
         - bash
@@ -33,7 +33,7 @@ services:
       requiredGpuCount: 1
 
   - serviceId: ELYZAJapaneseLlama2-7BFastInstruct|R
-    implementation: org.langrid.mlgridservices.service.impl.ReplCommandTextGeneration
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
         - bash

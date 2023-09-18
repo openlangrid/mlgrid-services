@@ -24,18 +24,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class ReplCommandTextGeneration
+public class CmdReplTextGeneration
 extends AbstractPipelineService
 implements TextGenerationService{
-	public ReplCommandTextGeneration(
-		String basePath) {
+	public CmdReplTextGeneration(String basePath) {
 		this.basePath = Path.of(basePath);
 		this.tempDir = new File(this.basePath.toFile(), "temp");
 		tempDir.mkdirs();
 	}
 
-	public ReplCommandTextGeneration(
-		String basePath, String... commands) {
+	public CmdReplTextGeneration(String basePath, String... commands) {
 		this(basePath);
 		setCommands(commands);
 	}

@@ -24,14 +24,15 @@ import lombok.NoArgsConstructor;
 
 public class CmdReplInstructionWithImage
 implements InstructionWithImageService {
-	public CmdReplInstructionWithImage(
-		String baseDir, String... commands) {
+	public CmdReplInstructionWithImage(String baseDir) {
 		this.baseDir = new File(baseDir);
-		this.commands = commands;
-
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
-		this.tempDir = new File(baseDir, "temp");
+		this.tempDir = new File(this.baseDir, "temp");
 		tempDir.mkdirs();
+	}
+
+	public CmdReplInstructionWithImage(String baseDir, String... commands) {
+		this(baseDir);
+		setCommands(commands);
 	}
 
 	public void setCommands(String[] commands) {
@@ -54,13 +55,12 @@ implements InstructionWithImageService {
 			var inputImageFile = new File(baseFile.toString() + ".input.image." + FileUtil.getExtFromFormat(imageFormat));
 			Files.write(inputImageFile.toPath(), image);
 			var outputFile = new File(baseFile.toString() + ".output.txt");
-			var outputFilePrefix = baseFile.getName() + ".output";
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var input = m.writeValueAsString(new InstructionWithImageCommandInput(
 				tempDir.getName() + "/" + inputTextFile.getName(),
 				promptLanguage,
 				tempDir.getName() + "/" + inputImageFile.getName(),
-				tempDir.getName() + "/" + outputFilePrefix
+				tempDir.getName() + "/" + outputFile.getName()
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 
@@ -104,7 +104,7 @@ implements InstructionWithImageService {
 		private String promptPath;
 		private String promptLanguage;
 		private String imagePath;
-		private String outputPathPrefix;
+		private String outputPath;
 	}
 
 	private ObjectMapper m = new ObjectMapper();
