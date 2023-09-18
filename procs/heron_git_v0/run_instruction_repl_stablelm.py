@@ -59,6 +59,7 @@ def run(tokenizer_model_name: str, model_name: str, video_blip_model_name: str):
 
         with open(outputPath, mode="w") as f:
             ret = processor.tokenizer.batch_decode(out)[0]
+            print(f"process result:\n{out}", file=sys.stderr)
             ret = ret.lstrip("<|endoftext|>").rstrip("\n##")
             f.write(ret)
 
