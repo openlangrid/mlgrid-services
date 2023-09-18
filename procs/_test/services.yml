@@ -1,0 +1,8 @@
+common:
+  description: Test services.
+  license: NONE
+  url: NONE
+
+services:
+  - serviceId: TestInstructionWithImage
+    implementation: org.langrid.mlgridservices.service.impl.test.TestInstructionWithImage
