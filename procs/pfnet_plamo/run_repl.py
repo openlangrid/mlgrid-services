@@ -26,7 +26,7 @@ def run(tokenizer_model_name: str, model_name: str):
         input_ids = input_ids.to(model.device)
         generated_tokens = model.generate(
             inputs=input_ids,
-            max_new_tokens=32,
+            max_new_tokens=256,
             do_sample=True,
             top_k=50,
             top_p=0.95,
