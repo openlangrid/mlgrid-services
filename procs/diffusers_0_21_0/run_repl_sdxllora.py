@@ -7,7 +7,9 @@ def run(model_name: str, lora_model_name: str):
         torch_dtype=torch.float16, variant="fp16", use_safetensors=True,
         device_map="auto")
     if lora_model_name:
-        base.load_lora_weights(lora_model_name)
+        base.load_lora_weights(
+            lora_model_name,
+            low_cpu_mem_usage=True)
 
     print("ready", flush=True)
 
