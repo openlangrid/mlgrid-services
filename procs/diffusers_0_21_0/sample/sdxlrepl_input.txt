@@ -1,0 +1,1 @@
+{"promptPath": "./sample/sdxlrepl_input_text.txt", "promptLanguage": "ja", "numberOfTimes":1, "outputPathPrefix": "./sample/sdxlrepl_output"}

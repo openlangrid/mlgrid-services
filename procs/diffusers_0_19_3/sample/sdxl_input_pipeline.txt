@@ -1,1 +1,1 @@
-{"promptPath": "./sample/sdxl_input_pipeline_text.txt", "language": "ja", "numberOfTimes":1, "outputPathPrefix": "./sample/sdxl_pipeline_output"}
+{"promptPath": "./sample/sdxl_input_pipeline_text.txt", "promptLanguage": "ja", "numberOfTimes":1, "outputPathPrefix": "./sample/sdxl_pipeline_output"}

@@ -1,0 +1,4 @@
+/build/xformers-*
+/cache
+/temp
+out.*
