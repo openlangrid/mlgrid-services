@@ -26,7 +26,6 @@ def run(model_name: str, refiner_model_name: str):
         numberOfTimes = input["numberOfTimes"]
         outputPathPrefix = input["outputPathPrefix"]
 
-        retImages = []
         for i in range(numberOfTimes):
             images = base(
                 prompt=prompt,
@@ -40,7 +39,6 @@ def run(model_name: str, refiner_model_name: str):
                 num_inference_steps=n_steps,
                 denoising_start=high_noise_frac
                 ).images[0]
-            retImages.append(image)
             image.save(f"{outputPathPrefix}_{i}.png")
 
         print("ok", flush=True)
