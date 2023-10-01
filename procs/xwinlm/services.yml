@@ -1,0 +1,25 @@
+common:
+  license: llama2
+
+services:
+  - serviceId: XwinLM7bV0.1|R
+    description: "Xwin-LM: Powerful, Stable, and Reproducible LLM Alignment"
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/TheBloke/Xwin-LM-7B-V0.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - Xwin-LM/Xwin-LM-7B-V0.1
+      requiredGpuCount: 1
+
+  - serviceId: XwinLM13bV0.1|R
+    description: "Xwin-LM: Powerful, Stable, and Reproducible LLM Alignment"
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/TheBloke/Xwin-LM-13B-V0.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - Xwin-LM/Xwin-LM-13B-V0.1
+      requiredGpuCount: 1
