@@ -1,0 +1,14 @@
+common:
+  license: Apache v2.0
+
+services:
+  - serviceId: PfnetPlamo13b|R
+    description: "PLaMo-13B is a LLaMA-based 13B model pre-trained on English and Japanese open datasets, developed by Preferred Networks, Inc."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/pfnet/plamo-13b
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - pfnet/plamo-13b
+      requiredGpuCount: 1
