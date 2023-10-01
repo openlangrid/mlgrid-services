@@ -26,14 +26,17 @@ import lombok.NoArgsConstructor;
 
 public class CmdReplTextImageGeneration
 implements TextGuidedImageGenerationService{
-	public CmdReplTextImageGeneration(
-		String baseDir, String... commands) {
+	public CmdReplTextImageGeneration(String baseDir) {
 		this.baseDir = new File(baseDir);
-		this.commands = commands;
-
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 		this.tempDir = new File(baseDir, "temp");
 		tempDir.mkdirs();
+	}
+
+	public CmdReplTextImageGeneration(
+		String baseDir, String... commands) {
+		this(baseDir);
+		this.commands = commands;
+		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 	}
 
 	public void setCommands(String[] commands) {

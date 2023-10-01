@@ -9,7 +9,7 @@ services:
     properties:
       commands:
         - bash
-        - run_sdxlbase_repl.sh
+        - run_repl_sdxlbase.sh
         - stabilityai/stable-diffusion-xl-base-1.0
       requiredGpuCount: 1
 
@@ -20,7 +20,7 @@ services:
     properties:
       commands:
         - bash
-        - run_sdxlrefiner_repl.sh
+        - run_repl_sdxlrefiner.sh
         - stabilityai/stable-diffusion-xl-base-1.0
         - --refinerModel
         - stabilityai/stable-diffusion-xl-refiner-1.0
@@ -33,8 +33,20 @@ services:
     properties:
       commands:
         - bash
-        - run_sdxllora_repl.sh
+        - run_repl_sdxllora.sh
         - stabilityai/stable-diffusion-xl-base-1.0
         - --loraModel
         - ostris/ikea-instructions-lora-sdxl
+      requiredGpuCount: 1
+
+  - serviceId: Wuerstchen_DS_0_21_0|R
+    description: "Würstchen is a diffusion model, whose text-conditional model works in a highly compressed latent space of images."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    license: mit
+    url: https://huggingface.co/warp-ai/wuerstchen
+    properties:
+      commands:
+        - bash
+        - run_repl_wuerstchen.sh
+        - warp-ai/wuerstchen
       requiredGpuCount: 1
