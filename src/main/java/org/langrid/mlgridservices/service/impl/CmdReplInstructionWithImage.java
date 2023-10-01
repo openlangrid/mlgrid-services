@@ -10,7 +10,7 @@ import org.langrid.mlgridservices.service.Instance;
 import org.langrid.mlgridservices.service.ProcessInstance;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.service.ml.interim.InstructionWithImageService;
+import org.langrid.service.ml.interim.VisualQuestionAnsweringService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,7 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class CmdReplInstructionWithImage
-implements InstructionWithImageService {
+implements VisualQuestionAnsweringService {
 	public CmdReplInstructionWithImage(String baseDir) {
 		this.baseDir = new File(baseDir);
 		this.tempDir = new File(this.baseDir, "temp");
@@ -45,7 +45,7 @@ implements InstructionWithImageService {
 	}
 
 	@Override
-	public String instruct(String prompt, String promptLanguage, byte[] image, String imageFormat)
+	public String answer(String prompt, String promptLanguage, byte[] image, String imageFormat)
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
