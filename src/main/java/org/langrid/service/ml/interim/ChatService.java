@@ -5,6 +5,6 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public interface ChatService {
-	String chat(String utterance, String utteranceLanguage)
+	String generate(ChatMessage[] messages)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException;
 }
