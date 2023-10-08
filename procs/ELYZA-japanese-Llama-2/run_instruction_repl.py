@@ -23,7 +23,7 @@ def run(tokenizer_model_name: str, model_name: str):
             systemPrompt = "あなたは誠実で優秀な日本人のアシスタントです。"
         with open(input["userPromptPath"]) as f:
             userPrompt = f.read()
-        language = input["language"]
+        promptLanguage = input["promptLanguage"]
         outputPath = input["outputPath"]
 
         B_INST, E_INST = "[INST]", "[/INST]"
