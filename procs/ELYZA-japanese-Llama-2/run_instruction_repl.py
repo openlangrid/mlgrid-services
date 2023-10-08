@@ -17,8 +17,8 @@ def run(tokenizer_model_name: str, model_name: str):
         if "systemPromptPath" in input:
             fname = input["systemPromptPath"]
             if len(fname) > 0:
-                with open() as f:
-                    systemPrompt = f.read().trim()
+                with open(fname) as f:
+                    systemPrompt = f.read()
         if systemPrompt == None:
             systemPrompt = "あなたは誠実で優秀な日本人のアシスタントです。"
         with open(input["userPromptPath"]) as f:

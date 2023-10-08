@@ -33,7 +33,7 @@ implements TextInstructionService {
 			var systemPromptFile = new File(baseFile.toString() + ".input_systemPrompt.txt");
 			Files.writeString(systemPromptFile.toPath(), systemPrompt, StandardCharsets.UTF_8);
 			var userPromptFile = new File(baseFile.toString() + ".input_userPrompt.txt");
-			Files.writeString(userPromptFile.toPath(), systemPrompt, StandardCharsets.UTF_8);
+			Files.writeString(userPromptFile.toPath(), userPrompt, StandardCharsets.UTF_8);
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var outputFile = new File(baseFile.toString() + ".output.txt");
 			var input = mapper().writeValueAsString(new TextInstructionCommandInput(
