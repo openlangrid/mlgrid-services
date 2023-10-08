@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import org.langrid.service.ml.interim.TextGenerationService;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.langrid.service.ml.interim.TextInstructionService;
 
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
@@ -16,28 +14,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class CmdReplTextGeneration
+public class CmdReplTextInstruction
 extends AbstractCmdRepl
-implements TextGenerationService{
-	public CmdReplTextGeneration(String basePath) {
+implements TextInstructionService {
+	public CmdReplTextInstruction(String basePath) {
 		super(basePath);
 	}
 
-	public CmdReplTextGeneration(String basePath, String... commands) {
+	public CmdReplTextInstruction(String basePath, String... commands) {
 		super(basePath, commands);
 	}
 
-	public String generate(String text, String textLanguage)
+	@Override
+	public String generate(String systemPrompt, String userPrompt, String language)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var baseFile = createBaseFile();
-			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
-			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
+			var systemPromptFile = new File(baseFile.toString() + ".input_systemPrompt.txt");
+			Files.writeString(systemPromptFile.toPath(), systemPrompt, StandardCharsets.UTF_8);
+			var userPromptFile = new File(baseFile.toString() + ".input_userPrompt.txt");
+			Files.writeString(userPromptFile.toPath(), systemPrompt, StandardCharsets.UTF_8);
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var outputFile = new File(baseFile.toString() + ".output.txt");
-			var input = mapper().writeValueAsString(new TextGenerationCommandInput(
-				getTempDir().getName() + "/" + inputTextFile.getName(),
-				textLanguage,
+			var input = mapper().writeValueAsString(new TextInstructionCommandInput(
+				getTempDir().getName() + "/" + systemPromptFile.getName(),
+				getTempDir().getName() + "/" + userPromptFile.getName(),
+				language,
 				getTempDir().getName() + "/" + outputFile.getName()
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
@@ -56,9 +58,11 @@ implements TextGenerationService{
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Data
-	static class TextGenerationCommandInput{
-		private String textPath;
-		private String textLanguage;
+	static class TextInstructionCommandInput{
+		private String systemPromptPath;
+		private String userPromptPath;
+		private String promptLanguage;
 		private String outputPath;
 	}
+
 }

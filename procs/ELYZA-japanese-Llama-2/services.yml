@@ -42,3 +42,20 @@ services:
       requiredGpuCount: 1
 
   # instruction services
+  - serviceId: ELYZAJapaneseLlama2-7BInstruct_TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-instruct
+      requiredGpuCount: 1
+
+  - serviceId: ELYZAJapaneseLlama2-7BFastInstruct_TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpuCount: 1

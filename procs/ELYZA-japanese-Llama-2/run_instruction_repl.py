@@ -13,20 +13,21 @@ def run(tokenizer_model_name: str, model_name: str):
     import json, sys
     for line in sys.stdin:
         input = json.loads(line)
+        systemPrompt = None
+        if "systemPromptPath" in input:
+            fname = input["systemPromptPath"]
+            if len(fname) > 0:
+                with open() as f:
+                    systemPrompt = f.read().trim()
+        if systemPrompt == None:
+            systemPrompt = "あなたは誠実で優秀な日本人のアシスタントです。"
         with open(input["userPromptPath"]) as f:
             userPrompt = f.read()
-        if "systemPromptPath" in input:
-            with open(input["systemPromptPath"]) as f:
-                systemPrompt = f.read()
-        else:
-            systemPrompt = "あなたは誠実で優秀な日本人のアシスタントです。"
-        language = input["textLanguage"]
+        language = input["language"]
         outputPath = input["outputPath"]
-
 
         B_INST, E_INST = "[INST]", "[/INST]"
         B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
-#        text = "クマが海辺に行ってアザラシと友達になり、最終的には家に帰るというプロットの短編小説を書いてください。"
         prompt = f"{tokenizer.bos_token}{B_INST} {B_SYS}{systemPrompt}{E_SYS}{userPrompt} {E_INST}"
 
         with torch.no_grad():
