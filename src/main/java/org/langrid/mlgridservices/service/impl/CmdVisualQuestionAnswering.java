@@ -8,16 +8,16 @@ import java.nio.file.Files;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.mlgridservices.util.ProcessUtil;
-import org.langrid.service.ml.interim.InstructionWithImageService;
+import org.langrid.service.ml.interim.VisualQuestionAnsweringService;
 
 import jp.go.nict.langrid.commons.lang.StringUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
-public class CmdInstructionWithImage
-implements InstructionWithImageService{
-	public CmdInstructionWithImage(
+public class CmdVisualQuestionAnswering
+implements VisualQuestionAnsweringService{
+	public CmdVisualQuestionAnswering(
 		String baseDir, String command, String modelName, String... params) {
 		this.baseDir = new File(baseDir);
 		this.command = command;
@@ -38,7 +38,7 @@ implements InstructionWithImageService{
 	}
 
 	@Override
-	public String instruct(String prompt, String promptLanguage, byte[] image, String imageFormat)
+	public String generate(String prompt, String promptLanguage, byte[] image, String imageFormat)
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
 		try{
 			var tempDir = new File(baseDir, "temp");

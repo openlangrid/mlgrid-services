@@ -25,15 +25,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class ExternalChatService
+public class CmdReplChatService
 implements ChatService{
-	public ExternalChatService(String basePath) {
+	public CmdReplChatService(String basePath) {
 		this.basePath = Path.of(basePath);
 		this.tempDir = new File(this.basePath.toFile(), "temp");
 		tempDir.mkdirs();
 	}
 
-	public ExternalChatService(String basePath, String... commands) {
+	public CmdReplChatService(String basePath, String... commands) {
 		this(basePath);
 		setCommands(commands);
 	}

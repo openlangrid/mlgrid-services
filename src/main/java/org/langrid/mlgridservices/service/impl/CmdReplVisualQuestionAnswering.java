@@ -22,15 +22,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class CmdReplInstructionWithImage
+public class CmdReplVisualQuestionAnswering
 implements VisualQuestionAnsweringService {
-	public CmdReplInstructionWithImage(String baseDir) {
+	public CmdReplVisualQuestionAnswering(String baseDir) {
 		this.baseDir = new File(baseDir);
 		this.tempDir = new File(this.baseDir, "temp");
 		tempDir.mkdirs();
 	}
 
-	public CmdReplInstructionWithImage(String baseDir, String... commands) {
+	public CmdReplVisualQuestionAnswering(String baseDir, String... commands) {
 		this(baseDir);
 		setCommands(commands);
 	}
@@ -45,7 +45,7 @@ implements VisualQuestionAnsweringService {
 	}
 
 	@Override
-	public String answer(String prompt, String promptLanguage, byte[] image, String imageFormat)
+	public String generate(String prompt, String promptLanguage, byte[] image, String imageFormat)
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
 		try{
 			var baseFile = FileUtil.createUniqueFileWithDateTime(
