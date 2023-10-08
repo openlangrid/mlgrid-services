@@ -5,6 +5,6 @@ import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
 
 public interface TextInstructionService {
-	String generate(String systemPrompt, String userPrompt, String language)
+	String generate(String systemPrompt, String userPrompt, String promptLanguage)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException;
 }

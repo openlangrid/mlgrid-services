@@ -26,7 +26,7 @@ implements TextInstructionService {
 	}
 
 	@Override
-	public String generate(String systemPrompt, String userPrompt, String language)
+	public String generate(String systemPrompt, String userPrompt, String promptLanguage)
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var baseFile = createBaseFile();
@@ -39,7 +39,7 @@ implements TextInstructionService {
 			var input = mapper().writeValueAsString(new TextInstructionCommandInput(
 				getTempDir().getName() + "/" + systemPromptFile.getName(),
 				getTempDir().getName() + "/" + userPromptFile.getName(),
-				language,
+				promptLanguage,
 				getTempDir().getName() + "/" + outputFile.getName()
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
@@ -64,5 +64,4 @@ implements TextInstructionService {
 		private String promptLanguage;
 		private String outputPath;
 	}
-
 }
