@@ -29,7 +29,7 @@ def run(tokenizer_model_name: str, model_name: str):
             temperature=0.2,
             top_p=0.9,
             eos_token_id=tokenizer.eos_token_id,
-            max_length=100,
+            max_length=1024,
         )
         output = tokenizer.decode(
             outputs[0].to("cpu")
