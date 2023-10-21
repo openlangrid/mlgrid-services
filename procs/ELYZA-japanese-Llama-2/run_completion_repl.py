@@ -4,10 +4,9 @@ def run(tokenizer_model_name: str, model_name: str):
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto")
-    if torch.cuda.is_available():
-        model = model.to("cuda")
-
+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto", device_map="auto")
+#    if torch.cuda.is_available():
+#        model = model.to("cuda")
     print("ready", flush=True)
 
     import json, sys
@@ -19,15 +18,17 @@ def run(tokenizer_model_name: str, model_name: str):
         outputPath = input["outputPath"]
 
         print(f"bos_token: {tokenizer.bos_token}", file=sys.stderr)
-
+        token_ids = tokenizer.encode(
+            text,
+            add_special_tokens=False,
+            return_tensors="pt").to(model.device)
         with torch.no_grad():
-            token_ids = tokenizer.encode(
-                text,
-                add_special_tokens=False,
-                return_tensors="pt")
             output_ids = model.generate(
-                token_ids.to(model.device),
+                token_ids,
                 max_new_tokens=512,
+                do_sample=True,
+                top_p=0.95,
+                temperature=0.7,
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
             )
