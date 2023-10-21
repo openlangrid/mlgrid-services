@@ -38,7 +38,8 @@ def run(model_name: str, tokenizer_model_name: str):
 #                skip_special_tokens=True)
 #        ret = ret.rstrip("<|endoftext|>")
         with open(outputPath, mode="w") as f:
-            f.write(tokenizer.decode(output_ids.tolist()[tokenized_input.size(1):]))
+            output_ids = output_ids.tolist()[tokenized_input.size(1):]
+            f.write(tokenizer.decode(output_ids).rstrip("<EOD|LLM-jp>"))
 
         print("ok", flush=True)
 

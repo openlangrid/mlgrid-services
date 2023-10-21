@@ -23,7 +23,7 @@ def run(model_name: str, tokenizer_model_name: str):
         with torch.no_grad():
             output = model.generate(
                 **tokenized_input,
-                max_new_tokens=100,
+                max_new_tokens=512,
                 do_sample=True,
                 top_p=0.95,
                 temperature=0.7,

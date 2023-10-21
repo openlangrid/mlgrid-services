@@ -68,12 +68,12 @@ services:
   - serviceId: LLMJp13bInstructLoraJasterDollyOasst-v1.0|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
-    disabled: true
+    disabled: false
     properties:
       commands:
         - bash
         - run_completion_peft_repl.sh
-        - llm-jp/llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
+        - llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
       requiredGpuCount: 1
 
   - serviceId: LLMJp13bInstructLoraDollyOasst-v1.0|TG|R
