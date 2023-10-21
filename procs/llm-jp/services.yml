@@ -1,0 +1,87 @@
+common:
+  description: 日本語と英語を中心に事前学習した130億パラメータの大規模言語モデル
+  license: apache2.0
+
+services:
+  # completion services
+  - serviceId: LLMJp1.3b-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-1.3b-v1.0
+    disabled: true
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - llm-jp/llm-jp-1.3b-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13b-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-v1.0
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - llm-jp/llm-jp-13b-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructFullJasterDollyOasst-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructFullJaster-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-full-jaster-v1.0
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - llm-jp/llm-jp-13b-instruct-full-jaster-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructFullDollyJaster-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-full-dolly-oasst-v1.0
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - llm-jp/llm-jp-13b-instruct-full-dolly-oasst-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructLoraJaster-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-jaster-v1.0
+    properties:
+      commands:
+        - bash
+        - run_completion_peft_repl.sh
+        - llm-jp/llm-jp-13b-instruct-lora-jaster-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructLoraJasterDollyOasst-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
+    disabled: true
+    properties:
+      commands:
+        - bash
+        - run_completion_peft_repl.sh
+        - llm-jp/llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructLoraDollyOasst-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-dolly-oasst-v1.0
+    properties:
+      commands:
+        - bash
+        - run_completion_peft_repl.sh
+        - llm-jp/llm-jp-13b-instruct-lora-dolly-oasst-v1.0
+      requiredGpuCount: 1

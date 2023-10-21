@@ -1,0 +1,1 @@
+{"textPath": "./sample/completion_repl_input_text.txt", "textLanguage": "ja", "outputPath": "./sample/completion_repl_output.txt"}
