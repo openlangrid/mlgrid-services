@@ -2,12 +2,10 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto")
-    if torch.cuda.is_available():
-        model = model.to("cuda")
-
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name, device_map="auto",
+        torch_dtype=torch.float16)
     print("ready", flush=True)
 
     import json, sys
@@ -20,30 +18,26 @@ def run(tokenizer_model_name: str, model_name: str):
                 with open(fname) as f:
                     systemPrompt = f.read()
         if systemPrompt == None:
-            systemPrompt = "あなたは誠実で優秀な日本人のアシスタントです。"
+            systemPrompt = ""
         with open(input["userPromptPath"]) as f:
             userPrompt = f.read()
         promptLanguage = input["promptLanguage"]
         outputPath = input["outputPath"]
-
-        B_INST, E_INST = "[INST]", "[/INST]"
-        B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
-        prompt = f"{tokenizer.bos_token}{B_INST} {B_SYS}{systemPrompt}{E_SYS}{userPrompt} {E_INST}"
-
+        prompt = f"{systemPrompt}{userPrompt}### 回答："
+        tokenized_input = tokenizer.encode(
+            prompt, add_special_tokens=False, return_tensors="pt"
+            ).to(model.device)
         with torch.no_grad():
-            token_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
-
             output_ids = model.generate(
-                token_ids.to(model.device),
-                max_new_tokens=256,
-                pad_token_id=tokenizer.pad_token_id,
-                eos_token_id=tokenizer.eos_token_id,
-            )
-        output = tokenizer.decode(output_ids.tolist()[0][token_ids.size(1) :], skip_special_tokens=True)
-#        ret = ret.rstrip("<|endoftext|>")
+                tokenized_input,
+                max_new_tokens=512,
+                do_sample=True,
+                top_p=0.95,
+                temperature=0.7,
+            )[0]
         with open(outputPath, mode="w") as f:
-            f.write(output)
-
+            output_ids = output_ids.tolist()[tokenized_input.size(1):]
+            f.write(tokenizer.decode(output_ids).rstrip("<EOD|LLM-jp>"))
         print("ok", flush=True)
 
 

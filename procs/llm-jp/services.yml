@@ -85,3 +85,64 @@ services:
         - run_completion_peft_repl.sh
         - llm-jp/llm-jp-13b-instruct-lora-dolly-oasst-v1.0
       requiredGpuCount: 1
+
+  # instruction services
+  - serviceId: LLMJp13bInstructFullJasterDollyOasst-v1.0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructFullJaster-v1.0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-full-jaster-v1.0
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - llm-jp/llm-jp-13b-instruct-full-jaster-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructFullDollyJaster-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-full-dolly-oasst-v1.0
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - llm-jp/llm-jp-13b-instruct-full-dolly-oasst-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructLoraJaster-v1.0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-jaster-v1.0
+    properties:
+      commands:
+        - bash
+        - run_instruction_peft_repl.sh
+        - llm-jp/llm-jp-13b-instruct-lora-jaster-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructLoraJasterDollyOasst-v1.0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
+    disabled: false
+    properties:
+      commands:
+        - bash
+        - run_instruction_peft_repl.sh
+        - llm-jp/llm-jp-13b-instruct-lora-jaster-dolly-oasst-v1.0
+      requiredGpuCount: 1
+
+  - serviceId: LLMJp13bInstructLoraDollyOasst-v1.0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-dolly-oasst-v1.0
+    properties:
+      commands:
+        - bash
+        - run_instruction_peft_repl.sh
+        - llm-jp/llm-jp-13b-instruct-lora-dolly-oasst-v1.0
+      requiredGpuCount: 1
