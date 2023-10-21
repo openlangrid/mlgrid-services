@@ -6,7 +6,7 @@ common:
 services:
   - serviceId: HeronChatBlipJaStableLmBase7bV0|R
     description: Heron BLIP Japanese StableLM Base 7B is a vision-language model that can converse about input images.
-    implementation: org.langrid.mlgridservices.service.impl.CmdReplInstructionWithImage
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplVisualQuestionAnswering
     properties:
       commands:
         - bash
@@ -17,7 +17,7 @@ services:
   - serviceId: HeronChatGitElyzaFast7bV0|R
     description: Heron GIT Japanese ELYZA Llama 2 Fast 7B is a vision-language model that can converse about input images.
     url: https://huggingface.co/turing-motors/heron-chat-git-ELYZA-fast-7b-v0
-    implementation: org.langrid.mlgridservices.service.impl.CmdReplInstructionWithImage
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplVisualQuestionAnswering
     disabled: false
     properties:
       commands:
@@ -29,7 +29,7 @@ services:
   - serviceId: HeronChatGitLlama2-7bV0|R
     description: Heron GIT Llama 2 7B is a vision-language model that can converse about input images.
     url: https://huggingface.co/turing-motors/heron-chat-git-Llama-2-7b-v0
-    implementation: org.langrid.mlgridservices.service.impl.CmdReplInstructionWithImage
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplVisualQuestionAnswering
     disabled: false
     properties:
       commands:
