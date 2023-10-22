@@ -2,12 +2,10 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto")
     if torch.cuda.is_available():
         model = model.to("cuda")
-
     print("ready", flush=True)
 
     import json, sys
@@ -25,17 +23,14 @@ def run(tokenizer_model_name: str, model_name: str):
             userPrompt = f.read()
         promptLanguage = input["promptLanguage"]
         outputPath = input["outputPath"]
-
         B_INST, E_INST = "[INST]", "[/INST]"
         B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
         prompt = f"{tokenizer.bos_token}{B_INST} {B_SYS}{systemPrompt}{E_SYS}{userPrompt} {E_INST}"
-
         with torch.no_grad():
             token_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
-
             output_ids = model.generate(
                 token_ids.to(model.device),
-                max_new_tokens=256,
+                max_new_tokens=512,
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
             )
@@ -43,7 +38,6 @@ def run(tokenizer_model_name: str, model_name: str):
 #        ret = ret.rstrip("<|endoftext|>")
         with open(outputPath, mode="w") as f:
             f.write(output)
-
         print("ok", flush=True)
 
 
