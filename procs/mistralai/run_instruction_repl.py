@@ -33,7 +33,7 @@ def run(tokenizer_model_name: str, model_name: str):
         model_inputs = encodeds.to(model.device)
         generated_ids = model.generate(
             model_inputs, max_new_tokens=1000, do_sample=True)
-        generated_text = tokenizer.decode(generated_ids[0][model_inputs.shape[1]:])
+        generated_text = tokenizer.decode(generated_ids[0][model_inputs.shape[1]:]).rstrip("</s>")
         with open(outputPath, mode="w") as f:
             f.write(str(generated_text))
 
