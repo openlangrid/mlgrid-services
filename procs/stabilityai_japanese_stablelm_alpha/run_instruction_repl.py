@@ -30,8 +30,6 @@ def run(tokenizer_model_name: str, model_name: str):
         prompt = f"{systemPrompt}\n\n### 指示: \n{userPrompt}\n\n### 応答: \n"
         input_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
         input_ids = input_ids.to(model.device)
-        print(f"systemPrompt: {systemPrompt}", file=sys.stderr)
-        print(f"prompt: {prompt}", file=sys.stderr)
         tokens = model.generate(
             input_ids,
             max_new_tokens=512,
