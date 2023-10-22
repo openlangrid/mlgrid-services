@@ -4,5 +4,5 @@ common:
   url: NONE
 
 services:
-  - serviceId: TestInstructionWithImage
-    implementation: org.langrid.mlgridservices.service.impl.test.TestInstructionWithImage
+  - serviceId: TestVisualQuestionAnswering
+    implementation: org.langrid.mlgridservices.service.impl.test.TestVisualQuestionAnswering
