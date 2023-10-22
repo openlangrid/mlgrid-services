@@ -358,10 +358,6 @@ public class ServiceInvoker {
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-hf"));
 		serviceImples.put("MetaLLama2-13BChat", new CmdTextGeneration(
 			"./procs/meta-llama2", "/bin/bash run.sh", "meta-llama/Llama-2-13b-chat-hf"));
-		serviceImples.put("StabilityAIJapaneseStableLMBaseAlpha-7B", new CmdTextGeneration(
-			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_base.sh", "stabilityai/japanese-stablelm-base-alpha-7b"));
-		serviceImples.put("StabilityAIJapaneseStableLMInstructAlpha-7B", new CmdTextGeneration(
-			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct.sh", "stabilityai/japanese-stablelm-instruct-alpha-7b"));
 		serviceImples.put("LightblueJapaneseMpt7B", new CmdTextGeneration(
 			"./procs/lightblue_japanese_mpt", "/bin/bash run.sh",
 			"lightblue/japanese-mpt-7b"));
@@ -413,18 +409,24 @@ public class ServiceInvoker {
 		serviceImples.put("Qwen7BChat|P", new CmdReplTextGeneration(
 			"./procs/qwenlm", "bash", "run_chat_pipeline.sh",
 			"Qwen/Qwen-7B-Chat"));
-		serviceImples.put("MatsuoLabWeblab7B", new CmdTextGeneration(
-			"./procs/matsuolab_weblab", "/bin/bash run.sh",
-			"matsuo-lab/weblab-10b"));
-		serviceImples.put("MatsuoLabWeblab7BInstruct", new CmdTextGeneration(
-			"./procs/matsuolab_weblab", "/bin/bash run.sh",
-			"matsuo-lab/weblab-10b-instruction-sft"));
 		serviceImples.put("StabilityAiStableBeluga7b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-7B"));
 		serviceImples.put("StabilityAiStableBeluga13b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-13B"));
+/* repl版に移行
+		serviceImples.put("StabilityAIJapaneseStableLMBaseAlpha-7B", new CmdTextGeneration(
+			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_base.sh", "stabilityai/japanese-stablelm-base-alpha-7b"));
+		serviceImples.put("StabilityAIJapaneseStableLMInstructAlpha-7B", new CmdTextGeneration(
+			"./procs/stabilityai_japanese_stablelm_alpha", "/bin/bash run_instruct.sh", "stabilityai/japanese-stablelm-instruct-alpha-7b"));
+		serviceImples.put("MatsuoLabWeblab7B", new CmdTextGeneration(
+			"./procs/matsuolab_weblab", "/bin/bash run.sh",
+			"matsuo-lab/weblab-10b"));
+		serviceImples.put("MatsuoLabWeblab7BInstruct", new CmdTextGeneration(
+			"./procs/matsuolab_weblab", "/bin/bash run.sh",
+			"matsuo-lab/weblab-10b-instruction-sft"));
+ */
 
 
 		serviceImples.put("StabilityAIStableCodeCompletionAlpha3b|P", new CmdReplTextGeneration(

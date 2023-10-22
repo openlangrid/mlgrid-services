@@ -1,0 +1,63 @@
+common:
+  license: apache-2.0
+
+services:
+  # completion services
+  - serviceId: StabilityAIJapaneseStableLMBaseAlpha7B|R
+    url: https://huggingface.co/stabilityai/japanese-stablelm-base-alpha-7b
+    description: 7B-parameter decoder-only language model pre-trained on a diverse collection of Japanese and English datasets which focus on maximizing Japanese language modeling performance and Japanese downstream task performance.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stabilityai/japanese-stablelm-base-alpha-7b
+      requiredGpuCount: 1
+
+  - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B|TG|R
+    url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b
+    description: 7B parameter decoder-only language models pre-trained built on top of the Japanese-StableLM-Base-Alpha-7B model and further fine-tuned on various instruction-following datasets.
+    license: JAPANESE STABLELM RESEARCH LICENSE AGREEMENT.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stabilityai/japanese-stablelm-instruct-alpha-7b
+      requiredGpuCount: 1
+
+  - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B-v2|TG|R
+    url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b-v2
+    description: 7B parameter decoder-only language models pre-trained built on top of the Japanese-StableLM-Base-Alpha-7B model and further fine-tuned on various instruction-following datasets.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stabilityai/japanese-stablelm-instruct-alpha-7b-v2
+      requiredGpuCount: 1
+
+
+  # instruction services
+  - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B|TI|R
+    url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b
+    description: 7B parameter decoder-only language models pre-trained built on top of the Japanese-StableLM-Base-Alpha-7B model and further fine-tuned on various instruction-following datasets.
+    license: JAPANESE STABLELM RESEARCH LICENSE AGREEMENT.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - stabilityai/japanese-stablelm-instruct-alpha-7b
+      requiredGpuCount: 1
+
+  - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B-v2|TI|R
+    url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b-v2
+    description: 7B parameter decoder-only language models pre-trained built on top of the Japanese-StableLM-Base-Alpha-7B model and further fine-tuned on various instruction-following datasets.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - stabilityai/japanese-stablelm-instruct-alpha-7b-v2
+      requiredGpuCount: 1

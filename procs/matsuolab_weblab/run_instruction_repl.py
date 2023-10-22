@@ -16,7 +16,7 @@ def run(tokenizer_model_name: str, model_name: str):
             if len(fname) > 0:
                 with open(fname) as f:
                     systemPrompt = f.read()
-        if systemPrompt == None:
+        if systemPrompt == None or len(systemPrompt) == 0:
             systemPrompt = "以下は、タスクを説明する指示です。要求を適切に満たす応答を書きなさい。"
         with open(input["userPromptPath"]) as f:
             userPrompt = f.read()
