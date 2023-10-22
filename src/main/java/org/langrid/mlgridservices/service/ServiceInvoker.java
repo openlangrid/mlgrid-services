@@ -419,23 +419,6 @@ public class ServiceInvoker {
 		serviceImples.put("MatsuoLabWeblab7BInstruct", new CmdTextGeneration(
 			"./procs/matsuolab_weblab", "/bin/bash run.sh",
 			"matsuo-lab/weblab-10b-instruction-sft"));
-		serviceImples.put("MatsuoLabWeblab7BInstruct|P", new CmdReplTextGeneration(
-			"./procs/matsuolab_weblab", "bash", "run_pipeline.sh",
-			"matsuo-lab/weblab-10b-instruction-sft"));
-/* services.ymlに移行
-		serviceImples.put("ELYZAJapaneseLlama2-7b|P", new ReplCommandTextGeneration(
-			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
-			"elyza/ELYZA-japanese-Llama-2-7b"));
-		serviceImples.put("ELYZAJapaneseLlama2-7bInstruct|P", new ReplCommandTextGeneration(
-			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
-			"elyza/ELYZA-japanese-Llama-2-7b-instruct"));
-		serviceImples.put("ELYZAJapaneseLlama2-7bFast|P", new ReplCommandTextGeneration(
-			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
-			"elyza/ELYZA-japanese-Llama-2-7b-fast"));
-		serviceImples.put("ELYZAJapaneseLlama2-7bFastInstruct|P", new ReplCommandTextGeneration(
-			"./procs/ELYZA-japanese-Llama-2", "bash", "run_completion_repl.sh",
-			"elyza/ELYZA-japanese-Llama-2-7b-fast-instruct"));
-*/
 		serviceImples.put("StabilityAiStableBeluga7b|P", new CmdReplTextGeneration(
 			"./procs/stabilityai_StableBeluga", "bash", "run_completion_repl.sh",
 			"stabilityai/StableBeluga-7B"));

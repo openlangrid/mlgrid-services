@@ -1,0 +1,36 @@
+common:
+  description: Japanese-centric multilingual GPT-NeoX model of 10 billion parameters.
+  license: cc-by-nc-4.0
+
+services:
+  # completion services
+  - serviceId: MatsuoLabWebLab10b|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/matsuo-lab/weblab-10b
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - matsuo-lab/weblab-10b
+      requiredGpuCount: 1
+
+  - serviceId: MatsuoLabWebLab10bInstructionSft|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/matsuo-lab/weblab-10b-instruction-sft
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - matsuo-lab/weblab-10b-instruction-sft
+      requiredGpuCount: 1
+
+  # instruction services
+  - serviceId: MatsuoLabWebLab10bInstructionSft|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/matsuo-lab/weblab-10b-instruction-sft
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - matsuo-lab/weblab-10b-instruction-sft
+      requiredGpuCount: 1
