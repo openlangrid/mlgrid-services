@@ -1,0 +1,36 @@
+common:
+  license: apache-2.0
+
+services:
+  - serviceId: StabilityAIJapaneseStableLMBaseGamma7B|R
+    description: 7B-parameter decoder-only language model with a focus on maximizing Japanese language modeling performance and Japanese downstream task performance.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/stabilityai/japanese-stablelm-base-gamma-7b
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stabilityai/japanese-stablelm-base-gamma-7b
+      requiredGpuCount: 1
+
+  - serviceId: StabilityAIJapaneseStableLMInstructGamma7B|TG|R
+    description: 7B-parameter decoder-only Japanese language model fine-tuned on instruction-following datasets, built on top of the base model Japanese Stable LM Base Gamma 7B.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-gamma-7b
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stabilityai/japanese-stablelm-instruct-gamma-7b
+      requiredGpuCount: 1
+
+  - serviceId: StabilityAIJapaneseStableLMInstructGamma7B|TI|R
+    description: 7B-parameter decoder-only Japanese language model fine-tuned on instruction-following datasets, built on top of the base model Japanese Stable LM Base Gamma 7B.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-gamma-7b
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - stabilityai/japanese-stablelm-instruct-gamma-7b
+      requiredGpuCount: 1
