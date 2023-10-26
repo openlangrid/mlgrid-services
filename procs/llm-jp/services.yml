@@ -106,7 +106,7 @@ services:
         - llm-jp/llm-jp-13b-instruct-full-jaster-v1.0
       requiredGpuCount: 1
 
-  - serviceId: LLMJp13bInstructFullDollyJaster-v1.0|TG|R
+  - serviceId: LLMJp13bInstructFullDollyJaster-v1.0|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-full-dolly-oasst-v1.0
     properties:

@@ -2,12 +2,10 @@
 def run(model_name: str, tokenizer_model_name: str):
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM
-
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
     model = AutoModelForCausalLM.from_pretrained(
         model_name, device_map="auto",
         torch_dtype=torch.float16)
-
     print("ready", flush=True)
 
     import json, sys
@@ -40,7 +38,6 @@ def run(model_name: str, tokenizer_model_name: str):
         with open(outputPath, mode="w") as f:
             output_ids = output_ids.tolist()[tokenized_input.size(1):]
             f.write(tokenizer.decode(output_ids).rstrip("<EOD|LLM-jp>"))
-
         print("ok", flush=True)
 
 

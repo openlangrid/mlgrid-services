@@ -18,7 +18,7 @@ def run(model_name: str, tokenizer_model_name: str):
             if len(fname) > 0:
                 with open(fname) as f:
                     systemPrompt = f.read()
-        if systemPrompt == None:
+        if systemPrompt == None or len(systemPrompt) == 0:
             systemPrompt = ""
         with open(input["userPromptPath"]) as f:
             userPrompt = f.read()
