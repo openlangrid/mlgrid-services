@@ -1,0 +1,14 @@
+common:
+  license: mit
+
+services:
+  - serviceId: Stockmark13B|R
+    description: Llama-2 based model with 13B parameters pre-trained on Japanese corpus of about 220B tokens.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/stockmark/stockmark-13b
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stockmark/stockmark-13b
+      requiredGpuCount: 1
