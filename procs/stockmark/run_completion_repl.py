@@ -5,7 +5,7 @@ def run(tokenizer_model_name: str, model_name: str):
     tokenizer = AutoTokenizer.from_pretrained(
         tokenizer_model_name)
     model = AutoModelForCausalLM.from_pretrained(
-        "stockmark/stockmark-13b",
+        model_name,
         device_map="auto",
         torch_dtype=torch.bfloat16)
     model.eval()
@@ -28,7 +28,9 @@ def run(tokenizer_model_name: str, model_name: str):
                 temperature=0.7
             )[0]
         input_ids = inputs.input_ids
-        generated_text = tokenizer.decode(tokens[input_ids.shape[1]:])
+        generated_text = tokenizer.decode(
+            tokens[input_ids.shape[1]:],
+            skip_special_tokens=True)
         with open(outputPath, mode="w") as f:
             f.write(str(generated_text))
         print("ok", flush=True)

@@ -12,3 +12,28 @@ services:
         - run_completion_repl.sh
         - stockmark/stockmark-13b
       requiredGpuCount: 1
+
+  - serviceId: Stockmark13B-instruct|TG|R
+    description: instruction-tuned version of Stockmark-13b, a 13 billion parameter Japanese LLM.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/stockmark/stockmark-13b-instruct
+    license: CC-BY-NC-SA
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - stockmark/stockmark-13b-instruct
+      requiredGpuCount: 1
+
+  # instruction
+  - serviceId: Stockmark13B-instruct|TI|R
+    description: instruction-tuned version of Stockmark-13b, a 13 billion parameter Japanese LLM.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/stockmark/stockmark-13b-instruct
+    license: CC-BY-NC-SA
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - stockmark/stockmark-13b-instruct
+      requiredGpuCount: 1
