@@ -1,0 +1,38 @@
+common:
+  license: apache-2.0
+
+services:
+  # completion
+  - serviceId: CALM2-7B|R
+    description: Decoder-only language model pre-trained on the 1.3T tokens of publicly available Japanese and English datasets.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/cyberagent/calm2-7b
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - cyberagent/calm2-7b
+      requiredGpuCount: 1
+
+  - serviceId: CALM2-7B-instruct|TG|R
+    description: Fine-tuned model of CyberAgentLM2 for dialogue use cases.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/cyberagent/calm2-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - cyberagent/calm2-7b-chat
+      requiredGpuCount: 1
+
+  # instruction
+  - serviceId: CALM2-7B-instruct|TI|R
+    description: Fine-tuned model of CyberAgentLM2 for dialogue use cases.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/cyberagent/calm2-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - cyberagent/calm2-7b-chat
+      requiredGpuCount: 1
