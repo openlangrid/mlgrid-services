@@ -1,0 +1,65 @@
+common:
+  license: openrail++
+
+services:
+  - serviceId: SDXLBase_DS_0_23_1|R
+    description: "SDXL consists of an ensemble of experts pipeline for latent diffusion: In a first step, the base model is used to generate (noisy) latents, which are then further processed with a refinement model (available here: https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/) specialized for the final denoising steps. Note that the base model can be used as a standalone module."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
+    properties:
+      commands:
+        - bash
+        - run_repl_sdxlbase.sh
+        - stabilityai/stable-diffusion-xl-base-1.0
+      requiredGpuCount: 1
+
+  - serviceId: SDXLBaseWithRefiner_DS_0_23_1|R
+    description: "SDXL consists of an ensemble of experts pipeline for latent diffusion: In a first step, the base model (available here: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) is used to generate (noisy) latents, which are then further processed with a refinement model specialized for the final denoising steps."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0
+    properties:
+      commands:
+        - bash
+        - run_repl_sdxlrefiner.sh
+        - stabilityai/stable-diffusion-xl-base-1.0
+        - --refinerModel
+        - stabilityai/stable-diffusion-xl-refiner-1.0
+      requiredGpuCount: 1
+
+  - serviceId: SDXLBaseWithLora_Ikea_DS_0_23_1|R
+    description: "Ikea Instructions - LoRA - SDXL"
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/ostris/ikea-instructions-lora-sdxl
+    properties:
+      commands:
+        - bash
+        - run_repl_sdxllora.sh
+        - stabilityai/stable-diffusion-xl-base-1.0
+        - --loraModel
+        - ostris/ikea-instructions-lora-sdxl
+      requiredGpuCount: 1
+
+  - serviceId: Wuerstchen_DS_0_23_1|R
+    description: "Würstchen is a diffusion model, whose text-conditional model works in a highly compressed latent space of images."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    license: mit
+    url: https://huggingface.co/warp-ai/wuerstchen
+    properties:
+      commands:
+        - bash
+        - run_repl_wuerstchen.sh
+        - warp-ai/wuerstchen
+      requiredGpuCount: 1
+
+  - serviceId: JapaneseSDXL_DS_0_23_1|R
+    description: "a Japanese-specific SDXL model that is capable of inputting prompts in Japanese and generating Japanese-style images."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    license: STABILITY AI JAPANESE STABLE DIFFUSION XL COMMUNITY LICENSE
+    url: https://huggingface.co/stabilityai/japanese-stable-diffusion-xl
+    properties:
+      commands:
+        - bash
+        - run_repl_japanese-sdxl.sh
+        - stabilityai/japanese-stable-diffusion-xl
+      requiredGpuCount: 1
+
