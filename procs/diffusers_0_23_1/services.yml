@@ -71,6 +71,6 @@ services:
     properties:
       commands:
         - bash
-        - run_repl_japanese-sdxl.sh
+        - run_repl_sdxl-turbo.sh
         - stabilityai/sdxl-turbo
       requiredGpuCount: 1
