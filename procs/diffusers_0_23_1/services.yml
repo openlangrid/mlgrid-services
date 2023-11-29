@@ -63,3 +63,14 @@ services:
         - stabilityai/japanese-stable-diffusion-xl
       requiredGpuCount: 1
 
+  - serviceId: SDXL-TURBO|R
+    description: "a fast generative text-to-image model that can synthesize photorealistic images from a text prompt in a single network evaluation."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    license: research purposes only
+    url: https://huggingface.co/stabilityai/sdxl-turbo
+    properties:
+      commands:
+        - bash
+        - run_repl_japanese-sdxl.sh
+        - stabilityai/sdxl-turbo
+      requiredGpuCount: 1
