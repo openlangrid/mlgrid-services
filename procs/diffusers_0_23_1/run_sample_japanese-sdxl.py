@@ -12,4 +12,4 @@ pipeline.to("cuda")
 prompt = "柴犬、カラフルアート"
 
 image = pipeline(prompt=prompt).images[0]
-image.save("sample/sample.jpg")
+image.save("sample/japanese-sdxl_output.jpg")

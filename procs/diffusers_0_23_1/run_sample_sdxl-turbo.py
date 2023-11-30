@@ -18,5 +18,5 @@ image = pipe(
     guidance_scale=0.0
 ).images[0]
 
-image.save("sample/sdxl-turbo.png")
+image.save("sample/sdxl-turbo_output.png")
 
