@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  service:
+    build: ./StreamDiffusion
+    volumes:
+      - ../cache/huggingface:/root/.cache/huggingface
+      - .:/home/ubuntu/streamdiffusion

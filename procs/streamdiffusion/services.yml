@@ -1,0 +1,14 @@
+common:
+  license: Apache License 2.0
+
+services:
+  - serviceId: StreamDiffusion|kohaku-v2.1|R
+    description: "A Pipeline-Level Solution for Real-Time Interactive Generation with kohaku-v2.1."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://github.com/cumulo-autumn/StreamDiffusion
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - KBlueLeaf/kohaku-v2.1
+      requiredGpuCount: 1
