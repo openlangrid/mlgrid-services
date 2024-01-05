@@ -1,0 +1,1 @@
+{"promptPath": "./sample/input_text.txt","promptLanguage": "en","numberOfTimes":1,"outputPathPrefix": "./sample/output"}

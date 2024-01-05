@@ -3,7 +3,7 @@ common:
 
 services:
   - serviceId: StreamDiffusion|kohaku-v2.1|R
-    description: "A Pipeline-Level Solution for Real-Time Interactive Generation with kohaku-v2.1."
+    description: "An innovative diffusion pipeline designed for real-time interactive generation."
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
     url: https://github.com/cumulo-autumn/StreamDiffusion
     properties:
@@ -11,4 +11,15 @@ services:
         - bash
         - run_repl.sh
         - KBlueLeaf/kohaku-v2.1
+      requiredGpuCount: 1
+
+  - serviceId: StreamDiffusion|stable-diffusion-v1-5|R
+    description: "An innovative diffusion pipeline designed for real-time interactive generation."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://github.com/cumulo-autumn/StreamDiffusion
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - runwayml/stable-diffusion-v1-5
       requiredGpuCount: 1

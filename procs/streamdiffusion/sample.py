@@ -9,7 +9,7 @@ pipe = StableDiffusionPipeline.from_pretrained(
     #"stabilityai/japanese-stable-diffusion-xl",  # doesn't work
     #trust_remote_code=True,
     #"runwayml/stable-diffusion-v1-5", # works
-    #"stabilityai/stable-diffusion-2-1", # doesn't work
+    "stabilityai/stable-diffusion-2-1", # doesn't work
     #torch_dtype=torch.float16, use_safetensors=True, variant="fp16",
     "KBlueLeaf/kohaku-v2.1",
     ).to(
