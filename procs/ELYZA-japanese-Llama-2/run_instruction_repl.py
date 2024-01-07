@@ -2,10 +2,14 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    torch.set_default_device("cuda")
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto")
-    if torch.cuda.is_available():
-        model = model.to("cuda")
+    model = AutoModelForCausalLM.from_pretrained(model_name,
+        torch_dtype=torch.bfloat16,
+        use_cache=True,
+        device_map="auto",
+        low_cpu_mem_usage=True,
+        )
     print("ready", flush=True)
 
     import json, sys
@@ -29,7 +33,7 @@ def run(tokenizer_model_name: str, model_name: str):
         with torch.no_grad():
             token_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
             output_ids = model.generate(
-                token_ids.to(model.device),
+                token_ids,
                 max_new_tokens=512,
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
@@ -38,7 +42,9 @@ def run(tokenizer_model_name: str, model_name: str):
 #        ret = ret.rstrip("<|endoftext|>")
         with open(outputPath, mode="w") as f:
             f.write(output)
-        print("ok", flush=True)
+        from gpuinfo import get_gpu_properties
+        props = get_gpu_properties()
+        print(f"ok {json.dumps(props)}", flush=True)
 
 
 def main(tokenizerModel: str, model: str):
