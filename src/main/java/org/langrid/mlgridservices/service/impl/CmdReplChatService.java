@@ -11,7 +11,6 @@ import org.langrid.mlgridservices.service.Instance;
 import org.langrid.mlgridservices.service.ProcessInstance;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.interim.ChatMessage;
 import org.langrid.service.ml.interim.ChatService;
 

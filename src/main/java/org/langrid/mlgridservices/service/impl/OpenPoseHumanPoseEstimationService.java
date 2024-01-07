@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.service.ml.HumanPoseEstimation3dResult;
 import org.langrid.service.ml.HumanPoseEstimation3dService;
 import org.langrid.service.ml.Point3d;

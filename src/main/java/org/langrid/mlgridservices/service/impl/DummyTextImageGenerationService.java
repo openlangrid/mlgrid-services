@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.service.ml.TextToImageGenerationResult;
 import org.langrid.service.ml.TextToImageGenerationService;
 

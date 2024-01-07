@@ -7,9 +7,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
-import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.Image;
 import org.langrid.service.ml.TextGuidedImageGenerationService;
 

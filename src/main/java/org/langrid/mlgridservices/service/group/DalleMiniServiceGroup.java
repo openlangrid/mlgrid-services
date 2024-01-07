@@ -3,7 +3,6 @@ package org.langrid.mlgridservices.service.group;
 import java.util.Arrays;
 import java.util.List;
 
-import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.service.impl.DalleMiniTextImageGenerationService;
 import org.langrid.service.ml.Image;
 import org.langrid.service.ml.TextGuidedImageGenerationService;

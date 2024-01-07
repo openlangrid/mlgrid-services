@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.SpeechRecognitionResult;
 import org.langrid.service.ml.SpeechRecognitionService;

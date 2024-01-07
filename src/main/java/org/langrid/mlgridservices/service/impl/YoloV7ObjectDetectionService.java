@@ -7,7 +7,6 @@ import java.nio.file.Files;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
-import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.service.ml.ObjectDetectionResult;
 import org.langrid.service.ml.ObjectDetectionService;
 

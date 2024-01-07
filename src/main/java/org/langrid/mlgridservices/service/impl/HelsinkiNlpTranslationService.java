@@ -8,9 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.mlgridservices.util.GPULock;
 import org.langrid.mlgridservices.util.LanguageUtil;
-import org.langrid.mlgridservices.util.ProcessUtil;
 import org.langrid.service.ml.TranslationService;
 
 import jp.go.nict.langrid.commons.io.FileUtil;

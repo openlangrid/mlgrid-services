@@ -3,8 +3,6 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.langrid.mlgridservices.service.Instance;
@@ -15,12 +13,6 @@ import org.langrid.mlgridservices.util.FileUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.nict.langrid.commons.lang.StringUtil;
-import jp.go.nict.langrid.service_1_2.InvalidParameterException;
-import jp.go.nict.langrid.service_1_2.ProcessFailedException;
-import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 public abstract class AbstractCmdRepl {
 	public AbstractCmdRepl(String basePath) {
