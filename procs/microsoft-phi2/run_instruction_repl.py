@@ -2,6 +2,7 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    torch.set_default_device("cuda")
     tokenizer = AutoTokenizer.from_pretrained(
         tokenizer_model_name, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
@@ -25,6 +26,7 @@ def run(tokenizer_model_name: str, model_name: str):
             userPrompt = f.read()
         promptLanguage = input["promptLanguage"]
         outputPath = input["outputPath"]
+        #systemPromptには対応していないので無視
         prompt = f"Instruct: {userPrompt}\nOutput: "
         inputs = tokenizer(prompt, return_tensors="pt", return_attention_mask=False)
         outputs = model.generate(**inputs, max_length=200)

@@ -2,6 +2,7 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    torch.set_default_device("cuda")
     tokenizer = AutoTokenizer.from_pretrained(
         tokenizer_model_name, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
@@ -18,8 +19,7 @@ def run(tokenizer_model_name: str, model_name: str):
             text = f.read()
         language = input["textLanguage"]
         outputPath = input["outputPath"]
-        # 指示無しだとコード生成結果が返るので指示テンプレートを使う。
-        prompt = f"Instruct: {text}\nOutput: "
+        prompt = text
         inputs = tokenizer(prompt, return_tensors="pt", return_attention_mask=False)
         outputs = model.generate(**inputs, max_length=200)
         inputTokenLen = len(inputs["input_ids"][0])

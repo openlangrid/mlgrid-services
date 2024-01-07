@@ -8,9 +8,10 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto", trust_remote_code=True)
 tokenizer = AutoTokenizer.from_pretrained("microsoft/phi-2", trust_remote_code=True)
 
-#text = "Write a detailed analogy between mathematics and a lighthouse."
-text = "数学と灯台の共通点を日本語で詳細に記述してください."
-prompt = f"Instruct: {text}\nOutput: "
+text = "Write a detailed analogy between mathematics and a lighthouse."
+#text = "数学と灯台の共通点を日本語で詳細に記述してください."
+text = "アルパカについて教えてください."
+prompt = text
 
 inputs = tokenizer(prompt, return_tensors="pt", return_attention_mask=False)
 
