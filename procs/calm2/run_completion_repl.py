@@ -19,7 +19,7 @@ def run(tokenizer_model_name: str, model_name: str):
             text = f.read()
         language = input["textLanguage"]
         outputPath = input["outputPath"]
-        inputs = tokenizer("自然言語処理とは", return_tensors="pt").to(model.device)
+        inputs = tokenizer(text, return_tensors="pt").to(model.device)
         with torch.no_grad():
             tokens = model.generate(
                 **inputs,
