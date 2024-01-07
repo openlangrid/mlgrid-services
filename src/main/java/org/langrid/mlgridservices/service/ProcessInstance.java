@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,18 +18,18 @@ implements Instance {
 	@Data
 	static class GpuInfo{
 		private String timestamp;
-		@JsonProperty("gpu_name")
+		@JsonAlias("gpu_name")
 		private String gpuName;
 		private int index;
-		@JsonProperty("memory.total")
+		@JsonAlias("memory.total")
 		private int totalMemoryMegas;
-		@JsonProperty("memory.used")
+		@JsonAlias("memory.used")
 		private int usedMemoryMegas;
-		@JsonProperty("memory.free")
+		@JsonAlias("memory.free")
 		private int freeMemoryMegas;
-		@JsonProperty("utilization.gpu")
+		@JsonAlias("utilization.gpu")
 		private int gpuUtilizationPercentage;
-		@JsonProperty("utilization.memory")
+		@JsonAlias("utilization.memory")
 		private int memoryUtilizationPercentage;
 	}
 	public ProcessInstance(Process process)
