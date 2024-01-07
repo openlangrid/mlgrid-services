@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessInstance
 implements Instance {
@@ -30,7 +31,7 @@ implements Instance {
 		return false;
 	}
 
-	public synchronized boolean exec(String input)
+	public synchronized Response exec(String input)
 	throws IOException, JsonMappingException {
 		writer.println(input);
 		writer.flush();
@@ -50,7 +51,18 @@ implements Instance {
 				break;
 			}
 		}
-		return response != null && response.equals("ok");
+		do{
+			if(response == null) break;
+			var values = response.split(" +", 2);
+			if(!values[0].equals("ok")) break;
+			if(values.length == 1) return new Response(true);
+			try{
+				return mapper.readValue(values[1], Response.class);
+			} catch(JsonMappingException e){
+				return Response.fail("invalid response: " + response);
+			}
+		} while(false);
+		return new Response(false);
 	}
 
 	public synchronized void terminateAndWait() throws InterruptedException{
@@ -65,4 +77,5 @@ implements Instance {
 	private Process process;
 	private PrintWriter writer;
 	private BufferedReader reader;
+	private ObjectMapper mapper = new ObjectMapper();
 }

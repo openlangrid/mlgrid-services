@@ -15,6 +15,9 @@ public interface Instance {
 		public Response(boolean succeeded){
 			this.succeeded = succeeded;
 		}
+		public static Response success(){
+			return new Response(true);
+		}
 		public static Response fail(String errorMessage){
 			return new Response(false, errorMessage, null);
 		}
