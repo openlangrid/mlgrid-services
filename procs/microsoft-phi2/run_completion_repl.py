@@ -26,7 +26,9 @@ def run(tokenizer_model_name: str, model_name: str):
         generated_text = tokenizer.decode(outputs[0][inputTokenLen:]).split("<|endoftext|>")[0]
         with open(outputPath, mode="w") as f:
             f.write(str(generated_text))
-        print("ok", flush=True)
+        from gpuinfo import get_gpu_properties
+        props = get_gpu_properties()
+        print(f"ok {json.dumps(props)}", flush=True)
 
 
 def main(tokenizerModel: str, model: str):
