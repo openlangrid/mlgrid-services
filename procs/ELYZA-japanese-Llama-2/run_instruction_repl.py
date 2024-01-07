@@ -10,6 +10,7 @@ def run(tokenizer_model_name: str, model_name: str):
         device_map="auto",
         low_cpu_mem_usage=True,
         )
+    model.eval()
     print("ready", flush=True)
 
     import json, sys

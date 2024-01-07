@@ -41,6 +41,42 @@ services:
         - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
       requiredGpuCount: 1
 
+  - serviceId: ELYZAJapaneseLlama2-13B|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b
+      requiredGpuCount: 1
+
+  - serviceId: ELYZAJapaneseLlama2-13BFast|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast
+      requiredGpuCount: 1
+
+  - serviceId: ELYZAJapaneseLlama2-13BInstruct|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-instruct
+      requiredGpuCount: 1
+
+  - serviceId: ELYZAJapaneseLlama2-13BFastInstruct|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+      requiredGpuCount: 1
+
   # instruction services
   - serviceId: ELYZAJapaneseLlama2-7BInstruct|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
@@ -58,4 +94,22 @@ services:
         - bash
         - run_instruction_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpuCount: 1
+
+  - serviceId: ELYZAJapaneseLlama2-13BInstruct|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-instruct
+      requiredGpuCount: 1
+
+  - serviceId: ELYZAJapaneseLlama2-13BFastInstruct|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
       requiredGpuCount: 1

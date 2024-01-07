@@ -11,6 +11,7 @@ def run(tokenizer_model_name: str, model_name: str):
         use_cache=True,
         low_cpu_mem_usage=True,
         )
+    model.eval()
     print("ready", flush=True)
 
     import json, sys
@@ -20,7 +21,6 @@ def run(tokenizer_model_name: str, model_name: str):
             text = f.read()
         language = input["textLanguage"]
         outputPath = input["outputPath"]
-
         print(f"bos_token: {tokenizer.bos_token}", file=sys.stderr)
         token_ids = tokenizer.encode(
             text,
