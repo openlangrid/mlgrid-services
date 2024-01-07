@@ -1,0 +1,27 @@
+common:
+  license: mit
+
+services:
+  # completion
+  - serviceId: Phi2|TG|R
+    description: a Transformer with 2.7 billion parameters.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/microsoft/phi-2
+    properties:
+      commands:
+        - bash
+        - run_completion_repl.sh
+        - microsoft/phi-2
+      requiredGpuCount: 1
+
+  # instruction
+  - serviceId: Phi2|TI|R
+    description: a Transformer with 2.7 billion parameters.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/microsoft/phi-2
+    properties:
+      commands:
+        - bash
+        - run_instruction_repl.sh
+        - microsoft/phi-2
+      requiredGpuCount: 1
