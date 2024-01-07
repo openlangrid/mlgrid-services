@@ -596,8 +596,10 @@ public class ServiceInvoker {
 			}
 		} finally{
 			if(result != null){
+				var headers = ServiceInvokerContext.current().getResponseHeaders();
 				var span = ServiceInvokerContext.finalizeWithResult(result);
 				r = new Response(result);
+				r.putAllHeaders(headers);
 				r.putHeader("trace", span);
 			} else {
 				if(exception == null){

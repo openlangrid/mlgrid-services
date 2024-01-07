@@ -5,13 +5,34 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.Data;
+
 public class ProcessInstance
 implements Instance {
+	@Data
+	static class GpuInfo{
+		private String timestamp;
+		@JsonProperty("gpu_name")
+		private String gpuName;
+		private int index;
+		@JsonProperty("memory.total")
+		private int totalMemoryMegas;
+		@JsonProperty("memory.used")
+		private int usedMemoryMegas;
+		@JsonProperty("memory.free")
+		private int freeMemoryMegas;
+		@JsonProperty("utilization.gpu")
+		private int gpuUtilizationPercentage;
+		@JsonProperty("utilization.memory")
+		private int memoryUtilizationPercentage;
+	}
 	public ProcessInstance(Process process)
 	throws IOException{
 		this.process = process;
@@ -53,12 +74,15 @@ implements Instance {
 		}
 		do{
 			if(response == null) break;
-			var values = response.split(" +", 2);
-			if(!values[0].equals("ok")) break;
-			if(values.length == 1) return new Response(true);
+			var vals = response.split(" +", 2);
+			if(!vals[0].equals("ok")) break;
+			if(vals.length == 1) return new Response(true);
 			try{
-				return mapper.readValue(values[1], Response.class);
+				var gpuInfos = mapper.readValue(vals[1], GpuInfo[].class);
+				ServiceInvokerContext.current().getResponseHeaders().put("gpuInfos", gpuInfos);
+				return new Response(true, null, gpuInfos[0].getUsedMemoryMegas());
 			} catch(JsonMappingException e){
+				e.printStackTrace();
 				return Response.fail("invalid response: " + response);
 			}
 		} while(false);

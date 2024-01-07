@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -75,12 +76,18 @@ public class ServiceInvokerContext {
 		var current = current();
 		current.getSpan().finishWithResult(result);
 		ctxList.get().removeLast();
+		var newCurrent = current();
+		if(newCurrent != null)
+			newCurrent.getResponseHeaders().putAll(current.getResponseHeaders());
 	}
 
 	public static void finishWithException(Throwable exception){
 		var current = current();
 		current.getSpan().finishWithException(exception);
 		ctxList.get().removeLast();
+		var newCurrent = current();
+		if(newCurrent != null)
+			newCurrent.getResponseHeaders().putAll(current.getResponseHeaders());
 	}
 
 	public static <E extends Exception> void exec(
@@ -113,6 +120,7 @@ public class ServiceInvokerContext {
 	}
 
 	public static ServiceInvokerContext current(){
+		if(ctxList.get().size() == 0) return null;
 		return ctxList.get().getLast();
 	}
 
@@ -173,10 +181,6 @@ public class ServiceInvokerContext {
 
 		return instance;
 	}
-	private static Map<String, GpuPool.Gpu> keyToGpu = new HashMap<>();
-	private static Map<String, Instance> keyToInstance = new LinkedHashMap<>();
-	private static Map<String, Long> keyToInstanceStartedAt = new HashMap<>();
-
 
 	public GpuPool.Gpu acquireGpu() throws InterruptedException{
 		return gpuPool.acquire();
@@ -249,6 +253,10 @@ public class ServiceInvokerContext {
 		return factory;
 	}
 
+	public Map<String, Object> getResponseHeaders() {
+		return responseHeaders;
+	}
+
 	public Span getSpan() {
 		return span;
 	}
@@ -300,10 +308,16 @@ public class ServiceInvokerContext {
 	public static void setGpuPool(GpuPool pool){
 		gpuPool = pool;
 	}
+
 	private static GpuPool gpuPool = new GpuPool(0);
 	private ServiceFactory factory;
 	private Span span;
 	private Timer timer;
 	private Map<String, Object> requestHeaders;
 	private Map<String, Object> bindings;
+	private Map<String, Object> responseHeaders = new TreeMap<>();
+
+	private static Map<String, GpuPool.Gpu> keyToGpu = new HashMap<>();
+	private static Map<String, Instance> keyToInstance = new LinkedHashMap<>();
+	private static Map<String, Long> keyToInstanceStartedAt = new HashMap<>();
 }

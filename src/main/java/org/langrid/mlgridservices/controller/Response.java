@@ -22,9 +22,17 @@ public class Response {
 		this.error = error;
 	}
 	public void putHeader(String name, Object value){
-		if(headers.size() == 0){
+		headers().put(name, value);
+	}
+
+	public void putAllHeaders(Map<String, Object> headers){
+		headers().putAll(headers);
+	}
+
+	private Map<String, Object> headers(){
+		if(headers == null || headers.size() == 0){
 			headers = new TreeMap<>();
 		}
-		headers.put(name, value);
+		return headers;
 	}
 }
