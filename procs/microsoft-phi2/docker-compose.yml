@@ -7,3 +7,4 @@ services:
     volumes:
       - ../cache/huggingface:/root/.cache/huggingface
       - .:/work
+      - ../_common/gpuinfo.py:/work/gpuinfo.py
