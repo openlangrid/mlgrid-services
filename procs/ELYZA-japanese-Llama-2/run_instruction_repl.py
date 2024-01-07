@@ -2,12 +2,11 @@
 def run(tokenizer_model_name: str, model_name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    torch.set_default_device("cuda")
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name,
         torch_dtype=torch.bfloat16,
         use_cache=True,
-        device_map="auto",
+        device_map="cuda",
         low_cpu_mem_usage=True,
         )
     model.eval()
