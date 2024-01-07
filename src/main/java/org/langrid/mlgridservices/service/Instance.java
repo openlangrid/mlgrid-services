@@ -11,7 +11,7 @@ public interface Instance {
 	public class Response{
 		private boolean succeeded;
 		private String errorMessage;
-		private Integer usedGpuMemory;
+		private Integer usedGpuMemoryMB;
 		public Response(boolean succeeded){
 			this.succeeded = succeeded;
 		}

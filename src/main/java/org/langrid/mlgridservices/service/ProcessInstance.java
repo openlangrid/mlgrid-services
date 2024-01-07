@@ -22,11 +22,11 @@ implements Instance {
 		private String gpuName;
 		private int index;
 		@JsonAlias("memory.total")
-		private int totalMemoryMegas;
+		private int totalMemoryMB;
 		@JsonAlias("memory.used")
-		private int usedMemoryMegas;
+		private int usedMemoryMB;
 		@JsonAlias("memory.free")
-		private int freeMemoryMegas;
+		private int freeMemoryMB;
 		@JsonAlias("utilization.gpu")
 		private int gpuUtilizationPercentage;
 		@JsonAlias("utilization.memory")
@@ -79,7 +79,7 @@ implements Instance {
 			try{
 				var gpuInfos = mapper.readValue(vals[1], GpuInfo[].class);
 				ServiceInvokerContext.current().getResponseHeaders().put("gpuInfos", gpuInfos);
-				return new Response(true, null, gpuInfos[0].getUsedMemoryMegas());
+				return new Response(true, null, gpuInfos[0].getUsedMemoryMB());
 			} catch(JsonMappingException e){
 				e.printStackTrace();
 				return Response.fail("invalid response: " + response);
