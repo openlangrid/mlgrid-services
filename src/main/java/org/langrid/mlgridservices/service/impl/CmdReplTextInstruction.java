@@ -44,7 +44,7 @@ implements TextInstructionService {
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 			var i = getInstance();
-			var success = i.exec(input);
+			var success = i.exec(input).isSucceeded();
 			if(success && outputFile.exists())
 				return Files.readString(outputFile.toPath());
 			return null;

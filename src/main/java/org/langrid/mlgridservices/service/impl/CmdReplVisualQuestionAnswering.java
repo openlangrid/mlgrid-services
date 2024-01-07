@@ -64,7 +64,7 @@ implements VisualQuestionAnsweringService {
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 
-			var success = getInstance().exec(input);
+			var success = getInstance().exec(input).isSucceeded();
 			if(success && outputFile.exists()){
 				return Files.readString(outputFile.toPath());
 			}

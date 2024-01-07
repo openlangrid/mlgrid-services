@@ -16,9 +16,9 @@ public class GpuPoolTest {
 				"instance" + i, 0, id->{
 					System.out.println("instance" + instanceId + " with GPU " + id + " is created.");
 					return new Instance() {
-						public boolean exec(String line)
+						public Response exec(String line)
 						throws IOException{
-							return true;
+							return new Response(true);
 						}
 						public void terminateAndWait()
 						throws InterruptedException{

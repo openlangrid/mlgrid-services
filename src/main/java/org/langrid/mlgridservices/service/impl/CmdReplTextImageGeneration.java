@@ -73,7 +73,7 @@ implements TextGuidedImageGenerationService{
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 
 			var ins = getInstance();
-			var success = ins.exec(input);
+			var success = ins.exec(input).isSucceeded();
 			if(success){
 				var ret = new ArrayList<Image>();
 				for(var i = 0; i < numberOfTimes; i++){
