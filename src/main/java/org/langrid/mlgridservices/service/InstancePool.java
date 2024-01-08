@@ -119,6 +119,10 @@ public class InstancePool {
 		return gpus;
 	}
 
+	public Map<String, InstanceEntry> getInstances(){
+		return instances;
+	}
+
 	public synchronized Gpu.GpuLock acquireAnyGpu() throws InterruptedException{
 		var gpu = reserveAnyGpu();
 		return gpu.lock();
@@ -145,34 +149,22 @@ public class InstancePool {
 	public synchronized Instance getInstanceWithGpus(
 		String id, int[] requiredGpuMemoryMBs, Function<GpuSpec[], Instance> supplier)
 	throws InterruptedException {
-		return unsoft(()->instances.computeIfAbsent(id, Functions.soften(k->{
-				var gpus = reserveGpus(requiredGpuMemoryMBs);
-				var specs = new GpuSpec[gpus.length];
-				for(int i = 0; i < specs.length; i++){
-					specs[i] = new GpuSpec(gpus[i].getSpec().getId(), requiredGpuMemoryMBs[i]);
-				}
-				var ie = new InstanceEntry(id, supplier.apply(specs), specs);
-				for(int i = 0; i < specs.length; i++){
-					var gpu = gpus[i];
-					var spec = specs[i];
-					gpu.getAllocations().add(new GpuAllocation(ie, spec.getMemoryMB()));
-					gpu.setAvailableMemoryMB(gpu.getAvailableMemoryMB() - spec.getMemoryMB());
-				}
-				return ie;
-			})), InterruptedException.class).instance();
-	}
-
-	@SuppressWarnings("unchecked")
-	private <U, E extends Throwable> U unsoft(Supplier<U> softenedFunc, Class<E> exceptionClass)
-	throws E{
-		try{
-			return softenedFunc.get();
-		} catch(SoftenedException e){
-			if(exceptionClass.isAssignableFrom(e.getCause().getClass())){
-				throw (E)e.getCause();
-			}
-			throw e;
+		var ie = instances.get(id);
+		if(ie != null) return ie.instance();
+		var gpus = reserveGpus(requiredGpuMemoryMBs);
+		var specs = new GpuSpec[gpus.length];
+		for(int i = 0; i < specs.length; i++){
+			specs[i] = new GpuSpec(gpus[i].getSpec().getId(), requiredGpuMemoryMBs[i]);
 		}
+		ie = new InstanceEntry(id, supplier.apply(specs), specs);
+		for(int i = 0; i < specs.length; i++){
+			var gpu = gpus[i];
+			var spec = specs[i];
+			gpu.getAllocations().add(new GpuAllocation(ie, spec.getMemoryMB()));
+			gpu.setAvailableMemoryMB(gpu.getAvailableMemoryMB() - spec.getMemoryMB());
+		}
+		instances.put(id, ie);
+		return ie.instance();
 	}
 
 	private Gpu reserveAnyGpu() throws InterruptedException{
@@ -234,6 +226,7 @@ public class InstancePool {
 				for(var g : gpus){
 					g.releaseInstance(oldestInstance.instanceId());
 				}
+				instances.remove(oldestInstance.instanceId());
 				i++;
 			}
 		}

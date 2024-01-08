@@ -56,10 +56,13 @@ public class InstancePoolTest {
 			};
 		};
 		ip.getInstanceWithGpus("proc1", new int[]{20}, f);
+		assertEquals(1, ip.getInstances().size());
 		ip.getInstanceWithGpus("proc2", new int[]{20}, f);
+		assertEquals(1, ip.getInstances().size());
 		ip.terminateInstancesOlderMsThan(0);
 		assertEquals(2, createCount.get());
 		assertEquals(2, releaseCount.get());
+		assertEquals(0, ip.getInstances().size());
 	}
 
 	@Test
@@ -86,9 +89,14 @@ public class InstancePoolTest {
 			return instance;
 		};
 		ip.getInstanceWithGpus("proc1", new int[]{20}, f1);
+		assertEquals(1, ip.getInstances().size());
 		ip.getInstanceWithAnyGpu("proc2", f2);
+		assertEquals(1, ip.getInstances().size());
 		ip.getInstanceWithGpus("proc1", new int[]{20}, f1);
+		assertEquals(1, ip.getInstances().size());
+		ip.terminateInstancesOlderMsThan(0);
+		assertEquals(0, ip.getInstances().size());
 		assertEquals(3, createCount.get());
-		assertEquals(2, releaseCount.get());
+		assertEquals(3, releaseCount.get());
 	}
 }
