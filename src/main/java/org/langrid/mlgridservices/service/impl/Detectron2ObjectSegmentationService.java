@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,11 +57,12 @@ public class Detectron2ObjectSegmentationService implements ObjectSegmentationSe
 	}
 
 	private void run(String config, String dir, String file){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var cmd = String.format("PATH=$PATH:/usr/local/bin /usr/local/bin/"
 					+ "docker-compose run --rm service python run.py "
 					+ "--config %s --infile %s/%s", config, dir, file);
 			var pb = new ProcessBuilder("bash", "-c", cmd);
+			pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
 			pb.directory(baseDir);
 			ServiceInvokerContext.exec(()->{
 				var proc = pb.start();

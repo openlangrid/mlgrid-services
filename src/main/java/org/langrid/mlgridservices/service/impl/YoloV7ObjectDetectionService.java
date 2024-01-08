@@ -37,7 +37,7 @@ implements ObjectDetectionService{
 	}
 
 	public String run(String modelName, String imgFile){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/"
 					+ "docker-compose run --rm "
 					+ "-v $(pwd)/detect.py:/workspace/yolov7/detect.py "
@@ -51,6 +51,7 @@ implements ObjectDetectionService{
 				  ;
 			var pb = new ProcessBuilder("bash", "-c", cmd);
 			pb.directory(baseDir);
+			pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
 			pb.redirectErrorStream(true);
 			return ServiceInvokerContext.exec(()->{
 				var proc = pb.start();

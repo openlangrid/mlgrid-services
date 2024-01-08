@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -52,7 +53,7 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches(supportedLang, textLanguage))
 			throw new UnsupportedLanguageException("textLanguage", textLanguage);
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			if(additionalPrompt != null){
 				text = additionalPrompt + ", " + text;
 			}
@@ -67,9 +68,12 @@ public class AbstractTextGuidedImageGenerationService implements TextGuidedImage
 					scriptFile,
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(),
 					modelPath);
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWait(cmd, baseDir);
+				ProcessUtil.runAndWait(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			var ret = new ArrayList<Image>();
 			for(var i = 0; i < numberOfTimes; i++){

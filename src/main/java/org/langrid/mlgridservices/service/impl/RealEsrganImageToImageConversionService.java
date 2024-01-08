@@ -2,6 +2,7 @@ package org.langrid.mlgridservices.service.impl;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -19,7 +20,7 @@ implements ImageConversionService{
 	@Override
 	public Image convert(byte[] image, String imageFormat)
 			throws InvalidParameterException, ProcessFailedException {
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var inputFile = FileUtil.writeTempFile(tempDir, image, imageFormat);
@@ -31,10 +32,13 @@ implements ImageConversionService{
 						"-o \"/work/temp\" --suffix out " +
 						"-n RealESRGAN_x4plus -s 4 --face_enhance",
 					inputFile.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			var outputFile = new File(tempDir, FileUtil.addFileNameSuffix(inputFile.getName(), "_out"));
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			do{
 				if(outputFile.exists()) break;

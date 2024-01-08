@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -62,7 +63,7 @@ implements TextGenerationService{
 	}
 
 	public void run(String modelName, String dirName, String inputFileName, String inputLanguage, String outputFileName){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var cmd = String.format(
 				"PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm " +
 				"service python %3$s --model %1$s " +
@@ -72,8 +73,11 @@ implements TextGenerationService{
 				modelName, dirName, scriptName,
 				inputFileName, inputLanguage,
 				outputFileName);
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 		} catch(Exception e){
 			throw new RuntimeException(e);

@@ -25,17 +25,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class PipelineExternalCommandTextToSpeech 
-extends AbstractPipelineService
+extends AbstractCmdRepl
 implements TextToSpeechService{
+	public PipelineExternalCommandTextToSpeech(String baseDir){
+		super(baseDir);
+	}
+
 	public PipelineExternalCommandTextToSpeech(
 		String baseDir, String... commands) {
-		this.baseDir = new File(baseDir);
-		this.commands = commands;
-
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
-		this.tempDir = new File(baseDir, "temp");
-		tempDir.mkdirs();
-		System.out.println("[PipelineExternalCommandTextToSpeech.speak] created");
+		super(baseDir, commands);
 	}
 
 	@Override
@@ -72,22 +70,6 @@ implements TextToSpeechService{
 	protected ProcessInstance newProcessInstance(Process process)
 	throws IOException{
 		return new ProcessInstance(process);
-	}
-
-	private Instance getInstance()
-	throws InterruptedException{
-		var instance = ServiceInvokerContext.getInstanceWithGpuLock(
-			instanceKey, ()->{
-				var pb = new ProcessBuilder(commands);
-				try{
-					pb.directory(baseDir);
-					pb.redirectError(Redirect.INHERIT);
-					return newProcessInstance(pb.start());
-				} catch(IOException e){
-					throw new RuntimeException(e);
-				}
-		});
-		return instance;
 	}
 
 	@NoArgsConstructor

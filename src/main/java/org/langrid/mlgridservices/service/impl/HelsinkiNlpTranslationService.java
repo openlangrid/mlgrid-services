@@ -43,7 +43,7 @@ public class HelsinkiNlpTranslationService implements TranslationService{
 	}
 
 	public String run(String modelName, File file){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose run --rm "
 					+ "helsinki-nlp python run.py " + modelName + " temp/" + file.getName();
 			var pb = new ProcessBuilder("bash", "-c", cmd);

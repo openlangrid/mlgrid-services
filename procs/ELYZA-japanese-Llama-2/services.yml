@@ -66,7 +66,7 @@ services:
         - bash
         - run_completion_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-instruct
-      requiredGpuMemoryMB: 26757
+      requiredGpuMemoryMBs: [26757]
 
   - serviceId: ELYZAJapaneseLlama2-13BFastInstruct|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
@@ -75,7 +75,7 @@ services:
         - bash
         - run_completion_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
-      requiredGpuMemoryMB: 27001
+      requiredGpuMemoryMBs: [27001]
 
   # instruction services
   - serviceId: ELYZAJapaneseLlama2-7BInstruct|TI|R
@@ -103,7 +103,7 @@ services:
         - bash
         - run_instruction_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-instruct
-      requiredGpuMemoryMB: 26757
+      requiredGpuMemoryMBs: [26757]
 
   - serviceId: ELYZAJapaneseLlama2-13BFastInstruct|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
@@ -112,4 +112,4 @@ services:
         - bash
         - run_instruction_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
-      requiredGpuMemoryMB: 27001
+      requiredGpuMemoryMBs: [27001]

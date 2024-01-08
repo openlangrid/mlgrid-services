@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -46,7 +47,7 @@ implements TextGuidedImageManipulationService{
 			throws UnsupportedLanguageException, InvalidParameterException, ProcessFailedException {
 		if(!LanguageUtil.matches(supportedLang, textLanguage))
 			throw new UnsupportedLanguageException("textLanguage", textLanguage);
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "out-", "");
@@ -58,9 +59,12 @@ implements TextGuidedImageManipulationService{
 					"python3 run.py \"%s\" %d temp/%s --modelPath \"%s\" --initImage \"temp/%s\"",
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName(), 
 					modelPath, infile.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWait(cmd, baseDir);
+				ProcessUtil.runAndWait(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			var ret = new ArrayList<Image>();
 			for(var i = 0; i < numberOfTimes; i++){

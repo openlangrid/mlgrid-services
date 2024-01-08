@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -56,7 +57,7 @@ implements TextGenerationService{
 	}
 
 	public void run(String dirName, String inputFileName, String inputLanguage, String outputFileName){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var cmd = String.format(
 				"%s " +
 				"--model %s " +
@@ -67,8 +68,11 @@ implements TextGenerationService{
 				inputFileName, inputLanguage, outputFileName);
 			cmd += StringUtil.join(params, " ");
 			var c = cmd;
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(c, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(c, env, baseDir);
 			}, "execution", command);
 		} catch(Exception e){
 			throw new RuntimeException(e);

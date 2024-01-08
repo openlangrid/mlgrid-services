@@ -48,7 +48,7 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 			throw new UnsupportedLanguageException("audioLanguage", audioLanguage);
 		}
 		lang = lang.substring(0, 1).toUpperCase() + lang.substring(1);
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");
@@ -59,9 +59,12 @@ public class WhisperSpeechRecognitionService implements SpeechRecognitionService
 					"/usr/local/bin/docker-compose run --rm service " +
 					"whisper temp/%s -o temp --language %s --model small",
 					temp.getName(), lang);
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			return ServiceInvokerContext.exec(()->{
-				var proc = ProcessUtil.run(cmd, baseDir);
+				var proc = ProcessUtil.run(cmd, env, baseDir);
 				try{
 					var br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
 					String line = null;

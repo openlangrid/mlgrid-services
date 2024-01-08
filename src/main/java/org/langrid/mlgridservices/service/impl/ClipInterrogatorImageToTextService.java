@@ -2,6 +2,7 @@ package org.langrid.mlgridservices.service.impl;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -21,7 +22,7 @@ implements ImageToTextConversionService{
 		if(textLang.length() == 0 || !textLang.split("-")[0].equals("en")){
 			throw new InvalidParameterException("textLang", "invalid textLang");
 		}
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var infile = FileUtil.writeTempFile(tempDir, image, imageFormat);
@@ -30,9 +31,12 @@ implements ImageToTextConversionService{
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python3 /work/run.py --infile \"/work/temp/%s\"",
 					infile.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWait(cmd, baseDir);
+				ProcessUtil.runAndWait(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			var resultFile = new File(infile.toString() + ".result.txt");
 			if(!resultFile.exists()) {

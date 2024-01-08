@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.function.Function;
 
 import org.langrid.mlgridservices.service.Instance;
 import org.langrid.mlgridservices.service.ProcessInstance;
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
+import org.langrid.mlgridservices.util.GpuSpec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,8 +34,20 @@ public abstract class AbstractCmdRepl {
 		this.instanceKey = "process:" + StringUtil.join(commands, ":");
 	}
 
+	public int getRequiredGpuCount() {
+		return requiredGpuCount;
+	}
+
 	public void setRequiredGpuCount(int requiredGpuCount){
 		this.requiredGpuCount = requiredGpuCount;
+	}
+
+	public int[] getRequiredGpuMemoryMBs() {
+		return requiredGpuMemoryMBs;
+	}
+
+	public void setRequiredGpuMemoryMBs(int[] requiredGpuMemoryMBs) {
+		this.requiredGpuMemoryMBs = requiredGpuMemoryMBs;
 	}
 
 	protected ObjectMapper mapper(){
@@ -50,12 +65,11 @@ public abstract class AbstractCmdRepl {
 
 	protected Instance getInstance()
 	throws InterruptedException{
-		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
-			instanceKey, requiredGpuCount, (gpuIds)->{
+		Function<GpuSpec[], Instance> factory = (gpus)->{
 				var pb = new ProcessBuilder(commands);
-				if(gpuIds.length > 0){
-					var ids = org.langrid.mlgridservices.util.StringUtil.join(gpuIds, v->""+v, ",");
-					System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, ids);
+				if(gpus.length > 0){
+					String ids = org.langrid.mlgridservices.util.StringUtil.join(gpus, v->""+v.getId(), ",");
+					System.out.printf("instance(\"%s\") uses devices %s%n", instanceKey, Arrays.toString(gpus));
 					pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + ids);
 				}
 				try{
@@ -65,15 +79,25 @@ public abstract class AbstractCmdRepl {
 				} catch(IOException e){
 					throw new RuntimeException(e);
 				}
-		});
-		return instance;
+		};
+		var ip = ServiceInvokerContext.getInstancePool();
+		if(requiredGpuMemoryMBs.length > 0){
+			return ip.getInstanceWithGpus(
+				instanceKey, requiredGpuMemoryMBs, factory);
+		} else if(requiredGpuCount == 1){
+			return ip.getInstanceWithAnyGpu(
+				instanceKey, spec->factory.apply(new GpuSpec[]{spec}));
+		} else{
+			return ip.getInstance(instanceKey, ()->factory.apply(new GpuSpec[]{}));
+		}
 	}
 
 	private ObjectMapper m = new ObjectMapper();;
 
 	private Path basePath;
 	private String[] commands;
-	private int requiredGpuCount = 1;
+	private int requiredGpuCount = 0;
+	private int[] requiredGpuMemoryMBs = {};
 
 	private String instanceKey;
 	private File tempDir;
