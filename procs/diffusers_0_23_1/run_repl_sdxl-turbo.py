@@ -23,7 +23,9 @@ def run(model_name: str):
                 guidance_scale=0.0
                 ).images[0]
             image.save(f"{outputPathPrefix}_{i}.png")
-        print("ok", flush=True)
+        from gpuinfo import get_gpu_properties
+        props = get_gpu_properties()
+        print(f"ok {json.dumps(props)}", flush=True)
 
 
 def main(model: str):
