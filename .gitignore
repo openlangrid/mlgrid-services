@@ -2,6 +2,6 @@
 /bin
 /build
 /temp
-application.yml
+/application.yml
 /google-*-key.json
 /mlgrid-services.log
