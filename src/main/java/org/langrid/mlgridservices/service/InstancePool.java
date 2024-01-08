@@ -110,7 +110,7 @@ public class InstancePool {
 		}
 	}
 
-	public InstancePool(GpuSpec[] availableGpus){
+	public InstancePool(GpuSpec... availableGpus){
 		this.gpus = ArrayUtil.map(availableGpus, Gpu.class,
 			s->new Gpu(s));
 	}
@@ -132,13 +132,14 @@ public class InstancePool {
 
 	public synchronized Instance getInstanceWithAnyGpu(String id, Function<GpuSpec, Instance> supplier)
 	throws InterruptedException {
-		return unsoft(()->instances.computeIfAbsent(id, Functions.soften(k->{
-				var gpu = reserveAnyGpu();
-				var ie = new InstanceEntry(id, supplier.apply(gpu.getSpec()), gpu.getSpec());
-				gpu.getAllocations().add(new GpuAllocation(ie, gpu.getSpec().getMemoryMB()));
-				gpu.setAvailableMemoryMB(0);
-				return ie;
-			})), InterruptedException.class).instance();
+		var ie = instances.get(id);
+		if(ie != null) return ie.instance();
+		var gpu = reserveAnyGpu();
+		ie = new InstanceEntry(id, supplier.apply(gpu.getSpec()), gpu.getSpec());
+		gpu.getAllocations().add(new GpuAllocation(ie, gpu.getSpec().getMemoryMB()));
+		gpu.setAvailableMemoryMB(0);
+		instances.put(id, ie);
+		return ie.instance();
 	}
 
 	public synchronized Instance getInstanceWithGpus(
@@ -191,6 +192,7 @@ public class InstancePool {
 			throw new IllegalStateException("no gpu available");
 		}
 		try(var l = ret.lock()){
+			ret.getAllocations().forEach(a->instances.remove(a.instanceEntry().instanceId()));
 			ret.releaseInstances();
 			return ret;
 		}
@@ -248,6 +250,7 @@ public class InstancePool {
 				for(var g : gpus){
 					g.releaseInstance(e.getKey());
 				}
+				it.remove();
 			}
 		}
 	}
