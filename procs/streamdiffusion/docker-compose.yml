@@ -6,3 +6,4 @@ services:
     volumes:
       - ../cache/huggingface:/root/.cache/huggingface
       - .:/home/ubuntu/streamdiffusion
+      - ../_common/gpuinfo.py:/home/ubuntu/streamdiffusion/gpuinfo.py

@@ -22,4 +22,4 @@ services:
         - bash
         - run_repl.sh
         - runwayml/stable-diffusion-v1-5
-      requiredGpuCount: 1
+      requiredGpuMemoryMBs: [5559]
