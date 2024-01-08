@@ -31,7 +31,7 @@ public abstract class AbstractCmdRepl {
 
 	public void setCommands(String[] commands) {
 		this.commands = commands;
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
+		this.instanceKey = "process:" + basePath.toString() + "/" + StringUtil.join(commands, ":");
 	}
 
 	public int getRequiredGpuCount() {
