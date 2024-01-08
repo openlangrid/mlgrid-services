@@ -12,6 +12,8 @@ import java.util.function.Supplier;
 
 import org.langrid.mlgridservices.util.GpuSpec;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jp.go.nict.langrid.commons.util.ArrayUtil;
 import jp.go.nict.langrid.commons.util.function.Functions;
 import jp.go.nict.langrid.commons.util.function.SoftenedException;
@@ -19,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class InstancePool {
-	static record InstanceEntry(String instanceId, Instance instance, long startedAt, GpuSpec[] gpus){
+	static record InstanceEntry(String instanceId, @JsonIgnore Instance instance, long startedAt, GpuSpec[] gpus){
 		private static final GpuSpec[] empty = {};
 		public InstanceEntry(String instanceId, Instance instance){
 			this(instanceId, instance, System.currentTimeMillis(), empty);
@@ -49,6 +51,7 @@ public class InstancePool {
 				return Gpu.this.getSpec().getId();
 			}
 		}
+		@JsonIgnore
 		private ReentrantLock lock = new ReentrantLock();
 		private GpuSpec spec;
 		private int availableMemoryMB;
@@ -110,6 +113,10 @@ public class InstancePool {
 	public InstancePool(GpuSpec[] availableGpus){
 		this.gpus = ArrayUtil.map(availableGpus, Gpu.class,
 			s->new Gpu(s));
+	}
+
+	public Gpu[] getGpus() {
+		return gpus;
 	}
 
 	public synchronized Gpu.GpuLock acquireAnyGpu() throws InterruptedException{
