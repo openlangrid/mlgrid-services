@@ -33,7 +33,7 @@ def run(tokenizer_model_name: str, model_name: str):
         with torch.no_grad():
             token_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
             output_ids = model.generate(
-                token_ids,
+                token_ids.to(model.device),
                 max_new_tokens=512,
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
