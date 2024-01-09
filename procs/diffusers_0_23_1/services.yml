@@ -73,4 +73,4 @@ services:
         - bash
         - run_repl_sdxl-turbo.sh
         - stabilityai/sdxl-turbo
-      requiredGpuCount: 1
+      requiredGpuMemoryMBs: [10391]

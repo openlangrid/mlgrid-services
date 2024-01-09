@@ -99,10 +99,10 @@ mlgrid-servicesに含まれている多くのサービスは、GPUを利用し�
 ```bash
 git clone https://github.com/openlangrid/mlgrid-services/
 cd ./mlgrid-services
-cp ./src/main/resources/application.yml.sample ./src/main/resources/application.yml
+cp ./src/main/resources/application.yml ./application.yml
 ```
 
-次に、コピーした設定ファイル(`application.yml`)の内容を環境に応じて編集してください。
+次に、コピーした設定ファイル(`./application.yml`)の内容を環境に応じて編集してください。
 
 ```yaml
 server:

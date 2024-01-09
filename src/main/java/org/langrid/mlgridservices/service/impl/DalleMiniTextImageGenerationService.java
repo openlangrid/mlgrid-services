@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.LanguageUtil;
@@ -57,13 +58,14 @@ public class DalleMiniTextImageGenerationService implements TextGuidedImageGener
 	}
 	
 	public void run(String model, String text, int maxResults, String outimagePrefix){
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var cmd = "PATH=$PATH:/usr/local/bin /usr/local/bin/docker-compose " +
 					"run --rm dalle-mini python3 run.py " +
 				model + " \"" + text.replaceAll("\"", "\\\"") + "\" " +
 				maxResults + " " + outimagePrefix;
 			System.out.println(cmd);
 			var pb = new ProcessBuilder("bash", "-c", cmd);
+			pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
 			pb.directory(baseDir);
 			ServiceInvokerContext.exec(()->{
 				var proc = pb.start();

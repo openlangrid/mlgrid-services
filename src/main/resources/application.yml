@@ -5,7 +5,9 @@ server:
     context-path: ${CONTEXT_PATH:/mlgrid-services}
 
 mlgrid:
-  additionalGpuCount: ${ADDITIONAL_GPU_COUNT:0}
+  availableGpus:
+    - id: 0
+      memoryMB: 8192
 
 services:
   langrid:

@@ -5,6 +5,7 @@ from gpuinfo import get_gpu_properties
 import json
 
 model_names = [
+    "elyza/ELYZA-japanese-Llama-2-7b-fast-instruct",
 #    "elyza/ELYZA-japanese-Llama-2-13b",
 #    "elyza/ELYZA-japanese-Llama-2-13b-instruct",
 #    "elyza/ELYZA-japanese-Llama-2-13b-fast",

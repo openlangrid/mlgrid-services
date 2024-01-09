@@ -3,15 +3,10 @@ package org.langrid.mlgridservices.service;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-import org.langrid.mlgridservices.util.GPULock;
-import org.langrid.mlgridservices.util.GpuPool;
 import org.langrid.mlgridservices.util.Timer;
 import org.springframework.cglib.proxy.Proxy;
 
@@ -124,119 +119,8 @@ public class ServiceInvokerContext {
 		return ctxList.get().getLast();
 	}
 
-	public static synchronized Instance getInstance(String key, Supplier<Instance> supplier)
-	throws InterruptedException {
-		return instances.computeIfAbsent(key, k->supplier.get());
-	}
-
-	public static synchronized Instance getInstanceWithGpuLock(String key, Supplier<Instance> supplier)
-	throws InterruptedException {
-		if(gpuInstanceKey != null){
-			if(!key.equals(gpuInstanceKey)){
-				terminateGpuInstance();
-			} else{
-				return gpuInstance;
-			}
-		}
-		gpuInstanceLock = acquireGpuLock();
-		gpuInstance = supplier.get();
-		gpuInstanceKey = key;
-		gpuInstanceLockedAtMs = System.currentTimeMillis();
-
-		return gpuInstance;
-	}
-
-	/**
-	 * 今はadditionalGpuIdsに設定されているidから1つだけ割り当てている。gpuCountパラメータは無視。
-	 * @param key
-	 * @param gpuCount
-	 * @param supplier
-	 * @return
-	 * @throws InterruptedException
-	 */
-	public static synchronized Instance getInstanceWithPooledGpu(
-		String key, int gpuCount, Function<int[], Instance> supplier)
-	throws InterruptedException {
-		if(gpuPool.getGpuCount() == 0){
-			return getInstanceWithGpuLock(key, ()->supplier.apply(new int[]{}));
-		}
-		var instance = keyToInstance.get(key);
-		if(instance != null) return instance;
-
-		if(gpuPool.getAvailableGpuCount() == 0){
-			var it = keyToInstance.entrySet().iterator();
-			var entry = it.next();
-			entry.getValue().terminateAndWait();
-			var id = entry.getKey();
-			keyToGpu.remove(id).release();
-			keyToInstanceStartedAt.remove(id);
-			it.remove();
-		}
-
-		var gpu = gpuPool.acquire();
-		instance = supplier.apply(new int[]{gpu.getId()});
-		keyToInstance.put(key, instance);
-		keyToInstanceStartedAt.put(key, System.currentTimeMillis());
-		keyToGpu.put(key, gpu);
-
-		return instance;
-	}
-
-	public GpuPool.Gpu acquireGpu() throws InterruptedException{
-		return gpuPool.acquire();
-	}
-
-	public static long getGpuInstanceLockedAtMs() {
-		return gpuInstanceLockedAtMs;
-	}
-
-	public static synchronized void terminateGpuInstanceOlderMsThan(
-		long threshold)
-	throws InterruptedException {
-		if(gpuInstanceLockedAtMs <= 0) return;
-		if((System.currentTimeMillis() - gpuInstanceLockedAtMs) >= threshold){
-			terminateGpuInstance();
-		}
-		var it = keyToInstance.entrySet().iterator();
-		while(it.hasNext()){
-			var entry = it.next();
-			var id = entry.getKey();
-			var startedAt = keyToInstanceStartedAt.get(id);
-			if((System.currentTimeMillis() - startedAt) >= threshold){
-				entry.getValue().terminateAndWait();
-				keyToGpu.remove(id).release();
-				keyToInstanceStartedAt.remove(id);
-				it.remove();
-			}
-		}
-	}
-
-	private static synchronized void terminateGpuInstance() throws InterruptedException{
-		gpuInstance.terminateAndWait();
-		gpuInstance = null;
-		gpuInstanceKey = null;
-		gpuInstanceLock.release();
-		gpuInstanceLock = null;
-		gpuInstanceLockedAtMs = -1;
-	}
-
-	private static String gpuInstanceKey;
-	private static Instance gpuInstance;
-	private static long gpuInstanceLockedAtMs;
-	private static GPULock gpuInstanceLock;
-	private static Map<String, Instance> instances = new HashMap<>();
-
-	public static synchronized GPULock acquireGpuLock() throws InterruptedException{
-		if(gpuInstanceLock != null && gpuInstance != null){
-			System.out.println("terminate other instance.");
-			terminateGpuInstance();
-		}
-		start("execution", "GPULock.acquire");
-		try{
-			return GPULock.acquire();
-		} finally{
-			finishWithResult(null);
-		}
+	public static InstancePool getInstancePool(){
+		return instancePool;
 	}
 
 	private ServiceInvokerContext(
@@ -305,19 +189,15 @@ public class ServiceInvokerContext {
 		};
 	};
 
-	public static void setGpuPool(GpuPool pool){
-		gpuPool = pool;
+	public static void setInstancePool(InstancePool pool){
+		instancePool = pool;
 	}
 
-	private static GpuPool gpuPool = new GpuPool(0);
+	private static InstancePool instancePool;
 	private ServiceFactory factory;
 	private Span span;
 	private Timer timer;
 	private Map<String, Object> requestHeaders;
 	private Map<String, Object> bindings;
 	private Map<String, Object> responseHeaders = new TreeMap<>();
-
-	private static Map<String, GpuPool.Gpu> keyToGpu = new HashMap<>();
-	private static Map<String, Instance> keyToInstance = new LinkedHashMap<>();
-	private static Map<String, Long> keyToInstanceStartedAt = new HashMap<>();
 }

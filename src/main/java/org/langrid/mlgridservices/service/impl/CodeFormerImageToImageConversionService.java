@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -25,7 +26,7 @@ implements ImageConversionService{
 	@Override
 	public Image convert(byte[] image, String imageFormat)
 			throws InvalidParameterException, ProcessFailedException {
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			var inputsDir = new File(tempDir, "inputs");
 			inputsDir.mkdirs();
@@ -41,8 +42,11 @@ implements ImageConversionService{
 					"python inference_codeformer.py --test_path /%s/%s/%s --w 0.7 --bg_upsampler realesrgan --face_upsample",
 					tempDir.getName(), inputsDir.getName(), inputDir.getName());
 			System.out.println(cmd);
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWait(cmd, baseDir);
+				ProcessUtil.runAndWait(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			var resultFile = new File(new File(new File(resultsDir, inputDir.getName() + "_0.7"), "final_results"), "input.png");
 			System.out.println("result: " + resultFile);

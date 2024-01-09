@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -26,7 +27,7 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 		byte[] audio, String audioFormat, String audioLanguage)
 			throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException
 	{
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var temp = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");
@@ -37,9 +38,12 @@ public class SpeechBrainSpeechEmotionRecognitionService implements SpeechEmotion
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python3 run.py temp/%s",
 					temp.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			return ServiceInvokerContext.exec(()->{
-				var proc = ProcessUtil.run(cmd, baseDir);
+				var proc = ProcessUtil.run(cmd, env, baseDir);
 				var om = new ObjectMapper();
 				EmotionRecognitionResult ret = null;
 				try{

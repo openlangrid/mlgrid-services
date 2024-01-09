@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -28,7 +29,7 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		if(!LanguageUtil.matches("ja", textLanguage))
 			throw new UnsupportedLanguageException("textLanguage", textLanguage);
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			numberOfTimes = Math.min(numberOfTimes, 8);
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
@@ -38,9 +39,12 @@ public class RinnaJapaneseStableDiffusionTextImageGenerationService implements T
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python3 run.py \"%s\" %d temp/%s",
 					text.replaceAll("\"", "\\\""), numberOfTimes, temp.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			var ret = new ArrayList<Image>();
 			for(var i = 0; i < numberOfTimes; i++){

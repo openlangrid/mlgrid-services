@@ -28,7 +28,6 @@ def run(model_name: str):
         language = input["promptLanguage"]
         numberOfTimes = input["numberOfTimes"]
         outputPathPrefix = input["outputPathPrefix"]
-
         stream.prepare(prompt)
         # Warmup >= len(t_index_list) x frame_buffer_size
         for _ in range(4):
@@ -37,7 +36,9 @@ def run(model_name: str):
             x_output = stream.txt2img()
             image = postprocess_image(x_output, output_type="pil")[0]
             image.save(f"{outputPathPrefix}_{i}.png")
-        print("ok", flush=True)
+        from gpuinfo import get_gpu_properties
+        props = get_gpu_properties()
+        print(f"ok {json.dumps(props)}", flush=True)
 
 
 def main(model: str):

@@ -9,8 +9,8 @@ public class TestGpuService implements TestService{
 	@Override
 	public Object test(Object arg) throws ProcessFailedException {
 		System.out.println("[TestGpuService] acquire lock.");
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
-			System.out.println("[TestGpuService] executed.");
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
+			System.out.println("[TestGpuService] executed with GPU:" + l.gpuId() + ".");
 		} catch(InterruptedException e){
 		} finally{
 			System.out.println("[TestGpuService] release lock.");

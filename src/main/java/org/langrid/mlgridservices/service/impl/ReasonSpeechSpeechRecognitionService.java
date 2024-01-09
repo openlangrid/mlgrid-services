@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -24,7 +25,7 @@ public class ReasonSpeechSpeechRecognitionService implements SpeechRecognitionSe
 		if(!language.startsWith("ja")){
 			throw new UnsupportedLanguageException("language", language);
 		}
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var input = FileUtil.createUniqueFileWithDateTime(tempDir, "audio-", ".wav");
@@ -36,9 +37,12 @@ public class ReasonSpeechSpeechRecognitionService implements SpeechRecognitionSe
 					"/usr/local/bin/docker-compose run --rm service " +
 					"python run.py temp/%s",
 					input.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			var br = Files.newBufferedReader(output.toPath(), StandardCharsets.UTF_8);
 			String line = null;

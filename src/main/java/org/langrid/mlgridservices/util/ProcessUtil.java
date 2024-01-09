@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
+import java.util.Map;
 
 public class ProcessUtil {
 	public static class ProcessFailedException extends Exception{
@@ -21,16 +22,17 @@ public class ProcessUtil {
 		}
 	}
 
-	public static Process run(String cmd, File workDir)
+	public static Process run(String cmd, Map<String, String> env, File workDir)
 	throws IOException, InterruptedException, ProcessFailedException{
 		var pb = new ProcessBuilder("bash", "-c", cmd);
 		pb.directory(workDir);
+		pb.environment().putAll(env);
 		return pb.start();
 	}
 
-	public static void runAndWait(String cmd, File workDir)
+	public static void runAndWait(String cmd, Map<String, String> env, File workDir)
 	throws IOException, InterruptedException, ProcessFailedException{
-		var proc = run(cmd, workDir);
+		var proc = run(cmd, env, workDir);
 		try {
 			proc.waitFor();
 			var res = proc.exitValue();
@@ -50,9 +52,9 @@ public class ProcessUtil {
 		}
 	}
 
-	public static void runAndWaitWithInheritingOutput(String cmd, File workDir)
+	public static void runAndWaitWithInheritingOutput(String cmd, Map<String, String> env, File workDir)
 	throws IOException, InterruptedException, ProcessFailedException{
-		var proc = runWithInheritingOutput(cmd, workDir);
+		var proc = runWithInheritingOutput(cmd, env, workDir);
 		try {
 			proc.waitFor();
 			var res = proc.exitValue();
@@ -72,10 +74,11 @@ public class ProcessUtil {
 		}
 	}
 
-	public static Process runWithInheritingOutput(String cmd, File workDir)
+	public static Process runWithInheritingOutput(String cmd, Map<String, String> env, File workDir)
 	throws IOException, InterruptedException, ProcessFailedException{
 		var pb = new ProcessBuilder("bash", "-c", cmd);
 		pb.directory(workDir);
+		pb.environment().putAll(env);
 		pb.redirectOutput(Redirect.INHERIT);
 		pb.redirectError(Redirect.INHERIT);
 		return pb.start();

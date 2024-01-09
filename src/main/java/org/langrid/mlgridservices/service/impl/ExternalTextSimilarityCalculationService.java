@@ -3,6 +3,7 @@ package org.langrid.mlgridservices.service.impl;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 import org.langrid.mlgridservices.service.ServiceInvokerContext;
 import org.langrid.mlgridservices.util.FileUtil;
@@ -35,7 +36,7 @@ public class ExternalTextSimilarityCalculationService implements TextSimilarityC
 	public double calculate(String text1, String text1Lang,
 		String text2, String text2Lang)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguagePairException {
-		try(var l = ServiceInvokerContext.acquireGpuLock()){
+		try(var l = ServiceInvokerContext.getInstancePool().acquireAnyGpu()){
 			var tempDir = new File(baseDir, "temp");
 			tempDir.mkdirs();
 			var utf8 = StandardCharsets.UTF_8;
@@ -55,9 +56,12 @@ public class ExternalTextSimilarityCalculationService implements TextSimilarityC
 					"temp/" + input1Path.getName(), text1Lang,
 					"temp/" + input2Path.getName(), text2Lang,
 					"temp/" + outputPath.getName());
+			var env = new HashMap<String, String>(){{
+				put("NVIDIA_VISIBLE_DEVICES", "" + l.gpuId());
+			}};
 			System.out.println(cmd);
 			ServiceInvokerContext.exec(()->{
-				ProcessUtil.runAndWaitWithInheritingOutput(cmd, baseDir);
+				ProcessUtil.runAndWaitWithInheritingOutput(cmd, env, baseDir);
 			}, "execution", "docker-compose");
 			return Double.parseDouble(Files.readString(outputPath.toPath()));
 		} catch(RuntimeException e) {

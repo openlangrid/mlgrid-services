@@ -2,21 +2,13 @@ package org.langrid.mlgridservices.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-import org.langrid.mlgridservices.service.Instance;
-import org.langrid.mlgridservices.service.ProcessInstance;
-import org.langrid.mlgridservices.service.ServiceInvokerContext;
-import org.langrid.mlgridservices.util.FileUtil;
 import org.langrid.service.ml.Image;
 import org.langrid.service.ml.TextGuidedImageGenerationService;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jp.go.nict.langrid.commons.lang.StringUtil;
 import jp.go.nict.langrid.service_1_2.InvalidParameterException;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 import jp.go.nict.langrid.service_1_2.UnsupportedLanguageException;
@@ -25,27 +17,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class CmdReplTextImageGeneration
+extends AbstractCmdRepl
 implements TextGuidedImageGenerationService{
 	public CmdReplTextImageGeneration(String baseDir) {
-		this.baseDir = new File(baseDir);
-		this.tempDir = new File(baseDir, "temp");
-		tempDir.mkdirs();
+		super(baseDir);
 	}
 
 	public CmdReplTextImageGeneration(
 		String baseDir, String... commands) {
-		this(baseDir);
-		this.commands = commands;
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
-	}
-
-	public void setCommands(String[] commands) {
-		this.commands = commands;
-		this.instanceKey = "process:" + StringUtil.join(commands, ":");
-	}
-
-	public void setRequiredGpuCount(int requiredGpuCount){
-		this.requiredGpuCount = requiredGpuCount;
+		super(baseDir, commands);
 	}
 
 	@Override
@@ -58,17 +38,16 @@ implements TextGuidedImageGenerationService{
 	public Image[] generateMultiTimes(String text, String textLanguage, int numberOfTimes)
 			throws InvalidParameterException, ProcessFailedException, UnsupportedLanguageException {
 		try{
-			var baseFile = FileUtil.createUniqueFileWithDateTime(
-				tempDir, "", "");
+			var baseFile = createBaseFile();
 			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
 			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
 			var outputFilePrefix = baseFile.getName() + ".output";
 			var inputFile = new File(baseFile.toString() + ".input.txt");
-			var input = m.writeValueAsString(new TextImageGenerationCommandInput(
-				tempDir.getName() + "/" + inputTextFile.getName(),
+			var input = mapper().writeValueAsString(new TextImageGenerationCommandInput(
+				getTempDir().getName() + "/" + inputTextFile.getName(),
 				textLanguage,
 				numberOfTimes,
-				tempDir.getName() + "/" + outputFilePrefix
+				getTempDir().getName() + "/" + outputFilePrefix
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 
@@ -77,7 +56,7 @@ implements TextGuidedImageGenerationService{
 			if(success){
 				var ret = new ArrayList<Image>();
 				for(var i = 0; i < numberOfTimes; i++){
-					var imgFile = new File(tempDir, outputFilePrefix + "_" + i + ".png");
+					var imgFile = new File(getTempDir(), outputFilePrefix + "_" + i + ".png");
 					if(!imgFile.exists()) break;
 					ret.add(new Image(
 						Files.readAllBytes(imgFile.toPath()),
@@ -94,27 +73,6 @@ implements TextGuidedImageGenerationService{
 		}
 	}
 
-	private Instance getInstance()
-	throws InterruptedException{
-		var instance = ServiceInvokerContext.getInstanceWithPooledGpu(
-			instanceKey, requiredGpuCount, (gpuIds)->{
-				var pb = new ProcessBuilder(commands);
-				if(gpuIds.length > 0){
-					var ids = org.langrid.mlgridservices.util.StringUtil.join(gpuIds, v->""+v, ",");
-					System.out.printf("instance(\"%s\") uses device %d%n", instanceKey, ids);
-					pb.environment().put("NVIDIA_VISIBLE_DEVICES", "" + ids);
-				}
-				try{
-					pb.directory(baseDir);
-					pb.redirectError(Redirect.INHERIT);
-					return new ProcessInstance(pb.start());
-				} catch(IOException e){
-					throw new RuntimeException(e);
-				}
-		});
-		return instance;
-	}
-
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Data
@@ -124,13 +82,4 @@ implements TextGuidedImageGenerationService{
 		private int numberOfTimes;
 		private String outputPathPrefix;
 	}
-
-	private ObjectMapper m = new ObjectMapper();
-
-	private File baseDir;
-	private String[] commands;
-	private int requiredGpuCount = 1;
-
-	private String instanceKey;
-	private File tempDir;
 }

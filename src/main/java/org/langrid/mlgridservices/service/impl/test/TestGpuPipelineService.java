@@ -12,9 +12,9 @@ public class TestGpuPipelineService implements TestService{
 	@Override
 	public Object test(Object arg) throws ProcessFailedException {
 		try{
-			var instance = ServiceInvokerContext.getInstanceWithGpuLock(
+			var instance = ServiceInvokerContext.getInstancePool().getInstanceWithAnyGpu(
 				TestGpuPipelineService.class.getName(),
-				()->{
+				(gpu)->{
 					return new Instance(){
 						{
 							System.out.println("[TestGpuPipelineService] created.");
