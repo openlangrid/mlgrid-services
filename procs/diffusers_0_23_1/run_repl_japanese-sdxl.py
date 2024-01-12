@@ -2,7 +2,9 @@ def run(model_name: str):
     from diffusers import DiffusionPipeline
     import torch
 
-    pipeline = DiffusionPipeline.from_pretrained(model_name)
+    pipeline = DiffusionPipeline.from_pretrained(
+        model_name,
+        trust_remote_code=True)
     pipeline.to("cuda")
     print("ready", flush=True)
 

@@ -2,7 +2,8 @@ from diffusers import DiffusionPipeline
 import torch
 
 pipeline = DiffusionPipeline.from_pretrained(
-    "stabilityai/japanese-stable-diffusion-xl"
+    "stabilityai/japanese-stable-diffusion-xl",
+    trust_remote_code=True
 )
 pipeline.to("cuda")
 
