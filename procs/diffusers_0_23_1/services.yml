@@ -61,7 +61,7 @@ services:
         - bash
         - run_repl_japanese-sdxl.sh
         - stabilityai/japanese-stable-diffusion-xl
-      requiredGpuCount: 1
+      requiredGpuMemoryMBs: [17067]
 
   - serviceId: SDXL-TURBO|R
     description: "a fast generative text-to-image model that can synthesize photorealistic images from a text prompt in a single network evaluation."

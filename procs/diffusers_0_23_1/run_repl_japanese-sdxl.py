@@ -2,16 +2,8 @@ def run(model_name: str):
     from diffusers import DiffusionPipeline
     import torch
 
-    pipeline = DiffusionPipeline.from_pretrained(
-        model_name, trust_remote_code=True
-    )
+    pipeline = DiffusionPipeline.from_pretrained(model_name)
     pipeline.to("cuda")
-
-#    base = DiffusionPipeline.from_pretrained(
-#        model_name,
-#        torch_dtype=torch.float16, variant="fp16", use_safetensors=True,
- #       device_map="auto")
-
     print("ready", flush=True)
 
     import json, sys
@@ -22,14 +14,14 @@ def run(model_name: str):
         language = input["promptLanguage"]
         numberOfTimes = input["numberOfTimes"]
         outputPathPrefix = input["outputPathPrefix"]
-
         for i in range(numberOfTimes):
             image = pipeline(
                 prompt=prompt
                 ).images[0]
             image.save(f"{outputPathPrefix}_{i}.png")
-
-        print("ok", flush=True)
+        from gpuinfo import get_gpu_properties
+        props = get_gpu_properties()
+        print(f"ok {json.dumps(props)}", flush=True)
 
 
 def main(model: str):

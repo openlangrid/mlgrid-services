@@ -2,7 +2,7 @@ from diffusers import DiffusionPipeline
 import torch
 
 pipeline = DiffusionPipeline.from_pretrained(
-    "stabilityai/japanese-stable-diffusion-xl", trust_remote_code=True
+    "stabilityai/japanese-stable-diffusion-xl"
 )
 pipeline.to("cuda")
 
@@ -13,3 +13,8 @@ prompt = "柴犬、カラフルアート"
 
 image = pipeline(prompt=prompt).images[0]
 image.save("sample/japanese-sdxl_output.jpg")
+
+from gpuinfo import get_gpu_properties
+import json
+props = get_gpu_properties()
+print(f"ok {json.dumps(props)}", flush=True)
