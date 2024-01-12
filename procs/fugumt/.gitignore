@@ -1,3 +1,5 @@
 /cache
 /temp
 out.*
+/gpuinfo.py
+/__pycache__

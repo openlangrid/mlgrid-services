@@ -1,0 +1,24 @@
+common:
+  description: a translation model using Marian-NMT.
+  license: cc-by-sa-4.0
+
+services:
+  - serviceId: FuguMT-ja-en|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTranslation
+    url: https://huggingface.co/staka/fugumt-ja-en
+    properties:
+      commands:
+        - bash
+        - run_translation_repl.sh
+        - staka/fugumt-ja-en
+      requiredGpuMemoryMBs: [1253]
+
+  - serviceId: FuguMT-en-ja|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTranslation
+    url: https://huggingface.co/staka/fugumt-en-ja
+    properties:
+      commands:
+        - bash
+        - run_translation_repl.sh
+        - staka/fugumt-en-ja
+      requiredGpuMemoryMBs: [1253]
