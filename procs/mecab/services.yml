@@ -1,0 +1,12 @@
+common:
+  description: MeCabは 京都大学情報学研究科−日本電信電話株式会社コミュニケーション科学基礎研究所 共同研究ユニットプロジェクトを通じて開発されたオープンソース形態素解析エンジンです。
+  license: BSD,LGPL,GPL
+  url: https://taku910.github.io/mecab/
+
+services:
+  - serviceId: Mecab|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplMorphologicalAnalysis
+    properties:
+      commands:
+        - bash
+        - run_analyze_repl.sh
