@@ -2,7 +2,8 @@ import MeCab
 mecab = MeCab.Tagger()
 
 import json
-ret = mecab.parse("Amazon Web Services（アマゾン ウェブ サービス、略称：AWS）とは、Amazon.comにより提供されているクラウドコンピューティングサービスである。")
+ret = mecab.parse(
+    "Amazon Web Services（アマゾン ウェブ サービス、略称：AWS）とは、https://Amazon.comにより提供されているクラウドコンピューティングサービスである。")
 morphs = []
 for line in ret.split("\n"):
     if line == "EOS":
