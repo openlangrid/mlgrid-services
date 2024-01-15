@@ -55,6 +55,13 @@ implements TextGenerationService{
 	@AllArgsConstructor
 	@Data
 	static class TextGenerationCommandInput{
+		public TextGenerationCommandInput(String textPath, String textLanguage, String outputPath){
+			this.textPath = textPath;
+			this.textLanguage = textLanguage;
+			this.outputPath = outputPath;
+		}
+		private String serviceType = TextGenerationService.class.getSimpleName();
+		private String methodName = "generate";
 		private String textPath;
 		private String textLanguage;
 		private String outputPath;

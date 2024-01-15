@@ -59,6 +59,15 @@ implements TextInstructionService {
 	@AllArgsConstructor
 	@Data
 	static class TextInstructionCommandInput{
+		public TextInstructionCommandInput(String systemPromptPath, String userPromptPath,
+				String promptLanguage, String outputPath){
+			this.systemPromptPath = systemPromptPath;
+			this.userPromptPath = userPromptPath;
+			this.promptLanguage = promptLanguage;
+			this.outputPath = outputPath;
+		}
+		private String serviceType = TextInstructionService.class.getSimpleName();
+		private String methodName = "generate";
 		private String systemPromptPath;
 		private String userPromptPath;
 		private String promptLanguage;

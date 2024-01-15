@@ -117,6 +117,8 @@ implements MorphologicalAnalysisService{
 	@AllArgsConstructor
 	@Data
 	static class MorphologicalAnalysisCommandOutputElement{
+		private String serviceType = MorphologicalAnalysisService.class.getSimpleName();
+		private String methodName = "analyze";
 		private String word;
 		private String pos;
 		private String posDetail;
