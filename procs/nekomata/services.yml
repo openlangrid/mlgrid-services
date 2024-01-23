@@ -1,0 +1,71 @@
+common:
+  license: Tongyi Qianwen LICENSE AGREEMENT
+
+services:
+  # completion services
+  - serviceId: RinnaNekomata7B|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/rinna/nekomata-7b
+    description: We conduct continual pre-training of qwen-7b on 30B tokens from a mixture of Japanese and English datasets.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-7b
+     requiredGpuMemoryMBs: [16631]
+
+  - serviceId: RinnaNekomata7BInstruction|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-7b-instruction
+      requiredGpuMemoryMBs: [16977]
+
+  - serviceId: RinnaNekomata14B|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/rinna/nekomata-14b
+    description: We conduct continual pre-training of qwen-14b on 66B tokens from a mixture of Japanese and English datasets.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-14b
+      requiredGpuMemoryMBs: [29387]
+
+  - serviceId: RinnaNekomata14BInstruction|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-14b-instruction
+      requiredGpuMemoryMBs: [28189]
+
+  # instruction services
+  - serviceId: RinnaNekomata7BInstruction|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-7b-instruction
+      requiredGpuMemoryMBs: [16977]
+
+  - serviceId: RinnaNekomata14BInstruction|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-14b-instruction
+      requiredGpuMemoryMBs: [29821]
