@@ -12,7 +12,7 @@ services:
         - bash
         - run_repl.sh
         - rinna/nekomata-7b
-     requiredGpuMemoryMBs: [16631]
+      requiredGpuMemoryMBs: [16631]
 
   - serviceId: RinnaNekomata7BInstruction|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
