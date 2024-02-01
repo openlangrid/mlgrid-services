@@ -10,7 +10,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b
       requiredGpuMemoryMBs: [14815]
 
@@ -19,7 +19,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-fast
       requiredGpuMemoryMBs: [15019]
 
@@ -28,7 +28,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-instruct
       requiredGpuMemoryMBs: [14815]
 
@@ -37,7 +37,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
       requiredGpuMemoryMBs: [15019]
 
@@ -46,7 +46,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b
       requiredGpuMemoryMBs: [27379]
 
@@ -55,7 +55,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-fast
       requiredGpuMemoryMBs: [27601]
 
@@ -64,7 +64,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-instruct
       requiredGpuMemoryMBs: [26757]
 
@@ -73,7 +73,7 @@ services:
     properties:
       commands:
         - bash
-        - run_completion_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
       requiredGpuMemoryMBs: [27001]
 
@@ -83,7 +83,7 @@ services:
     properties:
       commands:
         - bash
-        - run_instruction_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-instruct
       requiredGpuMemoryMBs: [14315]
 
@@ -92,7 +92,7 @@ services:
     properties:
       commands:
         - bash
-        - run_instruction_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
       requiredGpuMemoryMBs: [14353]
 
@@ -101,7 +101,7 @@ services:
     properties:
       commands:
         - bash
-        - run_instruction_repl.sh
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-instruct
       requiredGpuMemoryMBs: [26757]
 
@@ -110,6 +110,43 @@ services:
     properties:
       commands:
         - bash
-        - run_instruction_repl.sh
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+      requiredGpuMemoryMBs: [27001]
+
+  # context question answering services
+  - serviceId: ELYZAJapaneseLlama2-7BInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-instruct
+      requiredGpuMemoryMBs: [14315]
+
+  - serviceId: ELYZAJapaneseLlama2-7BFastInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpuMemoryMBs: [14353]
+
+  - serviceId: ELYZAJapaneseLlama2-13BInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-instruct
+      requiredGpuMemoryMBs: [26757]
+
+  - serviceId: ELYZAJapaneseLlama2-13BFastInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
         - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
       requiredGpuMemoryMBs: [27001]

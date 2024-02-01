@@ -58,11 +58,9 @@ def run(tokenizer_model_name: str, model_name: str):
                         userPrompt = f.read()
                     promptLanguage = input["promptLanguage"]
                     sourceText = buildInstructionPrompt(tokenizer.bos_token, systemPrompt, userPrompt, promptLanguage)
-                elif serviceType == "QuestionAnsweringService" and methodName == "ask":
-                    with open(input["questionPath"]) as f:
-                        question = f.read()
-                    with open(input["contextPath"]) as f:
-                        context = f.read()
+                elif serviceType == "ContextualQuestionAnsweringService" and methodName == "ask":
+                    question = input["question"]
+                    context = input["context"]
                     language = input["language"]
                     sourceText = buildQuestionAnsweringPrompt(tokenizer.bos_token, question, context, language)
                 token_ids = tokenizer.encode(
@@ -88,7 +86,7 @@ def run(tokenizer_model_name: str, model_name: str):
                 raise e
             except Exception as e:
                 print(e, file=sys.stderr)
-                print("ng RuntimeError", flush=True)
+                print("ng Exception", flush=True)
     except OutOfMemoryError:
         print("ng torch.cuda.OutOfMemoryError", flush=True)
     except RuntimeError:  # RuntimeError: "addmm_impl_cpu_" not implemented for 'Half'

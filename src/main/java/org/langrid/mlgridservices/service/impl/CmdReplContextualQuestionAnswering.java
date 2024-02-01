@@ -30,16 +30,10 @@ implements ContextualQuestionAnsweringService {
 	throws InvalidParameterException, UnsupportedLanguageException, ProcessFailedException {
 		try{
 			var baseFile = createBaseFile();
-			var contextFile = new File(baseFile.toString() + ".input_context.txt");
-			Files.writeString(contextFile.toPath(), context, StandardCharsets.UTF_8);
-			var questionFile = new File(baseFile.toString() + ".input_question.txt");
-			Files.writeString(questionFile.toPath(), question, StandardCharsets.UTF_8);
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var outputFile = new File(baseFile.toString() + ".output.txt");
 			var input = mapper().writeValueAsString(new ContextualQuestionAnsweringCommandInput(
-				getTempDir().getName() + "/" + contextFile.getName(),
-				getTempDir().getName() + "/" + questionFile.getName(),
-				language,
+				context, question, language,
 				getTempDir().getName() + "/" + outputFile.getName()
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
@@ -67,7 +61,7 @@ implements ContextualQuestionAnsweringService {
 			this.outputPath = outputPath;
 		}
 		private String serviceType = ContextualQuestionAnsweringService.class.getSimpleName();
-		private String method = "ask";
+		private String methodName = "ask";
 		private String context;
 		private String question;
 		private String language;

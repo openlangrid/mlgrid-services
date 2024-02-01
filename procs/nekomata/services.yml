@@ -69,3 +69,26 @@ services:
         - run_repl.sh
         - rinna/nekomata-14b-instruction
       requiredGpuMemoryMBs: [29821]
+
+  # contextual question answeing service
+  - serviceId: RinnaNekomata7BInstruction|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-7b-instruction
+      requiredGpuMemoryMBs: [29821]
+
+  - serviceId: RinnaNekomata14BInstruction|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna/nekomata-14b-instruction
+      requiredGpuMemoryMBs: [29821]

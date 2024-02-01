@@ -38,13 +38,9 @@ def run(tokenizer_model_name: str, model_name: str):
                     userPrompt = f.read()
                 promptLanguage = input["promptLanguage"]
                 sourceText = f"{tokenizer.bos_token}[INST] <<SYS>>\n{systemPrompt}\n<</SYS>>{userPrompt} [/INST]"
-            elif serviceType == "QuestionAnsweringService" and methodName == "ask":
-                question = None
-                context = None
-                with open(input["questionPath"]) as f:
-                    question = f.read()
-                with open(input["contextPath"]) as f:
-                    context = f.read()
+            elif serviceType == "ContextualQuestionAnsweringService" and methodName == "ask":
+                question = input["question"]
+                context = input["context"]
                 language = input["language"]
                 systemPrompt = "<<SYS>>\n参考情報を元に、質問にできるだけ正確に答えてください。\n<</SYS>>\n\n"
                 contextAndQuestion = f"{context}\n質問は次のとおりです。{question}"
