@@ -14,9 +14,17 @@ def buildInstructionPrompt(bosToken: str, systemPrompt: str, userPrompt: str, la
 """
 
 def buildQuestionAnsweringPrompt(bosToken: str, question: str, context: str, language: str):
-    systemPrompt = "<<SYS>>\n参考情報を元に、質問にできるだけ正確に答えてください。\n<</SYS>>\n\n"
-    contextAndQuestion = f"{context}\n質問は次のとおりです。{question}"
-    return f"{bosToken}[INST] {systemPrompt}{contextAndQuestion} [/INST] "
+    return f"""
+以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。
+
+### 指示:
+{question}
+
+### 入力:
+{context}
+
+### 応答:
+"""
 
 
 
