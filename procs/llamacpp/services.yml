@@ -1,0 +1,26 @@
+services:
+  # completion services
+  - serviceId: llama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
+      requiredGpus: 1
+
+  # instruction services
+  - serviceId: llama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
+      requiredGpus: 1
