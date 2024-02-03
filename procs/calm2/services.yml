@@ -12,7 +12,7 @@ services:
         - bash
         - run_completion_repl.sh
         - cyberagent/calm2-7b
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: CALM2-7B-instruct|TG|R
     description: Fine-tuned model of CyberAgentLM2 for dialogue use cases.
@@ -23,7 +23,7 @@ services:
         - bash
         - run_completion_repl.sh
         - cyberagent/calm2-7b-chat
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   # instruction
   - serviceId: CALM2-7B-instruct|TI|R
@@ -35,4 +35,4 @@ services:
         - bash
         - run_instruction_repl.sh
         - cyberagent/calm2-7b-chat
-      requiredGpuCount: 1
+      requiredGpus: 1

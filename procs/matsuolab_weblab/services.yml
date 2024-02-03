@@ -12,7 +12,7 @@ services:
         - bash
         - run_completion_repl.sh
         - matsuo-lab/weblab-10b
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: MatsuoLabWebLab10bInstructionSft|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
@@ -22,7 +22,7 @@ services:
         - bash
         - run_completion_repl.sh
         - matsuo-lab/weblab-10b-instruction-sft
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   # instruction services
   - serviceId: MatsuoLabWebLab10bInstructionSft|TI|R
@@ -33,4 +33,4 @@ services:
         - bash
         - run_instruction_repl.sh
         - matsuo-lab/weblab-10b-instruction-sft
-      requiredGpuCount: 1
+      requiredGpus: 1

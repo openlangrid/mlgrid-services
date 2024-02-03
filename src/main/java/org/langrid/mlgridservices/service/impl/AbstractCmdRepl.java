@@ -34,12 +34,12 @@ public abstract class AbstractCmdRepl {
 		this.instanceKey = "process:" + basePath.toString() + "/" + StringUtil.join(commands, ":");
 	}
 
-	public int getRequiredGpuCount() {
-		return requiredGpuCount;
+	public int getRequiredGpus() {
+		return requiredGpus;
 	}
 
-	public void setRequiredGpuCount(int requiredGpuCount){
-		this.requiredGpuCount = requiredGpuCount;
+	public void setRequiredGpus(int requiredGpus){
+		this.requiredGpus = requiredGpus;
 	}
 
 	public int[] getRequiredGpuMemoryMBs() {
@@ -84,7 +84,7 @@ public abstract class AbstractCmdRepl {
 		if(requiredGpuMemoryMBs.length > 0){
 			return ip.getInstanceWithGpus(
 				instanceKey, requiredGpuMemoryMBs, factory);
-		} else if(requiredGpuCount == 1){
+		} else if(requiredGpus == 1){
 			return ip.getInstanceWithAnyGpu(
 				instanceKey, spec->factory.apply(new GpuSpec[]{spec}));
 		} else{
@@ -96,7 +96,7 @@ public abstract class AbstractCmdRepl {
 
 	private Path basePath;
 	private String[] commands;
-	private int requiredGpuCount = 0;
+	private int requiredGpus = 0;
 	private int[] requiredGpuMemoryMBs = {};
 
 	private String instanceKey;

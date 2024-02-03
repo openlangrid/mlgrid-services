@@ -12,7 +12,7 @@ services:
         - bash
         - run_completion_repl.sh
         - microsoft/phi-2
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   # instruction
   - serviceId: Phi2|TI|R
@@ -24,4 +24,4 @@ services:
         - bash
         - run_instruction_repl.sh
         - microsoft/phi-2
-      requiredGpuCount: 1
+      requiredGpus: 1

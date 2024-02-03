@@ -11,4 +11,4 @@ services:
         - bash
         - run_repl.sh
         - pfnet/plamo-13b
-      requiredGpuCount: 1
+      requiredGpus: 1

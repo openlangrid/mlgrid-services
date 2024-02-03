@@ -11,7 +11,7 @@ services:
         - bash
         - run_repl_sdxlbase.sh
         - stabilityai/stable-diffusion-xl-base-1.0
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: SDXLBaseWithRefiner_DS_0_23_1|R
     description: "SDXL consists of an ensemble of experts pipeline for latent diffusion: In a first step, the base model (available here: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) is used to generate (noisy) latents, which are then further processed with a refinement model specialized for the final denoising steps."
@@ -24,7 +24,7 @@ services:
         - stabilityai/stable-diffusion-xl-base-1.0
         - --refinerModel
         - stabilityai/stable-diffusion-xl-refiner-1.0
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: SDXLBaseWithLora_Ikea_DS_0_23_1|R
     description: "Ikea Instructions - LoRA - SDXL"
@@ -37,7 +37,7 @@ services:
         - stabilityai/stable-diffusion-xl-base-1.0
         - --loraModel
         - ostris/ikea-instructions-lora-sdxl
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: Wuerstchen_DS_0_23_1|R
     description: "Würstchen is a diffusion model, whose text-conditional model works in a highly compressed latent space of images."
@@ -49,7 +49,7 @@ services:
         - bash
         - run_repl_wuerstchen.sh
         - warp-ai/wuerstchen
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: JapaneseSDXL_DS_0_23_1|R
     description: "a Japanese-specific SDXL model that is capable of inputting prompts in Japanese and generating Japanese-style images."

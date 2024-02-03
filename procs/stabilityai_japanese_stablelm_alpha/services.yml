@@ -12,7 +12,7 @@ services:
         - bash
         - run_completion_repl.sh
         - stabilityai/japanese-stablelm-base-alpha-7b
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B|TG|R
     url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b
@@ -24,7 +24,7 @@ services:
         - bash
         - run_completion_repl.sh
         - stabilityai/japanese-stablelm-instruct-alpha-7b
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B-v2|TG|R
     url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b-v2
@@ -35,7 +35,7 @@ services:
         - bash
         - run_completion_repl.sh
         - stabilityai/japanese-stablelm-instruct-alpha-7b-v2
-      requiredGpuCount: 1
+      requiredGpus: 1
 
 
   # instruction services
@@ -49,7 +49,7 @@ services:
         - bash
         - run_instruction_repl.sh
         - stabilityai/japanese-stablelm-instruct-alpha-7b
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: StabilityAIJapaneseStableLMInstructAlpha7B-v2|TI|R
     url: https://huggingface.co/stabilityai/japanese-stablelm-instruct-alpha-7b-v2
@@ -60,4 +60,4 @@ services:
         - bash
         - run_instruction_repl.sh
         - stabilityai/japanese-stablelm-instruct-alpha-7b-v2
-      requiredGpuCount: 1
+      requiredGpus: 1

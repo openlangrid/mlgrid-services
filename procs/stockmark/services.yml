@@ -11,7 +11,7 @@ services:
         - bash
         - run_completion_repl.sh
         - stockmark/stockmark-13b
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: Stockmark13B-instruct|TG|R
     description: instruction-tuned version of Stockmark-13b, a 13 billion parameter Japanese LLM.
@@ -23,7 +23,7 @@ services:
         - bash
         - run_completion_repl.sh
         - stockmark/stockmark-13b-instruct
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   # instruction
   - serviceId: Stockmark13B-instruct|TI|R
@@ -36,4 +36,4 @@ services:
         - bash
         - run_instruction_repl.sh
         - stockmark/stockmark-13b-instruct
-      requiredGpuCount: 1
+      requiredGpus: 1

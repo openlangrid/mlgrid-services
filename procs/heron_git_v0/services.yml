@@ -12,7 +12,7 @@ services:
         - bash
         - run_instruction_repl_stablelm.sh
         - turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: HeronChatGitElyzaFast7bV0|R
     description: Heron GIT Japanese ELYZA Llama 2 Fast 7B is a vision-language model that can converse about input images.
@@ -24,7 +24,7 @@ services:
         - bash
         - run_instruction_repl_gitllama.sh
         - turing-motors/heron-chat-git-ELYZA-fast-7b-v0
-      requiredGpuCount: 1
+      requiredGpus: 1
 
   - serviceId: HeronChatGitLlama2-7bV0|R
     description: Heron GIT Llama 2 7B is a vision-language model that can converse about input images.
@@ -36,4 +36,4 @@ services:
         - bash
         - run_instruction_repl_gitllama.sh
         - turing-motors/heron-chat-git-Llama-2-7b-v0
-      requiredGpuCount: 1
+      requiredGpus: 1
