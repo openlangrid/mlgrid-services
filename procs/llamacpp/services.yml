@@ -1,6 +1,6 @@
 services:
   # completion
-  - serviceId: llama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|R
+  - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     description: a pretrained language model that builds upon Llama 2.
     license: LLAMA 2 Community License, CC BY-SA 4.0
@@ -12,8 +12,32 @@ services:
         - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
       requiredGpus: 1
 
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S.gguf
+      requiredGpuMemoryMBs: [9735]
+
+  - serviceId: llama.cpp|Calm2-7b-chat-dpo-experimental-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: cyberagent/calm2-7b-chatにcyberagent/chatbot-arena-ja-calm2-7b-chat-experimentalデータセットを用いてDirect Preference Optimization (DPO)をしたモデルです。
+    license: cc-by-4.0
+    url: https://huggingface.co/cyberagent/calm2-7b-chat-dpo-experimental
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5663]
+
   # instruction
-  - serviceId: llama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|TI|R
+  - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     description: a pretrained language model that builds upon Llama 2.
     license: LLAMA 2 Community License, CC BY-SA 4.0
@@ -25,8 +49,32 @@ services:
         - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
       requiredGpus: 1
 
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S.gguf
+      requiredGpuMemoryMBs: [9735]
+
+  - serviceId: llama.cpp|Calm2-7b-chat-dpo-experimental-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: cyberagent/calm2-7b-chatにcyberagent/chatbot-arena-ja-calm2-7b-chat-experimentalデータセットを用いてDirect Preference Optimization (DPO)をしたモデルです。
+    license: cc-by-4.0
+    url: https://huggingface.co/cyberagent/calm2-7b-chat-dpo-experimental
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5663]
+
   # contextual question answering
-  - serviceId: llama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|CQA|R
+  - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|CQA|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
     description: a pretrained language model that builds upon Llama 2.
     license: LLAMA 2 Community License, CC BY-SA 4.0
@@ -37,3 +85,27 @@ services:
         - run_repl.sh
         - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
       requiredGpus: 1
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S.gguf
+      requiredGpuMemoryMBs: [9735]
+
+  - serviceId: llama.cpp|Calm2-7b-chat-dpo-experimental-q5_K_S|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    description: cyberagent/calm2-7b-chatにcyberagent/chatbot-arena-ja-calm2-7b-chat-experimentalデータセットを用いてDirect Preference Optimization (DPO)をしたモデルです。
+    license: cc-by-4.0
+    url: https://huggingface.co/cyberagent/calm2-7b-chat-dpo-experimental
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5663]

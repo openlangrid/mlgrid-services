@@ -16,6 +16,7 @@ def run(model_name: str):
             serviceType = input["serviceType"]
             methodName = input["methodName"]
             outputPath = input["outputPath"]
+            attr = " [ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR]" if "karakuri" in model_name else ""
             if serviceType == "TextGenerationService" and methodName == "generate":
                 with open(input["textPath"]) as f:
                     text = f.read()
@@ -33,14 +34,14 @@ def run(model_name: str):
                 with open(input["userPromptPath"]) as f:
                     userPrompt = f.read()
                 promptLanguage = input["promptLanguage"]
-                sourceText = f"<s>[INST]{systemPrompt} {userPrompt} [ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR] [/INST]"
+                sourceText = f"<s>[INST]{systemPrompt} {userPrompt}{attr} [/INST]"
             elif serviceType == "ContextualQuestionAnsweringService" and methodName == "ask":
                 question = input["question"]
                 context = input["context"]
                 language = input["language"]
                 systemPrompt = "<<SYS>>\n参考情報を元に、質問にできるだけ正確に答えてください。\n<</SYS>>\n\n"
                 contextAndQuestion = f"{context}\n質問は次のとおりです。{question}"
-                sourceText = f"<s>[INST] {systemPrompt}{contextAndQuestion} [/INST] "
+                sourceText = f"<s>[INST] {systemPrompt}{contextAndQuestion}{attr} [/INST] "
             output = llm(sourceText,
                 temperature=0.7,
                 max_tokens=1024)
