@@ -1,0 +1,195 @@
+services:
+  # completion services
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7B|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BFast|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BInstruct|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BFastInstruct|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13B|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BFast|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BInstruct|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BFastInstruct|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+      requiredGpus: 1
+
+  # instruction services
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BInstruct|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BFastInstruct|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BInstruct|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BFastInstruct|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+      requiredGpus: 1
+
+  # context question answering services
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-7BFastInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-instruct
+      requiredGpus: 1
+
+  - serviceId: vLLM|ELYZAJapaneseLlama2-13BFastInstruct|CQA|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+      requiredGpus: 1
