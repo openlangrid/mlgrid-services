@@ -26,7 +26,7 @@ services:
       requiredGpus: 1
 
   # contextual question answering
-  - serviceId: Ellama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|CQA|R
+  - serviceId: llama-cpp|Karakuri-70b-chat-v0.1-q5_K_S|CQA|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplContextualQuestionAnswering
     description: a pretrained language model that builds upon Llama 2.
     license: LLAMA 2 Community License, CC BY-SA 4.0
