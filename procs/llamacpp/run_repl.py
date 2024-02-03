@@ -29,11 +29,11 @@ def run(model_name: str):
                         with open(fname) as f:
                             systemPrompt = f.read()
                 if not systemPrompt == None and len(systemPrompt) > 0:
-                    systemPrompt = f" <<SYS>>\n{systemPrompt}\n<</SYS>>"
+                    systemPrompt = f" <<SYS>>\n{systemPrompt}\n<</SYS>>\n\n"
                 with open(input["userPromptPath"]) as f:
                     userPrompt = f.read()
                 promptLanguage = input["promptLanguage"]
-                sourceText = f"<s>[INST] {systemPrompt}{userPrompt} [ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR] [/INST]"
+                sourceText = f"<s>[INST]{systemPrompt} {userPrompt} [ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR] [/INST]"
             elif serviceType == "ContextualQuestionAnsweringService" and methodName == "ask":
                 question = input["question"]
                 context = input["context"]
