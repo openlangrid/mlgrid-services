@@ -1,12 +1,29 @@
+def instructionFormatter(modelName: str):
+    import sys
+    f = "<s>[INST] <<SYS>>\\n{systemPrompt or 'あなたは誠実で優秀な日本人のアシスタントです。'}\\n<</SYS>>\\n\\n{userPrompt} [/INST] "
+    if "ELYZA" in modelName:
+        pass
+    elif "calm2" in modelName and "chat" in modelName:
+        f = "USER: {userPrompt}\\nASSISTANT: "
+    elif "karakuri" in modelName:
+        sysp = "'You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.' + chr(92) + chr(92) + 'n' + chr(92) + chr(92) + 'nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you do not know the answer to a question, please do not share false information.'"
+        attr = "[ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR]"
+        f = "<s>[INST] <<SYS>>\\n{systemPrompt or " + sysp + "}\\n<</SYS>\\n\\n{userPrompt} " + attr + " [/INST] "
+    elif "youri" in modelName and "chat" in modelName:
+        f = "設定: {systemPrompt or 'あなたは誠実で優秀な日本人のアシスタントです。'}\\nユーザー: {userPrompt}\\nシステム: "
+    elif "nekomata" in modelName or "youri" in modelName:
+        f = "以下は、タスクを説明する指示です。要求を適切に満たす応答を書きなさい。\\n\\n### 指示:\\n{userPrompt}\\n\\n### 応答:\\n"
+    print("using template: " + f, file=sys.stderr)
+    return lambda systemPrompt, userPrompt, attr: eval(f'f"{f}"')
 
 
-def run(model_name: str):
+def run(modelName: str):
     from torch.cuda import OutOfMemoryError
     from llama_cpp import Llama
 
     try:
         llm = Llama(
-            model_path=model_name,
+            model_path=modelName,
             n_gpu_layers=-1)
         print("ready", flush=True)
 
@@ -16,7 +33,7 @@ def run(model_name: str):
             serviceType = input["serviceType"]
             methodName = input["methodName"]
             outputPath = input["outputPath"]
-            attr = " [ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR]" if "karakuri" in model_name else ""
+            attr = " [ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR]" if "karakuri" in modelName else ""
             if serviceType == "TextGenerationService" and methodName == "generate":
                 with open(input["textPath"]) as f:
                     text = f.read()
@@ -29,12 +46,10 @@ def run(model_name: str):
                     if len(fname) > 0:
                         with open(fname) as f:
                             systemPrompt = f.read()
-                if not systemPrompt == None and len(systemPrompt) > 0:
-                    systemPrompt = f" <<SYS>>\n{systemPrompt}\n<</SYS>>\n\n"
                 with open(input["userPromptPath"]) as f:
                     userPrompt = f.read()
                 promptLanguage = input["promptLanguage"]
-                sourceText = f"<s>[INST]{systemPrompt} {userPrompt}{attr} [/INST]"
+                sourceText = instructionFormatter(modelName)(systemPrompt, userPrompt, attr)
             elif serviceType == "ContextualQuestionAnsweringService" and methodName == "ask":
                 question = input["question"]
                 context = input["context"]

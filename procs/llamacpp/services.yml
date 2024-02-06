@@ -1,16 +1,52 @@
 services:
   # completion
-  - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|R
+  - serviceId: llama.cpp|Calm2-7b-chat-dpo-experimental-q5_K_S|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
-    description: a pretrained language model that builds upon Llama 2.
-    license: LLAMA 2 Community License, CC BY-SA 4.0
-    url: https://huggingface.co/karakuri-ai/karakuri-lm-70b-v0.1
+    description: cyberagent/calm2-7b-chatにcyberagent/chatbot-arena-ja-calm2-7b-chat-experimentalデータセットを用いてDirect Preference Optimization (DPO)をしたモデルです。
+    license: cc-by-4.0
+    url: https://huggingface.co/cyberagent/calm2-7b-chat-dpo-experimental
     properties:
       commands:
         - bash
         - run_repl.sh
-        - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
-      requiredGpus: 1
+        - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5663]
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5165]
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5039]
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_M.gguf
+      requiredGpuMemoryMBs: [9539]
 
   - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
@@ -24,17 +60,114 @@ services:
         - ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S.gguf
       requiredGpuMemoryMBs: [9735]
 
-  - serviceId: llama.cpp|Calm2-7b-chat-dpo-experimental-q5_K_S|R
+  - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
-    description: cyberagent/calm2-7b-chatにcyberagent/chatbot-arena-ja-calm2-7b-chat-experimentalデータセットを用いてDirect Preference Optimization (DPO)をしたモデルです。
-    license: cc-by-4.0
-    url: https://huggingface.co/cyberagent/calm2-7b-chat-dpo-experimental
+    description: a pretrained language model that builds upon Llama 2.
+    license: LLAMA 2 Community License, CC BY-SA 4.0
+    url: https://huggingface.co/karakuri-ai/karakuri-lm-70b-v0.1
     properties:
       commands:
         - bash
         - run_repl.sh
-        - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
-      requiredGpuMemoryMBs: [5663]
+        - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
+      requiredGpus: 1
+
+  - serviceId: llama.cpp|Nekomata-7b-instruction-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-7b-instruction-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5909]
+
+  - serviceId: llama.cpp|Nekomata-7b-instruction-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-7b-instruction-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5613]
+
+  - serviceId: llama.cpp|Nekomata-14b-instruction-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-14b-instruction-q5_K_M.gguf
+      requiredGpuMemoryMBs: [10887]
+
+  - serviceId: llama.cpp|Nekomata-14b-instruction-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-14b-instruction-q5_K_S.gguf
+      requiredGpuMemoryMBs: [10071]
+
+  - serviceId: llama.cpp|Youri-7b-instruction-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-instruction-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5095]
+
+  - serviceId: llama.cpp|Youri-7b-instruction-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-instruction-q5_K_S.gguf
+      requiredGpuMemoryMBs: [4969]
+
+  - serviceId: llama.cpp|Youri-7b-chat-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-chat-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5095]
+
+  - serviceId: llama.cpp|Youri-7b-chat-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-chat-q5_K_S.gguf
+      requiredGpuMemoryMBs: [4969]
+
 
   # instruction
   - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|TI|R
@@ -48,6 +181,42 @@ services:
         - run_repl.sh
         - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
       requiredGpus: 1
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5521]
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-7b-fast-instruct-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5395]
+
+  - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Llama2をベースとして日本語能力を拡張するために追加事前学習を行ったモデル。
+    license: LLAMA 2 Community License
+    url: https://huggingface.co/elyza/ELYZA-japanese-Llama-2-13b-fast-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_M.gguf
+      requiredGpuMemoryMBs: [9977]
 
   - serviceId: llama.cpp|ELYZA-japanese-Llama-2-13b-fast-instruct-q5_K_S|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
@@ -71,7 +240,104 @@ services:
         - bash
         - run_repl.sh
         - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
-      requiredGpuMemoryMBs: [5663]
+      requiredGpuMemoryMBs: [5147]
+
+  - serviceId: llama.cpp|Nekomata-7b-instruction-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-7b-instruction-q5_K_M.gguf
+      requiredGpuMemoryMBs: [7111]
+
+  - serviceId: llama.cpp|Nekomata-7b-instruction-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: The model is the instruction-tuned version of rinna/nekomata-7b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-7b-instruction-q5_K_S.gguf
+      requiredGpuMemoryMBs: [6815]
+
+  - serviceId: llama.cpp|Nekomata-14b-instruction-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-14b-instruction-q5_K_M.gguf
+      requiredGpuMemoryMBs: [12387]
+
+  - serviceId: llama.cpp|Nekomata-14b-instruction-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: The model is the instruction-tuned version of rinna/nekomata-14b.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/rinna/nekomata-14b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-nekomata-14b-instruction-q5_K_S.gguf
+      requiredGpuMemoryMBs: [11571]
+
+  - serviceId: llama.cpp|Youri-7b-instruction-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-instruction-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5351]
+
+  - serviceId: llama.cpp|Youri-7b-instruction-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-instruction
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-instruction-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5225]
+
+  - serviceId: llama.cpp|Youri-7b-chat-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-chat-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5349]
+
+  - serviceId: llama.cpp|Youri-7b-chat-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-chat-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5223]
+
 
   # contextual question answering
   - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|CQA|R
