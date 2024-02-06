@@ -28,7 +28,7 @@ public class ChatMessage {
 		this.contentLanguage = contentLanguage;
 	}
 
-	private String role;
+	private String role; // "system" or "user" or "assistant"
 	private String content;
 	private String contentLanguage;
 }

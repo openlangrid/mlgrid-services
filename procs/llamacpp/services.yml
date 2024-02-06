@@ -375,3 +375,66 @@ services:
         - run_repl.sh
         - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
       requiredGpuMemoryMBs: [5663]
+
+
+# chat
+  - serviceId: llama.cpp|Calm2-7b-chat-dpo-experimental-q5_K_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: cyberagent/calm2-7b-chatにcyberagent/chatbot-arena-ja-calm2-7b-chat-experimentalデータセットを用いてDirect Preference Optimization (DPO)をしたモデルです。
+    license: cc-by-4.0
+    url: https://huggingface.co/cyberagent/calm2-7b-chat-dpo-experimental
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - cyberagent-calm2-7b-chat-dpo-experimental-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5663]
+
+  - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: a pretrained language model that builds upon Llama 2.
+    license: LLAMA 2 Community License, CC BY-SA 4.0
+    url: https://huggingface.co/karakuri-ai/karakuri-lm-70b-chat-v0.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - karakuri-lm-70b-chat-v0.1-q5_K_S.gguf
+      requiredGpuMemoryMBs: [46499]
+
+  - serviceId: llama.cpp|Youri-7b-chat-q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-chat-q5_K_M.gguf
+      requiredGpuMemoryMBs: [5347]
+
+  - serviceId: llama.cpp|Youri-7b-chat-q5_K_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: the instruction-tuned version of rinna/youri-7b.
+    license: The llama2 license
+    url: https://huggingface.co/rinna/youri-7b-chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - rinna-youri-7b-chat-q5_K_S.gguf
+      requiredGpuMemoryMBs: [5221]
+
+  - serviceId: llama.cpp|Qwen1.5-7B-Chat-q5_k_m|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-7B-Chat
+    disabled: true
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-14b-chat-q5_k_m.gguf
+      requiredGpuMemoryMBs: [5223]

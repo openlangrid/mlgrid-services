@@ -15,14 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class CmdReplChatService
+public class CmdReplChat
 extends AbstractCmdRepl
 implements ChatService{
-	public CmdReplChatService(String basePath) {
+	public CmdReplChat(String basePath) {
 		super(basePath);
 	}
 
-	public CmdReplChatService(String basePath, String... commands) {
+	public CmdReplChat(String basePath, String... commands) {
 		super(basePath, commands);
 	}
 
@@ -55,6 +55,12 @@ implements ChatService{
 	@AllArgsConstructor
 	@Data
 	static class ChatCommandInput{
+		public ChatCommandInput(String messagePath, String outputPath){
+			this.messagesPath = messagePath;
+			this.outputPath = outputPath;
+		}
+		private String serviceType = ChatService.class.getSimpleName();
+		private String methodName = "generate";
 		private String messagesPath;
 		private String outputPath;
 	}

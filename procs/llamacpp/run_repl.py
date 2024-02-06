@@ -17,6 +17,69 @@ def instructionFormatter(modelName: str):
     return lambda systemPrompt, userPrompt, attr: eval(f'f"{f}"')
 
 
+class LlamaChatMessageFormatter:
+    def __init__(self, attr=""):
+        self.attr = attr
+
+    def format(self, messages):
+        message = ""
+        first = messages[0]
+        sys = f"<<SYS>>\n{first['content']}\n<</SYS>>\n\n" if first["role"] == "system" else ""
+        for m in messages:
+            if m["role"] == "user":
+                message += f"<s>[INST] {sys}{m['content']} {self.attr}[/INST] "
+            elif m["role"] == "assistant":
+                message += f"{m['content']} </s>"
+        return message
+
+class Clam2ChatMessageFormatter:
+    def format(self, messages):
+        message = ""
+        for m in messages:
+            if m["role"] == "user":
+                message += f"USER: {m['content']}\n"
+            elif m["role"] == "assistant":
+                message += f"ASSISTANT: {m['content']}\n"
+        message += "ASSISTANT: "
+        return message
+
+class YouriChatMessageFormatter:
+    def format(self, messages):
+        message = ""
+        for m in messages:
+            if m["role"] == "system":
+                message += f"設定: {m['content']}\n"
+            elif m["role"] == "user":
+                message += f"ユーザー: {m['content']}\n"
+            elif m["role"] == "assistant":
+                message += f"システム: {m['content']}\n"
+        message += "システム: "
+        return message
+
+class OpenAIChatMessageFormatter:
+    def format(self, messages):
+        message = ""
+        for m in messages:
+            if m["role"] == "system":
+                message += f"<|im_start|>system\n{m['content']}<|im_end|>\n"
+            elif m["role"] == "user":
+                message += f"<|im_start|>user\n{m['content']}<|im_end|>\n"
+            elif m["role"] == "assistant":
+                message += f"<|im_start|>assistant\n{m['content']}<|im_end|>\n"
+        return message
+
+def chatFormatter(modelName: str):
+    if "calm2" in modelName and "chat" in modelName:
+        return Clam2ChatMessageFormatter()
+    if "karakuri" in modelName:
+        return LlamaChatMessageFormatter("[ATTR] helpfulness: 4 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 0 humor: 0 creativity: 0 [/ATTR]")
+    if "youri" in modelName and "chat" in modelName:
+        return YouriChatMessageFormatter()
+    if "qwen" in modelName and "chat" in modelName:
+        return OpenAIChatMessageFormatter()
+    return LlamaChatMessageFormatter()
+
+
 def run(modelName: str):
     from torch.cuda import OutOfMemoryError
     from llama_cpp import Llama
@@ -57,6 +120,11 @@ def run(modelName: str):
                 systemPrompt = "<<SYS>>\n参考情報を元に、質問にできるだけ正確に答えてください。\n<</SYS>>\n\n"
                 contextAndQuestion = f"{context}\n質問は次のとおりです。{question}"
                 sourceText = f"<s>[INST] {systemPrompt}{contextAndQuestion}{attr} [/INST] "
+            elif serviceType == "ChatService" and methodName == "generate":
+                with open(input["messagesPath"]) as f:
+                    messages = json.load(f)
+                sourceText = chatFormatter(modelName).format(messages)
+
             output = llm(sourceText,
                 temperature=0.7,
                 max_tokens=1024)
