@@ -183,17 +183,27 @@ public class InstancePool {
 		return ie.getInstance();
 	}
 
+	public synchronized void clear() {
+		for(var g : gpus){
+			try(var l = g.lock()){
+				g.getAllocations().forEach(a->instances.remove(a.instanceEntry().getInstanceId()));
+				g.releaseInstances();
+			} catch(InterruptedException e){
+			}
+		}
+    }
+
 	private Gpu reserveAnyGpu() throws InterruptedException{
 		Gpu ret = null;
-		for(var a : gpus){
-			if(a.getAllocations().size() == 0){
-				ret = a;
+		for(var g : gpus){
+			if(g.getAllocations().size() == 0){
+				ret = g;
 				break;
 			}
 			if(ret == null){
-				ret = a;
-			} else if(a.getAllocations().size() < ret.getAllocations().size()){
-				ret = a;
+				ret = g;
+			} else if(g.getAllocations().size() < ret.getAllocations().size()){
+				ret = g;
 			}
 		}
 		if(ret == null){

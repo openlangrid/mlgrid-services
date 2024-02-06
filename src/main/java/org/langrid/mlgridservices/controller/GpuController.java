@@ -12,5 +12,12 @@ public class GpuController {
 	@GetMapping("/gpus")
 	public Gpu[] list() {
 		return ServiceInvokerContext.getInstancePool().getGpus();
-	}		
+	}
+
+	@GetMapping("/clearGpuProcs")
+	public Gpu[] clearProcs(){
+		var ip = ServiceInvokerContext.getInstancePool();
+		ip.clear();
+		return ip.getGpus();
+	}	
 }
