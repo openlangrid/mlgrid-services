@@ -87,7 +87,8 @@ def run(modelName: str):
     try:
         llm = Llama(
             model_path=modelName,
-            n_gpu_layers=-1)
+            n_gpu_layers=-1,
+            n_ctx=1024)
         print("ready", flush=True)
 
         import json, sys
