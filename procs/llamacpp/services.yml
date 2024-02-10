@@ -168,6 +168,30 @@ services:
         - rinna-youri-7b-chat-q5_K_S.gguf
       requiredGpuMemoryMBs: [4969]
 
+  - serviceId: llama.cpp|llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_M|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: large language models developed by LLM-jp, a collaborative project launched in Japan.
+    license: Apache License, Version2.0
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-dolly_en-dolly_ja-ichikara_003_001-oasst_en-oasst_ja-v1.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_M.gguf
+      requiredGpuMemoryMBs: [10345]
+
+  - serviceId: llama.cpp|llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: large language models developed by LLM-jp, a collaborative project launched in Japan.
+    license: Apache License, Version2.0
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-dolly_en-dolly_ja-ichikara_003_001-oasst_en-oasst_ja-v1.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S.gguf
+      requiredGpuMemoryMBs: [9955]
+
 
   # instruction
   - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|TI|R
@@ -337,6 +361,30 @@ services:
         - run_repl.sh
         - rinna-youri-7b-chat-q5_K_S.gguf
       requiredGpuMemoryMBs: [5223]
+
+  - serviceId: llama.cpp|llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: large language models developed by LLM-jp, a collaborative project launched in Japan.
+    license: Apache License, Version2.0
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-dolly_en-dolly_ja-ichikara_003_001-oasst_en-oasst_ja-v1.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_M.gguf
+      requiredGpuMemoryMBs: [10845]
+
+  - serviceId: llama.cpp|llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: large language models developed by LLM-jp, a collaborative project launched in Japan.
+    license: Apache License, Version2.0
+    url: https://huggingface.co/llm-jp/llm-jp-13b-instruct-lora-dolly_en-dolly_ja-ichikara_003_001-oasst_en-oasst_ja-v1.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S.gguf
+      requiredGpuMemoryMBs: [10181]
 
 
   # contextual question answering

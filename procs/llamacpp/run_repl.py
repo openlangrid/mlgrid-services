@@ -11,7 +11,7 @@ def instructionFormatter(modelName: str):
         f = "<s>[INST] <<SYS>>\\n{systemPrompt or " + sysp + "}\\n<</SYS>\\n\\n{userPrompt} " + attr + " [/INST] "
     elif "youri" in modelName and "chat" in modelName:
         f = "設定: {systemPrompt or 'あなたは誠実で優秀な日本人のアシスタントです。'}\\nユーザー: {userPrompt}\\nシステム: "
-    elif "nekomata" in modelName or "youri" in modelName:
+    elif "nekomata" in modelName or "youri" in modelName or "llm-jp" in modelName:
         f = "以下は、タスクを説明する指示です。要求を適切に満たす応答を書きなさい。\\n\\n### 指示:\\n{userPrompt}\\n\\n### 応答:\\n"
     print("using template: " + f, file=sys.stderr)
     return lambda systemPrompt, userPrompt, attr: eval(f'f"{f}"')

@@ -32,6 +32,10 @@ declare -A models=(
     rinna-youri-7b-chat-q5_K_M.gguf
     rinna-youri-7b-chat-q5_K_S.gguf
   "
+  ["llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-gguf"]="
+    llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_M.gguf
+    llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S.gguf
+  "
 )
 
 for D in "${!models[@]}"; do
