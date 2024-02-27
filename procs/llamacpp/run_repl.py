@@ -66,6 +66,7 @@ class OpenAIChatMessageFormatter:
                 message += f"<|im_start|>user\n{m['content']}<|im_end|>\n"
             elif m["role"] == "assistant":
                 message += f"<|im_start|>assistant\n{m['content']}<|im_end|>\n"
+        message += "<|im_start|>assistant\n"
         return message
 
 def chatFormatter(modelName: str):

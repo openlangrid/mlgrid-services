@@ -192,6 +192,30 @@ services:
         - llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S.gguf
       requiredGpuMemoryMBs: [9955]
 
+  - serviceId: llama.cpp|Qwen1.5-14B-Chat-q5_k_m|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-14B-Chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-14b-chat-q5_k_m.gguf
+      requiredGpuMemoryMBs: [12453]
+
+  - serviceId: llama.cpp|Qwen1.5-72B-Chat-q4_k_m|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-72B-Chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-72b-chat-q4_k_m.gguf
+      requiredGpus: 1
+
 
   # instruction
   - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|TI|R
@@ -386,6 +410,30 @@ services:
         - llm-jp-13b-instruct-dolly-en-ja-oasst-v1.1-q5_K_S.gguf
       requiredGpuMemoryMBs: [10181]
 
+  - serviceId: llama.cpp|Qwen1.5-14B-Chat-q5_k_m|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-14B-Chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-14b-chat-q5_k_m.gguf
+      requiredGpuMemoryMBs: [12453]
+
+  - serviceId: llama.cpp|Qwen1.5-72B-Chat-q4_k_m|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-72B-Chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-72b-chat-q4_k_m.gguf
+      requiredGpus: 1
+
 
   # contextual question answering
   - serviceId: llama.cpp|Karakuri-70b-chat-v0.1-q5_K_S|CQA|R
@@ -474,15 +522,38 @@ services:
         - rinna-youri-7b-chat-q5_K_S.gguf
       requiredGpuMemoryMBs: [5221]
 
-  - serviceId: llama.cpp|Qwen1.5-7B-Chat-q5_k_m|Chat|R
+  - serviceId: llama.cpp|Qwen1.5-14B-Chat-q5_k_m|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
     license: Tongyi Qianwen LICENSE AGREEMENT
-    url: https://huggingface.co/Qwen/Qwen1.5-7B-Chat
-    disabled: true
+    url: https://huggingface.co/Qwen/Qwen1.5-14B-Chat
     properties:
       commands:
         - bash
         - run_repl.sh
         - qwen1_5-14b-chat-q5_k_m.gguf
-      requiredGpuMemoryMBs: [5223]
+      requiredGpuMemoryMBs: [12453]
+
+  - serviceId: llama.cpp|Qwen1.5-72B-Chat-q4_k_m|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-72B-Chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-72b-chat-q4_k_m.gguf
+      requiredGpus: 1
+
+  - serviceId: llama.cpp|Qwen1.5-72B-Chat-q5_k_m|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
+    license: Tongyi Qianwen LICENSE AGREEMENT
+    url: https://huggingface.co/Qwen/Qwen1.5-72B-Chat
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - qwen1_5-72b-chat-q5_k_m.gguf
+      requiredGpus: 1

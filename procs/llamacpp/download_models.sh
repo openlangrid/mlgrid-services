@@ -48,3 +48,32 @@ for D in "${!models[@]}"; do
   done
 done
 
+
+declare -A qwenmodelparts=(
+  ["Qwen1.5-14B-Chat-GGUF"]="
+    qwen1_5-14b-chat-q5_k_m.gguf
+  "
+  ["Qwen1.5-72B-Chat-GGUF"]="
+    qwen1_5-72b-chat-q5_k_m.gguf.a
+    qwen1_5-72b-chat-q5_k_m.gguf.b
+    qwen1_5-72b-chat-q4_k_m.gguf.a
+    qwen1_5-72b-chat-q4_k_m.gguf.b
+  "
+)
+
+for D in "${!qwenmodelparts[@]}"; do
+  MS=(`echo ${qwenmodelparts[${D}]}`)
+  for M in "${MS[@]}"; do
+    if [ ! -e ./models/${M} ]; then
+      wget https://huggingface.co/Qwen/${D}/resolve/main/${M}?download=true \
+        -O ./models/${M}
+    fi
+  done
+done
+
+qwenmodels=(qwen1_5-72b-chat-q4_k_m.gguf qwen1_5-72b-chat-q5_k_m.gguf)
+for M in "${qwenmodels[@]}"; do
+  if [ ! -e ./models/${M} ]; then
+    cat ./models/${M}.* > ./models/${M}
+  fi
+done
