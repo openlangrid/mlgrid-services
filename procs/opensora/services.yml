@@ -1,0 +1,13 @@
+services:
+  # generation
+  - serviceId: OpenSora|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextVideoGeneration
+    description: Open-Sora: Democratizing Efficient Video Production for All
+    license: Apache-2.0 license
+    url: https://github.com/hpcaitech/Open-Sora
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - OpenSora-v1-HQ-16x256x256.pth
+      requiredGpuMemoryMBs: [21443]
