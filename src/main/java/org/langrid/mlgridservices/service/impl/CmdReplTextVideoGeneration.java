@@ -34,22 +34,23 @@ implements TextGuidedVideoGenerationService{
 			var baseFile = createBaseFile();
 			var inputTextFile = new File(baseFile.toString() + ".input_text.txt");
 			Files.writeString(inputTextFile.toPath(), text, StandardCharsets.UTF_8);
-			var outputFilePrefix = baseFile.getName() + ".output";
+			var outputFile = baseFile.getName() + ".output.mp4";
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var input = mapper().writeValueAsString(new TextVideoGenerationCommandInput(
 				getTempDir().getName() + "/" + inputTextFile.getName(),
 				textLanguage,
-				getTempDir().getName() + "/" + outputFilePrefix
+				getTempDir().getName() + "/" + outputFile
 			));
 			Files.writeString(inputFile.toPath(), input, StandardCharsets.UTF_8);
 
 			var ins = getInstance();
 			var success = ins.exec(input).isSucceeded();
+			System.out.println("Sccessed: " + success);
 			if(success){
-				var imgFile = new File(getTempDir(), outputFilePrefix + ".mp4");
-				if(imgFile.exists()){
+				var vdoFile = new File(getTempDir(), outputFile);
+				if(vdoFile.exists()){
 					return new Video(
-						Files.readAllBytes(imgFile.toPath()),
+						Files.readAllBytes(vdoFile.toPath()),
 						"video/mp4");
 				}
 			}
@@ -67,6 +68,6 @@ implements TextGuidedVideoGenerationService{
 	static class TextVideoGenerationCommandInput{
 		private String promptPath;
 		private String promptLanguage;
-		private String outputPathPrefix;
+		private String outputPath;
 	}
 }

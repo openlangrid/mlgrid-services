@@ -48,7 +48,7 @@ implements Instance {
 	}
 
 	protected boolean shouldIgnoreStdout(String line){
-		return false;
+		return !(line.equals("ok") || line.split(" ")[0].equals("ok"));
 	}
 
 	public synchronized Response exec(String input)
@@ -72,9 +72,15 @@ implements Instance {
 			}
 		}
 		do{
-			if(response == null) break;
+			if(response == null){
+				System.out.println("Process ended because response is null.");
+				break;
+			}
 			var vals = response.split(" +", 2);
-			if(!vals[0].equals("ok")) break;
+			if(!vals[0].equals("ok")){
+				System.out.println("Process ended because invalid response: " + response);
+				break;
+			}
 			if(vals.length == 1) return new Response(true);
 			try{
 				var gpuInfos = mapper.readValue(vals[1], GpuInfo[].class);

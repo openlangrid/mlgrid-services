@@ -105,7 +105,7 @@ def inference(prompt: str, save_path: str):
     save_sample(samples[0], fps=cfg.fps, save_path=save_path)
 
 
-def run(modelName: str):
+def run():
     from torch.cuda import OutOfMemoryError
     try:
         setup()
@@ -114,13 +114,12 @@ def run(modelName: str):
         import json, sys
         for line in sys.stdin:
             input = json.loads(line)
-            serviceType = input["serviceType"]
-            methodName = input["methodName"]
+#            serviceType = input["serviceType"]
+#            methodName = input["methodName"]
             with open(input["promptPath"]) as f:
                 text = f.read()
             language = input["promptLanguage"]
             outputPath = input["outputPath"]
-
             inference(text, outputPath)
             from gpuinfo import get_gpu_properties
             props = get_gpu_properties()
@@ -131,12 +130,5 @@ def run(modelName: str):
         print("ng RuntimeError", flush=True)
 
 
-def main(model: str):
-    run(model)
-
-
 if __name__ == "__main__": 
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("model", type=str, nargs="?", default="OpenSora-v1-HQ-16x256x256.pth")
-    main(**vars(parser.parse_args()))
+    run()
