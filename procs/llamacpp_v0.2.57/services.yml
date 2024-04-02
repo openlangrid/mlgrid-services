@@ -1,5 +1,48 @@
 services:
   # instruction
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-v1-7B_q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: an experimental general-purpose Japanese LLM.
+    license: Microsoft Research License
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-v1-7B-gguf
+        - "*q5_K_M.gguf"
+      requiredGpuMemoryMBs: [5314]
+
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-v1-7B_q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: an experimental general-purpose Japanese LLM.
+    license: Microsoft Research License
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-v1-7B-gguf
+        - "*q5_K_S.gguf"
+      requiredGpuMemoryMBs: [5314]
+
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-v1-7B_q8_0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: an experimental general-purpose Japanese LLM.
+    license: Microsoft Research License
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-v1-7B-gguf
+        - "*q8_0.gguf"
+      requiredGpuMemoryMBs: [7719]
+
+
   - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-A-v1-7B_q5_K_M|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     description: an experimental general-purpose Japanese LLM.
@@ -12,6 +55,20 @@ services:
         - SakanaAI/EvoLLM-JP-A-v1-7B
         - mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf
         - "*q5_K_M.gguf"
+      requiredGpuMemoryMBs: [5314]
+
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-A-v1-7B_q5_K_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: an experimental general-purpose Japanese LLM.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-A-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-A-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf
+        - "*q5_K_S.gguf"
       requiredGpuMemoryMBs: [5314]
 
   - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-A-v1-7B_q8_0|TI|R
@@ -29,6 +86,48 @@ services:
       requiredGpuMemoryMBs: [7719]
 
   # chat
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-v1-7B_q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an experimental general-purpose Japanese LLM.
+    license: Microsoft Research License
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-v1-7B-gguf
+        - "*q5_K_M.gguf"
+      requiredGpuMemoryMBs: [5314]
+
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-v1-7B_q5_K_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an experimental general-purpose Japanese LLM.
+    license: Microsoft Research License
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-v1-7B-gguf
+        - "*q5_K_S.gguf"
+      requiredGpuMemoryMBs: [5314]
+
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-v1-7B_q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an experimental general-purpose Japanese LLM.
+    license: Microsoft Research License
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-v1-7B-gguf
+        - "*q8_0.gguf"
+      requiredGpuMemoryMBs: [7719]
+
   - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-A-v1-7B_q5_K_M|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     description: an experimental general-purpose Japanese LLM.
@@ -41,6 +140,20 @@ services:
         - SakanaAI/EvoLLM-JP-A-v1-7B
         - mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf
         - "*q5_K_M.gguf"
+      requiredGpuMemoryMBs: [5314]
+
+  - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-A-v1-7B_q5_K_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an experimental general-purpose Japanese LLM.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/SakanaAI/EvoLLM-JP-A-v1-7B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - SakanaAI/EvoLLM-JP-A-v1-7B
+        - mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf
+        - "*q5_K_S.gguf"
       requiredGpuMemoryMBs: [5314]
 
   - serviceId: llama.cpp|SakanaAI-EvoLLM-JP-A-v1-7B_q8_0|Chat|R
@@ -56,4 +169,3 @@ services:
         - mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf
         - "*q8_0.gguf"
       requiredGpuMemoryMBs: [7719]
-
