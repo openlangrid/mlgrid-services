@@ -17,3 +17,8 @@ messages=[
 output = llm.create_chat_completion(
     messages=messages, max_tokens=1024)
 print(output["choices"][0]["message"]["content"])
+
+from gpuinfo import get_gpu_properties
+import json
+props = get_gpu_properties()
+print(f"ok {json.dumps(props)}", flush=True)

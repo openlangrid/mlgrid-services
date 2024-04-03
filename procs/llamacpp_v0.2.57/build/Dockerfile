@@ -10,3 +10,5 @@ RUN pip install transformers accelerate
 RUN pip install sentencepiece
 RUN pip install bitsandbytes einops scipy
 RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python==0.2.57
+RUN pip install protobuf
+

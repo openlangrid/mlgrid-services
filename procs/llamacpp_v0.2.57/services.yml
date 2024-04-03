@@ -169,3 +169,46 @@ services:
         - mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf
         - "*q8_0.gguf"
       requiredGpuMemoryMBs: [7719]
+
+
+  - serviceId: llama.cpp|Swallow-MX-8x7b-NVE-v0.1_q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Our Swallow-MX-8x7b-NVE-v0.1 model has undergone continuous pre-training from the Mixtral-8x7B-Instruct-v0.1, primarily with the addition of Japanese language data.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/tokyotech-llm/Swallow-MX-8x7b-NVE-v0.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - tokyotech-llm/Swallow-MX-8x7b-NVE-v0.1
+        - mmnga/tokyotech-llm-Swallow-MX-8x7b-NVE-v0.1-gguf
+        - "*q8_0.gguf"
+      requiredGpuMemoryMBs: [47913]
+
+  - serviceId: llama.cpp|Swallow-MX-8x7b-NVE-v0.1_q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Our Swallow-MX-8x7b-NVE-v0.1 model has undergone continuous pre-training from the Mixtral-8x7B-Instruct-v0.1, primarily with the addition of Japanese language data.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/tokyotech-llm/Swallow-MX-8x7b-NVE-v0.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - tokyotech-llm/Swallow-MX-8x7b-NVE-v0.1
+        - mmnga/tokyotech-llm-Swallow-MX-8x7b-NVE-v0.1-gguf
+        - "*q5_K_M.gguf"
+      requiredGpuMemoryMBs: [32323]
+
+  - serviceId: llama.cpp|Swallow-MX-8x7b-NVE-v0.1_q5_K_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Our Swallow-MX-8x7b-NVE-v0.1 model has undergone continuous pre-training from the Mixtral-8x7B-Instruct-v0.1, primarily with the addition of Japanese language data.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/tokyotech-llm/Swallow-MX-8x7b-NVE-v0.1
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - tokyotech-llm/Swallow-MX-8x7b-NVE-v0.1
+        - mmnga/tokyotech-llm-Swallow-MX-8x7b-NVE-v0.1-gguf
+        - "*q5_K_S.gguf"
+      requiredGpuMemoryMBs: [31371]
