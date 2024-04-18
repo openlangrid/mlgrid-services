@@ -254,3 +254,33 @@ services:
         - TFMC/Japanese-Starling-ChatV-7B-GGUF
         - "*f16.gguf"
       requiredGpuMemoryMBs: [13997]
+
+  - serviceId: llama.cpp|c4ai-command-r-plus-GGUF_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of a 104B billion parameter model with highly advanced capabilities
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/CohereForAI/c4ai-command-r-plus
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/c4ai-command-r-plus
+        - pmysl/c4ai-command-r-plus-GGUF
+        - "*Q4_K_M-00001-of-00002.gguf"
+        - 48
+      requiredGpuMemoryMBs: [46211]
+  # test.sh を使うなどして "*Q4_K_M-00002-of-00002.gguf" も一度ダウンロードしておかないと動かない。
+
+  - serviceId: llama.cpp|c4ai-command-r-plus-GGUF_Q2_K|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of a 104B billion parameter model with highly advanced capabilities
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/CohereForAI/c4ai-command-r-plus
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/c4ai-command-r-plus
+        - pmysl/c4ai-command-r-plus-GGUF
+        - "*Q2_K.gguf"
+      requiredGpuMemoryMBs: [38595]
