@@ -6,9 +6,8 @@ RUN apt update && \
   apt install -y software-properties-common git curl libgl1
 
 
-RUN pip install transformers accelerate
-RUN pip install sentencepiece
-RUN pip install bitsandbytes einops scipy
-RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python==0.2.57
-RUN pip install protobuf
-
+RUN pip install accelerate bitsandbytes einops scipy sentencepiece protobuf
+RUN pip install transformers==4.39.3
+#RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python==0.2.62
+RUN pip install llama-cpp-python==0.2.62 \
+  --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu121

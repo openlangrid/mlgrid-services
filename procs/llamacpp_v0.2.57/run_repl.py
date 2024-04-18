@@ -1,13 +1,17 @@
 
-def run(orgModelId: str, ggufModelId: str, ggufFilePattern: str):
+def run(orgModelId: str, ggufModelId: str, ggufFilePattern: str, gpuLayers: int):
     from torch.cuda import OutOfMemoryError
     from llama_cpp import Llama, llama_chat_format
 
     try:
         chat_handler = llama_chat_format.hf_autotokenizer_to_chat_completion_handler(orgModelId)
-        llm = Llama.from_pretrained(
-            ggufModelId, filename=ggufFilePattern, n_gpu_layers=-1, n_ctx=1024,
-            chat_handler=chat_handler)
+        if ggufModelId.startswith("./"):
+            llm = Llama(model_path=ggufModelId, n_gpu_layers=gpuLayers, n_ctx=1024,
+                chat_handler=chat_handler)
+        else:
+            llm = Llama.from_pretrained(
+                ggufModelId, filename=ggufFilePattern, n_gpu_layers=gpuLayers, n_ctx=1024,
+                chat_handler=chat_handler)
         print("ready", flush=True)
 
         import json, sys
@@ -66,4 +70,5 @@ if __name__ == "__main__":
     parser.add_argument("orgModelId", type=str, nargs="?", default="SakanaAI/EvoLLM-JP-A-v1-7B")
     parser.add_argument("ggufModelId", type=str, nargs="?", default="mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf")
     parser.add_argument("ggufFilePattern", type=str, nargs="?", default="*q5_K_M.gguf")
+    parser.add_argument("gpuLayers", type=int, nargs="?", default="-1")
     run(**vars(parser.parse_args()))

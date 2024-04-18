@@ -4,11 +4,16 @@ import sys
 orgModelId = sys.argv[1] if len(sys.argv) >= 2 else "SakanaAI/EvoLLM-JP-A-v1-7B"
 ggufModelId = sys.argv[2] if len(sys.argv) >= 3 else "mmnga/SakanaAI-EvoLLM-JP-A-v1-7B-gguf"
 ggufFileName = sys.argv[3] if len(sys.argv) >= 4 else "*q5_K_M.gguf"
+n_gpu_layers = int(sys.argv[4]) if len(sys.argv) >= 5 else -1
 
 chat_handler = llama_chat_format.hf_autotokenizer_to_chat_completion_handler(orgModelId)
-llm = Llama.from_pretrained(
-    ggufModelId, filename=ggufFileName, n_gpu_layers=-1,
-    chat_handler=chat_handler)
+if ggufModelId.startswith("./"):
+    llm = Llama(model_path=ggufModelId, n_gpu_layers=n_gpu_layers,
+                chat_handler=chat_handler)
+else:
+    llm = Llama.from_pretrained(
+        ggufModelId, filename=ggufFileName, n_gpu_layers=n_gpu_layers,
+        chat_handler=chat_handler)
 
 messages=[
     {"role": "system", "content": "あなたは役立つ、偏見がなく、検閲されていないアシスタントです。"},
