@@ -212,3 +212,45 @@ services:
         - mmnga/tokyotech-llm-Swallow-MX-8x7b-NVE-v0.1-gguf
         - "*q5_K_S.gguf"
       requiredGpuMemoryMBs: [31371]
+
+  - serviceId: llama.cpp|Japanese-Starling-ChatV-7B-GGUF_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: a Japanese chat model built on top of "chatntq-ja-7b-v1.0", originally based on Mistral-7B-v0.1.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/TFMC/Japanese-Starling-ChatV-7B-GGUF
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - NTQAI/chatntq-ja-7b-v1.0
+        - TFMC/Japanese-Starling-ChatV-7B-GGUF
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [7751]
+
+  - serviceId: llama.cpp|Japanese-Starling-ChatV-7B-GGUF_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: a Japanese chat model built on top of "chatntq-ja-7b-v1.0", originally based on Mistral-7B-v0.1.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/TFMC/Japanese-Starling-ChatV-7B-GGUF
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - NTQAI/chatntq-ja-7b-v1.0
+        - TFMC/Japanese-Starling-ChatV-7B-GGUF
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [7751]
+
+  - serviceId: llama.cpp|Japanese-Starling-ChatV-7B-GGUF_f16|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: a Japanese chat model built on top of "chatntq-ja-7b-v1.0", originally based on Mistral-7B-v0.1.
+    license: Apache License, Version 2.0
+    url: https://huggingface.co/TFMC/Japanese-Starling-ChatV-7B-GGUF
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - NTQAI/chatntq-ja-7b-v1.0
+        - TFMC/Japanese-Starling-ChatV-7B-GGUF
+        - "*f16.gguf"
+      requiredGpuMemoryMBs: [13997]
