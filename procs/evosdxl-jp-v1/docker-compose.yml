@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /workspace/EvoSDXL-JP-v1
+    volumes:
+      - ../_common/gpuinfo.py:/workspace/EvoSDXL-JP-v1/gpuinfo.py
+      - ./sample.py:/workspace/EvoSDXL-JP-v1/sample.py
+      - ./sample:/workspace/EvoSDXL-JP-v1/sample
+      - ./run_repl.py:/workspace/EvoSDXL-JP-v1/run_repl.py
+      - ./temp:/workspace/EvoSDXL-JP-v1/temp
+      - ../cache:/root/.cache
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}

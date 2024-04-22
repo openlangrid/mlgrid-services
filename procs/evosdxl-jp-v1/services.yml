@@ -1,0 +1,11 @@
+services:
+  - serviceId: EvoSDXL-JP-v1|R
+    description: an experimental education-purpose Japanese SDXL Lightning.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/SakanaAI/EvoSDXL-JP-v1
+    license: Apache License 2.0(Python script)
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+      requiredGpuMemoryMBs: [37700]
