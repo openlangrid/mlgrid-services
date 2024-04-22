@@ -1,2 +1,2 @@
 #!/bin/bash
-docker compose run -T --rm service python run_sample.py $@
+docker compose run -T --rm service python sample.py $@
