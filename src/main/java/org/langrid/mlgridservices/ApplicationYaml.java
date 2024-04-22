@@ -11,4 +11,6 @@ import lombok.Data;
 @Data
 public class ApplicationYaml {
 	private GpuSpec[] availableGpus;
+	private String[] apiKeys;
+	private String[] allowedOrigines;
 }

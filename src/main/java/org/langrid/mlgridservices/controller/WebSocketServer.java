@@ -9,17 +9,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import javax.servlet.http.HttpSession;
-import javax.websocket.CloseReason;
-import javax.websocket.EndpointConfig;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
 import org.langrid.mlgridservices.service.ServiceInvoker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -32,6 +21,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.undercouch.bson4jackson.BsonFactory;
+import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.CloseReason;
+import jakarta.websocket.EndpointConfig;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
 import jp.go.nict.langrid.service_1_2.ProcessFailedException;
 
 @Component
