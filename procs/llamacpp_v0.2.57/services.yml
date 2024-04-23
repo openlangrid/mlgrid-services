@@ -266,7 +266,7 @@ services:
         - run_repl.sh
         - CohereForAI/c4ai-command-r-plus
         - pmysl/c4ai-command-r-plus-GGUF
-        - "*Q4_K_M-00001-of-00002.gguf"
+        - "command-r-plus-Q4_K_M-00001-of-00002.gguf"
         - 48
       requiredGpuMemoryMBs: [46211]
   # test.sh を使うなどして "*Q4_K_M-00002-of-00002.gguf" も一度ダウンロードしておかないと動かない。
