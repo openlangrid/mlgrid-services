@@ -1,0 +1,11 @@
+services:
+  - serviceId: IDM-VTON|R
+    description: "Improving Diffusion Models for Authentic Virtual Try-on in the Wild."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplVirtualTryOn
+    url: https://huggingface.co/yisol/IDM-VTON
+    license: "CC BY-NC-SA 4.0"
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+      requiredGpuMemoryMBs: [19267]

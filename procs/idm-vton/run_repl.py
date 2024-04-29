@@ -126,7 +126,7 @@ pipe.to(device)
 pipe.unet_encoder.to(device)
 
 
-def start_tryon(human_img, human_prompt,
+def tryon(human_img, human_prompt,
                 garm_img, garm_prompt,
                 generate_mask, mask_category,
                 is_checked_crop,denoise_steps,seed):
@@ -232,26 +232,34 @@ def start_tryon(human_img, human_prompt,
         return images[0], mask_gray
 
 
-garment_des = ""  # Short Sleeve Round Neck T-shirts
-human_img = Image.open("/work/sample/in_human.jpg")
-human_prompt = "model is wearing " + garment_des
-garment_img = Image.open("/work/sample/in_garment.jpg")
-garment_prompt = "a phot of " + garment_des
-generate_mask = True
-mask_category = "upper_body" # "dresses" or "upper_body" or "lower_body"
-is_checked_crop = False
-denoise_steps = 30
-seed = 42
+def run():
+    print("ready", flush=True)
 
-img, mask = start_tryon(
-    human_img, human_prompt,
-    garment_img, garment_prompt,
-    generate_mask, mask_category,
-    is_checked_crop, denoise_steps, seed)
-img.save("/work/sample/out.jpg")
-mask.save("/work/sample/out_mask.jpg")
+    import json, sys
+    for line in sys.stdin:
+        input = json.loads(line)
+        human_img = Image.open(input["humanImagePath"])
+        human_prompt = input["humanPrompt"]
+        garment_img = Image.open(input["garmentImagePath"])
+        garment_prompt = input["garmentPrompt"]
+        language = input["promptLanguage"]
+        garment_category = input["garmentCategory"]
+        generate_mask = True
+        is_checked_crop = True
+        denoise_steps = 30
+        seed = 42
+        outputPath = input["outputPath"]    
+        image, mask = tryon(
+            human_img, human_prompt,
+            garment_img, garment_prompt,
+            generate_mask, garment_category,
+            is_checked_crop, denoise_steps, seed)
+        image.save(outputPath)
+        mask.save(outputPath + "_mask.jpg")
+        from gpuinfo import get_gpu_properties
+        props = get_gpu_properties()
+        print(f"ok {json.dumps(props)}", flush=True)
 
-from gpuinfo import get_gpu_properties
-import json
-props = get_gpu_properties()
-print(f"ok {json.dumps(props)}", flush=True)
+
+if __name__ == "__main__": 
+    run()
