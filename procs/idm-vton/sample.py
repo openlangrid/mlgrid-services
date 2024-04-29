@@ -238,8 +238,8 @@ def start_tryon(dict,garm_img,garment_des,is_checked,is_checked_crop,denoise_ste
         return images[0], mask_gray
 
 
-human_img = Image.open("example/human/00034_00.jpg")
-garm_img = Image.open("example/cloth/04469_00.jpg")
+human_img = Image.open("/work/sample/in_human.jpg")
+garm_img = Image.open("/work/sample/in_garment.jpg")
 garment_des = ""  # Short Sleeve Round Neck T-shirts
 is_checked = True
 is_checked_crop = False
@@ -250,5 +250,10 @@ img, mask = start_tryon(
     {"background": human_img, "layers": [human_img]},
     garm_img,garment_des,is_checked,is_checked_crop,denoise_steps,seed)
 
-img.save("/work/sample/mask.jpg")
+mask.save("/work/sample/out_mask.jpg")
 img.save("/work/sample/out.jpg")
+
+from gpuinfo import get_gpu_properties
+import json
+props = get_gpu_properties()
+print(f"ok {json.dumps(props)}", flush=True)
