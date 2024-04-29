@@ -243,7 +243,7 @@ def run():
         garment_img = Image.open(input["garmentImagePath"])
         garment_prompt = input["garmentPrompt"]
         language = input["promptLanguage"]
-        garment_category = input["garmentCategory"]
+        garment_category = input["garmentCategory"].lower()
         generate_mask = True
         is_checked_crop = True
         denoise_steps = 30
