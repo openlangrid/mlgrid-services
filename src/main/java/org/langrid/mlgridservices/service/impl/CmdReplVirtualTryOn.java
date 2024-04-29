@@ -36,11 +36,11 @@ implements VirtualTryOnService{
 		try{
 			var baseFile = createBaseFile();
 			var inputHumanImageFile = new File(
-				baseFile.toString() + ".input_human" + FileUtil.getExtFromFormat(humanImageFormat));
+				baseFile.toString() + ".input_human." + FileUtil.getExtFromFormat(humanImageFormat));
 			Files.write(inputHumanImageFile.toPath(), humanImage);
 			var inputGarmentImageFile = new File(
-				baseFile.toString() + ".input_garment" + FileUtil.getExtFromFormat(garmentImageFormat));
-			Files.write(inputGarmentImageFile.toPath(), humanImage);
+				baseFile.toString() + ".input_garment." + FileUtil.getExtFromFormat(garmentImageFormat));
+			Files.write(inputGarmentImageFile.toPath(), garmentImage);
 			var outputFile = baseFile.getName() + ".output.jpg";
 			var inputFile = new File(baseFile.toString() + ".input.txt");
 			var input = mapper().writeValueAsString(new VirtualTryOnCommandInput(
