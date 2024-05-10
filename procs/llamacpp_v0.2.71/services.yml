@@ -1,0 +1,87 @@
+services:
+  # instruction
+  - serviceId: llama.cpp|ArrowPro-7B-KUJIRA_fp16|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KUJIRA
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KUJIRA
+        - MCZK/ArrowPro-7B-KUJIRA-GGUF
+        - "*f16.gguf"
+      requiredGpuMemoryMBs: [13997]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KUJIRA_Q8_0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KUJIRA
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KUJIRA
+        - MCZK/ArrowPro-7B-KUJIRA-GGUF
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [7639]
+      
+  - serviceId: llama.cpp|ArrowPro-7B-KUJIRA_Q4_K_M_c4_en_ja_imatrix|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KUJIRA
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KUJIRA
+        - MCZK/ArrowPro-7B-KUJIRA-GGUF
+        - "*Q4_K_M.iMatrix.gguf"
+      requiredGpuMemoryMBs: [4529]
+
+
+  # chat
+  - serviceId: llama.cpp|ArrowPro-7B-KUJIRA_fp16|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KUJIRA
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KUJIRA
+        - MCZK/ArrowPro-7B-KUJIRA-GGUF
+        - "*f16.gguf"
+      requiredGpuMemoryMBs: [13997]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KUJIRA_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KUJIRA
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KUJIRA
+        - MCZK/ArrowPro-7B-KUJIRA-GGUF
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [7639]
+      
+  - serviceId: llama.cpp|ArrowPro-7B-KUJIRA_Q4_K_M_c4_en_ja_imatrix|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KUJIRA
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KUJIRA
+        - MCZK/ArrowPro-7B-KUJIRA-GGUF
+        - "*Q4_K_M.iMatrix.gguf"
+      requiredGpuMemoryMBs: [4529]
