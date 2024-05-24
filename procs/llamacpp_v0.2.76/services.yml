@@ -1,0 +1,114 @@
+services:
+  # instruction
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_Q8_0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [14905]
+
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_Q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [10423]
+
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_IQ4_NL|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*IQ4_NL.gguf"
+      requiredGpuMemoryMBs: [8367]
+
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_IQ2_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*IQ2_M.gguf"
+      requiredGpuMemoryMBs: [5355]
+
+  # chat
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [14905]
+
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_Q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [10423]
+
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_IQ4_NL|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChatInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*IQ4_NL.gguf"
+      requiredGpuMemoryMBs: [8367]
+
+  - serviceId: llama.cpp|Phi-3-medium-128k-instruct_IQ2_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChatInstruction
+    description: a 3.8 billion-parameter, lightweight, state-of-the-art open model trained using the Phi-3 datasets.
+    license: mit
+    url: https://huggingface.co/microsoft/Phi-3-medium-128k-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - microsoft/Phi-3-medium-128k-instruct
+        - mmnga/Phi-3-medium-128k-instruct-gguf
+        - "*IQ2_M.gguf"
+      requiredGpuMemoryMBs: [5355]
