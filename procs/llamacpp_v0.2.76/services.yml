@@ -112,3 +112,213 @@ services:
         - mmnga/Phi-3-medium-128k-instruct-gguf
         - "*IQ2_M.gguf"
       requiredGpuMemoryMBs: [5355]
+
+  - serviceId: llama.cpp|aya-23-35B_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-35B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-35B
+        - mmnga/aya-23-35B-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [37255]
+
+  - serviceId: llama.cpp|aya-23-35B_Q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-35B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-35B
+        - mmnga/aya-23-35B-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [25647]
+
+  - serviceId: llama.cpp|aya-23-35B_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-35B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-35B
+        - mmnga/aya-23-35B-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [22327]
+
+  - serviceId: llama.cpp|aya-23-35B_IQ4_N_L|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-35B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-35B
+        - mmnga/aya-23-35B-gguf
+        - "*IQ4_NL.gguf"
+      requiredGpuMemoryMBs: [21089]
+
+  - serviceId: llama.cpp|aya-23-35B_IQ2_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-35B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-35B
+        - mmnga/aya-23-35B-gguf
+        - "*IQ2_M.gguf"
+      requiredGpuMemoryMBs: [13885]
+
+  - serviceId: llama.cpp|aya-23-8B_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-8B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-8B
+        - mmnga/aya-23-8B-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [9115]
+
+  - serviceId: llama.cpp|aya-23-8B_Q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-8B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-8B
+        - mmnga/aya-23-8B-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [6505]
+
+  - serviceId: llama.cpp|aya-23-8B_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-8B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-8B
+        - mmnga/aya-23-8B-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [5793]
+
+  - serviceId: llama.cpp|aya-23-8B_IQ4_N_L|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-8B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-8B
+        - mmnga/aya-23-8B-gguf
+        - "*IQ4_NL.gguf"
+      requiredGpuMemoryMBs: [5561]
+
+  - serviceId: llama.cpp|aya-23-8B_IQ2_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: an open weights research release of an instruction fine-tuned model with highly advanced multilingual capabilities.
+    license: cc-by-nc-4.0
+    url: https://huggingface.co/CohereForAI/aya-23-8B
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - CohereForAI/aya-23-8B
+        - mmnga/aya-23-8B-gguf
+        - "*IQ2_M.gguf"
+      requiredGpuMemoryMBs: [3911]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KillerWhale_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache-2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KillerWhale
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KillerWhale
+        - mmnga/ArrowPro-7B-KillerWhale-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [7761]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KillerWhale_Q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache-2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KillerWhale
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KillerWhale
+        - mmnga/ArrowPro-7B-KillerWhale-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [5363]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KillerWhale_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache-2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KillerWhale
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KillerWhale
+        - mmnga/ArrowPro-7B-KillerWhale-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [4651]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KillerWhale_IQ4_NL|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache-2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KillerWhale
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KillerWhale
+        - mmnga/ArrowPro-7B-KillerWhale-gguf
+        - "*IQ4_NL.gguf"
+      requiredGpuMemoryMBs: [4419]
+
+  - serviceId: llama.cpp|ArrowPro-7B-KillerWhale_IQ2_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Mistral系のNTQAI/chatntq-ja-7b-v1.0をベースにAItuber、AIアシスタントの魂となるようにChat性能、および高いプロンプトインジェクション耐性を重視して作られました。
+    license: apache-2.0
+    url: https://huggingface.co/DataPilot/ArrowPro-7B-KillerWhale
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - DataPilot/ArrowPro-7B-KillerWhale
+        - mmnga/ArrowPro-7B-KillerWhale-gguf
+        - "*IQ2_M.gguf"
+      requiredGpuMemoryMBs: [2887]
