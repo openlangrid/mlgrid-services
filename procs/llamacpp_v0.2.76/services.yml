@@ -322,3 +322,31 @@ services:
         - mmnga/ArrowPro-7B-KillerWhale-gguf
         - "*IQ2_M.gguf"
       requiredGpuMemoryMBs: [2887]
+
+  - serviceId: llama.cpp|Fugaku-LLM-13B-instruct|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Our Fugaku LLM model is a domestic model pre-trained from scratch using supercomputer Fugaku.
+    license: fugaku-llm-tou
+    url: https://huggingface.co/Fugaku-LLM/Fugaku-LLM-13B-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - Fugaku-LLM/Fugaku-LLM-13B-instruct
+        - Fugaku-LLM/Fugaku-LLM-13B-instruct-gguf
+        - "*0325b.gguf"
+      requiredGpuMemoryMBs: [25925]
+
+  - serviceId: llama.cpp|Fugaku-LLM-13B-instruct_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: Our Fugaku LLM model is a domestic model pre-trained from scratch using supercomputer Fugaku.
+    license: fugaku-llm-tou
+    url: https://huggingface.co/Fugaku-LLM/Fugaku-LLM-13B-instruct
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - Fugaku-LLM/Fugaku-LLM-13B-instruct
+        - Fugaku-LLM/Fugaku-LLM-13B-instruct-gguf
+        - "*q8_0.gguf"
+      requiredGpuMemoryMBs: [14369]
