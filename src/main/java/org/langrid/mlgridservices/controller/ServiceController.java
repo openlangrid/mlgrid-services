@@ -19,7 +19,6 @@ public class ServiceController {
 	public synchronized @ResponseBody Response invoke(
 			@PathVariable("serviceId") String serviceId,
 			@RequestBody Request request) throws MalformedURLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
-		System.out.println(invoker);
 		try {
 			return invoker.invoke(serviceId, request);
 		} catch(Exception e) {
