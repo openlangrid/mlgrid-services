@@ -6,3 +6,13 @@ common:
 services:
   - serviceId: TestVisualQuestionAnswering
     implementation: org.langrid.mlgridservices.service.impl.test.TestVisualQuestionAnswering
+    disabled: true
+
+  - serviceId: ErrorTranslation
+    implementation: org.langrid.mlgridservices.service.impl.test.CmdTranslation
+    disabled: true
+    properties:
+      commands:
+        - bash
+        - -c
+        - "echo world; sleep 1; exit 1"

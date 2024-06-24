@@ -142,6 +142,10 @@ public class InstancePool {
 	throws InterruptedException {
 		var ie = instances.computeIfAbsent(
 			id, k->new InstanceEntry(id, supplier.get()));
+		if(!ie.getInstance().isAlive()){
+			ie = new InstanceEntry(id, supplier.get());
+			instances.put(id, ie);
+		}
 		ie.setLastGotAt(System.currentTimeMillis());
 		return ie.getInstance();
 	}
@@ -149,7 +153,7 @@ public class InstancePool {
 	public synchronized Instance getInstanceWithAnyGpu(String id, Function<GpuSpec, Instance> supplier)
 	throws InterruptedException {
 		var ie = instances.get(id);
-		if(ie == null){
+		if(ie == null || !ie.getInstance().isAlive()){
 			var gpu = reserveAnyGpu();
 			ie = new InstanceEntry(id, supplier.apply(gpu.getSpec()), gpu.getSpec());
 			gpu.getAllocations().add(new GpuAllocation(ie, gpu.getSpec().getMemoryMB()));
@@ -164,7 +168,7 @@ public class InstancePool {
 		String id, int[] requiredGpuMemoryMBs, Function<GpuSpec[], Instance> supplier)
 	throws InterruptedException {
 		var ie = instances.get(id);
-		if(ie == null){
+		if(ie == null || !ie.getInstance().isAlive()){
 			var gpus = reserveGpus(requiredGpuMemoryMBs);
 			var specs = new GpuSpec[gpus.length];
 			for(int i = 0; i < specs.length; i++){

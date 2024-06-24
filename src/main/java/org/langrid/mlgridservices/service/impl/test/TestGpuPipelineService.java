@@ -19,6 +19,9 @@ public class TestGpuPipelineService implements TestService{
 						{
 							System.out.println("[TestGpuPipelineService] created.");
 						}
+						public boolean isAlive(){
+							return true;
+						}
 						public Response exec(String input){
 							System.out.println("[TestGpuPipelineService] executed.");
 							return Response.success();

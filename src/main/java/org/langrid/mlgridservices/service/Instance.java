@@ -25,6 +25,8 @@ public interface Instance {
 	Response exec(String line)
 	throws IOException;
 
+	boolean isAlive();
+
 	void terminateAndWait()
 	throws InterruptedException;
 }

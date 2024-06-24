@@ -47,6 +47,10 @@ implements Instance {
 		}
 	}
 
+	public boolean isAlive(){
+		return process != null && process.isAlive();
+	}
+
 	protected boolean shouldIgnoreStdout(String line){
 		return !(line.equals("ok") || line.split(" ")[0].equals("ok"));
 	}
