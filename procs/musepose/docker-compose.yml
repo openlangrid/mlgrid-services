@@ -1,0 +1,11 @@
+services:
+  service:
+    build: ./build
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+    working_dir: /work
+    volumes:
+      - ../cache/huggingface:/root/.cache/huggingface
+      - .:/work
+      - ../_common/gpuinfo.py:/work/gpuinfo.py
+      - ./cache/pretrained_weights:/workspace/MusePose/pretrained_weights
