@@ -26,7 +26,7 @@ public class ServiceFinder {
 		var c = new Converter();
 		try(var stream = Files.walk(rootPath)){
 			stream.forEach(p -> {
-				if(p.getFileName().toString().equals("services.yml")){
+				if(p.getFileName().toString().matches("^services(.*)\\.yml$")){
 					try(var r = Files.newBufferedReader(p, StandardCharsets.UTF_8)){
 						var sy = new Yaml().loadAs(r, ServicesYml.class);
 						for(var s : sy.services){
