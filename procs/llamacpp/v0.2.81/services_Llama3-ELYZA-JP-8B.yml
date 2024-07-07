@@ -1,0 +1,67 @@
+common:
+  description: Llama-3-ELYZA-JP-8B is a large language model trained by ELYZA, Inc.
+  license: llama3
+  url: https://huggingface.co/elyza/Llama-3-ELYZA-JP-8B
+
+services:
+  # 8B
+  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - elyza/Llama-3-ELYZA-JP-8B
+      requiredGpuMemoryMBs: [15853]
+
+  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - elyza/Llama-3-ELYZA-JP-8B
+      requiredGpuMemoryMBs: [15853]
+
+  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - elyza/Llama-3-ELYZA-JP-8B
+      requiredGpuMemoryMBs: [15853]
+
+  # 8B, q4km
+  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B_q4_k_m|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - elyza/Llama-3-ELYZA-JP-8B
+        - elyza/Llama-3-ELYZA-JP-8B-GGUF
+        - "*q4_k_m.gguf"
+      requiredGpuMemoryMBs: [6612]
+
+  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B_q4_k_m|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - elyza/Llama-3-ELYZA-JP-8B
+        - elyza/Llama-3-ELYZA-JP-8B-GGUF
+        - "*q4_k_m.gguf"
+      requiredGpuMemoryMBs: [6612]
+
+  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B_q4_k_m|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - elyza/Llama-3-ELYZA-JP-8B
+        - elyza/Llama-3-ELYZA-JP-8B-GGUF
+        - "*q4_k_m.gguf"
+      requiredGpuMemoryMBs: [6612]

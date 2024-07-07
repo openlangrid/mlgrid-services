@@ -3,7 +3,6 @@ modelId = sys.argv[1] if len(sys.argv) >= 2 else "google/gemma-2-9b-it"
 
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import transformers
 import torch
 
 model_id = modelId
