@@ -5,7 +5,7 @@ common:
 
 services:
   # 9b-it
-  - serviceId: llama.cpp|gemma-2-9b-it|TG|R
+  - serviceId: transformers|gemma-2-9b-it|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
@@ -14,7 +14,7 @@ services:
         - google/gemma-2-9b-it
       requiredGpuMemoryMBs: [18461]
 
-  - serviceId: llama.cpp|gemma-2-9b-it|TI|R
+  - serviceId: transformers|gemma-2-9b-it|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     properties:
       commands:
@@ -23,7 +23,7 @@ services:
         - google/gemma-2-9b-it
       requiredGpuMemoryMBs: [18461]
 
-  - serviceId: llama.cpp|gemma-2-9b-it|Chat|R
+  - serviceId: transformers|gemma-2-9b-it|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     properties:
       commands:

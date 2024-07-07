@@ -5,7 +5,7 @@ common:
 
 services:
   # 8B
-  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B|TG|R
+  - serviceId: transformers|Llama-3-ELYZA-JP-8B|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
@@ -14,7 +14,7 @@ services:
         - elyza/Llama-3-ELYZA-JP-8B
       requiredGpuMemoryMBs: [15853]
 
-  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B|TI|R
+  - serviceId: transformers|Llama-3-ELYZA-JP-8B|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     properties:
       commands:
@@ -23,7 +23,7 @@ services:
         - elyza/Llama-3-ELYZA-JP-8B
       requiredGpuMemoryMBs: [15853]
 
-  - serviceId: llama.cpp|Llama-3-ELYZA-JP-8B|Chat|R
+  - serviceId: transformers|Llama-3-ELYZA-JP-8B|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     properties:
       commands:
