@@ -60,7 +60,7 @@ services:
     properties:
       commands:
         - bash
-        - run_rllamacpppython_epl.sh
+        - run_llamacpppython_repl.sh
         - google/gemma-2-9b-it
         - QuantFactory/Gemma-2-9B-It-SPPO-Iter3-GGUF
         - "*Q8_0.gguf"
