@@ -14,7 +14,7 @@ services:
         - microsoft/Phi-3-medium-128k-instruct
       requiredGpuMemoryMBs: [14905]
 
-  - serviceId: transformers|Phi-3-medium-128k-instruct_Q8_0|TI|R
+  - serviceId: transformers|Phi-3-medium-128k-instruct|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     properties:
       commands:
@@ -23,7 +23,7 @@ services:
         - microsoft/Phi-3-medium-128k-instruct
       requiredGpuMemoryMBs: [14905]
 
-  - serviceId: transformers|Phi-3-medium-128k-instruct_Q8_0|Chat|R
+  - serviceId: transformers|Phi-3-medium-128k-instruct|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     properties:
       commands:
