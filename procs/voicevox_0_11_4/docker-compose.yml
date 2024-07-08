@@ -4,7 +4,6 @@ services:
   service:
     build: ./build
     working_dir: /workspace/voicevox_core
-    runtime: nvidia
     volumes:
       - .:/work
-      - ./run.py:/workspace/voicevox_core/example/python/run.py
+      - ./run_repl.py:/workspace/voicevox_core/run_repl.py

@@ -86,12 +86,12 @@ public class ServiceInvoker {
 		serviceImples.put("GoogleTTS", googleTts);
 
 		// TextToSpeech
-		for(var i = 0; i < 20; i++){
+/*		for(var i = 0; i < 20; i++){
 			serviceImples.put(
 				String.format("VoiceVox_0_11_4_%02d", i),
 				new VoiceVoxTextToSpeechService("./procs/voicevox_0_11_4", "" + i));
 		}
-		serviceImples.put("Plachtaa/VALL-E-X/cafe|P", new VallexPipeline(
+*/		serviceImples.put("Plachtaa/VALL-E-X/cafe|P", new VallexPipeline(
 			"./procs/vallex", "bash", "run_pipeline.sh", "cafe"
 		));
 		serviceImples.put("Plachtaa/VALL-E-X/dingzhen|P", new VallexPipeline(

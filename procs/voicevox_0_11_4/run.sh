@@ -5,13 +5,7 @@ shift
 SPEAKER_ID=${1:-3}
 shift
 
-docker-compose run --rm \
+docker compose run --rm \
   service \
-  python ./example/python/run.py \
-     --text "こんにちは" \
-     --speaker_id ${SPEAKER_ID} \
-     --f0_speaker_id 0 \
-     --f0_correct 0 \
-     --root_dir_path="./release" \
-     --use_gpu \
-     --out_file_name="${OUT_FILE_NAME}" "$@"
+  python ./run.py --dict-dir "./open_jtalk_dic_utf_8-1.11" \
+    --text "こんにちは" --out /work/sample/out.wav --speaker-id  1

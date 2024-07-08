@@ -45,12 +45,8 @@ def run(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--use_gpu", action="store_true")
     parser.add_argument("--text", required=True)
     parser.add_argument("--speaker_id", type=int, required=True)
-    parser.add_argument("--f0_speaker_id", type=int)
-    parser.add_argument("--f0_correct", type=float, default=0)
     parser.add_argument("--root_dir_path", type=str, default="./")
-    parser.add_argument("--cpu_num_threads", type=int, default=0)
     parser.add_argument("--out_file_name", type=str, default=None)
     run(**vars(parser.parse_args()))

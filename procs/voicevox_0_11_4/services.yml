@@ -1,0 +1,463 @@
+common:
+  description: 無料で使える中品質なテキスト読み上げソフトウェア
+  license: MIT License
+  url: https://github.com/VOICEVOX
+
+services:
+  - serviceId: VoiceVox_0_14_2_00|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 0
+
+
+  - serviceId: VoiceVox_0_14_2_01|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 1
+
+
+  - serviceId: VoiceVox_0_14_2_02|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 2
+
+
+  - serviceId: VoiceVox_0_14_2_03|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 3
+
+
+  - serviceId: VoiceVox_0_14_2_04|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 4
+
+
+  - serviceId: VoiceVox_0_14_2_05|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 5
+
+
+  - serviceId: VoiceVox_0_14_2_06|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 6
+
+
+  - serviceId: VoiceVox_0_14_2_07|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 7
+
+
+  - serviceId: VoiceVox_0_14_2_08|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 8
+
+
+  - serviceId: VoiceVox_0_14_2_09|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 9
+
+
+  - serviceId: VoiceVox_0_14_2_10|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 10
+
+
+  - serviceId: VoiceVox_0_14_2_11|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 11
+
+
+  - serviceId: VoiceVox_0_14_2_12|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 12
+
+
+  - serviceId: VoiceVox_0_14_2_13|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 13
+
+
+  - serviceId: VoiceVox_0_14_2_14|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 14
+
+
+  - serviceId: VoiceVox_0_14_2_15|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 15
+
+
+  - serviceId: VoiceVox_0_14_2_16|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 16
+
+
+  - serviceId: VoiceVox_0_14_2_17|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 17
+
+
+  - serviceId: VoiceVox_0_14_2_18|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 18
+
+
+  - serviceId: VoiceVox_0_14_2_19|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 19
+
+
+  - serviceId: VoiceVox_0_14_2_20|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 20
+
+
+  - serviceId: VoiceVox_0_14_2_21|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 21
+
+
+  - serviceId: VoiceVox_0_14_2_22|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 22
+
+
+  - serviceId: VoiceVox_0_14_2_23|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 23
+
+
+  - serviceId: VoiceVox_0_14_2_24|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 24
+
+
+  - serviceId: VoiceVox_0_14_2_25|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 25
+
+
+  - serviceId: VoiceVox_0_14_2_26|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 26
+
+
+  - serviceId: VoiceVox_0_14_2_27|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 27
+
+
+  - serviceId: VoiceVox_0_14_2_28|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 28
+
+
+  - serviceId: VoiceVox_0_14_2_29|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 29
+
+
+  - serviceId: VoiceVox_0_14_2_30|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 30
+
+
+  - serviceId: VoiceVox_0_14_2_31|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 31
+
+
+  - serviceId: VoiceVox_0_14_2_32|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 32
+
+
+  - serviceId: VoiceVox_0_14_2_33|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 33
+
+
+  - serviceId: VoiceVox_0_14_2_34|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 34
+
+
+  - serviceId: VoiceVox_0_14_2_35|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 35
+
+
+  - serviceId: VoiceVox_0_14_2_36|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 36
+
+
+  - serviceId: VoiceVox_0_14_2_37|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 37
+
+
+  - serviceId: VoiceVox_0_14_2_38|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 38
+
+
+  - serviceId: VoiceVox_0_14_2_39|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 39
+
+
+  - serviceId: VoiceVox_0_14_2_40|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 40
+
+
+  - serviceId: VoiceVox_0_14_2_41|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 41
+
+
+  - serviceId: VoiceVox_0_14_2_42|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 42
+
+
+  - serviceId: VoiceVox_0_14_2_43|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 43
+
+
+  - serviceId: VoiceVox_0_14_2_44|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 44
+
+
+  - serviceId: VoiceVox_0_14_2_45|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 45
+
+
+  - serviceId: VoiceVox_0_14_2_46|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 46
+
+
+  - serviceId: VoiceVox_0_14_2_47|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 47
+
+
+  - serviceId: VoiceVox_0_14_2_48|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 48
+
+
+  - serviceId: VoiceVox_0_14_2_49|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 49
+
+
+  - serviceId: VoiceVox_0_14_2_50|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextToSpeech
+    properties:
+      commands:
+        - bash
+        - run_repl.sh
+        - 50
