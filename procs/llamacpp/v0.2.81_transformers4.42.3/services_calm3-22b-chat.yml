@@ -1,0 +1,32 @@
+common:
+  description: CyberAgentLM3 is a decoder-only language model pre-trained on 2.0 trillion tokens from scratch.
+  license: apache-2.0
+  url: https://huggingface.co/cyberagent/calm3-22b-chat
+
+services:
+  - serviceId: transformers|calm3-22b-chat|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - cyberagent/calm3-22b-chat
+      requiredGpuMemoryMBs: [43591]
+
+  - serviceId: transformers|calm3-22b-chat|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - cyberagent/calm3-22b-chat
+      requiredGpuMemoryMBs: [43591]
+
+  - serviceId: transformers|calm3-22b-chat|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - cyberagent/calm3-22b-chat
+      requiredGpuMemoryMBs: [43591]
