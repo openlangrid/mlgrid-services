@@ -1,0 +1,73 @@
+common:
+  description: Gemma is a family of lightweight, state-of-the-art open models from Google, built from the same research and technology used to create the Gemini models.
+  license: gemma
+  url: https://huggingface.co/google/gemma-2-27b-it
+
+services:
+  # Q5_K_M
+  - serviceId: llamacpp|gemma-2-27b-it_Q5_K_M|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-27b-it
+        - grapevine-AI/gemma-2-27b-it-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [19531]
+
+  - serviceId: llamacpp|gemma-2-27b-it_Q5_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-27b-it
+        - grapevine-AI/gemma-2-27b-it-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [19531]
+
+  - serviceId: llamacpp|gemma-2-27b-it_Q5_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-27b-it
+        - grapevine-AI/gemma-2-27b-it-gguf
+        - "*Q5_K_M.gguf"
+      requiredGpuMemoryMBs: [19531]
+
+  # Q4_K_M
+  - serviceId: llamacpp|gemma-2-27b-it_Q4_K_M|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-27b-it
+        - grapevine-AI/gemma-2-27b-it-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [16897]
+
+  - serviceId: llamacpp|gemma-2-27b-it_Q4_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-27b-it
+        - grapevine-AI/gemma-2-27b-it-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [16897]
+
+  - serviceId: llamacpp|gemma-2-27b-it_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-27b-it
+        - grapevine-AI/gemma-2-27b-it-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [16897]
