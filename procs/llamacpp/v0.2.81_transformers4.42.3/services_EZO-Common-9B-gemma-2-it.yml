@@ -1,0 +1,33 @@
+common:
+  description: Gemma-2-9B-itをベースとして、複数のチューニング手法を採用のうえ、汎用的に性能を向上させたモデルです。
+  license: gemma
+  url: https://huggingface.co/HODACHI/EZO-Common-9B-gemma-2-it
+
+services:
+  # 9b-it
+  - serviceId: transformers|EZO-Common-9B-gemma-2-it|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - HODACHI/EZO-Common-9B-gemma-2-it
+      requiredGpuMemoryMBs: [18435]
+
+  - serviceId: transformers|EZO-Common-9B-gemma-2-it|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - HODACHI/EZO-Common-9B-gemma-2-it
+      requiredGpuMemoryMBs: [18435]
+
+  - serviceId: transformers|EZO-Common-9B-gemma-2-it|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - HODACHI/EZO-Common-9B-gemma-2-it
+      requiredGpuMemoryMBs: [18435]
