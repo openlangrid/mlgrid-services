@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+    working_dir: /workspace/LivePortrait
+    volumes:
+      - ../../cache/huggingface:/root/.cache/huggingface
+      - ./pretrained_weights:/workspace/LivePortrait/pretrained_weights
+      - .:/work
+      - ../_common/gpuinfo.py:/work/gpuinfo.py
