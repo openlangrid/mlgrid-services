@@ -1,5 +1,4 @@
 import sys
-print(len(sys.argv))
 modelId = sys.argv[1] if len(sys.argv) >= 2 else "team-hatakeyama-phase2/Tanuki-8x8B-dpo-v1.0-GPTQ-4bit"
 gpuMemRatio = float(sys.argv[2]) if len(sys.argv) >= 3 else 0.9
 print(f"{modelId=}, {gpuMemRatio=}")
