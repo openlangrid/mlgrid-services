@@ -1,0 +1,36 @@
+common:
+  description: Tanuki-8x8Bは、フルスクラッチで約1.7Tトークン事前学習を行った8x8Bパラメータ（総パラメータ約47B、アクティブパラメータ約13B）の大規模言語モデルです。
+  license: apache-2.0
+  url: https://huggingface.co/weblab-GENIAC/Tanuki-8x8B-dpo-v1.0
+
+services:
+  # 8x8B GPTQ4
+  - serviceId: vllm|tanuki-8x8B-dpo-v1.0-GPTQ-4bit|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8x8B-dpo-v1.0-GPTQ-4bit
+        - 0.95
+      requiredGpuMemoryMBs: [46485]
+
+  - serviceId: vllm|tanuki-8x8B-dpo-v1.0-GPTQ-4bit|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8x8B-dpo-v1.0-GPTQ-4bit
+        - 0.95
+      requiredGpuMemoryMBs: [46485]
+
+  - serviceId: vllm|tanuki-8x8B-dpo-v1.0-GPTQ-4bit|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8x8B-dpo-v1.0-GPTQ-4bit
+        - 0.95
+      requiredGpuMemoryMBs: [46485]

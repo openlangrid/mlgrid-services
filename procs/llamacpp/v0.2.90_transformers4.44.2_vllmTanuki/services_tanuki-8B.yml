@@ -1,0 +1,95 @@
+common:
+  description: Tanuki-8Bは、フルスクラッチで約1.3Tトークン事前学習を行った約8Bパラメータの大規模言語モデルです。
+  license: apache-2.0
+  url: https://huggingface.co/weblab-GENIAC/Tanuki-8B-dpo-v1.0
+
+services:
+  # 8B
+  - serviceId: transformers|tanuki-8B-dpo-v1.0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - weblab-GENIAC/Tanuki-8B-dpo-v1.0
+      requiredGpuMemoryMBs: [14843]
+
+  - serviceId: transformers|tanuki-8B-dpo-v1.0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - weblab-GENIAC/Tanuki-8B-dpo-v1.0
+      requiredGpuMemoryMBs: [14843]
+
+  - serviceId: transformers|tanuki-8B-dpo-v1.0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - weblab-GENIAC/Tanuki-8B-dpo-v1.0
+      requiredGpuMemoryMBs: [14843]
+
+  # 8B GPTQ8
+  - serviceId: vllm|tanuki-8B-dpo-v1.0-GPTQ-8bit|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8B-dpo-v1.0-GPTQ-8bit
+        - 0.2
+      requiredGpuMemoryMBs: [9353]
+
+  - serviceId: vllm|tanuki-8B-dpo-v1.0-GPTQ-8bit|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8B-dpo-v1.0-GPTQ-8bit
+        - 0.2
+      requiredGpuMemoryMBs: [9353]
+
+  - serviceId: vllm|tanuki-8B-dpo-v1.0-GPTQ-8bit|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8B-dpo-v1.0-GPTQ-8bit
+        - 0.2
+      requiredGpuMemoryMBs: [9353]
+
+  # Q4_K_M
+  - serviceId: vllm|tanuki-8B-dpo-v1.0-GPTQ-4bit|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8B-dpo-v1.0-GPTQ-4bit
+        - 0.15
+      requiredGpuMemoryMBs: [6951]
+
+  - serviceId: vllm|tanuki-8B-dpo-v1.0-GPTQ-4bit|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8B-dpo-v1.0-GPTQ-4bit
+        - 0.15
+      requiredGpuMemoryMBs: [6951]
+
+  - serviceId: vllm|tanuki-8B-dpo-v1.0-GPTQ-4bit|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_vllm_repl.sh
+        - team-hatakeyama-phase2/Tanuki-8B-dpo-v1.0-GPTQ-4bit
+        - 0.15
+      requiredGpuMemoryMBs: [6951]

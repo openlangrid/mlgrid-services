@@ -1,0 +1,39 @@
+common:
+  description: C4AI Command R+ 08-2024 is an open weights research release of a 104B billion parameter model with highly advanced capabilities, this includes Retrieval Augmented Generation (RAG) and tool use to automate sophisticated tasks. 
+  license: cc-by-nc-4.0
+  url: https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
+
+services:
+  # IQ2_S
+  - serviceId: llama.cpp|c4ai-command-r-plus-08-2024_IQ2_S|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - CohereForAI/c4ai-command-r-plus-08-2024
+        - mmnga/c4ai-command-r-plus-08-2024-gguf
+        - "*-IQ2_S.gguf"
+      requiredGpuMemoryMBs: [32761]
+
+  - serviceId: llama.cpp|c4ai-command-r-plus-08-2024_IQ2_S|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - CohereForAI/c4ai-command-r-plus-08-2024
+        - mmnga/c4ai-command-r-plus-08-2024-gguf
+        - "*-IQ2_S.gguf"
+      requiredGpuMemoryMBs: [32761]
+
+  - serviceId: llama.cpp|c4ai-command-r-plus-08-2024_IQ2_S|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - CohereForAI/c4ai-command-r-plus-08-2024
+        - mmnga/c4ai-command-r-plus-08-2024-gguf
+        - "*-IQ2_S.gguf"
+      requiredGpuMemoryMBs: [32761]
