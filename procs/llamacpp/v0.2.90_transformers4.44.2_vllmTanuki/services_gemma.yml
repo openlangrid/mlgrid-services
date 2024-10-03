@@ -33,7 +33,7 @@ services:
       requiredGpuMemoryMBs: [5691]
 
   # gguf Q8
-  - serviceId: llama.cpp|gemma-2-2b-jpn-it_Q8|TG|R
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_NikolayKozloff_Q8_0|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
@@ -44,7 +44,7 @@ services:
         - "*.gguf"
       requiredGpuMemoryMBs: [3533]
 
-  - serviceId: llama.cpp|gemma-2-2b-jpn-it_Q8|TI|R
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_NikolayKozloff_Q8_0|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     properties:
       commands:
@@ -55,7 +55,7 @@ services:
         - "*.gguf"
       requiredGpuMemoryMBs: [3533]
 
-  - serviceId: llama.cpp|gemma-2-2b-jpn-it_Q8|Chat|R
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_NikolayKozloff_Q8_0|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     properties:
       commands:
@@ -65,3 +65,108 @@ services:
         - NikolayKozloff/gemma-2-2b-jpn-it-Q8_0-GGUF
         - "*.gguf"
       requiredGpuMemoryMBs: [3533]
+
+
+  # gguf Q8
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_Q8_0|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [3533]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_Q8_0|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [3533]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_Q8_0|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*Q8_0.gguf"
+      requiredGpuMemoryMBs: [3533]
+
+
+  # gguf Q4_K_M
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_Q4_K_M|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [2507]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_Q4_K_M|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [2507]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_Q4_K_M|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*Q4_K_M.gguf"
+      requiredGpuMemoryMBs: [2507]
+
+
+  # gguf IQ4_XS
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_IQ4_XS|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*IQ4_XS.gguf"
+      requiredGpuMemoryMBs: [2371]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_IQ4_XS|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*IQ4_XS.gguf"
+      requiredGpuMemoryMBs: [2371]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_alfredplpl_IQ4_XS|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - alfredplpl/gemma-2-2b-jpn-it-gguf
+        - "*IQ4_XS.gguf"
+      requiredGpuMemoryMBs: [2371]
