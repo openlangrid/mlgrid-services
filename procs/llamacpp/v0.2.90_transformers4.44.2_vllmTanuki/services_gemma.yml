@@ -1,0 +1,32 @@
+common:
+  description: Gemma is a series of best-in-class open models and draws inspiration and technological lineage from the Gemini family of models.
+  license: gemma
+  url: https://huggingface.co/google/gemma-2-2b-jpn-it
+
+services:
+  - serviceId: transromers|gemma-2-2b-jpn-it|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - google/gemma-2-2b-jpn-it
+      requiredGpuMemoryMBs: [5691]
+
+  - serviceId: transromers|gemma-2-2b-jpn-it|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - google/gemma-2-2b-jpn-it
+      requiredGpuMemoryMBs: [5691]
+
+  - serviceId: transromers|gemma-2-2b-jpn-it|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - google/gemma-2-2b-jpn-it
+      requiredGpuMemoryMBs: [5691]
