@@ -4,29 +4,64 @@ common:
   url: https://huggingface.co/google/gemma-2-2b-jpn-it
 
 services:
-  - serviceId: transromers|gemma-2-2b-jpn-it|TG|R
+  # transformers
+  - serviceId: transformers|gemma-2-2b-jpn-it|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
       commands:
         - bash
-        - run_tf_repl.sh
+        - run_transformers_repl.sh
         - google/gemma-2-2b-jpn-it
       requiredGpuMemoryMBs: [5691]
 
-  - serviceId: transromers|gemma-2-2b-jpn-it|TI|R
+  - serviceId: transformers|gemma-2-2b-jpn-it|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     properties:
       commands:
         - bash
-        - run_tf_repl.sh
+        - run_transformers_repl.sh
         - google/gemma-2-2b-jpn-it
       requiredGpuMemoryMBs: [5691]
 
-  - serviceId: transromers|gemma-2-2b-jpn-it|Chat|R
+  - serviceId: transformers|gemma-2-2b-jpn-it|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     properties:
       commands:
         - bash
-        - run_tf_repl.sh
+        - run_transformers_repl.sh
         - google/gemma-2-2b-jpn-it
       requiredGpuMemoryMBs: [5691]
+
+  # gguf Q8
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_Q8|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - NikolayKozloff/gemma-2-2b-jpn-it-Q8_0-GGUF
+        - "*.gguf"
+      requiredGpuMemoryMBs: [3533]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_Q8|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - NikolayKozloff/gemma-2-2b-jpn-it-Q8_0-GGUF
+        - "*.gguf"
+      requiredGpuMemoryMBs: [3533]
+
+  - serviceId: llama.cpp|gemma-2-2b-jpn-it_Q8|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_llamacpppython_repl.sh
+        - google/gemma-2-2b-jpn-it
+        - NikolayKozloff/gemma-2-2b-jpn-it-Q8_0-GGUF
+        - "*.gguf"
+      requiredGpuMemoryMBs: [3533]
