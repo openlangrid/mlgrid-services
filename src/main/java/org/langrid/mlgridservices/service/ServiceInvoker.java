@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
@@ -69,10 +70,19 @@ public class ServiceInvoker {
 	private void init() {
 		// services.ymlを検索してサービス登録
 		try{
-			new ServiceFinder(Path.of("./procs")).find((si, impl)->{
-				serviceImples.put(si.getServiceId(), impl);
-				serviceEntries.put(si.getServiceId(), new ServiceEntry(
-					si.getServiceId(), findInterface(impl).getSimpleName(),
+			new ServiceFinder(Path.of("./procs")).find((pathAndSi, impl)->{
+				var path = pathAndSi.getFirst();
+				var si = pathAndSi.getSecond();
+				var sid = si.getServiceId();
+				if(serviceImples.containsKey(sid)){
+					Logger.getAnonymousLogger().warning(String.format(
+						"Service %s is already loaded. Path: %s\n",
+						si.getServiceId(), path));
+					return;
+				}
+				serviceImples.put(sid, impl);
+				serviceEntries.put(sid, new ServiceEntry(
+					sid, findInterface(impl).getSimpleName(),
 					si.getDescription(), si.getLicense(), si.getUrl()
 				));
 			});

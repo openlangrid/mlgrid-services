@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import jp.go.nict.langrid.commons.beanutils.Converter;
 import jp.go.nict.langrid.commons.lang.ClassUtil;
+import jp.go.nict.langrid.commons.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class ServiceFinder {
 		this.rootPath = rootPath;
 	}
 
-	public void find(BiConsumer<ServiceInfo, Object> onFound)
+	public void find(BiConsumer<Pair<Path, ServiceInfo>, Object> onFound)
 	throws IOException{
 		var c = new Converter();
 		try(var stream = Files.walk(rootPath)){
@@ -46,7 +47,7 @@ public class ServiceFinder {
 									setter.invoke(impl, c.convert(kv.getValue(), setter.getParameterTypes()[0]));
 								}
 							}
-							onFound.accept(si, impl);
+							onFound.accept(Pair.create(p, si), impl);
 						}
 					} catch(ClassNotFoundException | IllegalAccessException | InstantiationException |
 						InvocationTargetException | IOException | NoSuchMethodException e){
