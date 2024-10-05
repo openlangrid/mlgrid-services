@@ -1,0 +1,24 @@
+services:
+  - serviceId: FLUX.1-dev_DS_0_30_0|R
+    description: "FLUX.1 [dev] is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/black-forest-labs/FLUX.1-dev
+    license: flux-1-dev-non-commercial-license
+    properties:
+      commands:
+        - bash
+        - run_repl_flux.sh
+        - black-forest-labs/FLUX.1-dev
+      requiredGpuMemoryMBs: [26222]
+
+  - serviceId: FLUX.1-schnell_DS_0_30_0|R
+    description: "FLUX.1 [schnell] is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/black-forest-labs/FLUX.1-schnell
+    license: apache-2.0
+    properties:
+      commands:
+        - bash
+        - run_repl_flux.sh
+        - black-forest-labs/FLUX.1-schnell
+      requiredGpuMemoryMBs: [24255]
