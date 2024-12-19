@@ -8,5 +8,6 @@ services:
     working_dir: /workspace/reasoning-model
     volumes:
       - ../cache/huggingface:/root/.cache/huggingface
-      - ./test.py:/workspace/reasoning-model/test.py
       - ../_common/gpuinfo.py:/workspace/reasoning-model/gpuinfo.py
+      - ./test.py:/workspace/reasoning-model/test.py
+      - ./run_reasoning_repl.py:/workspace/reasoning-model/run_reasoning_repl.py

@@ -54,6 +54,7 @@ def run(modelId: str, ggufFile: str):
                 elif serviceType == "ChatService" and methodName == "generate":
                     with open(input["messagesPath"]) as f:
                         messages = json.load(f)
+                    messages = addSystemMessageIfAbsent(messages)
                 prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 #                model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
                 inputs = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
@@ -81,6 +82,14 @@ def run(modelId: str, ggufFile: str):
         print("ng torch.cuda.OutOfMemoryError", flush=True)
     except RuntimeError:  # RuntimeError: "addmm_impl_cpu_" not implemented for 'Half'
         print("ng RuntimeError", flush=True)
+
+def addSystemMessageIfAbsent(messages):
+    if messages[0]["role"] != "system":
+        return [
+            {"role": "system", "content": "You are a helpful and harmless assistant. You should think step-by-step."},
+            *messages 
+            ]
+    return messages
 
 
 if __name__ == "__main__": 

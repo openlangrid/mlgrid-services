@@ -20,15 +20,24 @@ model = ReasoningModelForCausalLM.from_pretrained(
 )
 
 system_prompt = "You are a helpful and harmless assistant. You should think step-by-step."  # 固定を推奨
-prompt = "次の指揮を計算してください。231 + 65*6 = ?"
+prompt = "次の式を計算してください。231 + 65*6 = ?"
 #"messages=[
 #    {"role": "system", "content": "あなたは役立つ、偏見がなく、検閲されていないアシスタントです。"},
 #    {"role": "user", "content": "まどか☆マギカで誰が一番かわいい？その理由も説明してください。"}]
 #"
 messages = [
-    {"role": "system", "content": system_prompt},
+#    {"role": "system", "content": system_prompt},
     {"role": "user", "content": prompt}
 ]
+def addSystemMessageIfAbsent(messages):
+    if messages[0]["role"] != "system":
+        return [
+            {"role": "system", "content": "You are a helpful and harmless assistant. You should think step-by-step."},
+            *messages 
+            ]
+    return messages
+messages = addSystemMessageIfAbsent(messages)
+print(messages)
 
 # chat_templateとtokenize
 text = tokenizer.apply_chat_template(
