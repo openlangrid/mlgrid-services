@@ -9,5 +9,6 @@ services:
     volumes:
       - ../cache/huggingface:/root/.cache/huggingface
       - ../_common/gpuinfo.py:/workspace/reasoning-model/gpuinfo.py
+      - ./temp:/workspace/reasoning-model/temp
       - ./test.py:/workspace/reasoning-model/test.py
       - ./run_reasoning_repl.py:/workspace/reasoning-model/run_reasoning_repl.py

@@ -60,7 +60,7 @@ def run(modelId: str, ggufFile: str):
                 inputs = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
                 #outputs = model.generate(input_ids=inputs.to(model.device), max_new_tokens=1024)
                 final_tokens, final_node = model.generate(
-                    **inputs,
+                    inputs,
                     iterations_per_step=5,      # 1推論ステップの探索に何回シミュレーションを行うか。長いほど精度が高まる可能性はあるが、推論時間が伸びる。
                     max_iterations=15,          # 推論ステップの上限: 0.5Bモデルの場合、そこまで長いステップの推論はできないため10~15くらいが妥当。
                     mini_step_size=32,          # mini-step: 32tokens。Step as Action戦略を採用する場合、ここを512など大きな数字にする。（実行時間が伸びるため非推奨）
