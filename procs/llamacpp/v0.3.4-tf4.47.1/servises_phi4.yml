@@ -1,0 +1,33 @@
+common:
+  description: phi-4 is a state-of-the-art open model built upon a blend of synthetic datasets, data from filtered public domain websites, and acquired academic books and Q&A datasets.
+  license: mit
+  url: https://huggingface.co/microsoft/phi-4
+
+services:
+  # transformers
+  - serviceId: transformers|phi-4|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - microsoft/phi-4
+      requiredGpuMemoryMBs: [28476]
+
+  - serviceId: transformers|phi-4|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - microsoft/phi-4
+      requiredGpuMemoryMBs: [28476]
+
+  - serviceId: transformers|phi-4|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_transformers_repl.sh
+        - microsoft/phi-4
+      requiredGpuMemoryMBs: [28476]
