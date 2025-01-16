@@ -197,7 +197,6 @@ services:
     description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
     license: Tongyi Qianwen LICENSE AGREEMENT
     url: https://huggingface.co/Qwen/Qwen1.5-14B-Chat
-    disabled: true  # A6000では動かない。CPUオフロードすれば動くかも
     properties:
       commands:
         - bash
@@ -552,6 +551,7 @@ services:
     description: the beta version of Qwen2, a transformer-based decoder-only language model pretrained on a large amount of data.
     license: Tongyi Qianwen LICENSE AGREEMENT
     url: https://huggingface.co/Qwen/Qwen1.5-72B-Chat
+    disabled: true  # A6000では動かない。CPUオフロードすれば動くかも
     properties:
       commands:
         - bash
