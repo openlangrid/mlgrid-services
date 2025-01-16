@@ -24,7 +24,7 @@ services:
         - stabilityai/stable-diffusion-xl-base-1.0
         - --refinerModel
         - stabilityai/stable-diffusion-xl-refiner-1.0
-      requiredGpus: 1
+      requiredGpuMemoryMBs: [18694]
 
   - serviceId: SDXLBaseWithLora_Ikea_DS_0_23_1|R
     description: "Ikea Instructions - LoRA - SDXL"
