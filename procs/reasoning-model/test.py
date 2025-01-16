@@ -63,6 +63,10 @@ print("=== 最終生成テキスト ===")
 print(final_text)
 
 
+# ツリー構造表示
+print("=== ツリー構造 ===")
+print_tree_with_best_path(final_node, tokenizer)
+
 from gpuinfo import get_gpu_properties
 import json
 props = get_gpu_properties()

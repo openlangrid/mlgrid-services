@@ -1,6 +1,6 @@
 services:
   # instruction
-  - serviceId: reasoning-model|HachiML-QwQ-CoT-0.5B-JA|TI|R
+  - serviceId: reasoning-model|HachiML/QwQ-CoT-0.5B-JA|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
     description: 本プロジェクトでは、Hugging Face Transformersの AutoModelForCausalLM を拡張し、Monte Carlo Tree Search (MCTS) を用いたステップごとの探索に基づくテキスト生成を実行します。
     license: apache2
@@ -13,7 +13,7 @@ services:
       requiredGpuMemoryMBs: [1358]
 
   # chat
-  - serviceId: reasoning-model|reasoning-model-HachiML-QwQ-CoT-0.5B-JA|Chat|R
+  - serviceId: reasoning-model|HachiML/QwQ-CoT-0.5B-JA|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     description: 本プロジェクトでは、Hugging Face Transformersの AutoModelForCausalLM を拡張し、Monte Carlo Tree Search (MCTS) を用いたステップごとの探索に基づくテキスト生成を実行します。
     license: apache2
@@ -25,7 +25,7 @@ services:
         - HachiML/QwQ-CoT-0.5B-JA
       requiredGpuMemoryMBs: [1358]
 
-  - serviceId: reasoning-model|reasoning-model-mmnga-Marco-01-gguf-Q6_K|Chat|R
+  - serviceId: reasoning-model|mmnga/Marco-01-gguf-Q6_K|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
     description: 本プロジェクトでは、Hugging Face Transformersの AutoModelForCausalLM を拡張し、Monte Carlo Tree Search (MCTS) を用いたステップごとの探索に基づくテキスト生成を実行します。
     license: apache2
@@ -37,3 +37,15 @@ services:
         - mmnga/Marco-o1-gguf
         - Marco-o1-Q6_K.gguf
       requiredGpuMemoryMBs: [15293]
+
+  - serviceId: reasoning-model|Kendamarron/llm-jp-3-3.7b-o1-v0.1|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    description: 本プロジェクトでは、Hugging Face Transformersの AutoModelForCausalLM を拡張し、Monte Carlo Tree Search (MCTS) を用いたステップごとの探索に基づくテキスト生成を実行します。
+    license: apache2
+    url: https://github.com/Hajime-Y/reasoning-model
+    properties:
+      commands:
+        - bash
+        - run_reasoning_repl.sh
+        - Kendamarron/llm-jp-3-3.7b-o1-v0.1
+      requiredGpuMemoryMBs: [1358]
