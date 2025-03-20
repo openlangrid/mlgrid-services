@@ -6,6 +6,7 @@ services:
   # 27b
   - serviceId: transformers|gemma-3-27b-it|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/google/gemma-3-27b-it
     properties:
       commands:
         - bash
@@ -15,6 +16,7 @@ services:
 
   - serviceId: transformers|gemma-3-27b-it|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    url: https://huggingface.co/google/gemma-3-27b-it
     properties:
       commands:
         - bash
@@ -25,6 +27,7 @@ services:
   # 12b
   - serviceId: transformers|gemma-3-12b-it|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    url: https://huggingface.co/google/gemma-3-12b-it
     properties:
       commands:
         - bash
@@ -34,6 +37,7 @@ services:
 
   - serviceId: transformers|gemma-3-12b-it|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    url: https://huggingface.co/google/gemma-3-12b-it
     properties:
       commands:
         - bash
