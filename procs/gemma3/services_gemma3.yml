@@ -1,0 +1,42 @@
+common:
+  description: Gemma is a family of lightweight, state-of-the-art open models from Google, built from the same research and technology used to create the Gemini models.
+  license: gemma
+
+services:
+  # 27b
+  - serviceId: transformers|gemma-3-27b-it|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_gemma3_repl.sh
+        - google/gemma-3-27b-it
+      requiredGpuMemoryMBs: [42060]
+
+  - serviceId: transformers|gemma-3-27b-it|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_gemma3_repl.sh
+        - google/gemma-3-27b-it
+      requiredGpuMemoryMBs: [42060]
+
+  # 12b
+  - serviceId: transformers|gemma-3-12b-it|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_gemma3_repl.sh
+        - google/gemma-3-12b-it
+      requiredGpuMemoryMBs: [42550]
+
+  - serviceId: transformers|gemma-3-12b-it|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_gemma3_repl.sh
+        - google/gemma-3-12b-it
+      requiredGpuMemoryMBs: [42550]
