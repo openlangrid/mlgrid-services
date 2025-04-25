@@ -1,0 +1,8 @@
+/build/xformers-*
+/cache
+/temp
+out.*
+/gpuinfo.py
+__pycache__
+/outputs
+/sample

@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  service:
+    build: ./build
+    working_dir: /workspace/FramePack
+    volumes:
+      - ../_common/gpuinfo.py:/workspace/FramePack/gpuinfo.py
+      - ../cache:/root/.cache
+      - ./sample:/workspace/FramePack/sample
+      - ./temp:/workspace/FramePack/temp
+      - ./run_repl.py:/workspace/FramePack/run_repl.py
+      - ./outputs:/workspace/FramePack/outputs
+      - ./sample.py:/workspace/FramePack/sample.py
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
