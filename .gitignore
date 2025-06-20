@@ -5,3 +5,5 @@
 /application.yml
 /google-*-key.json
 /mlgrid-services.log
+/cache
+__pycache__
