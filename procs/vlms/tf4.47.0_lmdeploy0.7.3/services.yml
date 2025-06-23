@@ -1,7 +1,7 @@
 services:
   - serviceId: Sarashina2-Vsion-8b|R
     description: a Japanese Large Vision Language Model trained by SB Intuitions.
-    implementation: org.langrid.mlgridservices.service.impl.CmdRepTextInstructionWithImage
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstructionWithImage
     url: https://huggingface.co/sbintuitions/sarashina2-vision-8b
     license: mit
     properties:
@@ -12,10 +12,10 @@ services:
       requiredGpuMemoryMBs: [20041]
 
   - serviceId: InternVL3-8b|R
-    description: a Japanese Large Vision Language Model trained by SB Intuitions.
-    implementation: org.langrid.mlgridservices.service.impl.CmdRepTextInstructionWithImage
-    url: https://huggingface.co/sbintuitions/sarashina2-vision-8b
-    license: mit
+    description: We introduce InternVL3, an advanced multimodal large language model (MLLM) series that demonstrates superior overall performance.
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstructionWithImage
+    url: https://huggingface.co/OpenGVLab/InternVL3-8B
+    license: apache-2.0
     properties:
       commands:
         - bash
