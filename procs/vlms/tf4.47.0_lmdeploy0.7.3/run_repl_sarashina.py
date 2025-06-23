@@ -1,5 +1,5 @@
 
-def run(tokenizer_model_name: str, model_name: str, video_blip_model_name: str):
+def run(tokenizer_model_name: str, model_name: str):
     from PIL import Image
     from transformers import AutoModelForCausalLM, AutoProcessor
     # Load model and processor
@@ -62,9 +62,8 @@ def run(tokenizer_model_name: str, model_name: str, video_blip_model_name: str):
         print("ok", flush=True)
 
 
-def main(tokenizerModel: str, model: str, videoBlipModel: str):
-    run(tokenizerModel if tokenizerModel is not None else model
-        , model, videoBlipModel)
+def main(tokenizerModel: str, model: str):
+    run(tokenizerModel if tokenizerModel is not None else model, model)
 
 
 if __name__ == "__main__": 
