@@ -1,0 +1,24 @@
+services:
+  - serviceId: Sarashina2-Vsion-8b|R
+    description: a Japanese Large Vision Language Model trained by SB Intuitions.
+    implementation: org.langrid.mlgridservices.service.impl.CmdRepTextInstructionWithImage
+    url: https://huggingface.co/sbintuitions/sarashina2-vision-8b
+    license: mit
+    properties:
+      commands:
+        - bash
+        - run_repl_sarashina.sh
+        - "sbintuitions/sarashina2-vision-8b"
+      requiredGpuMemoryMBs: [20041]
+
+  - serviceId: InternVL3-8b|R
+    description: a Japanese Large Vision Language Model trained by SB Intuitions.
+    implementation: org.langrid.mlgridservices.service.impl.CmdRepTextInstructionWithImage
+    url: https://huggingface.co/sbintuitions/sarashina2-vision-8b
+    license: mit
+    properties:
+      commands:
+        - bash
+        - run_repl_internvl3.sh
+        - "OpenGVLab/InternVL3-8B"
+      requiredGpuMemoryMBs: [25003]

@@ -1,0 +1,7 @@
+services:
+  service:
+    build: ./build
+    volumes:
+      - .:/workspace
+      - ../../cache/huggingface:/root/.cache/huggingface
+      - ../../_common/gpuinfo.py:/workspace/gpuinfo.py
