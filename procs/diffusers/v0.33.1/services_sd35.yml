@@ -1,0 +1,36 @@
+services:
+  - serviceId: StableDiffusion_3.5_Large
+    description: "a Multimodal Diffusion Transformer (MMDiT) text-to-image model that features improved performance in image quality, typography, complex prompt understanding, and resource-efficiency."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/stabilityai/stable-diffusion-3.5-large
+    license: stabilityai-ai-community
+    properties:
+      commands:
+        - bash
+        - run_repl_sd35.sh
+        - stabilityai/stable-diffusion-3.5-large
+      requiredGpuMemoryMBs: [32501]
+
+  - serviceId: StableDiffusion_3.5_Large_Turbo
+    description: "a Multimodal Diffusion Transformer (MMDiT) text-to-image model with Adversarial Diffusion Distillation (ADD)."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/stabilityai/stable-diffusion-3.5-large-turbo
+    license: stabilityai-ai-community
+    properties:
+      commands:
+        - bash
+        - run_repl_sd35.sh
+        - stabilityai/stable-diffusion-3.5-large-turbo
+      requiredGpuMemoryMBs: [32501]
+
+  - serviceId: StableDiffusion_3.5_Medium
+    description: "a Multimodal Diffusion Transformer with improvements (MMDiT-X) text-to-image model that features improved performance in image quality, typography, complex prompt understanding, and resource-efficiency."
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextImageGeneration
+    url: https://huggingface.co/stabilityai/stable-diffusion-3.5-medium
+    license: stabilityai-ai-community
+    properties:
+      commands:
+        - bash
+        - run_repl_sd35.sh
+        - stabilityai/stable-diffusion-3.5-medium
+      requiredGpuMemoryMBs: [20804]

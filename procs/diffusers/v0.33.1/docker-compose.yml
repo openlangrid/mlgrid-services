@@ -1,0 +1,10 @@
+services:
+  service:
+    build: ./build
+    working_dir: /work
+    volumes:
+      - ../../_common/gpuinfo.py:/work/gpuinfo.py
+      - .:/work
+      - ../../cache:/root/.cache
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
