@@ -8,4 +8,4 @@ RUN apt update && \
 
 RUN git clone https://huggingface.co/SakanaAI/EvoSDXL-JP-v1 && \
   cd EvoSDXL-JP-v1 && \
-  pip install -r requirements.txt
+  pip install diffusers==0.26.0 sentencepiece==0.2.0 transformers==4.40.0 accelerate==0.29.3 huggingface-hub==0.22.2
