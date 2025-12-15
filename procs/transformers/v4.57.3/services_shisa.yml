@@ -12,7 +12,7 @@ services:
         - bash
         - run_tf_repl.sh
         - shisa-ai/shisa-v2.1-unphi4-14b
-      requiredGpuMemoryMBs: [28476]
+      requiredGpuMemoryMBs: [28774]
 
   - serviceId: transformers|shisa-v2.1-14b|TI|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
@@ -21,7 +21,7 @@ services:
         - bash
         - run_tf_repl.sh
         - shisa-ai/shisa-v2.1-unphi4-14b
-      requiredGpuMemoryMBs: [28476]
+      requiredGpuMemoryMBs: [28774]
 
   - serviceId: transformers|shisa-v2.1-14b|Chat|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
@@ -30,4 +30,4 @@ services:
         - bash
         - run_tf_repl.sh
         - shisa-ai/shisa-v2.1-unphi4-14b
-      requiredGpuMemoryMBs: [28476]
+      requiredGpuMemoryMBs: [28774]
