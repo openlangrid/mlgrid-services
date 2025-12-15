@@ -4,7 +4,7 @@ common:
   url: https://huggingface.co/shisa-ai/shisa-v2.1-unphi4-14b
 
 services:
-  # transformers
+  # transformers 14b
   - serviceId: transformers|shisa-v2.1-14b|TG|R
     implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
     properties:
@@ -31,3 +31,31 @@ services:
         - run_tf_repl.sh
         - shisa-ai/shisa-v2.1-unphi4-14b
       requiredGpuMemoryMBs: [28774]
+
+  # transformers 8b
+  - serviceId: transformers|shisa-v2.1-qwen3-8b|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - shisa-ai/shisa-v2.1-qwen3-8b
+      requiredGpuMemoryMBs: [16218]
+
+  - serviceId: transformers|shisa-v2.1-qwen3-8b|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - shisa-ai/shisa-v2.1-qwen3-8b
+      requiredGpuMemoryMBs: [16218]
+
+  - serviceId: transformers|shisa-v2.1-qwen3-8b|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - shisa-ai/shisa-v2.1-qwen3-8b
+      requiredGpuMemoryMBs: [16218]
