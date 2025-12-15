@@ -1,0 +1,33 @@
+common:
+  description: Shisa V2.1 is an update to our Shisa V2 family of bilingual Japanese and English (JA/EN) general-purpose chat models trained by Shisa.AI.
+  license: mit
+  url: https://huggingface.co/shisa-ai/shisa-v2.1-unphi4-14b
+
+services:
+  # transformers
+  - serviceId: transformers|shisa-v2.1-14b|TG|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextGeneration
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - shisa-ai/shisa-v2.1-unphi4-14b
+      requiredGpuMemoryMBs: [28476]
+
+  - serviceId: transformers|shisa-v2.1-14b|TI|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplTextInstruction
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - shisa-ai/shisa-v2.1-unphi4-14b
+      requiredGpuMemoryMBs: [28476]
+
+  - serviceId: transformers|shisa-v2.1-14b|Chat|R
+    implementation: org.langrid.mlgridservices.service.impl.CmdReplChat
+    properties:
+      commands:
+        - bash
+        - run_tf_repl.sh
+        - shisa-ai/shisa-v2.1-unphi4-14b
+      requiredGpuMemoryMBs: [28476]
