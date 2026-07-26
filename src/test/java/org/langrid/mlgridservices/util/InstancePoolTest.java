@@ -1,6 +1,6 @@
 package org.langrid.mlgridservices.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +26,9 @@ public class InstancePoolTest {
 				@Override
 				public void terminateAndWait() throws InterruptedException {
 					releaseCount.incrementAndGet();
+				}
+				public boolean isAlive(){
+				    return false;
 				}
 			};
 		};
@@ -53,6 +56,9 @@ public class InstancePoolTest {
 				public void terminateAndWait() throws InterruptedException {
 					releaseCount.incrementAndGet();
 				}
+                public boolean isAlive(){
+                    return false;
+                }
 			};
 		};
 		ip.getInstanceWithGpus("proc1", new int[]{20}, f);
@@ -79,6 +85,9 @@ public class InstancePoolTest {
 			public void terminateAndWait() throws InterruptedException {
 				releaseCount.incrementAndGet();
 			}
+            public boolean isAlive(){
+                return false;
+            }
 		};
 		Function<GpuSpec[], Instance> f1 = gpus->{
 			createCount.incrementAndGet();
